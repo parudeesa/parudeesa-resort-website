@@ -105,7 +105,69 @@
                     </table>
                 </div>
             </div>
-            
+
+            <!-- Amenities Management Card -->
+            <div class="p-card overflow-hidden p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="p-serif text-2xl font-bold border-b pb-3" style="color:#3e2010; border-color:rgba(250,135,62,.15)">Amenities Management</h3>
+                    <a href="{{ route('amenities.index') }}" class="p-btn">
+                        <i class="bi bi-gear mr-2"></i>Manage Amenities
+                    </a>
+                </div>
+                <p class="p-text">Add, edit, and manage property amenities that can be assigned to properties.</p>
+            </div>
+
+            <!-- Booking Calendar Card -->
+            <div class="p-card overflow-hidden p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="p-serif text-2xl font-bold border-b pb-3" style="color:#3e2010; border-color:rgba(250,135,62,.15)">Booking Calendar</h3>
+                    <a href="https://calendar.google.com/calendar/u/0/r?cid={{ env('GOOGLE_CALENDAR_ID') }}" target="_blank" class="p-btn">
+                        <i class="bi bi-calendar mr-2"></i>Open Calendar
+                    </a>
+                </div>
+                <p class="p-text">View and manage all bookings in Google Calendar. New bookings are automatically synced.</p>
+            </div>
+
+            <!-- Recent Bookings Card -->
+            <div class="p-card overflow-hidden p-8">
+                <h3 class="p-serif text-2xl font-bold mb-6 border-b pb-3" style="color:#3e2010; border-color:rgba(250,135,62,.15)">Recent Bookings</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y" style="border-color:rgba(250,135,62,.15)">
+                        <thead style="background:rgba(250,135,62,.05)">
+                            <tr>
+                                <th class="px-6 py-4 text-left p-label">Customer</th>
+                                <th class="px-6 py-4 text-left p-label">Property</th>
+                                <th class="px-6 py-4 text-left p-label">Check-in</th>
+                                <th class="px-6 py-4 text-left p-label">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y" style="border-color:rgba(250,135,62,.15)">
+                            @foreach(App\Models\Booking::with('property')->latest()->take(10)->get() as $booking)
+                            <tr class="hover:bg-orange-50 transition-colors">
+                                <td class="px-6 py-5 whitespace-nowrap text-md font-bold p-text">{{ $booking->name }}</td>
+                                <td class="px-6 py-5 whitespace-nowrap text-sm p-text">{{ $booking->property->name }}</td>
+                                <td class="px-6 py-5 whitespace-nowrap text-sm p-text">{{ $booking->check_in->format('M d, Y') }}</td>
+                                <td class="px-6 py-5 whitespace-nowrap text-sm">
+                                    <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide
+                                        @if($booking->status == 'confirmed') bg-green-100 text-green-800
+                                        @elseif($booking->status == 'pending') bg-yellow-100 text-yellow-800
+                                        @else bg-red-100 text-red-800 @endif">
+                                        {{ $booking->status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            @endforeach
+
+                            @if(App\Models\Booking::count() == 0)
+                            <tr>
+                                <td colspan="4" class="px-6 py-12 text-center text-md p-text font-serif italic">No bookings yet.</td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 </x-app-layout>

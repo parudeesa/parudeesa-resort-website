@@ -2600,18 +2600,8 @@
                                     @endif
                                 </div>
                                 <div class="prop-footer">
-                                    @if($property->phone)
-                                    <a href="https://wa.me/{{ str_replace(['+', ' ', '-'], '', $property->phone) }}?text=Hi!%20I%20want%20to%20book%20{{ urlencode($property->name) }}%20at%20Parudeesa."
-                                        target="_blank" class="btn-wa"><i class="bi bi-whatsapp"></i> Book Now</a>
-                                    @endif
-                                    <a onclick="goPage('booking')" class="btn-outline-brand"><i
-                                            class="bi bi-calendar-check"></i>
-                                        Reserve</a>
+                                    <a href="{{ route('property.show', $property) }}" class="btn-brand w-100 justify-content-center"><i class="bi bi-eye"></i> View Details</a>
                                 </div>
-                                @if($property->phone)
-                                <div class="wa-note mt-2"><i class="bi bi-whatsapp" style="color:#25D366"></i> Direct
-                                    booking: {{ $property->phone }}</div>
-                                @endif
                             </div>
                         </div>
                     </div>
@@ -3529,22 +3519,19 @@
                                     <div class="form-group"><label>Select Property <span
                                                 style="color:var(--brand)">*</span></label>
                                         <select id="f-prop" required onchange="updateSummary()">
-                                            <option value="">Choose property...</option>
-                                            <option value="cottage">Parudeesa The Paradise — ₹6,500/night (40–50 Guests)
+                                            <option value="" data-price="0">Choose property...</option>
+                                            @foreach($properties as $property)
+                                            <option value="{{ $property->id }}" data-name="{{ $property->name }}" data-price="{{ $property->price }}">{{ $property->name }} — ₹{{ number_format($property->price, 0) }}/night
                                             </option>
-                                            <option value="villa">Parudeesa Utopiya — ₹9,000/night (Up to 200 Guests)
-                                            </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group"><label>Event Type</label>
-                                        <select id="f-event">
+                                        <select id="f-event" onchange="updatePackages(); updateSummary()">
                                             <option value="">No Event / Regular Stay</option>
-                                            <option>Birthday</option>
-                                            <option>Wedding</option>
-                                            <option>Anniversary</option>
-                                            <option>Corporate Retreat</option>
-                                            <option>Proposal</option>
-                                            <option>Other</option>
+                                            <option value="Birthday">Birthday</option>
+                                            <option value="Wedding">Wedding</option>
+                                            <option value="Corporate">Corporate</option>
                                         </select>
                                     </div>
                                     <div class="row g-3">
@@ -3585,32 +3572,30 @@
                                     <div class="form-group"><label>Select Amenities</label>
                                         <div class="amenity-check-grid">
                                             <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Kayaking" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🚣 Kayaking</label>
+                                                    value="Kayaking" onchange="updateSummary()" /><span class="amen-check-box"><i
+                                                        class="bi bi-check"></i></span>🚣 Kayaking (₹500/pp)</label>
                                             <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Private Yacht" /><span class="amen-check-box"><i
+                                                    value="Private Yacht" onchange="updateSummary()" /><span class="amen-check-box"><i
                                                         class="bi bi-check"></i></span>⛵
-                                                Private Yacht</label>
+                                                Private Yacht (₹2000/pp)</label>
                                             <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Food Package" /><span class="amen-check-box"><i
+                                                    value="Food Package" onchange="updateSummary()" /><span class="amen-check-box"><i
                                                         class="bi bi-check"></i></span>🍽️ Food
-                                                Package</label>
+                                                Package (₹1000/pp)</label>
                                             <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Decorations" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🎊 Decorations</label>
+                                                    value="Decorations" onchange="updateSummary()" /><span class="amen-check-box"><i
+                                                        class="bi bi-check"></i></span>🎊 Decorations (₹5000)</label>
                                             <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Photography" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>📸 Photography</label>
+                                                    value="Photography" onchange="updateSummary()" /><span class="amen-check-box"><i
+                                                        class="bi bi-check"></i></span>📸 Photography (₹8000)</label>
                                             <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="DJ Setup" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🎵 DJ Setup</label>
+                                                    value="DJ Setup" onchange="updateSummary()" /><span class="amen-check-box"><i
+                                                        class="bi bi-check"></i></span>🎵 DJ Setup (₹10000)</label>
                                         </div>
                                     </div>
                                     <div class="form-group"><label>Event Package</label>
                                         <select id="f-pkg" onchange="updateSummary()">
-                                            <option value="">No package</option>
-                                            <option value="party">Party Package — ₹25,000</option>
-                                            <option value="grand">Grand Celebration — ₹75,000</option>
+                                            <option value="" data-price="0">No package</option>
                                         </select>
                                     </div>
                                     <div class="form-group"><label>Special Requests</label><textarea id="f-notes"
@@ -3666,6 +3651,7 @@
                                         id="sum-nights">—</span></div>
                                 <div class="brow"><span class="bl">Package</span><span class="bv"
                                         id="sum-pkg">None</span></div>
+                                <div id="sum-amenities-container"></div>
                                 <div class="btotal">
                                     <div>
                                         <div class="tl">Est. Total</div>
@@ -4046,57 +4032,165 @@
             });
         }
 
+        /* ── Event Packages Data ── */
+        const eventPackages = {
+            'Birthday': [
+                { value: 'party', name: 'Party Package', price: 25000 },
+                { value: 'intimate', name: 'Intimate Gathering', price: 10000 }
+            ],
+            'Wedding': [
+                { value: 'grand', name: 'Grand Celebration', price: 75000 },
+                { value: 'royal', name: 'Royal Wedding', price: 150000 }
+            ],
+            'Corporate': [
+                { value: 'retreat', name: 'Corporate Retreat', price: 35000 },
+                { value: 'dayout', name: 'Day Outing', price: 15000 }
+            ]
+        };
+
+        const amenityPricing = {
+            'Kayaking': { price: 500, perPerson: true },
+            'Private Yacht': { price: 2000, perPerson: true },
+            'Food Package': { price: 1000, perPerson: true },
+            'Decorations': { price: 5000, perPerson: false },
+            'Photography': { price: 8000, perPerson: false },
+            'DJ Setup': { price: 10000, perPerson: false }
+        };
+
+        function updatePackages() {
+            const event = document.getElementById('f-event').value;
+            const pkgSelect = document.getElementById('f-pkg');
+            pkgSelect.innerHTML = '<option value="" data-price="0" data-name="No package">No package</option>';
+            
+            if (eventPackages[event]) {
+                eventPackages[event].forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.value;
+                    opt.setAttribute('data-price', p.price);
+                    opt.setAttribute('data-name', p.name);
+                    opt.textContent = `${p.name} — ₹${p.price.toLocaleString('en-IN')}`;
+                    pkgSelect.appendChild(opt);
+                });
+            }
+        }
+
         /* ── Live booking summary ── */
         function updateSummary() {
-            const prop = (document.getElementById('f-prop') || {}).value || '';
+            const propSelect = document.getElementById('f-prop');
+            const propOpt = propSelect.options[propSelect.selectedIndex];
+            const propName = propOpt ? propOpt.getAttribute('data-name') || '—' : '—';
+            const propPrice = propOpt ? parseFloat(propOpt.getAttribute('data-price')) || 0 : 0;
+            
             const ci = (document.getElementById('f-checkin') || {}).value || '';
             const co = (document.getElementById('f-checkout') || {}).value || '';
-            const g = (document.getElementById('f-guests') || {}).value || '';
-            const pkg = (document.getElementById('f-pkg') || {}).value || '';
-            const pm = { cottage: 'Parudeesa The Paradise', villa: 'Parudeesa Utopiya' };
-            const rm = { cottage: 6500, villa: 9000 };
-            const pkm = { party: 25000, grand: 75000 };
-            const pkl = { party: 'Party Package', grand: 'Grand Celebration' };
+            let guests = parseInt((document.getElementById('f-guests') || {}).value) || 0;
+            
+            const pkgSelect = document.getElementById('f-pkg');
+            const pkgOpt = pkgSelect.options[pkgSelect.selectedIndex];
+            const pkgName = pkgOpt ? pkgOpt.getAttribute('data-name') || 'None' : 'None';
+            const pkgPrice = pkgOpt ? parseFloat(pkgOpt.getAttribute('data-price')) || 0 : 0;
+            
             const el = id => document.getElementById(id);
             if (!el('sum-prop')) return;
-            el('sum-prop').textContent = pm[prop] || '—';
+            el('sum-prop').textContent = propName;
             el('sum-in').textContent = ci ? new Date(ci + 'T00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
             el('sum-out').textContent = co ? new Date(co + 'T00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
-            el('sum-guests').textContent = g ? g + ' Guests' : '—';
-            el('sum-pkg').textContent = pkl[pkg] || 'None';
-            let n = 0; if (ci && co) { const d = (new Date(co) - new Date(ci)) / 86400000; n = d > 0 ? d : 0 }
+            el('sum-guests').textContent = guests ? guests + ' Guests' : '—';
+            el('sum-pkg').textContent = pkgName !== 'No package' ? pkgName + ' (₹' + pkgPrice.toLocaleString('en-IN') + ')' : 'None';
+            
+            let n = 0; if (ci && co) { const d = (new Date(co) - new Date(ci)) / 86400000; n = d > 0 ? d : 0; }
             el('sum-nights').textContent = n ? n + (n === 1 ? ' Night' : ' Nights') : '—';
-            const tot = (rm[prop] || 0) * n + (pkm[pkg] || 0);
+            
+            // Calculate Amenities
+            let amenitiesTotal = 0;
+            const checkedAmenities = Array.from(document.querySelectorAll('input[name="amenities"]:checked'));
+            let amenityHtml = '';
+            
+            checkedAmenities.forEach(cb => {
+                const name = cb.value;
+                if (amenityPricing[name]) {
+                    const pricing = amenityPricing[name];
+                    let cost = pricing.price;
+                    if (pricing.perPerson) {
+                        cost = cost * (guests > 0 ? guests : 1);
+                    }
+                    amenitiesTotal += cost;
+                    amenityHtml += `<div class="brow"><span class="bl">${name}</span><span class="bv">₹${cost.toLocaleString('en-IN')}</span></div>`;
+                }
+            });
+            
+            el('sum-amenities-container').innerHTML = amenityHtml;
+            
+            const tot = (propPrice * n) + pkgPrice + amenitiesTotal;
             el('sum-total').textContent = tot > 0 ? '₹' + tot.toLocaleString('en-IN') : '₹ —';
+            return tot;
         }
 
         /* ── Form submit ── */
-        function handleFormSubmit(e) {
+        async function handleFormSubmit(e) {
             e.preventDefault();
             const name = document.getElementById('f-name').value.trim();
             const phone = document.getElementById('f-phone').value.trim();
             const email = document.getElementById('f-email').value.trim();
-            const prop = document.getElementById('f-prop').value;
+            const propSelect = document.getElementById('f-prop');
+            const propId = propSelect.value;
+            const propName = propSelect.options[propSelect.selectedIndex]?.getAttribute('data-name') || '';
             const event = document.getElementById('f-event').value || 'Stay';
             const guests = document.getElementById('f-guests').value;
             const ci = document.getElementById('f-checkin').value;
             const co = document.getElementById('f-checkout').value;
-            const pkg = document.getElementById('f-pkg').value || '';
+            const pkgSelect = document.getElementById('f-pkg');
+            const pkgName = pkgSelect.options[pkgSelect.selectedIndex]?.getAttribute('data-name') || '';
             const notes = document.getElementById('f-notes').value;
-            const amen = Array.from(document.querySelectorAll('input[name="amenities"]:checked')).map(c => c.value).join(', ') || 'None';
-            if (!name || !phone || !prop || !guests || !ci || !co) { alert('Please fill all required fields.'); return }
-            const pl = { cottage: 'Parudeesa The Paradise', villa: 'Parudeesa Utopiya' }[prop] || prop;
-            const pkl = { party: 'Party Package — ₹25,000', grand: 'Grand Celebration — ₹75,000', '': 'None' }[pkg] || 'None';
-            const waNum = prop === 'villa' ? '918075741948' : '918921021202';
-            document.getElementById('successMsg').innerHTML = '<strong style="color:var(--brand)">✅ Booking Request Submitted!</strong><br/><br/>' +
-                '<strong>Name:</strong> ' + name + '<br/><strong>Property:</strong> ' + pl + '<br/><strong>Event:</strong> ' + event +
-                '<br/><strong>Guests:</strong> ' + guests + '<br/><strong>Check-In:</strong> ' + ci + '<br/><strong>Check-Out:</strong> ' + co +
-                '<br/><strong>Amenities:</strong> ' + amen + '<br/><strong>Package:</strong> ' + pkl + (notes ? '<br/><strong>Requests:</strong> ' + notes : '') +
-                '<br/><br/>Our team will contact you on WhatsApp shortly!';
-            document.getElementById('successMsg').style.display = 'block';
-            document.getElementById('bookingForm').reset(); updateSummary();
-            const t = encodeURIComponent('Hi! I want to book at Parudeesa.\n\nName: ' + name + '\nPhone: ' + phone + '\nProperty: ' + pl + '\nEvent: ' + event + '\nGuests: ' + guests + '\nCheck-In: ' + ci + '\nCheck-Out: ' + co + '\nAmenities: ' + amen + '\nPackage: ' + pkl + (notes ? '\nRequests: ' + notes : ''));
-            setTimeout(() => window.open('https://wa.me/' + waNum + '?text=' + t, '_blank'), 800);
+            const amenElements = Array.from(document.querySelectorAll('input[name="amenities"]:checked')).map(c => c.value);
+            const amen = amenElements.join(', ') || 'None';
+            const totalAmount = updateSummary();
+            
+            if (!name || !phone || !propId || !guests || !ci || !co) { alert('Please fill all required fields.'); return }
+            
+            try {
+                const response = await fetch('/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        property_id: propId,
+                        event_type: event,
+                        check_in: ci,
+                        check_out: co,
+                        guests: guests,
+                        package_name: pkgName,
+                        amenities: amenElements,
+                        amount: totalAmount
+                    })
+                });
+                
+                const data = await response.json();
+                if (!data.success) {
+                    alert('Error saving booking: ' + JSON.stringify(data.errors || data.message));
+                    return;
+                }
+                
+                const waNum = propName.includes('Utopiya') ? '918075741948' : '918921021202';
+                document.getElementById('successMsg').innerHTML = '<strong style="color:var(--brand)">✅ Booking Request Saved & Submitted!</strong><br/><br/>' +
+                    '<strong>Name:</strong> ' + name + '<br/><strong>Property:</strong> ' + propName + '<br/><strong>Event:</strong> ' + event +
+                    '<br/><strong>Guests:</strong> ' + guests + '<br/><strong>Check-In:</strong> ' + ci + '<br/><strong>Check-Out:</strong> ' + co +
+                    '<br/><strong>Amenities:</strong> ' + amen + '<br/><strong>Package:</strong> ' + (pkgName || 'None') + (notes ? '<br/><strong>Requests:</strong> ' + notes : '') +
+                    '<br/><strong>Total Amount:</strong> ₹' + totalAmount.toLocaleString('en-IN') +
+                    '<br/><br/>Our team will contact you on WhatsApp shortly!';
+                document.getElementById('successMsg').style.display = 'block';
+                document.getElementById('bookingForm').reset(); updateSummary();
+                const t = encodeURIComponent('Hi! I want to book at Parudeesa.\n\nName: ' + name + '\nPhone: ' + phone + '\nProperty: ' + propName + '\nEvent: ' + event + '\nGuests: ' + guests + '\nCheck-In: ' + ci + '\nCheck-Out: ' + co + '\nAmenities: ' + amen + '\nPackage: ' + (pkgName || 'None') + (notes ? '\nRequests: ' + notes : '') + '\nTotal: ₹' + totalAmount.toLocaleString('en-IN'));
+                setTimeout(() => window.open('https://wa.me/' + waNum + '?text=' + t, '_blank'), 800);
+            } catch (err) {
+                alert('Something went wrong. Please try again.');
+                console.error(err);
+            }
         }
 
         /* ── Contact form ── */

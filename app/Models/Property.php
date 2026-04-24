@@ -14,4 +14,9 @@ class Property extends Model
         'image_url',
         'phone'
     ];
+
+    public function amenities()
+    {
+        return $this->belongsToMany(Amenity::class);
+    }
 }

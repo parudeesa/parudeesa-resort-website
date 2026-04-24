@@ -157,59 +157,42 @@ button:hover{
 
         <div class="form-group">
             <label>Select Property</label>
-            <select id="property" required>
+            <select id="property_id" name="property_id" required>
                 <option value="">Choose Property</option>
-                <option>Lakeside Cottage (40–50 guests)</option>
-                <option>Sunset Villa (Up to 200 guests)</option>
+                @foreach($properties ?? [] as $property)
+                <option value="{{ $property->id }}">{{ $property->name }} - ₹{{ number_format($property->price, 0) }}/night</option>
+                @endforeach
             </select>
         </div>
 
         <div class="form-group">
-            <label>Event Type (Optional)</label>
-            <select id="event">
-                <option value="">No Event</option>
-                <option>Birthday</option>
-                <option>Wedding</option>
-                <option>Anniversary</option>
-                <option>Corporate Gathering</option>
-            </select>
+            <label>Check-in Date</label>
+            <input type="date" id="check_in" name="check_in" required>
+        </div>
+
+        <div class="form-group">
+            <label>Check-out Date</label>
+            <input type="date" id="check_out" name="check_out" required>
         </div>
 
         <div class="form-group">
             <label>Number of Guests</label>
-            <input type="number" id="guests" placeholder="Enter guest count" required>
-        </div>
-
-        <div class="form-group">
-            <label>Preferred Booking Date</label>
-            <input type="date" id="date" required>
+            <input type="number" id="guests" name="guests" placeholder="Enter guest count" required>
         </div>
 
         <div class="form-group">
             <label>Your Name</label>
-            <input type="text" id="name" placeholder="Enter your name" required>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
         </div>
 
         <div class="form-group">
             <label>Phone Number</label>
-            <input type="tel" id="phone" placeholder="Enter phone number" required>
-        </div>
-
-        <div class="form-group">
-            <label>Select Amenities</label>
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="amenities" value="Kayaking"> Kayaking</label>
-                <label><input type="checkbox" name="amenities" value="Private Yacht"> Private Yacht</label>
-                <label><input type="checkbox" name="amenities" value="Food Package"> Food Package</label>
-                <label><input type="checkbox" name="amenities" value="Custom Decorations"> Decorations</label>
-                <label><input type="checkbox" name="amenities" value="Photography"> Photography</label>
-                <label><input type="checkbox" name="amenities" value="DJ Setup"> DJ Setup</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Special Requests</label>
-            <textarea id="request" placeholder="Any additional requests..."></textarea>
+            <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
         </div>
 
         <button type="submit">Confirm Booking</button>
@@ -222,39 +205,49 @@ button:hover{
 document.getElementById("bookingForm").addEventListener("submit", function(e){
     e.preventDefault();
 
-    let property = document.getElementById("property").value;
-    let event = document.getElementById("event").value || "No Event";
-    let guests = document.getElementById("guests").value;
-    let date = document.getElementById("date").value;
-    let name = document.getElementById("name").value;
-    let phone = document.getElementById("phone").value;
+    const formData = new FormData(this);
 
-    let selectedAmenities = Array.from(document.querySelectorAll('input[name="amenities"]:checked'))
-        .map(cb => cb.value)
-        .join(", ") || "None";
+    fetch('/bookings', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            let msg = `
+                <strong>✅ Booking request submitted successfully!</strong><br><br>
+                <strong>Name:</strong> ${formData.get('name')}<br>
+                <strong>Email:</strong> ${formData.get('email')}<br>
+                <strong>Phone:</strong> ${formData.get('phone')}<br>
+                <strong>Property ID:</strong> ${formData.get('property_id')}<br>
+                <strong>Check-in:</strong> ${formData.get('check_in')}<br>
+                <strong>Check-out:</strong> ${formData.get('check_out')}<br>
+                <strong>Guests:</strong> ${formData.get('guests')}<br><br>
+                Our team will contact you shortly.
+            `;
 
-    let msg = `
-        <strong>✅ Booking request submitted successfully!</strong><br><br>
-        <strong>Name:</strong> ${name}<br>
-        <strong>Phone:</strong> ${phone}<br>
-        <strong>Property:</strong> ${property}<br>
-        <strong>Event:</strong> ${event}<br>
-        <strong>Guests:</strong> ${guests}<br>
-        <strong>Date:</strong> ${date}<br>
-        <strong>Amenities:</strong> ${selectedAmenities}<br><br>
-        Our team will contact you shortly. You can also chat with us on WhatsApp for faster response.
-    `;
+            let successBox = document.getElementById("successMsg");
+            successBox.innerHTML = msg;
+            successBox.style.display = "block";
 
-    let successBox = document.getElementById("successMsg");
-    successBox.innerHTML = msg;
-    successBox.style.display = "block";
-
-    document.getElementById("bookingForm").reset();
-    
-    // Scroll to success message
-    setTimeout(() => {
-        successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 200);
+            document.getElementById("bookingForm").reset();
+            
+            // Scroll to success message
+            setTimeout(() => {
+                successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 200);
+        } else {
+            alert('Error submitting booking. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting booking. Please try again.');
+    });
 });
 </script>
 

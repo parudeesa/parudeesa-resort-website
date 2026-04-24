@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Property;
+use App\Models\Booking;
 
 class HomeController extends Controller
 {
@@ -13,28 +14,55 @@ class HomeController extends Controller
     return view('design', compact('properties')); // Sends them to design.blade.php
 }
 
+    public function show($id)
+    {
+        \Log::info('Property show method called', ['property_id' => $id]);
+        $property = Property::with('amenities')->findOrFail($id);
+        return view('property.show', compact('property'));
+    }
+
     public function storeBooking(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
             'check_in' => 'required|date',
             'check_out' => 'required|date',
-            'room_type' => 'required|string|max:255',
+            'guests' => 'required|integer|min:1',
+            'property_id' => 'required|exists:properties,id',
+            'event_type' => 'nullable|string|max:255',
+            'package_name' => 'nullable|string|max:255',
+            'amenities' => 'nullable|array',
+            'amount' => 'required|numeric'
         ]);
 
-        $booking = \App\Models\Booking::create([
+        $booking = Booking::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'check_in' => $request->check_in,
             'check_out' => $request->check_out,
-            'room_type' => $request->room_type,
-            'guests' => 2, // Default value since it is required in DB schema
-            'amount' => 0.00, // Quote to be decided
+            'guests' => $request->guests,
+            'property_id' => $request->property_id,
+            'event_type' => $request->event_type,
+            'package_name' => $request->package_name,
+            'amenities' => $request->amenities,
+            'amount' => $request->amount,
             'status' => 'pending',
-            'phone' => '' // Can be updated via whatsapp link integration implicitly
         ]);
 
-        return response()->json(['success' => true, 'booking' => $booking]);
+        // Load property for calendar event
+        $booking->load('property');
+
+        // Sync to Google Calendar
+        $calendarService = app(\App\Services\GoogleCalendarService::class);
+        $calendarSynced = $calendarService->createEvent($booking);
+
+        return response()->json([
+            'success' => true,
+            'booking' => $booking,
+            'calendar_synced' => $calendarSynced !== false
+        ]);
     }
 }
