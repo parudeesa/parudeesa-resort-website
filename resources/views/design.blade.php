@@ -1,0 +1,4369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="description"
+        content="Parudeesa – The Lake View Resort. Experience serenity by the lake. Kerala's premier lakeside staycation destination." />
+    <title>Parudeesa – The Lake View Resort</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* ═══════════════════════════════════════
+       BRAND TOKENS
+    ═══════════════════════════════════════ */
+        :root {
+            --brand: #fa873e;
+            --brand-d: #e06828;
+            --brand-dd: #c05520;
+            --brand-l: #ffb07a;
+            --brand-pale: #fff3ec;
+            --brand-mist: #fff8f3;
+            --cream: #fff3ec;
+            --cream-d: #fde8d8;
+            --parch: #fff8f3;
+            --brn-dk: #3e2010;
+            --brn-md: #7a4520;
+            --brn: #a0622a;
+            --brn-l: #c8895a;
+            --olive: #7a7040;
+            --olive-l: #a09858;
+            --txt: #2e1a08;
+            --txt-m: #7a5a3a;
+            --txt-l: #b08060;
+            --r: 16px;
+            --ease: .35s cubic-bezier(.4, 0, .2, 1);
+            --sh-s: 0 2px 16px rgba(250, 135, 62, .1);
+            --sh-m: 0 6px 32px rgba(250, 135, 62, .15);
+            --sh-l: 0 16px 56px rgba(250, 135, 62, .2);
+            --safe-t: env(safe-area-inset-top);
+            --safe-b: env(safe-area-inset-bottom);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%
+        }
+
+        body {
+            font-family: 'Josefin Sans', sans-serif;
+            background: var(--brand-pale);
+            color: var(--txt);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-family: 'Cormorant Garamond', serif
+        }
+
+        .eb {
+            font-family: 'EB Garamond', serif
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9990;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E")
+        }
+
+        /* Pages */
+        .page {
+            display: none
+        }
+
+        .page.active {
+            display: block
+        }
+
+        /* ═══════ NAVBAR ═══════ */
+        .navbar {
+            background: rgba(255, 243, 236, .88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(250, 135, 62, .18);
+            padding: .75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1050;
+            box-shadow: 0 4px 28px rgba(250, 135, 62, .1);
+            transition: box-shadow var(--ease), background var(--ease)
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 243, 236, .97);
+            box-shadow: 0 6px 36px rgba(250, 135, 62, .18)
+        }
+
+        .navbar-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--brn-dk) !important;
+            letter-spacing: .3px;
+            line-height: 1.1
+        }
+
+        .navbar-brand small {
+            display: block;
+            font-size: .52rem;
+            font-weight: 400;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: var(--brand);
+            margin-top: .1rem
+        }
+
+        .nav-link {
+            font-size: .65rem;
+            font-weight: 600;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--txt-m) !important;
+            padding: .45rem .85rem !important;
+            border-radius: 50px;
+            transition: all var(--ease);
+            cursor: pointer
+        }
+
+        .nav-link:hover,
+        .nav-link.anav {
+            color: var(--brand-d) !important;
+            background: rgba(250, 135, 62, .1)
+        }
+
+        .btn-nav-book {
+            background: linear-gradient(135deg, var(--brand), var(--brand-d));
+            color: #fff !important;
+            border-radius: 50px;
+            padding: .42rem 1.2rem !important;
+            font-size: .63rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            box-shadow: 0 3px 14px rgba(250, 135, 62, .35);
+            transition: opacity var(--ease), transform var(--ease)
+        }
+
+        .btn-nav-book:hover {
+            opacity: .9;
+            transform: translateY(-1px)
+        }
+
+        .navbar-toggler {
+            border: 1px solid rgba(250, 135, 62, .35);
+            border-radius: 8px;
+            padding: .3rem .5rem;
+            box-shadow: none !important
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23fa873e' stroke-width='2.2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none
+        }
+
+        /* ═══════ BUTTONS ═══════ */
+        .btn-brand {
+            background: linear-gradient(135deg, var(--brand), var(--brand-d));
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: .7rem 1.6rem;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: .73rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            box-shadow: 0 4px 18px rgba(250, 135, 62, .35);
+            transition: transform var(--ease), box-shadow var(--ease);
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer
+        }
+
+        .btn-brand:hover {
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(250, 135, 62, .45)
+        }
+
+        .btn-wa {
+            background: linear-gradient(135deg, #25D366, #1aa854);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: .7rem 1.6rem;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: .73rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            box-shadow: 0 4px 18px rgba(37, 211, 102, .3);
+            transition: transform var(--ease);
+            -webkit-tap-highlight-color: transparent
+        }
+
+        .btn-wa:hover {
+            color: #fff;
+            transform: translateY(-2px)
+        }
+
+        .btn-outline-brand {
+            background: transparent;
+            color: var(--brand-d);
+            border: 1.5px solid var(--brand);
+            border-radius: 10px;
+            padding: .68rem 1.6rem;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: .73rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            transition: all var(--ease);
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        .btn-outline-brand:hover {
+            background: var(--brand);
+            color: #fff;
+            transform: translateY(-2px)
+        }
+
+        .btn-ghost {
+            background: rgba(255, 255, 255, .12);
+            color: #fff;
+            border: 1.5px solid rgba(255, 255, 255, .4);
+            border-radius: 10px;
+            padding: .7rem 1.6rem;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: .73rem;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            transition: all var(--ease);
+            backdrop-filter: blur(8px);
+            -webkit-tap-highlight-color: transparent
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, .22);
+            border-color: var(--brand-l);
+            color: var(--brand-l);
+            transform: translateY(-2px)
+        }
+
+        /* ═══════ ORNAMENTS ═══════ */
+        .ornament-line {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            justify-content: center;
+            margin-bottom: 1rem
+        }
+
+        .ornament-line::before,
+        .ornament-line::after {
+            content: '';
+            flex: 1;
+            max-width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--brand))
+        }
+
+        .ornament-line::after {
+            background: linear-gradient(270deg, transparent, var(--brand))
+        }
+
+        .ornament-line span {
+            font-size: .58rem;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            color: var(--brand);
+            font-weight: 600
+        }
+
+        .eyebrow {
+            font-size: .6rem;
+            font-weight: 600;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: var(--brand);
+            display: block;
+            margin-bottom: .5rem
+        }
+
+        .sec-title {
+            font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            color: var(--brn-dk);
+            line-height: 1.15
+        }
+
+        .sec-title em {
+            font-style: italic;
+            color: var(--brand)
+        }
+
+        .wa-note {
+            font-size: .64rem;
+            color: var(--txt-m);
+            display: flex;
+            align-items: center;
+            gap: .3rem;
+            justify-content: center;
+            margin-top: .5rem
+        }
+
+        /* ═══════ PAGE HERO (inner) ═══════ */
+        .page-hero {
+            position: relative;
+            padding: 100px 0 65px;
+            text-align: center;
+            overflow: hidden
+        }
+
+        .ph-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1400&q=80') center/cover no-repeat
+        }
+
+        .ph-ov {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(62, 32, 16, .82) 0%, rgba(200, 90, 40, .68) 100%)
+        }
+
+        .ph-ct {
+            position: relative;
+            z-index: 2;
+            color: var(--brand-pale)
+        }
+
+        .ph-title {
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-weight: 700;
+            font-style: italic;
+            line-height: 1.1
+        }
+
+        .bc {
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+            justify-content: center;
+            font-size: .6rem;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: rgba(255, 243, 236, .5);
+            margin-top: .6rem
+        }
+
+        .bc span {
+            color: var(--brand-l);
+            cursor: pointer;
+            transition: color var(--ease)
+        }
+
+        .bc span:hover {
+            color: var(--brand-pale)
+        }
+
+        /* ═══════ HERO ═══════ */
+        .hero {
+            position: relative;
+            min-height: 96vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=85') center 55%/cover no-repeat;
+            transform: scale(1.04);
+            transition: transform 8s ease
+        }
+
+        .hero:hover .hero-bg {
+            transform: scale(1)
+        }
+
+        .hero-ov {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, rgba(62, 32, 16, .72) 0%, rgba(200, 90, 40, .38) 45%, rgba(250, 135, 62, .12) 70%, rgba(46, 26, 8, .82) 100%)
+        }
+
+        .hero-vig {
+            position: absolute;
+            inset: 0;
+            box-shadow: inset 0 0 130px rgba(30, 12, 0, .55);
+            pointer-events: none
+        }
+
+        .hero-frame {
+            position: absolute;
+            inset: 18px;
+            border: 1px solid rgba(255, 243, 236, .18);
+            pointer-events: none;
+            z-index: 2
+        }
+
+        .hero-ct {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            color: #fff;
+            width: 100%
+        }
+
+        .hero-name {
+            font-size: clamp(3.2rem, 9vw, 7.5rem);
+            font-weight: 700;
+            font-style: italic;
+            line-height: 1.0;
+            color: var(--brand-pale);
+            text-shadow: 0 4px 40px rgba(0, 0, 0, .45);
+            animation: fadeUp .9s ease both
+        }
+
+        .hero-sub {
+            font-size: clamp(.82rem, 2vw, 1.05rem);
+            font-weight: 400;
+            color: rgba(255, 243, 236, .72);
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            animation: fadeUp .9s .12s ease both
+        }
+
+        .hero-div {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            justify-content: center;
+            margin: .9rem auto 1rem;
+            animation: fadeUp .9s .22s ease both
+        }
+
+        .hero-div::before,
+        .hero-div::after {
+            content: '';
+            width: 50px;
+            height: 1px;
+            background: rgba(255, 243, 236, .32)
+        }
+
+        .hero-div span {
+            font-size: .58rem;
+            color: rgba(255, 243, 236, .42);
+            letter-spacing: .2em
+        }
+
+        .hero-tag {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(.88rem, 1.5vw, 1.08rem);
+            font-style: italic;
+            color: rgba(255, 243, 236, .68);
+            margin-bottom: 2rem;
+            animation: fadeUp .9s .32s ease both
+        }
+
+        .hero-btns {
+            animation: fadeUp .9s .44s ease both;
+            display: flex;
+            gap: .8rem;
+            justify-content: center;
+            flex-wrap: wrap
+        }
+
+        /* SCROLL HINT */
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            text-align: center;
+            color: rgba(255, 243, 236, .38);
+            font-size: .52rem;
+            letter-spacing: .2em;
+            text-transform: uppercase
+        }
+
+        @keyframes bob {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0)
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(7px)
+            }
+        }
+
+        .scroll-hint {
+            animation: bob 2.5s ease-in-out infinite
+        }
+
+        /* ═══════ PROPERTY CARDS ═══════ */
+        .feat-sec {
+            padding: 80px 0 70px;
+            background: linear-gradient(180deg, var(--brand-pale) 0%, var(--cream-d) 100%);
+            position: relative
+        }
+
+        .feat-sec::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--brand), var(--brand-l), var(--brand), transparent)
+        }
+
+        .ig-link {
+            display: block;
+            cursor: pointer;
+            position: relative
+        }
+
+        .ig-link::after {
+            content: '\f2d1';
+            font-family: 'bootstrap-icons';
+            position: absolute;
+            inset: 0;
+            background: rgba(250, 135, 62, 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            opacity: 0;
+            transition: all var(--ease)
+        }
+
+        .ig-link:hover::after {
+            opacity: 1;
+            background: rgba(250, 135, 62, .45)
+        }
+
+        .prop-card {
+            background: var(--parch);
+            border-radius: var(--r);
+            border: 1px solid rgba(250, 135, 62, .15);
+            box-shadow: var(--sh-m);
+            overflow: hidden;
+            height: 100%;
+            transition: transform var(--ease), box-shadow var(--ease)
+        }
+
+        .prop-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--sh-l)
+        }
+
+        .prop-img {
+            position: relative;
+            height: 245px;
+            overflow: hidden
+        }
+
+        .prop-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .7s ease;
+            display: block
+        }
+
+        .prop-card:hover .prop-img img {
+            transform: scale(1.07)
+        }
+
+        .prop-img-ov {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(62, 32, 16, .6) 0%, transparent 52%);
+            pointer-events: none
+        }
+
+        .prop-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--brand);
+            color: #fff;
+            border-radius: 6px;
+            padding: .22rem .75rem;
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(250, 135, 62, .4)
+        }
+
+        .prop-price-b {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(46, 26, 8, .88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(250, 135, 62, .3);
+            border-radius: 8px;
+            padding: .35rem .85rem
+        }
+
+        .prop-price-b .amt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--brand-l);
+            display: block;
+            line-height: 1
+        }
+
+        .prop-price-b .per {
+            font-size: .55rem;
+            color: rgba(255, 243, 236, .55);
+            letter-spacing: .1em
+        }
+
+        .prop-body {
+            padding: 1.4rem 1.5rem 1.5rem
+        }
+
+        .prop-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--brn-dk);
+            margin-bottom: .35rem;
+            line-height: 1.2
+        }
+
+        .prop-desc {
+            font-family: 'EB Garamond', serif;
+            font-size: .98rem;
+            color: var(--txt-m);
+            line-height: 1.65;
+            margin-bottom: 1rem
+        }
+
+        .prop-pills {
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem
+        }
+
+        .pill {
+            background: rgba(250, 135, 62, .08);
+            border: 1px solid rgba(250, 135, 62, .2);
+            color: var(--brand-d);
+            border-radius: 50px;
+            padding: .2rem .7rem;
+            font-size: .6rem;
+            font-weight: 600;
+            letter-spacing: .07em;
+            text-transform: uppercase
+        }
+
+        .prop-footer {
+            display: flex;
+            gap: .6rem;
+            flex-wrap: wrap;
+            padding-top: 1.1rem;
+            border-top: 1px solid rgba(250, 135, 62, .12)
+        }
+
+        /* ═══════ AMENITIES ═══════ */
+        .amen-sec {
+            padding: 80px 0;
+            background: linear-gradient(160deg, var(--brn-dk) 0%, var(--brn-md) 100%);
+            position: relative;
+            overflow: hidden
+        }
+
+        .amen-sec::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(250, 135, 62, .12) 0%, transparent 65%);
+            pointer-events: none
+        }
+
+        .amen-card {
+            text-align: center;
+            padding: 2.2rem 1.4rem;
+            background: rgba(255, 243, 236, .06);
+            border: 1px solid rgba(255, 243, 236, .12);
+            border-radius: var(--r);
+            transition: background var(--ease), border-color var(--ease), transform var(--ease)
+        }
+
+        .amen-card:hover {
+            background: rgba(250, 135, 62, .12);
+            border-color: rgba(250, 135, 62, .3);
+            transform: translateY(-5px)
+        }
+
+        .amen-icon {
+            width: 68px;
+            height: 68px;
+            background: linear-gradient(135deg, rgba(250, 135, 62, .22), rgba(200, 90, 40, .14));
+            border: 1px solid rgba(250, 135, 62, .25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            margin: 0 auto 1.1rem
+        }
+
+        .amen-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--brand-pale);
+            margin-bottom: .4rem
+        }
+
+        .amen-desc {
+            font-size: .78rem;
+            color: rgba(255, 243, 236, .5);
+            line-height: 1.65
+        }
+
+        /* ═══════ EVENTS BANNER (home) ═══════ */
+        .ev-banner {
+            position: relative;
+            padding: 90px 0;
+            overflow: hidden
+        }
+
+        .ev-banner-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1600&q=80') center/cover no-repeat
+        }
+
+        .ev-banner-ov {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(62, 32, 16, .88) 0%, rgba(250, 135, 62, .55) 100%)
+        }
+
+        .ev-banner-ct {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+            text-align: center
+        }
+
+        /* ═══════ GOOGLE REVIEWS ═══════ */
+        .reviews-sec {
+            padding: 80px 0;
+            background: linear-gradient(180deg, var(--cream-d) 0%, var(--brand-pale) 100%)
+        }
+
+        .review-card {
+            background: var(--parch);
+            border: 1px solid rgba(250, 135, 62, .15);
+            border-radius: var(--r);
+            padding: 1.6rem;
+            height: 100%;
+            box-shadow: var(--sh-s);
+            transition: transform var(--ease), box-shadow var(--ease)
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--sh-m)
+        }
+
+        .review-stars {
+            color: #f5a623;
+            font-size: .85rem;
+            margin-bottom: .7rem
+        }
+
+        .review-text {
+            font-family: 'EB Garamond', serif;
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--txt-m);
+            line-height: 1.75;
+            margin-bottom: 1.2rem
+        }
+
+        .review-av {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--brand), var(--brand-d));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            font-size: .9rem;
+            flex-shrink: 0
+        }
+
+        .review-name {
+            font-weight: 700;
+            color: var(--brn-dk);
+            font-size: .88rem
+        }
+
+        .review-src {
+            font-size: .68rem;
+            color: var(--txt-l);
+            display: flex;
+            align-items: center;
+            gap: .3rem
+        }
+
+        .google-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            background: rgba(250, 135, 62, .08);
+            border: 1px solid rgba(250, 135, 62, .2);
+            border-radius: 50px;
+            padding: .3rem .85rem;
+            font-size: .65rem;
+            font-weight: 700;
+            color: var(--brand-d);
+            margin-bottom: 1.5rem
+        }
+
+        /* ═══════ INSTAGRAM REELS ═══════ */
+        .reels-sec {
+            padding: 80px 0;
+            background: linear-gradient(160deg, var(--brn-dk) 0%, #2e1408 100%)
+        }
+
+        .reel-card {
+            border-radius: var(--r);
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 9/16;
+            max-height: 380px;
+            cursor: pointer
+        }
+
+        .reel-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s ease
+        }
+
+        .reel-card:hover img {
+            transform: scale(1.06)
+        }
+
+        .reel-ov {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(62, 32, 16, .75) 0%, transparent 55%);
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem
+        }
+
+        .reel-play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, .22);
+            backdrop-filter: blur(6px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.3rem;
+            border: 2px solid rgba(255, 255, 255, .5);
+            transition: all var(--ease)
+        }
+
+        .reel-card:hover .reel-play {
+            background: var(--brand);
+            border-color: var(--brand);
+            transform: translate(-50%, -50%) scale(1.1)
+        }
+
+        .reel-label {
+            color: rgba(255, 243, 236, .85);
+            font-size: .72rem;
+            font-weight: 600;
+            letter-spacing: .06em
+        }
+
+        /* ═══════ EVENTS PAGE ═══════ */
+        .ev-card {
+            background: var(--parch);
+            border: 1px solid rgba(250, 135, 62, .15);
+            border-radius: var(--r);
+            box-shadow: var(--sh-s);
+            overflow: hidden;
+            height: 100%;
+            transition: transform var(--ease), box-shadow var(--ease)
+        }
+
+        .ev-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--sh-l)
+        }
+
+        .ev-hdr {
+            padding: 1.5rem 1.5rem 1rem;
+            text-align: center;
+            border-bottom: 2px solid rgba(250, 135, 62, .25)
+        }
+
+        .ev-hdr-org {
+            background: linear-gradient(135deg, var(--brand-d), var(--brn-md))
+        }
+
+        .ev-hdr-pur {
+            background: linear-gradient(135deg, #7a5c6e, #5a3f52)
+        }
+
+        .ev-hdr-teal {
+            background: linear-gradient(135deg, #2d7a6e, #1a5a52)
+        }
+
+        .ev-hdr-gold {
+            background: linear-gradient(135deg, #8a6a20, #b89038)
+        }
+
+        .ev-label {
+            font-size: .58rem;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: rgba(255, 243, 236, .65);
+            margin-bottom: .3rem;
+            display: block
+        }
+
+        .ev-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-style: italic;
+            color: var(--brand-pale);
+            line-height: 1.15
+        }
+
+        .ev-cap {
+            font-size: .62rem;
+            color: rgba(255, 243, 236, .55);
+            margin-top: .2rem
+        }
+
+        .ev-body {
+            padding: 1.4rem 1.5rem 1.5rem
+        }
+
+        .ev-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--brand);
+            line-height: 1;
+            margin-bottom: .4rem
+        }
+
+        .ev-price small {
+            font-size: .6rem;
+            color: var(--txt-m);
+            font-weight: 400;
+            font-family: 'Josefin Sans', sans-serif
+        }
+
+        .ev-desc {
+            font-family: 'EB Garamond', serif;
+            font-size: .95rem;
+            color: var(--txt-m);
+            line-height: 1.65;
+            margin-bottom: 1rem
+        }
+
+        .ev-inc {
+            margin-bottom: 1.2rem;
+            list-style: none;
+            padding: 0
+        }
+
+        .ev-inc li {
+            font-size: .72rem;
+            color: var(--txt-m);
+            padding: .25rem 0;
+            border-bottom: 1px dashed rgba(250, 135, 62, .15);
+            display: flex;
+            align-items: center;
+            gap: .5rem
+        }
+
+        .ev-inc li:last-child {
+            border-bottom: none
+        }
+
+        .ev-inc li i {
+            color: var(--olive)
+        }
+
+        /* ═══════ GALLERY ═══════ */
+        .gallery-sec {
+            padding: 80px 0;
+            background: var(--brand-pale)
+        }
+
+        .gal-filter {
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 2.5rem
+        }
+
+        .gal-btn {
+            background: transparent;
+            border: 1.5px solid rgba(250, 135, 62, .3);
+            border-radius: 50px;
+            padding: .45rem 1.2rem;
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--brand-d);
+            cursor: pointer;
+            transition: all var(--ease);
+            -webkit-tap-highlight-color: transparent
+        }
+
+        .gal-btn.active,
+        .gal-btn:hover {
+            background: var(--brand);
+            border-color: var(--brand);
+            color: #fff
+        }
+
+        .gal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px
+        }
+
+        .gal-item {
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            aspect-ratio: 1;
+            transition: transform var(--ease)
+        }
+
+        .gal-item:hover {
+            transform: scale(1.02)
+        }
+
+        .gal-item.wide {
+            grid-column: span 2
+        }
+
+        .gal-item.tall {
+            grid-row: span 2;
+            aspect-ratio: unset
+        }
+
+        .gal-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s ease
+        }
+
+        .gal-item:hover img {
+            transform: scale(1.06)
+        }
+
+        .gal-item-ov {
+            position: absolute;
+            inset: 0;
+            background: rgba(250, 135, 62, 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background var(--ease)
+        }
+
+        .gal-item:hover .gal-item-ov {
+            background: rgba(250, 135, 62, .35)
+        }
+
+        .gal-item-ov i {
+            color: #fff;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(.8);
+            transition: all var(--ease)
+        }
+
+        .gal-item:hover .gal-item-ov i {
+            opacity: 1;
+            transform: scale(1)
+        }
+
+        /* ═══════ ABOUT US ═══════ */
+        .about-sec {
+            padding: 80px 0;
+            background: linear-gradient(180deg, var(--brand-pale) 0%, var(--cream-d) 100%)
+        }
+
+        .about-img-wrap {
+            border-radius: var(--r);
+            overflow: hidden;
+            box-shadow: var(--sh-l);
+            position: relative
+        }
+
+        .about-img-wrap img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover
+        }
+
+        .about-badge {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--brand);
+            color: #fff;
+            border-radius: 12px;
+            padding: .8rem 1.2rem;
+            text-align: center
+        }
+
+        .about-badge .num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1
+        }
+
+        .about-badge .lbl {
+            font-size: .6rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            opacity: .88
+        }
+
+        .stat-box {
+            background: var(--parch);
+            border: 1px solid rgba(250, 135, 62, .15);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+            box-shadow: var(--sh-s)
+        }
+
+        .stat-box .n {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--brand);
+            line-height: 1
+        }
+
+        .stat-box .l {
+            font-size: .68rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--txt-m);
+            margin-top: .3rem
+        }
+
+        .team-card {
+            background: var(--parch);
+            border: 1px solid rgba(250, 135, 62, .12);
+            border-radius: var(--r);
+            overflow: hidden;
+            text-align: center;
+            box-shadow: var(--sh-s);
+            transition: transform var(--ease), box-shadow var(--ease)
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--sh-m)
+        }
+
+        .team-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: top
+        }
+
+        .team-body {
+            padding: 1.2rem 1rem
+        }
+
+        .team-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--brn-dk)
+        }
+
+        .team-role {
+            font-size: .7rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--brand);
+            margin-top: .2rem
+        }
+
+        /* ═══════ CONTACT ═══════ */
+        .contact-sec {
+            padding: 80px 0;
+            background: linear-gradient(180deg, var(--cream-d) 0%, var(--brand-pale) 100%)
+        }
+
+        .contact-card {
+            background: var(--parch);
+            border: 1px solid rgba(250, 135, 62, .18);
+            border-radius: var(--r);
+            padding: 2rem;
+            box-shadow: var(--sh-m)
+        }
+
+        .contact-info-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: .9rem 0;
+            border-bottom: 1px dashed rgba(250, 135, 62, .15)
+        }
+
+        .contact-info-item:last-child {
+            border-bottom: none
+        }
+
+        .ci-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(250, 135, 62, .1);
+            border: 1px solid rgba(250, 135, 62, .2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--brand);
+            flex-shrink: 0
+        }
+
+        .ci-label {
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--txt-l);
+            margin-bottom: .2rem
+        }
+
+        .ci-value {
+            font-size: .88rem;
+            color: var(--brn-dk);
+            font-weight: 600
+        }
+
+        .ci-sub {
+            font-size: .75rem;
+            color: var(--txt-m)
+        }
+
+        .contact-form label {
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--brand-d);
+            display: block;
+            margin-bottom: .3rem
+        }
+
+        .contact-form input,
+        .contact-form select,
+        .contact-form textarea {
+            width: 100%;
+            border: 1.5px solid rgba(250, 135, 62, .25);
+            border-radius: 8px;
+            padding: .65rem 1rem;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: .85rem;
+            background: var(--brand-mist);
+            color: var(--txt);
+            transition: border-color var(--ease);
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none
+        }
+
+        .contact-form input:focus,
+        .contact-form select:focus,
+        .contact-form textarea:focus {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(250, 135, 62, .12);
+            background: #fff
+        }
+
+        .contact-form .fg {
+            margin-bottom: 1rem
+        }
+
+        .map-embed {
+            border-radius: var(--r);
+            overflow: hidden;
+            box-shadow: var(--sh-m);
+            height: 280px;
+            border: 1px solid rgba(250, 135, 62, .15)
+        }
+
+        .map-embed iframe {
+            width: 100%;
+            height: 100%;
+            border: none
+        }
+
+        /* ═══════ BOOKING FORM ═══════ */
+        .rp-form {
+            background: var(--parch);
+            border: 1px solid rgba(250, 135, 62, .18);
+            border-radius: var(--r);
+            padding: 2rem;
+            box-shadow: var(--sh-m)
+        }
+
+        .rp-form label {
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--brand-d);
+            display: block;
+            margin-bottom: .3rem
+        }
+
+        .rp-form input,
+        .rp-form select,
+        .rp-form textarea {
+            width: 100%;
+            border: 1.5px solid rgba(250, 135, 62, .25);
+            border-radius: 8px;
+            padding: .65rem 1rem;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: .85rem;
+            background: var(--brand-mist);
+            color: var(--txt);
+            transition: border-color var(--ease);
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none
+        }
+
+        .rp-form input:focus,
+        .rp-form select:focus,
+        .rp-form textarea:focus {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(250, 135, 62, .12);
+            background: #fff
+        }
+
+        .rp-form .form-group {
+            margin-bottom: 1rem
+        }
+
+        .bk-tab-row {
+            display: inline-flex;
+            gap: .5rem;
+            background: rgba(250, 135, 62, .08);
+            border: 1px solid rgba(250, 135, 62, .2);
+            border-radius: 50px;
+            padding: .35rem
+        }
+
+        .bk-tab {
+            background: transparent;
+            border: none;
+            border-radius: 50px;
+            padding: .55rem 1.4rem;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: .73rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--txt-m);
+            cursor: pointer;
+            transition: all var(--ease);
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        .bk-tab.active {
+            background: linear-gradient(135deg, var(--brand), var(--brand-d));
+            color: #fff;
+            box-shadow: 0 3px 14px rgba(250, 135, 62, .3)
+        }
+
+        .bk-card {
+            background: var(--parch);
+            border: 1px solid rgba(250, 135, 62, .18);
+            border-radius: var(--r);
+            padding: 2rem;
+            box-shadow: var(--sh-m)
+        }
+
+        .brow {
+            display: flex;
+            justify-content: space-between;
+            padding: .75rem 0;
+            border-bottom: 1px dashed rgba(250, 135, 62, .18);
+            font-size: .82rem
+        }
+
+        .brow:last-of-type {
+            border-bottom: none
+        }
+
+        .bl {
+            color: var(--txt-m);
+            font-size: .7rem;
+            letter-spacing: .08em;
+            text-transform: uppercase
+        }
+
+        .bv {
+            font-weight: 700;
+            color: var(--brn-dk)
+        }
+
+        .btotal {
+            background: linear-gradient(135deg, var(--brand-d), var(--brn-md));
+            border-radius: 10px;
+            padding: 1.1rem 1.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0;
+            border: 1px solid rgba(250, 135, 62, .25)
+        }
+
+        .btotal .tl {
+            font-size: .63rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: rgba(255, 243, 236, .65)
+        }
+
+        .btotal .tp {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--brand-l)
+        }
+
+        .wa-box {
+            background: rgba(37, 211, 102, .08);
+            border: 1px solid rgba(37, 211, 102, .22);
+            border-radius: 10px;
+            padding: .9rem 1.1rem;
+            text-align: center;
+            margin: .9rem 0
+        }
+
+        .wa-box p {
+            font-size: .75rem;
+            color: #1a9e50;
+            margin: 0;
+            line-height: 1.5
+        }
+
+        .amenity-check-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: .4rem
+        }
+
+        .amen-check-item {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            background: var(--parch);
+            border: 1.5px solid rgba(250, 135, 62, .18);
+            border-radius: 10px;
+            padding: .65rem .9rem;
+            cursor: pointer;
+            font-size: .8rem;
+            color: var(--txt);
+            transition: border-color var(--ease), background var(--ease);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none
+        }
+
+        .amen-check-item:hover {
+            border-color: var(--brand);
+            background: rgba(250, 135, 62, .04)
+        }
+
+        .amen-check-item input[type="checkbox"] {
+            display: none
+        }
+
+        .amen-check-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 1.5px solid rgba(250, 135, 62, .35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .75rem;
+            color: transparent;
+            flex-shrink: 0;
+            transition: all var(--ease);
+            background: transparent
+        }
+
+        .amen-check-item input[type="checkbox"]:checked~.amen-check-box {
+            background: var(--brand);
+            border-color: var(--brand);
+            color: #fff
+        }
+
+        .amen-check-item:has(input:checked) {
+            border-color: var(--brand);
+            background: rgba(250, 135, 62, .06)
+        }
+
+        .how-step {
+            background: linear-gradient(160deg, var(--parch), var(--cream-d));
+            border: 1px solid rgba(250, 135, 62, .15);
+            border-radius: var(--r);
+            padding: 2.2rem 1.5rem;
+            text-align: center;
+            height: 100%;
+            transition: transform var(--ease), box-shadow var(--ease)
+        }
+
+        .how-step:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--sh-m)
+        }
+
+        .step-n {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.1rem;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Cormorant Garamond', serif
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--brn-dk);
+            margin-bottom: .5rem
+        }
+
+        .step-desc {
+            font-family: 'EB Garamond', serif;
+            font-size: .95rem;
+            color: var(--txt-m);
+            line-height: 1.65
+        }
+
+        /* ═══════ FOOTER ═══════ */
+        footer {
+            background: linear-gradient(160deg, #1e0a02 0%, var(--brn-dk) 100%);
+            color: rgba(255, 243, 236, .6);
+            padding: 65px 0 calc(24px + var(--safe-b));
+            border-top: 2px solid rgba(250, 135, 62, .2)
+        }
+
+        .f-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-style: italic;
+            color: var(--brand-pale)
+        }
+
+        .f-brand small {
+            display: block;
+            font-size: .53rem;
+            font-style: normal;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: var(--brand-l);
+            margin-top: .2rem;
+            font-family: 'Josefin Sans', sans-serif
+        }
+
+        .f-head {
+            font-size: .58rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--brand-l);
+            margin-bottom: 1rem;
+            font-weight: 700
+        }
+
+        .f-links {
+            list-style: none;
+            padding: 0
+        }
+
+        .f-links li {
+            margin-bottom: .45rem
+        }
+
+        .f-links a {
+            font-size: .8rem;
+            color: rgba(255, 243, 236, .45);
+            text-decoration: none;
+            transition: color var(--ease);
+            cursor: pointer
+        }
+
+        .f-links a:hover {
+            color: var(--brand-l)
+        }
+
+        .f-div {
+            border-color: rgba(255, 255, 255, .06);
+            margin: 2rem 0 1.2rem
+        }
+
+        .f-copy {
+            font-size: .68rem;
+            opacity: .3;
+            text-align: center
+        }
+
+        .soc {
+            width: 35px;
+            height: 35px;
+            border: 1px solid rgba(250, 135, 62, .22);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 243, 236, .5);
+            text-decoration: none;
+            font-size: .88rem;
+            transition: all var(--ease);
+            margin-right: .4rem
+        }
+
+        .soc:hover {
+            border-color: var(--brand);
+            color: var(--brand-l);
+            transform: translateY(-2px)
+        }
+
+        /* ═══════ FLOAT STACK ═══════ */
+        .float-stack {
+            position: fixed;
+            bottom: calc(8rem + var(--safe-b));
+            right: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: .7rem;
+            z-index: 995
+        }
+
+        .float-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .25);
+            transition: transform var(--ease);
+            -webkit-tap-highlight-color: transparent;
+            border: none;
+            cursor: pointer
+        }
+
+        .float-btn:hover {
+            transform: translateY(-3px)
+        }
+
+        .fig {
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)
+        }
+
+        .fbtt {
+            background: linear-gradient(135deg, var(--brand), var(--brand-d));
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--ease)
+        }
+
+        .fbtt.show {
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        /* ═══════ SOCIAL PROOF POPUP ═══════ */
+        .sp-popup {
+            position: fixed;
+            bottom: calc(1.8rem + var(--safe-b));
+            left: 1.2rem;
+            background: var(--parch);
+            border: 1px solid rgba(250, 135, 62, .25);
+            border-radius: 14px;
+            padding: .8rem 1rem;
+            max-width: 265px;
+            box-shadow: 0 8px 32px rgba(250, 135, 62, .2);
+            z-index: 994;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            transform: translateX(-110%);
+            opacity: 0;
+            transition: transform .5s cubic-bezier(.34, 1.56, .64, 1), opacity .5s ease
+        }
+
+        .sp-popup.show {
+            transform: translateX(0);
+            opacity: 1
+        }
+
+        .sp-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem
+        }
+
+        .sp-icon-v {
+            background: rgba(250, 135, 62, .15)
+        }
+
+        .sp-icon-b {
+            background: rgba(37, 211, 102, .15)
+        }
+
+        .sp-text strong {
+            font-size: .78rem;
+            color: var(--brn-dk);
+            font-weight: 700;
+            display: block;
+            line-height: 1.2
+        }
+
+        .sp-text span {
+            font-size: .66rem;
+            color: var(--txt-m)
+        }
+
+        .sp-close {
+            font-size: .9rem;
+            color: var(--txt-m);
+            cursor: pointer;
+            flex-shrink: 0;
+            padding: .2rem;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        /* ═══════ INSTAGRAM MODAL ═══════ */
+        .ig-modal-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s ease
+        }
+
+        .ig-modal-bg.open {
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        .ig-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(.92);
+            background: var(--parch);
+            border-radius: 20px;
+            padding: 2rem;
+            width: min(340px, 90vw);
+            text-align: center;
+            transition: transform .35s cubic-bezier(.34, 1.56, .64, 1);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, .3)
+        }
+
+        .ig-modal-bg.open .ig-modal {
+            transform: translate(-50%, -50%) scale(1)
+        }
+
+        .ig-modal h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--brn-dk);
+            margin: .7rem 0 .4rem
+        }
+
+        .ig-modal p {
+            font-size: .85rem;
+            color: var(--txt-m);
+            margin-bottom: 1.2rem;
+            line-height: 1.6
+        }
+
+        .ig-modal-icon {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #f09433, #dc2743, #bc1888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        /* ═══════ CHATBOT ═══════ */
+        .cb-bubble {
+            position: fixed;
+            bottom: calc(1.8rem + var(--safe-b));
+            right: 1.4rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #fff;
+            cursor: pointer;
+            z-index: 997;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, .45);
+            animation: pulse-wa 2.5s ease-in-out infinite;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        @keyframes pulse-wa {
+
+            0%,
+            100% {
+                box-shadow: 0 4px 20px rgba(37, 211, 102, .4)
+            }
+
+            50% {
+                box-shadow: 0 4px 36px rgba(37, 211, 102, .65)
+            }
+        }
+
+        .cb-notif {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            background: var(--brand);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: .62rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #fff;
+            font-family: 'Josefin Sans', sans-serif
+        }
+
+        .cb-notif.hidden {
+            display: none
+        }
+
+        .cb-win {
+            position: fixed;
+            bottom: calc(5rem + var(--safe-b));
+            right: 1.4rem;
+            width: 350px;
+            max-width: calc(100vw - 2.8rem);
+            background: #fff3ec;
+            border-radius: 20px;
+            box-shadow: 0 16px 56px rgba(0, 0, 0, .22);
+            border: 1px solid rgba(250, 135, 62, .2);
+            z-index: 996;
+            transform: scale(.88) translateY(24px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform .38s cubic-bezier(.34, 1.56, .64, 1), opacity .3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column
+        }
+
+        .cb-win.open {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        .cb-head {
+            background: linear-gradient(135deg, #d96520, #fa873e);
+            padding: .85rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            flex-shrink: 0
+        }
+
+        .cb-av {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0
+        }
+
+        .cb-info {
+            flex: 1
+        }
+
+        .cb-info strong {
+            color: #fff;
+            font-size: .85rem;
+            display: block;
+            font-family: 'Josefin Sans', sans-serif
+        }
+
+        .cb-info span {
+            color: rgba(255, 255, 255, .78);
+            font-size: .68rem;
+            display: flex;
+            align-items: center;
+            gap: .3rem
+        }
+
+        .cb-dot {
+            width: 7px;
+            height: 7px;
+            background: #25D366;
+            border-radius: 50%;
+            display: inline-block
+        }
+
+        .cb-close {
+            background: rgba(255, 255, 255, .18);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: .85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+            flex-shrink: 0
+        }
+
+        .cb-body {
+            flex: 1;
+            padding: .9rem;
+            background: #fde9d8;
+            min-height: 320px;
+            max-height: 380px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            scroll-behavior: smooth
+        }
+
+        .cb-bot-msg {
+            background: #fff;
+            color: #3e2010;
+            border-radius: 4px 14px 14px 14px;
+            padding: .6rem .85rem;
+            font-size: .78rem;
+            line-height: 1.55;
+            max-width: 85%;
+            align-self: flex-start;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+            white-space: pre-line;
+            font-family: 'Josefin Sans', sans-serif
+        }
+
+        .cb-user-msg {
+            background: linear-gradient(135deg, #fa873e, #d96520);
+            color: #fff;
+            border-radius: 14px 14px 4px 14px;
+            padding: .6rem .85rem;
+            font-size: .78rem;
+            line-height: 1.55;
+            max-width: 85%;
+            align-self: flex-end;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+            font-family: 'Josefin Sans', sans-serif
+        }
+
+        .cb-typing {
+            background: #fff;
+            border-radius: 4px 14px 14px 14px;
+            padding: .5rem .85rem;
+            align-self: flex-start;
+            display: flex;
+            gap: 4px;
+            align-items: center
+        }
+
+        .cb-typing span {
+            width: 7px;
+            height: 7px;
+            background: var(--brand);
+            border-radius: 50%;
+            animation: cbT 1.2s ease-in-out infinite
+        }
+
+        .cb-typing span:nth-child(2) {
+            animation-delay: .2s
+        }
+
+        .cb-typing span:nth-child(3) {
+            animation-delay: .4s
+        }
+
+        @keyframes cbT {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(1);
+                opacity: .4
+            }
+
+            40% {
+                transform: scale(1.3);
+                opacity: 1
+            }
+        }
+
+        .cb-qr-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 4px
+        }
+
+        .cb-qbtn {
+            background: rgba(250, 135, 62, .1);
+            border: 1.5px solid rgba(250, 135, 62, .35);
+            color: #d96520;
+            border-radius: 20px;
+            padding: .5rem .9rem;
+            font-size: .72rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all var(--ease);
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Josefin Sans', sans-serif
+        }
+
+        .cb-qbtn:hover {
+            background: rgba(250, 135, 62, .2);
+            border-color: var(--brand)
+        }
+
+        .cb-wa-link {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            background: #25D366;
+            color: #fff;
+            border-radius: 8px;
+            padding: .5rem .9rem;
+            font-size: .72rem;
+            font-weight: 700;
+            text-decoration: none;
+            margin-top: 4px;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        .cb-footer {
+            padding: .6rem .8rem;
+            background: #fff3ec;
+            display: flex;
+            gap: .5rem;
+            flex-shrink: 0;
+            border-top: 1px solid rgba(250, 135, 62, .15)
+        }
+
+        .cb-inp {
+            flex: 1;
+            border: 1.5px solid rgba(250, 135, 62, .25);
+            border-radius: 50px;
+            padding: .55rem .9rem;
+            font-size: .78rem;
+            background: #fff;
+            outline: none;
+            font-family: 'Josefin Sans', sans-serif;
+            color: #2e1a08;
+            -webkit-appearance: none;
+            transition: border-color var(--ease)
+        }
+
+        .cb-inp:focus {
+            border-color: var(--brand)
+        }
+
+        .cb-send-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fa873e, #d96520);
+            border: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: .85rem;
+            flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        /* ═══════ ANIMATIONS & REVEALS ═══════ */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(26px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity .7s ease, transform .7s ease
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        /* ═══════ iOS FIXES ═══════ */
+        @supports (-webkit-touch-callout:none) {
+            .navbar {
+                padding-top: calc(.75rem + var(--safe-t))
+            }
+
+            input,
+            select,
+            textarea {
+                font-size: 16px !important
+            }
+        }
+
+        @media(max-width:575px) {
+            .hero {
+                min-height: 88vh
+            }
+
+            .cb-win {
+                right: .7rem;
+                width: calc(100vw - 1.4rem);
+                bottom: calc(4.5rem + var(--safe-b))
+            }
+
+            .cb-bubble {
+                right: .8rem
+            }
+
+            .float-stack {
+                right: .8rem
+            }
+
+            .sp-popup {
+                left: .8rem;
+                max-width: calc(100vw - 5.5rem)
+            }
+
+            .prop-footer {
+                flex-direction: column
+            }
+
+            .prop-footer .btn-brand,
+            .prop-footer .btn-outline-brand {
+                width: 100%;
+                justify-content: center
+            }
+
+            .gal-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .gal-item.wide {
+                grid-column: span 1
+            }
+
+            .gal-item.tall {
+                grid-row: span 1
+            }
+
+            .amenity-check-grid {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:767px) {
+
+            .hero-btns .btn-brand,
+            .hero-btns .btn-wa,
+            .hero-btns .btn-ghost {
+                padding: .65rem 1.1rem;
+                font-size: .68rem
+            }
+
+            .feat-sec,
+            .amen-sec,
+            .ev-banner,
+            .reviews-sec,
+            .reels-sec,
+            .gallery-sec,
+            .about-sec,
+            .contact-sec {
+                padding: 60px 0
+            }
+        }
+
+        .nav-link,
+        .btn-brand,
+        .btn-wa,
+        .btn-outline-brand,
+        .float-btn {
+            min-height: 44px
+        }
+
+        /* ═══════ FORM STYLES (LOGIN/REGISTER) ═══════ */
+        .auth-container {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=85') center/cover no-repeat;
+            filter: blur(8px) brightness(0.6);
+            transform: scale(1.05);
+            z-index: 0;
+        }
+
+        .auth-card {
+            background: var(--parch);
+            border: 1px solid rgba(250, 135, 62, .18);
+            border-radius: var(--r);
+            padding: 3rem 2.5rem;
+            box-shadow: var(--sh-l);
+            width: 100%;
+            max-width: 440px;
+            position: relative;
+            z-index: 1;
+            animation: fadeUp .6s ease both;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .auth-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--brn-dk);
+            line-height: 1.15;
+        }
+
+        .auth-header h1 em {
+            font-style: italic;
+            color: var(--brand);
+        }
+
+        .form-group {
+            margin-bottom: 1.4rem;
+        }
+
+        .form-group label {
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--brand-d);
+            display: block;
+            margin-bottom: .4rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            width: 100%;
+            border: 1.5px solid rgba(250, 135, 62, .25);
+            border-radius: 8px;
+            padding: .85rem 1rem;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: .95rem;
+            background: var(--brand-mist);
+            color: var(--txt);
+            transition: border-color var(--ease), box-shadow var(--ease);
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(250, 135, 62, .12);
+            background: #fff;
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: right;
+            font-size: .75rem;
+            color: var(--txt-m);
+            text-decoration: none;
+            margin-top: -0.6rem;
+            margin-bottom: 1.5rem;
+            transition: color var(--ease);
+        }
+
+        .forgot-link:hover {
+            color: var(--brand-d);
+        }
+
+        .auth-error {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid #dc3545;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: #dc3545;
+            font-size: 0.85rem;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(250, 135, 62, .12);
+        }
+
+        .auth-footer p {
+            font-size: .8rem;
+            color: var(--txt-m);
+            margin: 0;
+        }
+
+        .auth-footer a {
+            color: var(--brand);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color var(--ease);
+        }
+
+        .auth-footer a:hover {
+            color: var(--brand-d);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(26px)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ██ INSTAGRAM MODAL ██ -->
+    <div class="ig-modal-bg" id="igModal" onclick="closeIgModal(event)">
+        <div class="ig-modal">
+            <div class="ig-modal-icon"><i class="bi bi-instagram"></i></div>
+            <h4>Choose Instagram Account</h4>
+            <p>Explore our properties on Instagram:</p>
+            <div class="d-flex gap-2 flex-column">
+                <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
+                    class="btn-brand w-100 justify-content-center mb-2" style="border-radius:10px" onclick="closeIgModal()">
+                    <i class="bi bi-instagram"></i> @Parudeesa_the_paradise (Paradise)
+                </a>
+                <a href="https://www.instagram.com/parudeesa_utopiya" target="_blank"
+                    class="btn-brand w-100 justify-content-center mb-2" style="border-radius:10px" onclick="closeIgModal()">
+                    <i class="bi bi-instagram"></i> @parudeesa_utopiya (Utopiya)
+                </a>
+            </div>
+            <button onclick="closeIgModal()"
+                style="font-size:.72rem;color:var(--txt-m);background:none;border:none;cursor:pointer;margin-top:.3rem;padding:.4rem 1rem">Maybe
+                later</button>
+        </div>
+    </div>
+
+    <!-- ██ NAVBAR ██ -->
+    <nav class="navbar navbar-expand-lg" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="goPage('home');return false;">
+                Parudeesa <small>The Lake View Resort</small>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav mx-auto gap-1">
+                    <li class="nav-item"><a class="nav-link anav" onclick="goPage('home')">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="goPage('events')">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="goPage('gallery')">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="goPage('about')">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="goPage('contact')">Contact</a></li>
+                    @auth
+                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="nav-item">
+                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="nav-link" style="background: none; border: none; color: inherit; cursor: pointer;">Logout</button>
+                            </form>
+                        </li>
+                    @else
+                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+                    @endauth
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ████████████████████ PAGE: HOME ████████████████████ -->
+    <div id="page-home" class="page active">
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-ov"></div>
+            <div class="hero-vig"></div>
+            <div class="hero-frame"></div>
+            <div class="container hero-ct py-5">
+                <p
+                    style="font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,243,236,.5);margin-bottom:.6rem;animation:fadeUp .9s ease both">
+                    ✦ Kerala, India ✦</p>
+                <h1 class="hero-name">Parudeesa</h1>
+                <p class="hero-sub">The Lake View Resort</p>
+                <div class="hero-div"><span>✦</span></div>
+                <p class="hero-tag">"Experience Serenity by the Lake"</p>
+                <div class="hero-btns">
+                    <a onclick="goPage('booking')" class="btn-brand"><i class="bi bi-calendar-check"></i> Book Now</a>
+                    <a onclick="goPage('events')" class="btn-ghost"><i class="bi bi-stars"></i> Explore Events</a>
+                    <a href="#" onclick="toggleChatbot();return false;" class="btn-wa"><i class="bi bi-whatsapp"></i>
+                        Chat with
+                        Us</a>
+                </div>
+                <div class="wa-note mt-3" style="color:rgba(255,243,236,.55)">
+                    <i class="bi bi-whatsapp" style="color:#25D366"></i> Instant booking via WhatsApp
+                </div>
+            </div>
+            <div class="scroll-hint"><i class="bi bi-chevron-double-down d-block mb-1"></i>Scroll</div>
+        </section>
+
+        <!-- FEATURED PROPERTIES -->
+        <section class="feat-sec">
+            <div class="container">
+                <div class="text-center mb-5 reveal">
+                    <div class="ornament-line"><span>Our Properties</span></div>
+                    <span class="eyebrow">Handpicked Retreats</span>
+                    <h2 class="sec-title">Two <em>Lakeside</em> Jewels</h2>
+                    <p class="eb mt-2"
+                        style="color:var(--txt-m);max-width:480px;margin:0 auto;font-size:1rem;line-height:1.7">
+                        Each property offers unobstructed sunset views, private lake access, and curated experiences.
+                    </p>
+                </div>
+                <div class="row g-4 justify-content-center">
+                    @foreach($properties as $property)
+                    <div class="col-md-6 reveal">
+                        <div class="prop-card">
+                            <div class="prop-img">
+                                <a class="ig-link" onclick="showIgModal();return false;" title="View on Instagram">
+                                    <img src="{{ $property->image_url ?: 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=700&q=80' }}"
+                                        alt="{{ $property->name }}" loading="lazy" />
+                                </a>
+                                <div class="prop-img-ov"></div>
+                                <span class="prop-tag">{{ $property->name }}</span>
+                                <div class="prop-price-b"><span class="amt">₹{{ number_format($property->price, 0) }}</span><span class="per">/
+                                        Night</span></div>
+                            </div>
+                            <div class="prop-body">
+                                <h3 class="prop-name">{{ $property->name }}</h3>
+                                <p class="prop-desc">{{ $property->description ?: 'Beautiful lakeside property at Parudeesa.' }}</p>
+                                <div class="prop-pills">
+                                    <span class="pill"><i class="bi bi-geo-alt me-1"></i>{{ $property->location ?: 'Kerala, India' }}</span>
+                                    @if($property->phone)
+                                    <span class="pill"><i class="bi bi-telephone me-1"></i>{{ $property->phone }}</span>
+                                    @endif
+                                </div>
+                                <div class="prop-footer">
+                                    @if($property->phone)
+                                    <a href="https://wa.me/{{ str_replace(['+', ' ', '-'], '', $property->phone) }}?text=Hi!%20I%20want%20to%20book%20{{ urlencode($property->name) }}%20at%20Parudeesa."
+                                        target="_blank" class="btn-wa"><i class="bi bi-whatsapp"></i> Book Now</a>
+                                    @endif
+                                    <a onclick="goPage('booking')" class="btn-outline-brand"><i
+                                            class="bi bi-calendar-check"></i>
+                                        Reserve</a>
+                                </div>
+                                @if($property->phone)
+                                <div class="wa-note mt-2"><i class="bi bi-whatsapp" style="color:#25D366"></i> Direct
+                                    booking: {{ $property->phone }}</div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        <!-- AMENITIES -->
+        <section class="amen-sec">
+            <div class="container">
+                <div class="text-center mb-5 reveal">
+                    <span class="eyebrow" style="color:rgba(255,179,120,.8)">Experiences</span>
+                    <h2 class="sec-title" style="color:var(--brand-pale)">What <em
+                            style="color:var(--brand-l)">Awaits</em> You
+                    </h2>
+                </div>
+                <div class="row g-4 justify-content-center">
+                    <!-- Infinity Pool -->
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="amen-card">
+                            <div class="amen-icon">🏊‍♂️</div>
+                            <div class="amen-title">Infinity Pool</div>
+                            <p class="amen-desc">Relax with seamlessly blended lake views in our premium pool.</p>
+                        </div>
+                    </div>
+                    <!-- Lake View Dining -->
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="amen-card">
+                            <div class="amen-icon">🍽️</div>
+                            <div class="amen-title">Lake View Dining</div>
+                            <p class="amen-desc">Curated sunset dining directly by the tranquil waters.</p>
+                        </div>
+                    </div>
+                    <!-- Campfire Area -->
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="amen-card">
+                            <div class="amen-icon">🔥</div>
+                            <div class="amen-title">Campfire Area</div>
+                            <p class="amen-desc">Cozy evenings under the stars with dedicated pit spots.</p>
+                        </div>
+                    </div>
+                    <!-- Free WiFi -->
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="amen-card">
+                            <div class="amen-icon">📶</div>
+                            <div class="amen-title">Free WiFi</div>
+                            <p class="amen-desc">Stay connected seamlessly throughout your staycover.</p>
+                        </div>
+                    </div>
+                    <!-- Indoor Games -->
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="amen-card">
+                            <div class="amen-icon">🎱</div>
+                            <div class="amen-title">Indoor Games</div>
+                            <p class="amen-desc">A fun assortment of games for families and casual evenings.</p>
+                        </div>
+                    </div>
+                    <!-- Kids Play Area -->
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="amen-card">
+                            <div class="amen-icon">🛝</div>
+                            <div class="amen-title">Kids Play Area</div>
+                            <p class="amen-desc">Safe, engaging zones specially designed for younger guests.</p>
+                        </div>
+                    </div>
+                    <!-- Boating -->
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="amen-card">
+                            <div class="amen-icon">🚣</div>
+                            <div class="amen-title">Boating</div>
+                            <p class="amen-desc">Explore the waters at your pace with dawn and dusk rides.</p>
+                        </div>
+                    </div>
+                    <!-- Event Space -->
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="amen-card">
+                            <div class="amen-icon">🎊</div>
+                            <div class="amen-title">Event Space</div>
+                            <p class="amen-desc">Stunning backdrops tailored for grand and intimate celebrations.</p>
+                        </div>
+                    </div>
+                    <!-- Parking Facility -->
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="amen-card">
+                            <div class="amen-icon">🅿️</div>
+                            <div class="amen-title">Parking Facility</div>
+                            <p class="amen-desc">Spacious, secure parking for all staying and visiting guests.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPLORE EVENTS BANNER -->
+        <section class="ev-banner">
+            <div class="ev-banner-bg"></div>
+            <div class="ev-banner-ov"></div>
+            <div class="container ev-banner-ct reveal">
+                <span class="eyebrow" style="color:rgba(255,243,236,.7)">Celebrations at Parudeesa</span>
+                <h2
+                    style="font-size:clamp(2rem,5vw,4rem);font-weight:700;font-style:italic;color:var(--brand-pale);margin-bottom:1rem">
+                    Make Every Moment <em style="color:var(--brand-l)">Unforgettable</em></h2>
+                <p class="eb mb-4"
+                    style="color:rgba(255,243,236,.75);font-size:1.1rem;max-width:540px;margin:0 auto 2rem;line-height:1.75">
+                    From
+                    intimate birthday celebrations to grand 200-person weddings — Parudeesa is Kerala's premier lakeside
+                    events
+                    destination.</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a onclick="goPage('events')" class="btn-brand" style="cursor:pointer"><i
+                            class="bi bi-stars me-1"></i>
+                        Explore All Packages</a>
+                    <a href="https://wa.me/918921021202?text=Hi!%20I%20want%20to%20know%20about%20event%20packages%20at%20Parudeesa."
+                        target="_blank" class="btn-ghost"><i class="bi bi-whatsapp me-1"></i> Enquire Now</a>
+                </div>
+                <div class="row g-3 mt-5 justify-content-center">
+                    <div class="col-6 col-md-3">
+                        <div
+                            style="background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:1.2rem;text-align:center">
+                            <div
+                                style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--brand-l)">
+                                ₹25K</div>
+                            <div
+                                style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,243,236,.65);margin-top:.2rem">
+                                Party Package</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div
+                            style="background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:1.2rem;text-align:center">
+                            <div
+                                style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--brand-l)">
+                                ₹75K</div>
+                            <div
+                                style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,243,236,.65);margin-top:.2rem">
+                                Grand Celebration</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div
+                            style="background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:1.2rem;text-align:center">
+                            <div
+                                style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--brand-l)">
+                                200+</div>
+                            <div
+                                style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,243,236,.65);margin-top:.2rem">
+                                Guest Capacity</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div
+                            style="background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:1.2rem;text-align:center">
+                            <div
+                                style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--brand-l)">
+                                100%</div>
+                            <div
+                                style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,243,236,.65);margin-top:.2rem">
+                                Customisable</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GOOGLE REVIEWS / TESTIMONIALS -->
+        <section class="reviews-sec">
+            <div class="container">
+                <div class="text-center mb-5 reveal">
+                    <div class="ornament-line"><span>What Guests Say</span></div>
+                    <span class="eyebrow">Guest Reviews</span>
+                    <h2 class="sec-title">Memories <em>Made Here</em></h2>
+                    <a href="https://share.google/1u2VEy60cnApQDgkK" target="_blank" class="google-badge mt-3">
+                        <svg width="16" height="16" viewBox="0 0 48 48">
+                            <path fill="#EA4335"
+                                d="M24 9.5c3.5 0 6.3 1.2 8.4 3.2l6.3-6.3C34.6 2.7 29.7.5 24 .5 14.6.5 6.7 6.1 3 14.1l7.4 5.7C12.1 13 17.6 9.5 24 9.5z" />
+                            <path fill="#4285F4"
+                                d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.4 5.7c4.3-4 6.8-9.9 7.2-16.9z" />
+                            <path fill="#FBBC05"
+                                d="M10.4 28.2C9.8 26.6 9.5 24.8 9.5 23s.3-3.6.9-5.2L3 12.1C1.1 15.8 0 19.8 0 23s1.1 7.2 3 10.9l7.4-5.7z" />
+                            <path fill="#34A853"
+                                d="M24 45.5c5.7 0 10.5-1.9 14-5.1l-7.4-5.7c-1.9 1.3-4.4 2.1-6.6 2.1-6.4 0-11.9-3.5-13.6-9.8l-7.4 5.7C6.7 40.9 14.6 45.5 24 45.5z" />
+                        </svg>
+                        5.0 ★ Google Reviews · 200+ Happy Guests
+                    </a>
+                </div>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-4 reveal">
+                        <div class="review-card">
+                            <div class="review-stars">★★★★★</div>
+                            <p class="review-text">"Amazing place! The views were spectacular, and the service was
+                                absolutely top-notch."</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="review-av">SJ</div>
+                                <div>
+                                    <div class="review-name">Sarah J.</div>
+                                    <div class="review-src">Google Review</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 reveal">
+                        <div class="review-card">
+                            <div class="review-stars">★★★★★</div>
+                            <p class="review-text">"Parudeesa The Paradise made our friend's gathering unforgettably
+                                beautiful! Highly recommend the sunset views."</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="review-av">AK</div>
+                                <div>
+                                    <div class="review-name">Amit K.</div>
+                                    <div class="review-src">Google Review</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 reveal">
+                        <div class="review-card">
+                            <div class="review-stars">★★★★★</div>
+                            <p class="review-text">"Our wedding at Parudeesa Utopiya was a dream come true. The event
+                                space handled all 200 guests effortlessly."</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="review-av">RN</div>
+                                <div>
+                                    <div class="review-name">Riya N.</div>
+                                    <div class="review-src">Google Review</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 reveal">
+                        <div class="review-card">
+                            <div class="review-stars">★★★★★</div>
+                            <p class="review-text">"We loved the lake view dining and the complimentary boating! Best
+                                family gathering spot."</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="review-av">MD</div>
+                                <div>
+                                    <div class="review-name">Manoj D.</div>
+                                    <div class="review-src">Google Review</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 reveal">
+                        <div class="review-card">
+                            <div class="review-stars">★★★★★</div>
+                            <p class="review-text">"Corporate retreat was fantastic. Superb WiFi, great campfire area,
+                                and infinity pool."</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="review-av">PT</div>
+                                <div>
+                                    <div class="review-name">Priya T.</div>
+                                    <div class="review-src">Google Review</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4 reveal">
+                    <a href="https://share.google/1u2VEy60cnApQDgkK" target="_blank" class="btn-outline-brand">Read All
+                        Reviews on Google <i class="bi bi-arrow-right ms-1"></i></a>
+                </div>
+            </div>
+        </section>
+        <!-- INSTAGRAM REELS -->
+        <section class="reels-sec">
+            <div class="container">
+                <div class="text-center mb-5 reveal">
+                    <span class="eyebrow" style="color:rgba(250,135,62,.8)">Follow Our Story</span>
+                    <h2 class="sec-title" style="color:var(--brand-pale)">Instagram <em
+                            style="color:var(--brand-l)">Reels</em>
+                    </h2>
+                    <p style="color:rgba(255,243,236,.55);font-size:.82rem;margin-top:.5rem">@parudeesa_utopiya &
+                        @Parudeesa_the_paradise</p>
+                </div>
+                <div class="row g-3 justify-content-center">
+                    <div class="col-6 col-md-4 col-lg-2-4 reveal" style="flex:0 0 auto;width:18%">
+                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank">
+                            <div class="reel-card">
+                                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80"
+                                    alt="Reel 1" loading="lazy" />
+                                <div class="reel-ov"><span class="reel-label">Sunrise Views</span></div>
+                                <div class="reel-play"><i class="bi bi-play-fill"></i></div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2-4 reveal" style="flex:0 0 auto;width:18%">
+                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank">
+                            <div class="reel-card">
+                                <img src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=400&q=80"
+                                    alt="Reel 2" loading="lazy" />
+                                <div class="reel-ov"><span class="reel-label">Parudeesa The Paradise</span></div>
+                                <div class="reel-play"><i class="bi bi-play-fill"></i></div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2-4 reveal" style="flex:0 0 auto;width:18%">
+                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank">
+                            <div class="reel-card">
+                                <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&q=80"
+                                    alt="Reel 3" loading="lazy" />
+                                <div class="reel-ov"><span class="reel-label">Parudeesa Utopiya</span></div>
+                                <div class="reel-play"><i class="bi bi-play-fill"></i></div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2-4 reveal" style="flex:0 0 auto;width:18%">
+                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank">
+                            <div class="reel-card">
+                                <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80"
+                                    alt="Reel 4" loading="lazy" />
+                                <div class="reel-ov"><span class="reel-label">Celebrations</span></div>
+                                <div class="reel-play"><i class="bi bi-play-fill"></i></div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2-4 reveal" style="flex:0 0 auto;width:18%">
+                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank">
+                            <div class="reel-card">
+                                <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=400&q=80"
+                                    alt="Reel 5" loading="lazy" />
+                                <div class="reel-ov"><span class="reel-label">Lake at Dusk</span></div>
+                                <div class="reel-play"><i class="bi bi-play-fill"></i></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="text-center mt-4 reveal">
+                    <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank" class="btn-brand"
+                        style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888)">
+                        <i class="bi bi-instagram me-1"></i> Follow @parudeesa_utopiya & @Parudeesa_the_paradise
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div><!-- /page-home -->
+
+    <!-- ████████████████████ PAGE: EVENTS ████████████████████ -->
+    <div id="page-events" class="page">
+        <div class="page-hero">
+            <div class="ph-bg"
+                style="background-image:url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1400&q=80')">
+            </div>
+            <div class="ph-ov"></div>
+            <div class="ph-ct">
+                <span class="eyebrow" style="color:rgba(255,243,236,.65)">Celebrations at Parudeesa</span>
+                <h1 class="ph-title">Event <em>Packages</em></h1>
+                <div class="bc"><span onclick="goPage('home')">Home</span> / Events</div>
+            </div>
+        </div>
+        <section style="padding:80px 0;background:linear-gradient(180deg,var(--brand-pale) 0%,var(--cream-d) 100%)">
+            <div class="container">
+                <div class="text-center mb-5 reveal">
+                    <div class="ornament-line"><span>All Packages</span></div>
+                    <h2 class="sec-title">Make Every <em>Moment</em> Special</h2>
+                    <p class="eb mt-2"
+                        style="color:var(--txt-m);max-width:540px;margin:0 auto;font-size:1rem;line-height:1.7">
+                        Every celebration at Parudeesa is crafted to perfection — from intimate lakeside birthdays to
+                        grand
+                        200-person weddings.</p>
+                </div>
+                <div class="row g-4">
+
+                    <!-- Day Out for Corporate Team -->
+                    <div class="col-md-6 col-lg-4 reveal">
+                        <div class="ev-card">
+                            <div class="ev-hdr ev-hdr-gold">
+                                <span class="ev-label">Parudeesa Utopiya · Corporate</span>
+                                <div class="ev-name">Day Out for Corporate Team</div>
+                                <div class="ev-cap"><i class="bi bi-briefcase-fill me-1"></i>50 People</div>
+                            </div>
+                            <div class="ev-body">
+                                <div class="ev-price" style="color:#8a6a20">Enquire<small> pricing</small></div>
+                                <p class="ev-desc">Team-building activities, bonfire evenings, kayaking, and a full
+                                    catered retreat for your organisation.</p>
+                                <a href="https://wa.me/918075741948?text=Hi!%20I%20am%20interested%20in%20the%20Corporate%20Team%20Day%20Out."
+                                    target="_blank" class="btn-wa w-100 justify-content-center"
+                                    style="background:linear-gradient(135deg,#8a6a20,#b89038)"><i
+                                        class="bi bi-whatsapp"></i> Enquire Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Friends Day Out -->
+                    <div class="col-md-6 col-lg-4 reveal">
+                        <div class="ev-card">
+                            <div class="ev-hdr ev-hdr-org">
+                                <span class="ev-label">Parudeesa The Paradise · Group</span>
+                                <div class="ev-name">Friends Day Out</div>
+                                <div class="ev-cap"><i class="bi bi-people-fill me-1"></i>Small Group Gathering</div>
+                            </div>
+                            <div class="ev-body">
+                                <div class="ev-price">Enquire<small> pricing</small></div>
+                                <p class="ev-desc">Perfect for birthdays or catching up with friends right by the lake.
+                                </p>
+                                <a href="https://wa.me/918921021202?text=Hi!%20I%20am%20interested%20in%20the%20Friends%20Day%20Out."
+                                    target="_blank" class="btn-wa w-100 justify-content-center"><i
+                                        class="bi bi-whatsapp"></i> Enquire Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Family Gathering -->
+                    <div class="col-md-6 col-lg-4 reveal">
+                        <div class="ev-card">
+                            <div class="ev-hdr ev-hdr-teal">
+                                <span class="ev-label">Parudeesa The Paradise · Families</span>
+                                <div class="ev-name">Family Gathering</div>
+                                <div class="ev-cap"><i class="bi bi-house-heart fill me-1"></i>All Ages</div>
+                            </div>
+                            <div class="ev-body">
+                                <div class="ev-price" style="color:#2d7a6e">Enquire<small> pricing</small></div>
+                                <p class="ev-desc">A comfortable stay with delicious meals, kids play area, and bonding
+                                    by the campfire.</p>
+                                <a href="https://wa.me/918921021202?text=Hi!%20I%20am%20interested%20in%20a%20Family%20Gathering."
+                                    target="_blank" class="btn-wa w-100 justify-content-center"
+                                    style="background:linear-gradient(135deg,#2d7a6e,#1a5a52)"><i
+                                        class="bi bi-whatsapp"></i> Enquire Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Wedding Function -->
+                    <div class="col-md-6 col-lg-4 reveal">
+                        <div class="ev-card">
+                            <div class="ev-hdr ev-hdr-pur">
+                                <span class="ev-label">Parudeesa Utopiya · Wedding</span>
+                                <div class="ev-name">Wedding Function</div>
+                                <div class="ev-cap"><i class="bi bi-heart-fill me-1"></i>200 People</div>
+                            </div>
+                            <div class="ev-body">
+                                <div class="ev-price" style="color:#7a5c6e">Enquire<small> pricing</small></div>
+                                <p class="ev-desc">Grand lakeside wedding with premium stage and decor, yacht access,
+                                    and valet event coordination.</p>
+                                <a href="https://wa.me/918075741948?text=Hi!%20I%20want%20to%20plan%20a%20Wedding%20Function."
+                                    target="_blank" class="btn-wa w-100 justify-content-center"
+                                    style="background:linear-gradient(135deg,#7a5c6e,#5a3f52)"><i
+                                        class="bi bi-whatsapp"></i> Enquire Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Custom Package -->
+                    <div class="col-md-6 col-lg-4 reveal">
+                        <div class="ev-card">
+                            <div class="ev-hdr" style="background:linear-gradient(135deg,#4a6a30,#2a4a18)">
+                                <span class="ev-label">Both Properties</span>
+                                <div class="ev-name">Custom Package</div>
+                                <div class="ev-cap"><i class="bi bi-stars me-1"></i>Fully Tailored</div>
+                            </div>
+                            <div class="ev-body">
+                                <div class="ev-price" style="color:#4a6a30">Custom <small>pricing</small></div>
+                                <p class="ev-desc">Have something unique in mind? We'll craft a bespoke lakeside
+                                    experience just for you.</p>
+                                <a href="https://wa.me/918921021202?text=Hi!%20I%20want%20a%20custom%20event%20package."
+                                    target="_blank" class="btn-brand w-100 justify-content-center"><i
+                                        class="bi bi-whatsapp"></i> Enquire Now</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div><!-- /page-events -->
+
+    <!-- ████████████████████ PAGE: GALLERY ████████████████████ -->
+    <div id="page-gallery" class="page">
+        <div class="page-hero">
+            <div class="ph-bg"
+                style="background-image:url('https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1400&q=80')">
+            </div>
+            <div class="ph-ov"></div>
+            <div class="ph-ct">
+                <span class="eyebrow" style="color:rgba(255,243,236,.65)">Visual Escapes</span>
+                <h1 class="ph-title">Our <em>Gallery</em></h1>
+                <div class="bc"><span onclick="goPage('home')">Home</span> / Gallery</div>
+            </div>
+        </div>
+        <section class="gallery-sec">
+            <div class="container">
+                <div class="text-center mb-5 reveal">
+                    <div class="ornament-line"><span>Life at Parudeesa</span></div>
+                    <h2 class="sec-title">Through the <em>Lens</em></h2>
+                </div>
+                <!-- Filter buttons -->
+                <div class="gal-filter reveal">
+                    <button class="gal-btn active" onclick="filterGal(this,'all')">All</button>
+                    <button class="gal-btn" onclick="filterGal(this,'property')">Properties</button>
+                    <button class="gal-btn" onclick="filterGal(this,'lake')">Lake & Nature</button>
+                    <button class="gal-btn" onclick="filterGal(this,'events')">Events</button>
+                    <button class="gal-btn" onclick="filterGal(this,'food')">Dining</button>
+                </div>
+                <div class="gal-grid reveal" id="galGrid">
+                    <div class="gal-item wide" data-cat="lake" onclick="showIgModal()"><img
+                            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80"
+                            alt="Lakeside sunset" loading="lazy" />
+                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
+                    </div>
+                    <div class="gal-item tall" data-cat="property" onclick="showIgModal()"><img
+                            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=500&q=80"
+                            alt="Parudeesa The Paradise" loading="lazy" />
+                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
+                    </div>
+                    <div class="gal-item" data-cat="events" onclick="showIgModal()"><img
+                            src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&q=80"
+                            alt="Event celebration" loading="lazy" />
+                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
+                    </div>
+                    <div class="gal-item" data-cat="lake" onclick="showIgModal()"><img
+                            src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=500&q=80"
+                            alt="Lake view" loading="lazy" />
+                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
+                    </div>
+                    <div class="gal-item" data-cat="property" onclick="showIgModal()"><img
+                            src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=500&q=80"
+                            alt="Parudeesa Utopiya" loading="lazy" />
+                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
+                    </div>
+                    <div class="gal-item wide" data-cat="events" onclick="showIgModal()"><img
+                            src="https://images.unsplash.com/photo-1519741497674-611481863552?w=900&q=80"
+                            alt="Wedding setup" loading="lazy" />
+                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
+                    </div>
+                    <div class="gal-item" data-cat="food" onclick="showIgModal()"><img
+                            src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&q=80"
+                            alt="Lakeside dining" loading="lazy" />
+                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
+                    </div>
+                    <div class="gal-item" data-cat="lake" onclick="showIgModal()"><img
+                            src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500&q=80"
+                            alt="Lake cabin" loading="lazy" />
+                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
+                    </div>
+                    <div class="gal-item" data-cat="events" onclick="showIgModal()"><img
+                            src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&q=80"
+                            alt="Party night" loading="lazy" />
+                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
+                    </div>
+                </div>
+                <div class="text-center mt-4 reveal">
+                    <a href="#" onclick="showIgModal();return false;" class="btn-brand"
+                        style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888)">
+                        <i class="bi bi-instagram me-1"></i> View on Instagram
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div><!-- /page-gallery -->
+
+    <!-- ████████████████████ PAGE: ABOUT US ████████████████████ -->
+    <div id="page-about" class="page">
+        <div class="page-hero">
+            <div class="ph-bg"
+                style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=80')">
+            </div>
+            <div class="ph-ov"></div>
+            <div class="ph-ct">
+                <span class="eyebrow" style="color:rgba(255,243,236,.65)">Our Story</span>
+                <h1 class="ph-title">About <em>Parudeesa</em></h1>
+                <div class="bc"><span onclick="goPage('home')">Home</span> / About Us</div>
+            </div>
+        </div>
+        <section class="about-sec">
+            <div class="container">
+                <!-- Story -->
+                <div class="row g-5 align-items-center mb-5">
+                    <div class="col-lg-6 reveal">
+                        <div class="about-img-wrap">
+                            <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=700&q=80"
+                                alt="Parudeesa resort view" loading="lazy" />
+                            <div class="about-badge">
+                                <div class="num">5+</div>
+                                <div class="lbl">Years of<br />Experiences</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <span class="eyebrow">Our Story</span>
+                        <h2 class="sec-title mb-3">Born from a Love of <em>Kerala's Waters</em></h2>
+                        <p class="eb"
+                            style="font-size:1.05rem;color:var(--txt-m);line-height:1.85;margin-bottom:1.2rem">Parudeesa
+                            —
+                            meaning "paradise" — was born from a deep love of Kerala's serene backwaters and a vision to
+                            share that
+                            peace with the world. Nestled on the shores of a tranquil lake, we offer two distinct
+                            properties that
+                            blend natural beauty with thoughtful luxury.</p>
+                        <p class="eb" style="font-size:1.05rem;color:var(--txt-m);line-height:1.85;margin-bottom:2rem">
+                            From intimate
+                            couples' retreats to grand 200-person celebrations, every experience at Parudeesa is crafted
+                            with warmth,
+                            care, and an eye for the extraordinary. We don't just host events — we create lifelong
+                            memories.</p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <a onclick="goPage('contact')" class="btn-brand" style="cursor:pointer"><i
+                                    class="bi bi-telephone"></i>
+                                Get in Touch</a>
+                            <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
+                                class="btn-outline-brand"><i class="bi bi-instagram"></i> Follow Us</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="row g-3 mb-5 reveal">
+                    <div class="col-6 col-md-3">
+                        <div class="stat-box">
+                            <div class="n">2</div>
+                            <div class="l">Properties</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-box">
+                            <div class="n">200+</div>
+                            <div class="l">Events Hosted</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-box">
+                            <div class="n">1000+</div>
+                            <div class="l">Happy Guests</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-box">
+                            <div class="n">4.9★</div>
+                            <div class="l">Google Rating</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Values -->
+                <div class="text-center mb-4 reveal">
+                    <div class="ornament-line"><span>Our Values</span></div>
+                    <h2 class="sec-title">What We <em>Stand For</em></h2>
+                </div>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4 reveal">
+                        <div
+                            style="background:var(--parch);border:1px solid rgba(250,135,62,.15);border-radius:var(--r);padding:2rem;text-align:center;box-shadow:var(--sh-s)">
+                            <div style="font-size:2.5rem;margin-bottom:1rem">🌿</div>
+                            <h4 style="font-size:1.2rem;font-weight:700;color:var(--brn-dk);margin-bottom:.5rem">Nature
+                                First</h4>
+                            <p class="eb" style="font-size:.95rem;color:var(--txt-m);line-height:1.65">Every design
+                                decision honours
+                                the natural beauty of our lakeside setting. We preserve, not disturb.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 reveal">
+                        <div
+                            style="background:var(--parch);border:1px solid rgba(250,135,62,.15);border-radius:var(--r);padding:2rem;text-align:center;box-shadow:var(--sh-s)">
+                            <div style="font-size:2.5rem;margin-bottom:1rem">🤝</div>
+                            <h4 style="font-size:1.2rem;font-weight:700;color:var(--brn-dk);margin-bottom:.5rem">Warm
+                                Hospitality</h4>
+                            <p class="eb" style="font-size:.95rem;color:var(--txt-m);line-height:1.65">Every guest is
+                                family. We
+                                personalise every stay, anticipate every need, and exceed every expectation.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 reveal">
+                        <div
+                            style="background:var(--parch);border:1px solid rgba(250,135,62,.15);border-radius:var(--r);padding:2rem;text-align:center;box-shadow:var(--sh-s)">
+                            <div style="font-size:2.5rem;margin-bottom:1rem">✨</div>
+                            <h4 style="font-size:1.2rem;font-weight:700;color:var(--brn-dk);margin-bottom:.5rem">
+                                Unforgettable Moments
+                            </h4>
+                            <p class="eb" style="font-size:.95rem;color:var(--txt-m);line-height:1.65">We don't just
+                                provide venues.
+                                We craft experiences that guests carry with them for a lifetime.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team -->
+                <div class="text-center mb-4 reveal">
+                    <div class="ornament-line"><span>Our People</span></div>
+                    <h2 class="sec-title">Meet the <em>Team</em></h2>
+                </div>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="team-card">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80"
+                                class="team-img" alt="Resort Manager" loading="lazy" />
+                            <div class="team-body">
+                                <div class="team-name">Arun Kumar</div>
+                                <div class="team-role">Resort Manager</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="team-card">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=80"
+                                class="team-img" alt="Event Coordinator" loading="lazy" />
+                            <div class="team-body">
+                                <div class="team-name">Priya Nair</div>
+                                <div class="team-role">Event Coordinator</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="team-card">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80"
+                                class="team-img" alt="Head Chef" loading="lazy" />
+                            <div class="team-body">
+                                <div class="team-name">Rajan Pillai</div>
+                                <div class="team-role">Head Chef</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                        <div class="team-card">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&q=80"
+                                class="team-img" alt="Guest Relations" loading="lazy" />
+                            <div class="team-body">
+                                <div class="team-name">Meera Thomas</div>
+                                <div class="team-role">Guest Relations</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div><!-- /page-about -->
+
+    <!-- ████████████████████ PAGE: CONTACT ████████████████████ -->
+    <div id="page-contact" class="page">
+        <div class="page-hero">
+            <div class="ph-bg"
+                style="background-image:url('https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=1400&q=80')">
+            </div>
+            <div class="ph-ov"></div>
+            <div class="ph-ct">
+                <span class="eyebrow" style="color:rgba(255,243,236,.65)">Reach Us</span>
+                <h1 class="ph-title">Get in <em>Touch</em></h1>
+                <div class="bc"><span onclick="goPage('home')">Home</span> / Contact</div>
+            </div>
+        </div>
+        <section class="contact-sec">
+            <div class="container">
+                <div class="row g-5">
+                    <!-- LEFT: Contact Info -->
+                    <div class="col-lg-5 reveal">
+                        <div class="ornament-line mb-3"><span>Reach Us</span></div>
+                        <h2 class="sec-title mb-4">Let's <em>Plan Together</em></h2>
+                        <div class="contact-card">
+                            <div class="contact-info-item">
+                                <div class="ci-icon"><i class="bi bi-whatsapp"></i></div>
+                                <div>
+                                    <div class="ci-label">WhatsApp — Parudeesa The Paradise</div>
+                                    <a href="https://wa.me/918921021202" target="_blank" class="ci-value"
+                                        style="text-decoration:none;color:var(--brn-dk)">+91 89210 21202</a>
+                                    <div class="ci-sub">Direct booking for Parudeesa The Paradise</div>
+                                </div>
+                            </div>
+                            <div class="contact-info-item">
+                                <div class="ci-icon"
+                                    style="color:#25D366;background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.2)">
+                                    <i class="bi bi-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <div class="ci-label">WhatsApp — Parudeesa Utopiya</div>
+                                    <a href="https://wa.me/918075741948" target="_blank" class="ci-value"
+                                        style="text-decoration:none;color:var(--brn-dk)">+91 80757 41948</a>
+                                    <div class="ci-sub">Direct booking for Parudeesa Utopiya & Events</div>
+                                </div>
+                            </div>
+                            <div class="contact-info-item">
+                                <div class="ci-icon"
+                                    style="color:#dc2743;background:rgba(220,39,67,.1);border-color:rgba(220,39,67,.2)">
+                                    <i class="bi bi-instagram"></i>
+                                </div>
+                                <div>
+                                    <div class="ci-label">Instagram</div>
+                                    <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
+                                        class="ci-value"
+                                        style="text-decoration:none;color:var(--brn-dk)">@parudeesa_utopiya &
+                                        @Parudeesa_the_paradise</a>
+                                    <div class="ci-sub">DMs open for enquiries</div>
+                                </div>
+                            </div>
+                            <div class="contact-info-item">
+                                <div class="ci-icon"><i class="bi bi-envelope"></i></div>
+                                <div>
+                                    <div class="ci-label">Email</div>
+                                    <div class="ci-value">hello@parudeesa.in</div>
+                                    <div class="ci-sub">We respond within 4 hours</div>
+                                </div>
+                            </div>
+                            <div class="contact-info-item">
+                                <div class="ci-icon"><i class="bi bi-geo-alt"></i></div>
+                                <div>
+                                    <div class="ci-label">Location</div>
+                                    <div class="ci-value">Kerala Backwaters, India</div>
+                                    <div class="ci-sub">Exact address shared on booking confirmation</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Map -->
+                        <div class="map-embed mt-3 reveal">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63064.6!2d76.5!3d9.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b062ba16a5f9a1b%3A0x1234567890abcdef!2sKerala%20Backwaters!5e0!3m2!1sen!2sin!4v1234567890"
+                                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Contact Form -->
+                    <div class="col-lg-7 reveal">
+                        <div class="contact-card contact-form">
+                            <div class="ornament-line mb-3"><span>Send a Message</span></div>
+                            <h3 style="font-size:1.5rem;font-weight:700;color:var(--brn-dk);margin-bottom:.3rem">Drop Us
+                                a Note</h3>
+                            <p class="eb mb-4" style="color:var(--txt-m);font-size:.95rem">For enquiries, event
+                                planning, or just to
+                                say hello — we'd love to hear from you.</p>
+                            <form onsubmit="handleContact(event)">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="fg"><label>Full Name *</label><input type="text" id="c-name"
+                                                placeholder="Your name" required /></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="fg"><label>Phone / WhatsApp *</label><input type="tel" id="c-phone"
+                                                placeholder="+91 98765 43210" required /></div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="fg"><label>Email Address</label><input type="email" id="c-email"
+                                                placeholder="you@email.com" /></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="fg">
+                                            <label>I'm Interested In</label>
+                                            <select id="c-interest">
+                                                <option value="">Select...</option>
+                                                <option>Parudeesa The Paradise Stay</option>
+                                                <option>Parudeesa Utopiya Stay</option>
+                                                <option>Party Package</option>
+                                                <option>Grand Celebration</option>
+                                                <option>Romantic Anniversary</option>
+                                                <option>Corporate Retreat</option>
+                                                <option>Custom Package</option>
+                                                <option>General Enquiry</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="fg"><label>Preferred Date</label><input type="date" id="c-date" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="fg"><label>Your Message *</label><textarea id="c-msg" rows="4"
+                                                placeholder="Tell us about your plans, guest count, or any questions..."
+                                                required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column gap-2 mt-2">
+                                    <button type="submit" class="btn-brand w-100 justify-content-center"
+                                        style="border-radius:10px;padding:1rem;font-size:.88rem">
+                                        <i class="bi bi-send me-2"></i> Send Message
+                                    </button>
+                                    <a href="https://wa.me/918921021202?text=Hi!%20I%20found%20you%20on%20the%20Parudeesa%20website%20and%20have%20an%20enquiry."
+                                        target="_blank" class="btn-wa w-100 justify-content-center"
+                                        style="border-radius:10px;padding:1rem;font-size:.88rem">
+                                        <i class="bi bi-whatsapp me-2"></i> Or Chat on WhatsApp
+                                    </a>
+                                </div>
+                                <div id="c-success"
+                                    style="display:none;margin-top:1rem;background:#fff;border-left:4px solid var(--brand);padding:1rem 1.2rem;border-radius:10px;color:var(--brn-dk);font-size:.88rem;line-height:1.75">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div><!-- /page-contact -->
+
+    <!-- ████████████████████ PAGE: BOOKING ████████████████████ -->
+    <div id="page-booking" class="page">
+        <div class="page-hero">
+            <div class="ph-bg"></div>
+            <div class="ph-ov"></div>
+            <div class="ph-ct">
+                <span class="eyebrow" style="color:rgba(255,243,236,.65)">Reserve Your Stay</span>
+                <h1 class="ph-title">Book Your <em>Stay</em></h1>
+                <div class="bc"><span onclick="goPage('home')">Home</span> / Booking</div>
+            </div>
+        </div>
+        <section
+            style="padding:70px 0 90px;background:linear-gradient(180deg,var(--brand-pale) 0%,var(--cream-d) 100%)">
+            <div class="container">
+                <div class="text-center mb-4 reveal">
+                    <div class="ornament-line"><span>Choose How to Book</span></div>
+                    <div class="bk-tab-row">
+                        <button class="bk-tab active" onclick="switchTab('form',this)"><i
+                                class="bi bi-card-checklist"></i> Booking
+                            Form</button>
+                        <button class="bk-tab" onclick="switchTab('wa',this)"><i class="bi bi-whatsapp"></i> Via
+                            WhatsApp</button>
+                    </div>
+                </div>
+
+                <!-- FORM TAB -->
+                <div id="bk-form-tab">
+                    <div class="row g-5 align-items-start">
+                        <div class="col-lg-7">
+                            <div class="rp-form reveal">
+                                <div class="ornament-line mb-3"><span>Booking Application</span></div>
+                                <h3 style="font-size:1.5rem;font-weight:700;color:var(--brn-dk);margin-bottom:.2rem">
+                                    Reserve Your Stay
+                                </h3>
+                                <p class="eb mb-4" style="color:var(--txt-m);font-size:.95rem">Fill the form · Pay
+                                    advance via Razorpay
+                                    · Get confirmation on WhatsApp</p>
+                                <form id="bookingForm" onsubmit="handleFormSubmit(event)">
+                                    <div class="form-group"><label>Select Property <span
+                                                style="color:var(--brand)">*</span></label>
+                                        <select id="f-prop" required onchange="updateSummary()">
+                                            <option value="">Choose property...</option>
+                                            <option value="cottage">Parudeesa The Paradise — ₹6,500/night (40–50 Guests)
+                                            </option>
+                                            <option value="villa">Parudeesa Utopiya — ₹9,000/night (Up to 200 Guests)
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group"><label>Event Type</label>
+                                        <select id="f-event">
+                                            <option value="">No Event / Regular Stay</option>
+                                            <option>Birthday</option>
+                                            <option>Wedding</option>
+                                            <option>Anniversary</option>
+                                            <option>Corporate Retreat</option>
+                                            <option>Proposal</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-group"><label>Your Name <span
+                                                        style="color:var(--brand)">*</span></label><input type="text"
+                                                    id="f-name" placeholder="Full name" required /></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group"><label>Phone / WhatsApp <span
+                                                        style="color:var(--brand)">*</span></label><input type="tel"
+                                                    id="f-phone" placeholder="+91 98765 43210" required /></div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group"><label>Email <span
+                                                        style="color:var(--brand)">*</span></label><input type="email"
+                                                    id="f-email" placeholder="you@email.com" required /></div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <div class="form-group"><label>Check-In <span
+                                                        style="color:var(--brand)">*</span></label><input type="date"
+                                                    id="f-checkin" required onchange="updateSummary()" /></div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group"><label>Check-Out <span
+                                                        style="color:var(--brand)">*</span></label><input type="date"
+                                                    id="f-checkout" required onchange="updateSummary()" /></div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group"><label>Guests <span
+                                                        style="color:var(--brand)">*</span></label><input type="number"
+                                                    id="f-guests" placeholder="e.g. 4" min="1" max="200" required
+                                                    onchange="updateSummary()" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group"><label>Select Amenities</label>
+                                        <div class="amenity-check-grid">
+                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
+                                                    value="Kayaking" /><span class="amen-check-box"><i
+                                                        class="bi bi-check"></i></span>🚣 Kayaking</label>
+                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
+                                                    value="Private Yacht" /><span class="amen-check-box"><i
+                                                        class="bi bi-check"></i></span>⛵
+                                                Private Yacht</label>
+                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
+                                                    value="Food Package" /><span class="amen-check-box"><i
+                                                        class="bi bi-check"></i></span>🍽️ Food
+                                                Package</label>
+                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
+                                                    value="Decorations" /><span class="amen-check-box"><i
+                                                        class="bi bi-check"></i></span>🎊 Decorations</label>
+                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
+                                                    value="Photography" /><span class="amen-check-box"><i
+                                                        class="bi bi-check"></i></span>📸 Photography</label>
+                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
+                                                    value="DJ Setup" /><span class="amen-check-box"><i
+                                                        class="bi bi-check"></i></span>🎵 DJ Setup</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group"><label>Event Package</label>
+                                        <select id="f-pkg" onchange="updateSummary()">
+                                            <option value="">No package</option>
+                                            <option value="party">Party Package — ₹25,000</option>
+                                            <option value="grand">Grand Celebration — ₹75,000</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group"><label>Special Requests</label><textarea id="f-notes"
+                                            rows="3" placeholder="Dietary needs, décor preferences..."></textarea></div>
+                                    <div
+                                        style="background:rgba(250,135,62,.06);border:1px solid rgba(250,135,62,.15);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1.2rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+                                        <span
+                                            style="font-size:.65rem;color:var(--txt-m);font-weight:700;letter-spacing:.08em;text-transform:uppercase">Also
+                                            reach us:</span>
+                                        <a href="https://wa.me/918921021202" target="_blank"
+                                            style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
+                                                class="bi bi-whatsapp"></i> Paradise: 89210 21202</a>
+                                        <a href="https://wa.me/918075741948" target="_blank"
+                                            style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
+                                                class="bi bi-whatsapp"></i> Utopiya: 80757 41948</a>
+                                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
+                                            style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#dc2743;font-weight:700;text-decoration:none"><i
+                                                class="bi bi-instagram"></i> Instagram</a>
+                                    </div>
+                                    <div class="d-flex flex-column gap-2">
+                                        <button type="button" onclick="initiatePayment()"
+                                            class="btn-brand w-100 justify-content-center"
+                                            style="border-radius:10px;padding:1rem;font-size:.88rem"><i
+                                                class="bi bi-credit-card me-2"></i>
+                                            Pay ₹5,000 Advance via Razorpay</button>
+                                        <button type="submit" class="btn-wa w-100 justify-content-center"
+                                            style="border-radius:10px;padding:1rem;font-size:.88rem"><i
+                                                class="bi bi-whatsapp me-2"></i>
+                                            Submit &amp; Continue on WhatsApp</button>
+                                    </div>
+                                    <p style="font-size:.63rem;color:var(--txt-m);text-align:center;margin-top:.6rem"><i
+                                            class="bi bi-lock-fill me-1"></i> Razorpay · UPI · Card · Net Banking ·
+                                        Wallets</p>
+                                </form>
+                                <div id="successMsg"
+                                    style="display:none;margin-top:1.2rem;background:#fff;border-left:4px solid var(--brand);padding:1.1rem 1.3rem;border-radius:12px;color:var(--brn-dk);line-height:1.75;font-size:.88rem">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="bk-card reveal mb-4" id="liveSummary">
+                                <div class="ornament-line mb-3"><span>Your Booking Summary</span></div>
+                                <div class="brow"><span class="bl">Resort</span><span class="bv">Parudeesa</span></div>
+                                <div class="brow"><span class="bl">Property</span><span class="bv"
+                                        id="sum-prop">—</span></div>
+                                <div class="brow"><span class="bl">Check-In</span><span class="bv" id="sum-in">—</span>
+                                </div>
+                                <div class="brow"><span class="bl">Check-Out</span><span class="bv"
+                                        id="sum-out">—</span></div>
+                                <div class="brow"><span class="bl">Guests</span><span class="bv"
+                                        id="sum-guests">—</span></div>
+                                <div class="brow"><span class="bl">Nights</span><span class="bv"
+                                        id="sum-nights">—</span></div>
+                                <div class="brow"><span class="bl">Package</span><span class="bv"
+                                        id="sum-pkg">None</span></div>
+                                <div class="btotal">
+                                    <div>
+                                        <div class="tl">Est. Total</div>
+                                        <div class="tp" id="sum-total">₹ —</div>
+                                    </div>
+                                    <div style="text-align:right;font-size:.6rem;color:rgba(255,243,236,.5)">Advance:
+                                        ₹5,000<br />via
+                                        Razorpay</div>
+                                </div>
+                                <div class="wa-box">
+                                    <p><i class="bi bi-shield-check me-1"></i><strong>Secured by Razorpay.</strong>
+                                        Confirmation on
+                                        WhatsApp.</p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-3 reveal">
+                                <div class="how-step"
+                                    style="display:flex;align-items:flex-start;gap:1rem;padding:1.1rem 1.3rem;text-align:left">
+                                    <div class="step-n"
+                                        style="background:linear-gradient(135deg,var(--brand),var(--brand-d));min-width:42px;width:42px;height:42px;font-size:1.1rem;border-radius:50%">
+                                        1</div>
+                                    <div>
+                                        <div class="step-title" style="font-size:.95rem">Fill the Form</div>
+                                        <p class="step-desc" style="font-size:.78rem">Choose property, dates, guests and
+                                            amenities.</p>
+                                    </div>
+                                </div>
+                                <div class="how-step"
+                                    style="display:flex;align-items:flex-start;gap:1rem;padding:1.1rem 1.3rem;text-align:left">
+                                    <div class="step-n"
+                                        style="background:linear-gradient(135deg,#fa873e,#d96520);min-width:42px;width:42px;height:42px;font-size:1rem;border-radius:50%">
+                                        <i class="bi bi-credit-card"></i>
+                                    </div>
+                                    <div>
+                                        <div class="step-title" style="font-size:.95rem">Pay ₹5,000 Advance</div>
+                                        <p class="step-desc" style="font-size:.78rem">Secure via Razorpay — UPI, card,
+                                            net banking.</p>
+                                    </div>
+                                </div>
+                                <div class="how-step"
+                                    style="display:flex;align-items:flex-start;gap:1rem;padding:1.1rem 1.3rem;text-align:left">
+                                    <div class="step-n"
+                                        style="background:linear-gradient(135deg,#25D366,#128C7E);min-width:42px;width:42px;height:42px;font-size:1rem;border-radius:50%">
+                                        <i class="bi bi-whatsapp"></i>
+                                    </div>
+                                    <div>
+                                        <div class="step-title" style="font-size:.95rem">Get Confirmation</div>
+                                        <p class="step-desc" style="font-size:.78rem">Instant confirmation + check-in
+                                            details on WhatsApp.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WA TAB -->
+                <div id="bk-wa-tab" style="display:none">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6">
+                            <div class="rp-form reveal text-center">
+                                <div class="ornament-line mb-3"><span>Book via WhatsApp</span></div>
+                                <div style="font-size:3rem;margin-bottom:1rem">💬</div>
+                                <h3 style="font-size:1.5rem;font-weight:700;color:var(--brn-dk);margin-bottom:.5rem">
+                                    Chat Directly with
+                                    Our Team</h3>
+                                <p class="eb mb-4" style="color:var(--txt-m);font-size:1rem;line-height:1.75">Tap the
+                                    button for your
+                                    property. Our team will guide you through dates, guests, packages and payment.</p>
+                                <div class="d-flex flex-column gap-3 mb-4">
+                                    <a href="https://wa.me/918921021202?text=Hi!%20I%20want%20to%20book%20the%20*Lakeside%20Cottage*%20at%20Parudeesa.%20Please%20share%20availability."
+                                        target="_blank" class="btn-wa w-100 justify-content-center"
+                                        style="border-radius:12px;padding:1rem;font-size:.9rem"><i
+                                            class="bi bi-whatsapp"></i> 🏡 Book
+                                        Parudeesa The Paradise (+91 89210 21202)</a>
+                                    <a href="https://wa.me/918075741948?text=Hi!%20I%20want%20to%20book%20the%20*Sunset%20Villa*%20at%20Parudeesa.%20Please%20share%20availability."
+                                        target="_blank" class="btn-wa w-100 justify-content-center"
+                                        style="border-radius:12px;padding:1rem;font-size:.9rem"><i
+                                            class="bi bi-whatsapp"></i> 🌅 Book
+                                        Parudeesa Utopiya (+91 80757 41948)</a>
+                                    <a href="https://wa.me/918921021202?text=Hi!%20I%20am%20interested%20in%20an%20*Event%20Package*%20at%20Parudeesa."
+                                        target="_blank" class="btn-brand w-100 justify-content-center"
+                                        style="border-radius:12px;padding:1rem;font-size:.9rem"><i
+                                            class="bi bi-calendar-event"></i> Enquire
+                                        About Event Packages</a>
+                                </div>
+                                <div style="border-top:1px solid rgba(250,135,62,.15);padding-top:1rem">
+                                    <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
+                                        class="btn-outline-brand justify-content-center w-100"
+                                        style="border-radius:12px;padding:.9rem"><i class="bi bi-instagram"></i>
+                                        @parudeesa_utopiya & @Parudeesa_the_paradise</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div><!-- /page-booking -->
+
+    <!-- ████████ LOGIN PAGE ████████ -->
+    <div id="page-login" class="page">
+        <div class="page-hero">
+            <div class="ph-bg"></div>
+            <div class="ph-ov"></div>
+            <div class="ph-ct">
+                <span class="eyebrow" style="color:rgba(255,243,236,.65)">Welcome Back</span>
+                <h1 class="ph-title">Member <em>Sign In</em></h1>
+                <div class="bc"><span onclick="goPage('home')">Home</span> / Login</div>
+            </div>
+        </div>
+        <section style="padding:70px 0 90px;background:linear-gradient(180deg,var(--brand-pale) 0%,var(--cream-d) 100%)">
+            <div class="container d-flex justify-content-center">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <div class="ornament-line"><span>Welcome Back</span></div>
+                        <h1>Member <em>Sign In</em></h1>
+                    </div>
+
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
+
+                        @if ($errors->any())
+                        <div class="auth-error">
+                            @foreach ($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                        </div>
+                        @endif
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}" required autofocus autocomplete="username">
+                            @if ($errors->has('email'))
+                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('email') }}</div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                            @if ($errors->has('password'))
+                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('password') }}</div>
+                            @endif
+                        </div>
+
+                        <a href="{{ route('password.request') }}" class="forgot-link">Forgot Password?</a>
+
+                        <button type="submit" class="btn-brand w-100" style="margin-bottom: 1rem;">
+                            Sign In
+                        </button>
+
+                        <div class="auth-footer">
+                            <p>Don't have an account? <a href="#" onclick="goPage('register'); return false;">Register Now</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div><!-- /page-login -->
+
+    <!-- ████████ REGISTER PAGE ████████ -->
+    <div id="page-register" class="page">
+        <div class="page-hero">
+            <div class="ph-bg"></div>
+            <div class="ph-ov"></div>
+            <div class="ph-ct">
+                <span class="eyebrow" style="color:rgba(255,243,236,.65)">Create Account</span>
+                <h1 class="ph-title">Join <em>Parudeesa</em></h1>
+                <div class="bc"><span onclick="goPage('home')">Home</span> / Register</div>
+            </div>
+        </div>
+        <section style="padding:70px 0 90px;background:linear-gradient(180deg,var(--brand-pale) 0%,var(--cream-d) 100%)">
+            <div class="container d-flex justify-content-center">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <div class="ornament-line"><span>Get Started</span></div>
+                        <h1>Create <em>Account</em></h1>
+                    </div>
+
+                    <form method="POST" action="{{ route('register') }}">
+                        @csrf
+
+                        @if ($errors->any())
+                        <div class="auth-error">
+                            @foreach ($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                        </div>
+                        @endif
+
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" value="{{ old('name') }}" required autofocus autocomplete="name">
+                            @if ($errors->has('name'))
+                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('name') }}</div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}" required autocomplete="username">
+                            @if ($errors->has('email'))
+                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('email') }}</div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Create a strong password" required autocomplete="new-password">
+                            @if ($errors->has('password'))
+                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('password') }}</div>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password_confirmation">Confirm Password</label>
+                            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm your password" required autocomplete="new-password">
+                            @if ($errors->has('password_confirmation'))
+                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('password_confirmation') }}</div>
+                            @endif
+                        </div>
+
+                        <button type="submit" class="btn-brand w-100" style="margin-bottom: 1rem;">
+                            Create Account
+                        </button>
+
+                        <div class="auth-footer">
+                            <p>Already have an account? <a href="#" onclick="goPage('login'); return false;">Sign In</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div><!-- /page-register -->
+
+    <!-- ████████ FOOTER ████████ -->
+    <footer>
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <div class="f-brand">Parudeesa<small>The Lake View Resort</small></div>
+                    <p class="eb mt-2"
+                        style="font-style:italic;color:rgba(255,243,236,.4);font-size:.95rem;line-height:1.65">
+                        "Experience Serenity by the Lake"</p>
+                    <p style="font-size:.75rem;color:rgba(255,243,236,.3);margin-top:.6rem;line-height:1.65">Premium
+                        lakeside
+                        resort · Kerala Backwaters, India</p>
+                    <div class="mt-3">
+                        <a href="https://wa.me/918921021202" target="_blank" class="soc"
+                            style="color:#25D366;border-color:rgba(37,211,102,.3)"><i class="bi bi-whatsapp"></i></a>
+                        <a href="#" onclick="showIgModal();return false;" class="soc"
+                            style="color:#dc2743;border-color:rgba(220,39,67,.3)"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="soc"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="soc"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <div class="f-head">Navigate</div>
+                    <ul class="f-links">
+                        <li><a onclick="goPage('home')">Home</a></li>
+                        <li><a onclick="goPage('events')">Events</a></li>
+                        <li><a onclick="goPage('gallery')">Gallery</a></li>
+                        <li><a onclick="goPage('about')">About Us</a></li>
+                        <li><a onclick="goPage('contact')">Contact</a></li>
+                        <li><a onclick=\"goPage('booking')\">Book Now</a></li>
+                        <li><a href=\"#\">Terms and Conditions</a></li>
+                        <li><a href=\"#\">Privacy Policy</a></li>
+                        <li><a href=\"#\">Cancellation Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <div class="f-head">Properties</div>
+                    <ul class="f-links">
+                        <li><a href="https://wa.me/918921021202" target="_blank">Parudeesa The Paradise</a></li>
+                        <li><a href="https://wa.me/918075741948" target="_blank">Parudeesa Utopiya</a></li>
+                    </ul>
+                    <div class="f-head mt-3">Event Packages</div>
+                    <ul class="f-links">
+                        <li><a onclick="goPage('events')">Party Package</a></li>
+                        <li><a onclick="goPage('events')">Grand Celebration</a></li>
+                        <li><a onclick="goPage('events')">Corporate Retreat</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="f-head">Contact & Booking</div>
+                    <div style="font-size:.8rem;color:rgba(255,243,236,.45);line-height:2.2">
+                        <div><i class="bi bi-whatsapp me-2" style="color:#25D366"></i>Paradise: +91 89210 21202</div>
+                        <div><i class="bi bi-whatsapp me-2" style="color:#25D366"></i>Utopiya: +91 80757 41948</div>
+                        <div><i class="bi bi-envelope me-2" style="color:var(--brand-l)"></i>hello@parudeesa.in</div>
+                        <div><i class="bi bi-geo-alt me-2" style="color:var(--brand)"></i>Kerala Backwaters, India</div>
+                        <div><i class="bi bi-instagram me-2" style="color:#dc2743"></i>@parudeesa_utopiya &
+                            @Parudeesa_the_paradise</div>
+                    </div>
+                    <a href="#" onclick="toggleChatbot();return false;" class="btn-wa mt-3 d-inline-flex"
+                        style="font-size:.72rem;padding:.55rem 1.2rem"><i class="bi bi-whatsapp"></i> Chat with Us</a>
+                </div>
+            </div>
+            <hr class="f-div" />
+            <p class="f-copy">© 2026 Parudeesa – The Lake View Resort. All rights reserved. · Made with ♥ in Kerala</p>
+        </div>
+    </footer>
+
+    <!-- FLOAT STACK -->
+    <div class="float-stack">
+        <button class="float-btn fbtt" id="bttBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+            title="Back to top"><i class="bi bi-chevron-up"></i></button>
+        <a href="#" onclick="showIgModal();return false;" class="float-btn fig"
+            title="Instagram"><i class="bi bi-instagram"></i></a>
+    </div>
+
+    <!-- CHATBOT WIDGET -->
+    <div class="cb-win" id="cbWin">
+        <div class="cb-head">
+            <div class="cb-av">🏡</div>
+            <div class="cb-info">
+                <strong>Parudeesa Resort</strong>
+                <span><span class="cb-dot"></span>Online · Replies instantly</span>
+            </div>
+            <button class="cb-close" onclick="toggleChatbot()">✕</button>
+        </div>
+        <div class="cb-body" id="cbBody"></div>
+        <div class="cb-footer">
+            <input class="cb-inp" id="cbInput" placeholder="Type a message..." autocomplete="off"
+                onkeydown="if(event.key==='Enter')cbUserSend()" />
+            <button class="cb-send-btn" onclick="cbUserSend()"><i class="bi bi-send-fill"></i></button>
+        </div>
+    </div>
+    <div class="cb-bubble" id="cbBubble" onclick="toggleChatbot()">
+        <i class="bi bi-whatsapp"></i>
+        <span class="cb-notif" id="cbNotif">1</span>
+    </div>
+
+    <!-- SOCIAL PROOF POPUP -->
+    <div class="sp-popup" id="spPopup">
+        <div class="sp-icon sp-icon-v" id="spIcon">👁️</div>
+        <div class="sp-text">
+            <strong id="spTitle">124 people viewed this resort</strong>
+            <span id="spSub">in the last 1 hour</span>
+        </div>
+        <span class="sp-close" onclick="closeSpPopup()">✕</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        /* ── Page nav ── */
+        function goPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('anav'));
+            const map = { 'home': 'home', 'events': 'events', 'gallery': 'gallery', 'about': 'about', 'contact': 'contact', 'booking': 'booking', 'login': 'login', 'register': 'register' };
+            document.querySelectorAll('.nav-link').forEach(l => { if (l.getAttribute('onclick') && l.getAttribute('onclick').includes("'" + id + "'")) l.classList.add('anav') });
+            const nc = document.getElementById('nav');
+            if (nc && nc.classList.contains('show')) { try { new bootstrap.Collapse(nc).hide() } catch (e) { } }
+            setTimeout(initReveals, 80);
+        }
+
+        /* ── Tab switcher ── */
+        function switchTab(tab, btn) {
+            document.querySelectorAll('.bk-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('bk-form-tab').style.display = tab === 'form' ? 'block' : 'none';
+            document.getElementById('bk-wa-tab').style.display = tab === 'wa' ? 'block' : 'none';
+        }
+
+        /* ── Gallery filter ── */
+        function filterGal(btn, cat) {
+            document.querySelectorAll('.gal-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.gal-item').forEach(item => {
+                const show = cat === 'all' || item.dataset.cat === cat;
+                item.style.transition = 'opacity .3s,transform .3s';
+                if (show) { item.style.opacity = '1'; item.style.display = 'block'; item.style.transform = 'scale(1)' }
+                else { item.style.opacity = '0'; item.style.transform = 'scale(.95)'; setTimeout(() => { item.style.display = 'none' }, 300) }
+            });
+        }
+
+        /* ── Live booking summary ── */
+        function updateSummary() {
+            const prop = (document.getElementById('f-prop') || {}).value || '';
+            const ci = (document.getElementById('f-checkin') || {}).value || '';
+            const co = (document.getElementById('f-checkout') || {}).value || '';
+            const g = (document.getElementById('f-guests') || {}).value || '';
+            const pkg = (document.getElementById('f-pkg') || {}).value || '';
+            const pm = { cottage: 'Parudeesa The Paradise', villa: 'Parudeesa Utopiya' };
+            const rm = { cottage: 6500, villa: 9000 };
+            const pkm = { party: 25000, grand: 75000 };
+            const pkl = { party: 'Party Package', grand: 'Grand Celebration' };
+            const el = id => document.getElementById(id);
+            if (!el('sum-prop')) return;
+            el('sum-prop').textContent = pm[prop] || '—';
+            el('sum-in').textContent = ci ? new Date(ci + 'T00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+            el('sum-out').textContent = co ? new Date(co + 'T00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+            el('sum-guests').textContent = g ? g + ' Guests' : '—';
+            el('sum-pkg').textContent = pkl[pkg] || 'None';
+            let n = 0; if (ci && co) { const d = (new Date(co) - new Date(ci)) / 86400000; n = d > 0 ? d : 0 }
+            el('sum-nights').textContent = n ? n + (n === 1 ? ' Night' : ' Nights') : '—';
+            const tot = (rm[prop] || 0) * n + (pkm[pkg] || 0);
+            el('sum-total').textContent = tot > 0 ? '₹' + tot.toLocaleString('en-IN') : '₹ —';
+        }
+
+        /* ── Form submit ── */
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('f-name').value.trim();
+            const phone = document.getElementById('f-phone').value.trim();
+            const email = document.getElementById('f-email').value.trim();
+            const prop = document.getElementById('f-prop').value;
+            const event = document.getElementById('f-event').value || 'Stay';
+            const guests = document.getElementById('f-guests').value;
+            const ci = document.getElementById('f-checkin').value;
+            const co = document.getElementById('f-checkout').value;
+            const pkg = document.getElementById('f-pkg').value || '';
+            const notes = document.getElementById('f-notes').value;
+            const amen = Array.from(document.querySelectorAll('input[name="amenities"]:checked')).map(c => c.value).join(', ') || 'None';
+            if (!name || !phone || !prop || !guests || !ci || !co) { alert('Please fill all required fields.'); return }
+            const pl = { cottage: 'Parudeesa The Paradise', villa: 'Parudeesa Utopiya' }[prop] || prop;
+            const pkl = { party: 'Party Package — ₹25,000', grand: 'Grand Celebration — ₹75,000', '': 'None' }[pkg] || 'None';
+            const waNum = prop === 'villa' ? '918075741948' : '918921021202';
+            document.getElementById('successMsg').innerHTML = '<strong style="color:var(--brand)">✅ Booking Request Submitted!</strong><br/><br/>' +
+                '<strong>Name:</strong> ' + name + '<br/><strong>Property:</strong> ' + pl + '<br/><strong>Event:</strong> ' + event +
+                '<br/><strong>Guests:</strong> ' + guests + '<br/><strong>Check-In:</strong> ' + ci + '<br/><strong>Check-Out:</strong> ' + co +
+                '<br/><strong>Amenities:</strong> ' + amen + '<br/><strong>Package:</strong> ' + pkl + (notes ? '<br/><strong>Requests:</strong> ' + notes : '') +
+                '<br/><br/>Our team will contact you on WhatsApp shortly!';
+            document.getElementById('successMsg').style.display = 'block';
+            document.getElementById('bookingForm').reset(); updateSummary();
+            const t = encodeURIComponent('Hi! I want to book at Parudeesa.\n\nName: ' + name + '\nPhone: ' + phone + '\nProperty: ' + pl + '\nEvent: ' + event + '\nGuests: ' + guests + '\nCheck-In: ' + ci + '\nCheck-Out: ' + co + '\nAmenities: ' + amen + '\nPackage: ' + pkl + (notes ? '\nRequests: ' + notes : ''));
+            setTimeout(() => window.open('https://wa.me/' + waNum + '?text=' + t, '_blank'), 800);
+        }
+
+        /* ── Contact form ── */
+        function handleContact(e) {
+            e.preventDefault();
+            const name = document.getElementById('c-name').value.trim();
+            const phone = document.getElementById('c-phone').value.trim();
+            const interest = document.getElementById('c-interest').value || 'General Enquiry';
+            const msg = document.getElementById('c-msg').value.trim();
+            if (!name || !phone || !msg) { alert('Please fill required fields.'); return }
+            document.getElementById('c-success').innerHTML = '<strong style="color:var(--brand)">✅ Message Sent!</strong><br/>Thank you, ' + name + '! Our team will reach you on WhatsApp within 4 hours.';
+            document.getElementById('c-success').style.display = 'block';
+            const t = encodeURIComponent('Hi! I sent a message via the Parudeesa website.\n\nName: ' + name + '\nPhone: ' + phone + '\nInterest: ' + interest + '\nMessage: ' + msg);
+            setTimeout(() => window.open('https://wa.me/918921021202?text=' + t, '_blank'), 800);
+        }
+
+        /* ── Scroll reveal ── */
+        function initReveals() {
+            if (!('IntersectionObserver' in window)) { document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible')); return }
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach((e, i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), (i % 4) * 100); obs.unobserve(e.target) } });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal:not(.visible)').forEach(el => obs.observe(el));
+        }
+        initReveals();
+
+        /* ── Navbar scroll & BTT ── */
+        window.addEventListener('scroll', () => {
+            document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 50);
+            document.getElementById('bttBtn').classList.toggle('show', window.scrollY > 400);
+        }, { passive: true });
+
+        /* ── Instagram modal ── */
+        function showIgModal() { document.getElementById('igModal').classList.add('open') }
+        function closeIgModal(e) { if (!e || e.target === document.getElementById('igModal')) document.getElementById('igModal').classList.remove('open') }
+
+        /* ── Social proof popup ── */
+        function showSpPopup() {
+            const titles = [
+                '124 people viewed this resort',
+                '89 people checked availability',
+                '156 people liked our photos',
+                '67 people inquired today',
+                '203 people visited our site'
+            ];
+            const subs = [
+                'in the last 1 hour',
+                'in the last 2 hours',
+                'in the last 30 minutes',
+                'today',
+                'this week'
+            ];
+            const icons = ['👁️', '📅', '❤️', '💬', '🌟'];
+            const randomIndex = Math.floor(Math.random() * titles.length);
+            document.getElementById('spTitle').textContent = titles[randomIndex];
+            document.getElementById('spSub').textContent = subs[randomIndex];
+            document.getElementById('spIcon').textContent = icons[randomIndex];
+            document.getElementById('spPopup').classList.add('show');
+            setTimeout(() => document.getElementById('spPopup').classList.remove('show'), 4000);
+        }
+        function closeSpPopup() { document.getElementById('spPopup').classList.remove('show') }
+        setInterval(showSpPopup, 12000); // Show every 12 seconds
+
+        /* ── Chatbot Engine ── */
+        var cbOpen = false, cbStep = null, cbBooking = {};
+        var cbA = {
+            availability: "✅ Both properties have availability!\n\n🏡 Parudeesa The Paradise — weekdays & weekends\n🌅 Parudeesa Utopiya — select dates available\n\nFor specific dates, tap 'Book Now' or chat with our team.",
+            price: "💰 Our Pricing:\n\n🏡 Parudeesa The Paradise — ₹6,500/night\n🌅 Parudeesa Utopiya — ₹9,000/night\n\n🎉 Party Package — ₹25,000 (40–50 guests)\n✨ Grand Celebration — ₹75,000 (200 guests)\n💑 Anniversary — ₹12,000\n🏢 Corporate Retreat — ₹35,000",
+            properties: "🏡 Parudeesa The Paradise\nIdeal for 40–50 guests. Cozy, with sunrise views, kayaking dock & bonfire pit.\nBooking: +91 89210 21202\n\n🌅 Parudeesa Utopiya\nGrand villa for up to 200 guests. Sunset deck, private dock & yacht.\nBooking: +91 80757 41948",
+            events: "🎉 Our Event Packages:\n\n🎂 Party Package — ₹25,000 (40–50 guests)\n👑 Grand Celebration — ₹75,000 (200 guests)\n💑 Romantic Anniversary — ₹12,000\n🏢 Corporate Retreat — ₹35,000\n💍 Sunset Proposal — ₹6,500\n✨ Custom Package — enquire\n\nTap 'Events Page' to see full details!",
+            amenities: "✨ Parudeesa Amenities:\n\n🚣 Kayaking at sunrise\n⛵ Private yacht cruises\n🍽️ Gourmet lakeside dining\n🎊 Custom event decorations\n📸 Photography setups\n🎵 DJ / Live music\n🔥 Bonfire evenings\n📶 High-speed WiFi",
+            location: "📍 Location:\nParudeesa is on the Kerala Backwaters, India.\n\nClose to major Kerala cities — 1–3 hrs drive.\nExact address shared after booking confirmation.",
+            contact: "📞 Contact Parudeesa:\n\n🏡 Parudeesa The Paradise:\n+91 89210 21202\n\n🌅 Parudeesa Utopiya:\n+91 80757 41948\n\n📸 Instagram:\n@parudeesa_utopiya & @Parudeesa_the_paradise\n\n📧 hello@parudeesa.in"
+        };
+
+        function toggleChatbot() {
+            cbOpen = !cbOpen;
+            document.getElementById('cbWin').classList.toggle('open', cbOpen);
+            if (cbOpen) {
+                document.getElementById('cbNotif').classList.add('hidden');
+                if (!document.getElementById('cbBody').hasChildNodes()) cbInit();
+                setTimeout(() => document.getElementById('cbBody').scrollTop = 9999, 100);
+            }
+        }
+
+        function cbInit() {
+            document.getElementById('cbBody').innerHTML = ''; cbStep = null; cbBooking = {};
+            cbAddBot("👋 Welcome to <strong>Parudeesa – The Lake View Resort!</strong>\nI'm your virtual host. How can I help you today?", true);
+            setTimeout(cbMenu, 600);
+        }
+
+        function cbMenu() {
+            const btns = [
+                { l: '📅 Check Availability', k: 'availability' }, { l: '💰 View Pricing', k: 'price' },
+                { l: '🏠 Our Properties', k: 'properties' }, { l: '🎉 Event Packages', k: 'events' },
+                { l: '✨ Amenities', k: 'amenities' }, { l: '📍 Location', k: 'location' },
+                { l: '✅ Book Now', k: 'book' }, { l: '📞 Contact Us', k: 'contact' },
+                { l: '🙋 Talk to a Person', k: 'human' },
+            ];
+            const w = document.createElement('div'); w.className = 'cb-qr-wrap';
+            btns.forEach(b => {
+                const btn = document.createElement('button'); btn.className = 'cb-qbtn'; btn.textContent = b.l;
+                btn.onclick = () => cbHandle(b.k, b.l); w.appendChild(btn);
+            });
+            document.getElementById('cbBody').appendChild(w);
+            document.getElementById('cbBody').scrollTop = 9999;
+        }
+
+        function cbHandle(key, label) {
+            cbAddUser(label); document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove());
+            cbTyping();
+            setTimeout(() => {
+                cbRmTyping();
+                if (key === 'book') {
+                    cbStep = 'property'; cbAddBot("Great! Which property would you like?\n\n🏡 Parudeesa The Paradise (40–50 guests)\n🌅 Parudeesa Utopiya (up to 200 guests)");
+                    setTimeout(() => {
+                        const w = document.createElement('div'); w.className = 'cb-qr-wrap';
+                        [['🏡 Parudeesa The Paradise', 'cottage'], ['🌅 Parudeesa Utopiya', 'villa']].forEach(([l, v]) => {
+                            const btn = document.createElement('button'); btn.className = 'cb-qbtn'; btn.textContent = l;
+                            btn.onclick = () => { cbBooking.property = v; cbBooking.propertyLabel = l; cbAddUser(l); document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove()); cbStep = 'event'; cbTyping(); setTimeout(() => { cbRmTyping(); cbAddBot("What type of event?\n\n(e.g. Birthday, Wedding, Anniversary, Corporate, Just a stay)") }, 700) };
+                            w.appendChild(btn);
+                        });
+                        document.getElementById('cbBody').appendChild(w); document.getElementById('cbBody').scrollTop = 9999;
+                    }, 300);
+                } else if (key === 'human') {
+                    cbAddBot("Sure! Connect directly with our team:");
+                    setTimeout(() => {
+                        const w = document.createElement('div'); w.className = 'cb-qr-wrap';
+                        const a1 = document.createElement('a'); a1.className = 'cb-wa-link'; a1.href = 'https://wa.me/918921021202?text=Hi!%20I%20want%20to%20talk%20to%20the%20Lakeside%20Cottage%20team.'; a1.target = '_blank'; a1.innerHTML = '<i class="bi bi-whatsapp"></i> 🏡 Paradise Team: +91 89210 21202';
+                        const a2 = document.createElement('a'); a2.className = 'cb-wa-link'; a2.href = 'https://wa.me/918075741948?text=Hi!%20I%20want%20to%20talk%20to%20the%20Sunset%20Villa%20team.'; a2.target = '_blank'; a2.innerHTML = '<i class="bi bi-whatsapp"></i> 🌅 Utopiya Team: +91 80757 41948';
+                        const a3 = document.createElement('a'); a3.className = 'cb-wa-link'; a3.href = 'https://www.instagram.com/Parudeesa_the_paradise'; a3.target = '_blank'; a3.style.background = 'linear-gradient(135deg,#f09433,#dc2743,#bc1888)'; a3.innerHTML = '<i class="bi bi-instagram"></i> DM on Instagram';
+                        w.appendChild(a1); w.appendChild(a2); w.appendChild(a3);
+                        document.getElementById('cbBody').appendChild(w);
+                        setTimeout(cbBackBtn, 400); document.getElementById('cbBody').scrollTop = 9999;
+                    }, 300);
+                } else if (key === 'contact') {
+                    cbAddBot(cbA.contact);
+                    setTimeout(() => {
+                        const w = document.createElement('div'); w.className = 'cb-qr-wrap';
+                        const a1 = document.createElement('a'); a1.className = 'cb-wa-link'; a1.href = 'https://wa.me/918921021202'; a1.target = '_blank'; a1.innerHTML = '<i class="bi bi-whatsapp"></i> Paradise: +91 89210 21202';
+                        const a2 = document.createElement('a'); a2.className = 'cb-wa-link'; a2.href = 'https://wa.me/918075741948'; a2.target = '_blank'; a2.innerHTML = '<i class="bi bi-whatsapp"></i> Utopiya: +91 80757 41948';
+                        w.appendChild(a1); w.appendChild(a2);
+                        document.getElementById('cbBody').appendChild(w);
+                        setTimeout(cbBackBtn, 400); document.getElementById('cbBody').scrollTop = 9999;
+                    }, 300);
+                } else {
+                    cbAddBot(cbA[key] || "I'll help you with that shortly!");
+                    setTimeout(cbBackBtn, 400);
+                }
+            }, 900);
+        }
+
+        function cbBackBtn() {
+            const w = document.createElement('div'); w.className = 'cb-qr-wrap';
+            const b1 = document.createElement('button'); b1.className = 'cb-qbtn'; b1.textContent = '🔙 Main Menu';
+            b1.onclick = () => { document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove()); cbMenu() };
+            const b2 = document.createElement('button'); b2.className = 'cb-qbtn'; b2.textContent = '✅ Book Now';
+            b2.onclick = () => { document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove()); cbHandle('book', '✅ Book Now') };
+            w.appendChild(b1); w.appendChild(b2);
+            document.getElementById('cbBody').appendChild(w);
+            document.getElementById('cbBody').scrollTop = 9999;
+        }
+
+        function cbAddBot(html, isHtml) {
+            const d = document.createElement('div'); d.className = 'cb-bot-msg';
+            if (isHtml) d.innerHTML = html; else d.textContent = html;
+            document.getElementById('cbBody').appendChild(d);
+            document.getElementById('cbBody').scrollTop = 9999;
+        }
+        function cbAddUser(t) {
+            const d = document.createElement('div'); d.className = 'cb-user-msg'; d.textContent = t;
+            document.getElementById('cbBody').appendChild(d);
+            document.getElementById('cbBody').scrollTop = 9999;
+        }
+        function cbTyping() { const t = document.createElement('div'); t.className = 'cb-typing'; t.id = 'cbT'; t.innerHTML = '<span></span><span></span><span></span>'; document.getElementById('cbBody').appendChild(t); document.getElementById('cbBody').scrollTop = 9999 }
+        function cbRmTyping() { const t = document.getElementById('cbT'); if (t) t.remove() }
+
+        function cbUserSend() {
+            const inp = document.getElementById('cbInput'); const val = inp.value.trim(); if (!val) return;
+            inp.value = ''; cbAddUser(val); document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove());
+            cbTyping();
+            setTimeout(() => {
+                cbRmTyping();
+                if (cbStep === 'event') { cbBooking.event = val; cbStep = 'guests'; cbAddBot("How many guests are expected? 🎊"); return }
+                if (cbStep === 'guests') { cbBooking.guests = val; cbStep = 'date'; cbAddBot("Preferred check-in date?\n(e.g. 15 August 2025)"); return }
+                if (cbStep === 'date') { cbBooking.date = val; cbStep = 'name'; cbAddBot("Your full name? 😊"); return }
+                if (cbStep === 'name') { cbBooking.name = val; cbStep = 'phone'; cbAddBot("Your phone number?"); return }
+                if (cbStep === 'phone') {
+                    cbBooking.phone = val; cbStep = null;
+                    const waNum = cbBooking.property === 'villa' ? '918075741948' : '918921021202';
+                    const t = encodeURIComponent('Hi! I want to book at Parudeesa.\n\nProperty: ' + cbBooking.propertyLabel + '\nEvent: ' + (cbBooking.event || 'Stay') + '\nGuests: ' + cbBooking.guests + '\nDate: ' + cbBooking.date + '\nName: ' + cbBooking.name + '\nPhone: ' + cbBooking.phone);
+                    cbAddBot('✅ Booking request received!\n\n🏡 ' + cbBooking.propertyLabel + '\n🎉 ' + (cbBooking.event || 'Stay') + '\n👥 ' + cbBooking.guests + ' guests\n📅 ' + cbBooking.date + '\n👤 ' + cbBooking.name + '\n📞 ' + cbBooking.phone + '\n\nOur team will contact you shortly!');
+                    const w = document.createElement('div'); w.className = 'cb-qr-wrap';
+                    const a = document.createElement('a'); a.className = 'cb-wa-link'; a.href = 'https://wa.me/' + waNum + '?text=' + t; a.target = '_blank'; a.innerHTML = '<i class="bi bi-whatsapp"></i> Confirm on WhatsApp';
+                    const b = document.createElement('button'); b.className = 'cb-qbtn'; b.textContent = '🏠 Main Menu';
+                    b.onclick = () => { document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove()); cbBooking = {}; cbMenu() };
+                    w.appendChild(a); w.appendChild(b); document.getElementById('cbBody').appendChild(w);
+                    document.getElementById('cbBody').scrollTop = 9999; return;
+                }
+                const v = val.toLowerCase();
+                if (v.includes('cottage') || v.includes('lakeside')) cbHandle('properties', '🏠 Our Properties');
+                else if (v.includes('villa') || v.includes('sunset')) cbHandle('properties', '🏠 Our Properties');
+                else if (v.includes('price') || v.includes('cost') || v.includes('₹')) cbHandle('price', '💰 View Pricing');
+                else if (v.includes('avail') || v.includes('book')) cbHandle('availability', '📅 Check Availability');
+                else if (v.includes('event') || v.includes('birthday') || v.includes('wedding') || v.includes('party')) cbHandle('events', '🎉 Event Packages');
+                else if (v.includes('amen') || v.includes('kayak') || v.includes('yacht')) cbHandle('amenities', '✨ Amenities');
+                else if (v.includes('location') || v.includes('where') || v.includes('address')) cbHandle('location', '📍 Location');
+                else if (v.includes('contact') || v.includes('call') || v.includes('number')) cbHandle('contact', '📞 Contact Us');
+                else if (v.includes('hi') || v.includes('hello') || v.includes('hey')) { cbAddBot("Hello! 👋 Great to connect. How can I help?"); setTimeout(cbMenu, 400) }
+                else { cbAddBot("I'm here to help! 😊 Please choose from below:"); setTimeout(cbMenu, 400) }
+            }, 800);
+        }
+
+        /* ── Social Proof Popups ── */
+        const spMsgs = [
+            { icon: '👁️', cls: 'sp-icon-v', t: '124 people viewed this resort', s: 'in the last 1 hour' },
+            { icon: '🏠', cls: 'sp-icon-b', t: 'Someone from Kochi just booked!', s: 'Parudeesa The Paradise · 2 hrs ago' },
+            { icon: '👁️', cls: 'sp-icon-v', t: '89 people are viewing right now', s: "Don't miss out!" },
+            { icon: '🎉', cls: 'sp-icon-b', t: 'Party Package just reserved!', s: 'Parudeesa Utopiya · 45 mins ago' },
+            { icon: '👁️', cls: 'sp-icon-v', t: '3 bookings made today!', s: 'Limited dates available' },
+            { icon: '🏠', cls: 'sp-icon-b', t: 'Someone from Bangalore booked!', s: 'Grand Celebration · 1 hr ago' },
+        ];
+        let spIdx = 0;
+        function showSpPopup() {
+            const p = document.getElementById('spPopup'), m = spMsgs[spIdx % spMsgs.length]; spIdx++;
+            document.getElementById('spIcon').textContent = m.icon;
+            document.getElementById('spIcon').className = 'sp-icon ' + m.cls;
+            document.getElementById('spTitle').textContent = m.t;
+            document.getElementById('spSub').textContent = m.s;
+            p.classList.add('show'); setTimeout(() => p.classList.remove('show'), 5000);
+        }
+        function closeSpPopup() { document.getElementById('spPopup').classList.remove('show') }
+        setTimeout(() => { showSpPopup(); setInterval(() => { setTimeout(showSpPopup, (Math.random() * 60 + 120) * 1000) }, 150000) }, 8000);
+
+        /* ── Razorpay ── */
+        function initiatePayment() {
+            const name = (document.getElementById('f-name') || {}).value?.trim() || '';
+            const phone = (document.getElementById('f-phone') || {}).value?.trim() || '';
+            const email = (document.getElementById('f-email') || {}).value?.trim() || '';
+            const prop = (document.getElementById('f-prop') || {}).value || '';
+            if (!name || !phone || !email || !prop) { alert('Please fill Name, Phone, Email and Property first.'); return }
+            const pl = { cottage: 'Parudeesa The Paradise', villa: 'Parudeesa Utopiya' }[prop] || prop;
+            const waNum = prop === 'villa' ? '918075741948' : '918921021202';
+            const opts = {
+                key: 'rzp_test_YourRazorpayKeyHere', // ← Replace with your Razorpay Key ID
+                amount: 500000, currency: 'INR',
+                name: 'Parudeesa – The Lake View Resort',
+                description: 'Booking Advance — ' + pl,
+                image: 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=100&q=80',
+                handler: function (res) {
+                    window.open('https://wa.me/' + waNum + '?text=' + encodeURIComponent('Hi! I paid ₹5,000 advance at Parudeesa.\nName: ' + name + '\nPhone: ' + phone + '\nProperty: ' + pl + '\nPayment ID: ' + res.razorpay_payment_id), '_blank');
+                    alert('✅ Payment successful!\nID: ' + res.razorpay_payment_id + '\n\nConfirmation on WhatsApp shortly!');
+                },
+                prefill: { name, email, contact: phone }, theme: { color: '#fa873e' }, modal: { ondismiss: () => { } }
+            };
+            try { new Razorpay(opts).open() }
+            catch (e) { alert('Razorpay needs HTTPS. Redirecting to WhatsApp...'); window.open('https://wa.me/' + waNum + '?text=Hi!%20I%20want%20to%20pay%20advance%20for%20' + encodeURIComponent(pl), '_blank') }
+        }
+
+        /* ── iOS tap fix ── */
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('a,button,[onclick]').forEach(el => {
+                el.style.webkitTapHighlightColor = 'transparent';
+                el.style.touchAction = 'manipulation';
+            });
+        });
+    </script>
+</body>
+
+</html>
