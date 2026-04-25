@@ -331,7 +331,7 @@
         <div class="login-card">
             <div class="login-header">
                 <div class="ornament-line"><span>Welcome Back</span></div>
-                <h1>Member <em>Sign In</em></h1>
+                <h1><em>Login</em></h1>
             </div>
 
             <form method="POST" action="{{ route('login') }}">
@@ -364,7 +364,7 @@
                 <a href="{{ route('password.request') }}" class="forgot-link">Forgot Password?</a>
 
                 <button type="submit" class="btn-brand">
-                    Sign In
+                    Login
                 </button>
             </form>
         </div>

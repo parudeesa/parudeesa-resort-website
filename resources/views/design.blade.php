@@ -11,9 +11,9 @@
     <title>Parudeesa – The Lake View Resort</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <style>
         /* ═══════════════════════════════════════
@@ -3554,13 +3554,13 @@
                                     <div class="row g-3">
                                         <div class="col-md-4">
                                             <div class="form-group"><label>Check-In <span
-                                                        style="color:var(--brand)">*</span></label><input type="date"
-                                                    id="f-checkin" required onchange="updateSummary()" /></div>
+                                                        style="color:var(--brand)">*</span></label><input type="text"
+                                                    id="f-checkin" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group"><label>Check-Out <span
-                                                        style="color:var(--brand)">*</span></label><input type="date"
-                                                    id="f-checkout" required onchange="updateSummary()" /></div>
+                                                        style="color:var(--brand)">*</span></label><input type="text"
+                                                    id="f-checkout" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group"><label>Guests <span
@@ -3760,7 +3760,7 @@
             <div class="ph-ov"></div>
             <div class="ph-ct">
                 <span class="eyebrow" style="color:rgba(255,243,236,.65)">Welcome Back</span>
-                <h1 class="ph-title">Member <em>Sign In</em></h1>
+                <h1 class="ph-title"><em>Login</em></h1>
                 <div class="bc"><span onclick="goPage('home')">Home</span> / Login</div>
             </div>
         </div>
@@ -3769,7 +3769,7 @@
                 <div class="auth-card">
                     <div class="auth-header">
                         <div class="ornament-line"><span>Welcome Back</span></div>
-                        <h1>Member <em>Sign In</em></h1>
+                        <h1><em>Login</em></h1>
                     </div>
 
                     <form method="POST" action="{{ route('login') }}">
@@ -3802,7 +3802,7 @@
                         <a href="{{ route('password.request') }}" class="forgot-link">Forgot Password?</a>
 
                         <button type="submit" class="btn-brand w-100" style="margin-bottom: 1rem;">
-                            Sign In
+                            Login
                         </button>
 
                         <div class="auth-footer">
@@ -4456,6 +4456,34 @@
                 el.style.webkitTapHighlightColor = 'transparent';
                 el.style.touchAction = 'manipulation';
             });
+            
+            // Initialize Flatpickr instances globally so we can update them later
+            window.fpCheckin = flatpickr("#f-checkin", { minDate: "today", dateFormat: "Y-m-d", onChange: updateSummary });
+            window.fpCheckout = flatpickr("#f-checkout", { minDate: "today", dateFormat: "Y-m-d", onChange: updateSummary });
+            
+            // Add event listener to the property dropdown
+            const propSelect = document.getElementById('f-prop');
+            if (propSelect) {
+                propSelect.addEventListener('change', async function() {
+                    const propertyId = this.value;
+                    if (!propertyId) {
+                        window.fpCheckin.set("disable", []);
+                        window.fpCheckout.set("disable", []);
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch(`/property/${propertyId}/unavailable-dates`);
+                        if (response.ok) {
+                            const disabledDates = await response.json();
+                            window.fpCheckin.set("disable", disabledDates);
+                            window.fpCheckout.set("disable", disabledDates);
+                        }
+                    } catch (error) {
+                        console.error("Failed to fetch unavailable dates:", error);
+                    }
+                });
+            }
         });
     </script>
 </body>

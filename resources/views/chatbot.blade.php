@@ -319,6 +319,20 @@ function cbSend(){
 
   addMsg("Please choose one of the available options above.", false);
 }
+
+function getQueryParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const property = getQueryParam('property');
+  if (property) {
+    const selected = decodeURIComponent(property);
+    addMsg(`🏡 Selected property: ${selected}`, true);
+    addMsg(`Nice choice! I can help you book ${selected}. Tap “Book Now” or type your preferred dates.`, false);
+    bookingDetails.property = selected;
+  }
+});
 </script>
 
 </body>

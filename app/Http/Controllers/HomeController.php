@@ -21,6 +21,31 @@ class HomeController extends Controller
         return view('property.show', compact('property'));
     }
 
+    public function bookingsIndex()
+    {
+        $bookings = Booking::with('property')->latest()->paginate(15);
+        return view('bookings.index', compact('bookings'));
+    }
+
+    public function unavailableDates($propertyId)
+    {
+        $bookings = Booking::where('property_id', $propertyId)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->get(['check_in as start', 'check_out as end']);
+            
+        $blocks = \App\Models\BlockedDate::where('property_id', $propertyId)
+            ->get(['start_date as start', 'end_date as end']);
+            
+        $unavailable = $bookings->concat($blocks)->map(function($item) {
+            return [
+                'from' => \Carbon\Carbon::parse($item->start)->format('Y-m-d'),
+                'to' => \Carbon\Carbon::parse($item->end)->format('Y-m-d')
+            ];
+        });
+
+        return response()->json($unavailable);
+    }
+
     public function storeBooking(Request $request)
     {
         $request->validate([
@@ -36,6 +61,46 @@ class HomeController extends Controller
             'amenities' => 'nullable|array',
             'amount' => 'required|numeric'
         ]);
+
+        $checkIn = \Carbon\Carbon::parse($request->check_in)->startOfDay();
+        $checkOut = \Carbon\Carbon::parse($request->check_out)->endOfDay();
+
+        // Check availability in Bookings
+        $hasBookingConflict = Booking::where('property_id', $request->property_id)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->where(function($query) use ($checkIn, $checkOut) {
+                $query->whereBetween('check_in', [$checkIn, $checkOut])
+                      ->orWhereBetween('check_out', [$checkIn, $checkOut])
+                      ->orWhere(function($q) use ($checkIn, $checkOut) {
+                          $q->where('check_in', '<=', $checkIn)
+                            ->where('check_out', '>=', $checkOut);
+                      });
+            })->exists();
+
+        if ($hasBookingConflict) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The selected dates are already booked. Please choose different dates.'
+            ], 422);
+        }
+
+        // Check availability in Blocked Dates
+        $hasBlockedDateConflict = \App\Models\BlockedDate::where('property_id', $request->property_id)
+            ->where(function($query) use ($checkIn, $checkOut) {
+                $query->whereBetween('start_date', [$checkIn, $checkOut])
+                      ->orWhereBetween('end_date', [$checkIn, $checkOut])
+                      ->orWhere(function($q) use ($checkIn, $checkOut) {
+                          $q->where('start_date', '<=', $checkIn)
+                            ->where('end_date', '>=', $checkOut);
+                      });
+            })->exists();
+
+        if ($hasBlockedDateConflict) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The selected dates are unavailable. Please choose different dates.'
+            ], 422);
+        }
 
         $booking = Booking::create([
             'name' => $request->name,

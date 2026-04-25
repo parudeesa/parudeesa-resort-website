@@ -13,12 +13,16 @@ class Booking extends Model
         'check_in',
         'check_out',
         'guests',
-        'property_id',
         'amount',
         'status',
+        'property_id',
         'event_type',
         'package_name',
-        'amenities'
+        'amenities',
+        'payment_status',
+        'notes',
+        'created_by',
+        'google_event_id'
     ];
 
     protected $casts = [
