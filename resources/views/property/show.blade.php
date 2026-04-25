@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -8,6 +8,8 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 @php
     $heroImages = array_filter([
@@ -35,55 +37,47 @@
 
 <style>
 :root {
-  --brand:       #fa873e;
-  --brand-d:     #e06828;
-  --brand-dd:    #c05520;
-  --brand-l:     #ffb07a;
-  --brand-pale:  #fff3ec;
-  --brand-mist:  #fff8f3;
-  --cream:       #fff3ec;
-  --cream-d:     #fde8d8;
-  --parch:       #fff8f3;
-  --brn-dk:      #3e2010;
-  --brn-md:      #7a4520;
-  --brn:         #a0622a;
-  --brn-l:       #c8895a;
-  --olive:       #7a7040;
-  --txt:         #2e1a08;
-  --txt-m:       #7a5a3a;
-  --txt-l:       #b08060;
+  --brand:       #1f4e5f;
+  --brand-d:     #103245;
+  --brand-l:     #4c8ca1;
+  --brand-pale:  #eef5f8;
+  --brand-mist:  #f3f7fb;
+  --card:        #ffffff;
+  --bg:          #f4f6f8;
+  --txt:         #1e293b;
+  --txt-m:       #52606d;
+  --txt-l:       #7b8a99;
   --r:           16px;
   --ease:        .35s cubic-bezier(.4,0,.2,1);
-  --sh-s:        0 2px 16px rgba(250,135,62,.1);
-  --sh-m:        0 6px 32px rgba(250,135,62,.15);
-  --sh-l:        0 20px 64px rgba(250,135,62,.2);
+  --sh-s:        0 8px 24px rgba(31,50,65,.08);
+  --sh-m:        0 12px 36px rgba(31,50,65,.1);
+  --sh-l:        0 24px 72px rgba(31,50,65,.12);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{font-family:'Josefin Sans',sans-serif;background:var(--brand-pale);color:var(--txt);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'Josefin Sans',sans-serif;background:var(--bg);color:var(--txt);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4,h5{font-family:'Cormorant Garamond',serif}
 .eb{font-family:'EB Garamond',serif}
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E")}
-.navbar{background:rgba(255,243,236,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(250,135,62,.15);padding:.85rem 0;position:sticky;top:0;z-index:1050;box-shadow:0 4px 24px rgba(250,135,62,.08)}
+.navbar{background:rgba(255,255,255,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(31,50,65,.08);padding:.85rem 0;position:sticky;top:0;z-index:1050;box-shadow:0 10px 40px rgba(31,50,65,.05)}
 .navbar-brand{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--brn-dk)!important;letter-spacing:.3px;line-height:1.1}
 .navbar-brand small{display:block;font-size:.5rem;font-weight:400;letter-spacing:.25em;text-transform:uppercase;color:var(--brn-l);margin-top:.05rem}
 .nav-back{display:inline-flex;align-items:center;gap:.5rem;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-m);cursor:pointer;transition:color var(--ease);padding:.4rem .9rem;border-radius:50px;border:1.5px solid rgba(250,135,62,.25);background:transparent}
-.nav-back:hover{color:var(--brand-d);border-color:var(--brand);background:rgba(250,135,62,.06)}
-.prop-nav-badge{display:inline-flex;align-items:center;gap:.45rem;background:var(--brand);color:#fff;border-radius:50px;padding:.32rem .85rem;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 3px 12px rgba(250,135,62,.35)}
+.nav-back:hover{color:var(--brand);border-color:var(--brand);background:rgba(76,140,161,.08)}
+.prop-nav-badge{display:inline-flex;align-items:center;gap:.45rem;background:var(--brand);color:#fff;border-radius:50px;padding:.32rem .85rem;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 6px 18px rgba(31,50,65,.08)}
 .detail-hero{position:relative;height:78vh;min-height:500px;overflow:hidden;border-radius:0 0 32px 32px}
 .hero-main-img{width:100%;height:100%;object-fit:cover;transition:transform 8s ease}
 .detail-hero:hover .hero-main-img{transform:scale(1.04)}
-.hero-gradient{position:absolute;inset:0;background:linear-gradient(to top,rgba(46,26,8,.72) 0%,rgba(62,32,16,.25) 45%,transparent 70%)}
+.hero-gradient{position:absolute;inset:0;background:linear-gradient(to top,rgba(16,50,69,.78) 0%,rgba(16,50,69,.26) 45%,transparent 70%)}
 .hero-top-bar{position:absolute;top:1.5rem;left:1.5rem;right:1.5rem;display:flex;align-items:flex-start;justify-content:space-between;z-index:3}
-.hero-prop-tag{background:var(--brand);color:#fff;border-radius:50px;padding:.35rem 1rem;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 3px 14px rgba(250,135,62,.45)}
-.hero-price-chip{background:rgba(46,26,8,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(250,135,62,.35);border-radius:12px;padding:.6rem 1.2rem;text-align:center}
-.hero-price-chip .amt{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--brand-l);line-height:1;display:block}
-.hero-price-chip .per{font-size:.6rem;color:rgba(255,243,236,.65);letter-spacing:.1em}
+.hero-prop-tag{background:var(--brand);color:#fff;border-radius:50px;padding:.35rem 1rem;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 6px 20px rgba(31,50,65,.15)}
+.hero-price-chip{background:rgba(16,50,69,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(76,140,161,.3);border-radius:12px;padding:.6rem 1.2rem;text-align:center}
+.hero-price-chip .amt{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:#fff;line-height:1;display:block}
+.hero-price-chip .per{font-size:.6rem;color:rgba(255,255,255,.75);letter-spacing:.1em}
 .hero-bottom-info{position:absolute;bottom:2rem;left:2rem;right:2rem;z-index:3;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 .hero-prop-name{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3.5rem);font-weight:700;font-style:italic;color:#fff;text-shadow:0 3px 20px rgba(0,0,0,.4);line-height:1.1}
 .hero-meta-chips{display:flex;gap:.6rem;flex-wrap:wrap}
-.meta-chip{background:rgba(255,243,236,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,243,236,.3);border-radius:50px;padding:.3rem .85rem;font-size:.65rem;font-weight:600;letter-spacing:.06em;color:#fff;display:flex;align-items:center;gap:.3rem}
-.thumb-strip-wrap{background:var(--parch);padding:1.1rem 0;border-bottom:1px solid rgba(250,135,62,.12)}
+.meta-chip{background:rgba(255,255,255,.18);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);border-radius:50px;padding:.3rem .85rem;font-size:.65rem;font-weight:600;letter-spacing:.06em;color:#fff;display:flex;align-items:center;gap:.3rem}
+.thumb-strip-wrap{background:var(--brand-mist);padding:1.1rem 0;border-bottom:1px solid rgba(31,50,65,.1)}
 .thumb-strip{display:flex;gap:10px;overflow-x:auto;padding:0 1.5rem;scrollbar-width:none}
 .thumb-strip::-webkit-scrollbar{display:none}
 .thumb-item{flex-shrink:0;width:110px;height:74px;border-radius:10px;overflow:hidden;cursor:pointer;border:2.5px solid transparent;transition:border-color var(--ease),transform var(--ease)}
@@ -103,65 +97,65 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 .retro-divider span{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brand);font-weight:600;white-space:nowrap}
 .about-text{font-family:'EB Garamond',serif;font-size:1.05rem;color:var(--txt-m);line-height:1.85;margin-bottom:1.8rem}
 .highlights-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:2rem}
-.highlight-item{background:var(--parch);border:1px solid rgba(250,135,62,.15);border-radius:12px;padding:1rem 1.1rem;display:flex;align-items:flex-start;gap:.8rem;transition:all var(--ease)}
-.highlight-item:hover{border-color:rgba(250,135,62,.35);box-shadow:var(--sh-s);transform:translateY(-2px)}
-.hi-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,rgba(250,135,62,.15),rgba(200,90,40,.1));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.highlight-item{background:#fff;border:1px solid rgba(31,50,65,.08);border-radius:12px;padding:1rem 1.1rem;display:flex;align-items:flex-start;gap:.8rem;transition:all var(--ease)}
+.highlight-item:hover{border-color:rgba(31,50,65,.16);box-shadow:var(--sh-s);transform:translateY(-2px)}
+.hi-icon{width:40px;height:40px;border-radius:10px;background:rgba(76,140,161,.1);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;color:var(--brand)}
 .hi-label{font-size:.72rem;font-weight:700;color:var(--brn-dk);letter-spacing:.04em;line-height:1.3}
 .hi-sub{font-size:.65rem;color:var(--txt-l);margin-top:.15rem}
 .room-list{display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem}
-.room-item{background:var(--parch);border:1px solid rgba(250,135,62,.15);border-radius:14px;padding:1.1rem 1.3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;transition:all var(--ease)}
-.room-item:hover{border-color:rgba(250,135,62,.3);box-shadow:var(--sh-s)}
+.room-item{background:#fff;border:1px solid rgba(31,50,65,.08);border-radius:14px;padding:1.1rem 1.3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;transition:all var(--ease)}
+.room-item:hover{border-color:rgba(31,50,65,.14);box-shadow:var(--sh-s)}
 .room-item-left .rname{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--brn-dk)}
 .room-item-left .rfeat{font-size:.68rem;color:var(--txt-l);margin-top:.15rem;display:flex;gap:.8rem}
 .room-item-right .rprice{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--brand)}
 .room-item-right .rper{font-size:.58rem;color:var(--txt-l);letter-spacing:.08em}
 .amenity-badges{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
-.amen-badge{background:rgba(250,135,62,.07);border:1px solid rgba(250,135,62,.18);border-radius:50px;padding:.28rem .85rem;font-size:.65rem;font-weight:600;color:var(--brn-md);letter-spacing:.05em;display:flex;align-items:center;gap:.35rem;transition:all var(--ease)}
-.amen-badge:hover{background:rgba(250,135,62,.14);border-color:rgba(250,135,62,.35);color:var(--brand-d)}
+.amen-badge{background:rgba(76,140,161,.08);border:1px solid rgba(76,140,161,.12);border-radius:50px;padding:.28rem .85rem;font-size:.65rem;font-weight:600;color:var(--brand-d);letter-spacing:.05em;display:flex;align-items:center;gap:.35rem;transition:all var(--ease)}
+.amen-badge:hover{background:rgba(76,140,161,.14);border-color:rgba(76,140,161,.2);color:var(--brand-d)}
 .booking-sticky{position:sticky;top:100px}
-.booking-card{background:var(--parch);border:1px solid rgba(250,135,62,.2);border-radius:22px;overflow:hidden;box-shadow:var(--sh-l)}
-.bk-header{background:linear-gradient(135deg,var(--brn-dk),var(--brn-md));padding:1.6rem 1.8rem}
-.bk-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem}
-.bk-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;font-style:italic;color:var(--brand-pale)}
+.booking-card{background:var(--card);border:1px solid rgba(31,50,65,.08);border-radius:22px;overflow:hidden;box-shadow:var(--sh-l)}
+.bk-header{background:var(--card);padding:1.4rem 1.6rem;border-bottom:1px solid rgba(31,50,65,.08)}
+.bk-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;gap:.8rem;flex-wrap:wrap}
+.bk-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;font-style:italic;color:var(--brand-d)}
 .bk-price-display{text-align:right}
-.bk-price-display .p-amt{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--brand-l);line-height:1}
-.bk-price-display .p-per{font-size:.58rem;color:rgba(255,243,236,.55);letter-spacing:.1em;display:block}
-.bk-subtitle{font-size:.65rem;color:rgba(255,243,236,.55);letter-spacing:.1em;text-transform:uppercase}
-.bk-tabs{display:flex;border-bottom:1px solid rgba(250,135,62,.15)}
+.bk-price-display .p-amt{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--brand);line-height:1}
+.bk-price-display .p-per{font-size:.58rem;color:var(--txt-m);letter-spacing:.1em;display:block}
+.bk-subtitle{font-size:.68rem;color:var(--txt-m);letter-spacing:.08em;text-transform:uppercase}
+.bk-tabs{display:flex;border-bottom:1px solid rgba(31,50,65,.1)}
 .bk-tab{flex:1;padding:.85rem;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:none;color:var(--txt-m);cursor:pointer;transition:all var(--ease);position:relative}
 .bk-tab.active{color:var(--brand)}
 .bk-tab.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--brand);border-radius:2px 2px 0 0}
 .bk-tab-content{display:none;padding:1.5rem 1.6rem 1.8rem}
 .bk-tab-content.active{display:block}
 .bk-label{font-size:.63rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brn-md);display:block;margin-bottom:.35rem}
-.bk-input,.bk-select,.bk-textarea{width:100%;border:1.5px solid rgba(250,135,62,.22);border-radius:10px;padding:.68rem 1rem;font-family:'Josefin Sans',sans-serif;font-size:.85rem;background:var(--brand-mist);color:var(--txt);outline:none;transition:border-color var(--ease),box-shadow var(--ease);-webkit-appearance:none;appearance:none}
-.bk-input:focus,.bk-select:focus,.bk-textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(250,135,62,.12);background:#fff}
+.bk-input,.bk-select,.bk-textarea{width:100%;border:1.5px solid rgba(31,50,65,.15);border-radius:10px;padding:.68rem 1rem;font-family:'Josefin Sans',sans-serif;font-size:.85rem;background:var(--brand-mist);color:var(--txt);outline:none;transition:border-color var(--ease),box-shadow var(--ease);-webkit-appearance:none;appearance:none}
+.bk-input:focus,.bk-select:focus,.bk-textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(76,140,161,.12);background:#fff}
 .bk-textarea{resize:none;min-height:80px}
 .bk-input-group{position:relative}
 .bk-input-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--brand-l);font-size:.9rem;pointer-events:none}
 .bk-input-group .bk-input{padding-left:2.4rem}
 .bk-fg{margin-bottom:1rem}
 .bk-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-.date-range-box{background:rgba(250,135,62,.05);border:1.5px solid rgba(250,135,62,.2);border-radius:14px;overflow:hidden;margin-bottom:1rem}
+.date-range-box{background:rgba(76,140,161,.05);border:1.5px solid rgba(76,140,161,.15);border-radius:14px;overflow:hidden;margin-bottom:1rem}
 .date-range-box .dr-row{display:grid;grid-template-columns:1fr 1px 1fr}
-.date-range-box .dr-divider{background:rgba(250,135,62,.2)}
+.date-range-box .dr-divider{background:rgba(76,140,161,.15)}
 .date-field{padding:.7rem 1rem}
-.date-field .df-label{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-d);display:block;margin-bottom:.2rem}
+.date-field .df-label{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);display:block;margin-bottom:.2rem}
 .date-field input{width:100%;border:none;background:transparent;font-family:'Josefin Sans',sans-serif;font-size:.82rem;color:var(--txt);outline:none;-webkit-appearance:none;cursor:pointer}
 .date-field input::-webkit-calendar-picker-indicator{opacity:.4;cursor:pointer}
-.price-summary{background:rgba(250,135,62,.05);border:1px solid rgba(250,135,62,.15);border-radius:14px;padding:1.1rem 1.2rem;margin-bottom:1.2rem}
-.ps-row{display:flex;justify-content:space-between;font-size:.78rem;color:var(--txt-m);padding:.35rem 0;border-bottom:1px dashed rgba(250,135,62,.15)}
+.price-summary{background:rgba(76,140,161,.05);border:1px solid rgba(76,140,161,.12);border-radius:14px;padding:1.1rem 1.2rem;margin-bottom:1.2rem}
+.ps-row{display:flex;justify-content:space-between;font-size:.78rem;color:var(--txt-m);padding:.35rem 0;border-bottom:1px dashed rgba(76,140,161,.15)}
 .ps-row:last-child{border-bottom:none}
 .ps-row.total{color:var(--brn-dk);font-weight:700;font-size:.88rem;padding-top:.6rem}
 .ps-row.total .amt{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--brand)}
-.btn-book-primary{width:100%;padding:.9rem 1.2rem;background:linear-gradient(135deg,var(--brand),var(--brand-d));border:none;border-radius:12px;color:#fff;font-family:'Josefin Sans',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 20px rgba(250,135,62,.4);transition:transform var(--ease),box-shadow var(--ease);display:flex;align-items:center;justify-content:center;gap:.5rem;-webkit-tap-highlight-color:transparent;margin-bottom:.75rem}
-.btn-book-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(250,135,62,.5)}
-.btn-wa-book{width:100%;padding:.9rem 1.2rem;background:linear-gradient(135deg,#25D366,#1aa854);border:none;border-radius:12px;color:#fff;font-family:'Josefin Sans',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 18px rgba(37,211,102,.32);transition:transform var(--ease);display:flex;align-items:center;justify-content:center;gap:.5rem;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.btn-book-primary{width:100%;padding:.95rem 1.2rem;background:var(--brand);border:none;border-radius:14px;color:#fff;font-family:'Josefin Sans',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 10px 30px rgba(31,50,65,.14);transition:transform var(--ease),box-shadow var(--ease);display:flex;align-items:center;justify-content:center;gap:.5rem;-webkit-tap-highlight-color:transparent;margin-bottom:.75rem}
+.btn-book-primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(31,50,65,.18)}
+.btn-wa-book{width:100%;padding:.95rem 1.2rem;background:#25D366;border:none;border-radius:14px;color:#fff;font-family:'Josefin Sans',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 10px 24px rgba(37,211,102,.24);transition:transform var(--ease);display:flex;align-items:center;justify-content:center;gap:.5rem;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .btn-wa-book:hover{color:#fff;transform:translateY(-2px)}
 .secure-note{text-align:center;font-size:.62rem;color:var(--txt-l);margin-top:.7rem;display:flex;align-items:center;justify-content:center;gap:.3rem}
 .wa-option-list{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.2rem}
-.wa-option-btn{display:flex;align-items:center;gap:1rem;background:var(--brand-mist);border:1.5px solid rgba(250,135,62,.2);border-radius:14px;padding:1rem 1.2rem;cursor:pointer;transition:all var(--ease);text-decoration:none;-webkit-tap-highlight-color:transparent}
-.wa-option-btn:hover{border-color:var(--brand);background:rgba(250,135,62,.08);transform:translateX(4px)}
+.wa-option-btn{display:flex;align-items:center;gap:1rem;background:#fff;border:1.25px solid rgba(31,50,65,.12);border-radius:16px;padding:1rem 1.2rem;cursor:pointer;transition:all var(--ease);text-decoration:none;color:var(--txt);-webkit-tap-highlight-color:transparent}
+.wa-option-btn:hover{border-color:var(--brand);background:rgba(76,140,161,.08);transform:translateX(3px)}
 .wa-opt-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
 .wa-opt-icon.green{background:rgba(37,211,102,.15);color:#1aa854}
 .wa-opt-icon.orange{background:rgba(250,135,62,.15);color:var(--brand)}
@@ -169,15 +163,15 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 .wa-opt-text .t2{font-size:.65rem;color:var(--txt-m);margin-top:.1rem}
 .wa-opt-arrow{margin-left:auto;color:var(--brand-l);font-size:1rem}
 .check-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem}
-.check-item{display:flex;align-items:center;gap:.6rem;background:var(--brand-mist);border:1.5px solid rgba(250,135,62,.15);border-radius:8px;padding:.5rem .7rem;cursor:pointer;font-size:.72rem;color:var(--txt);transition:all var(--ease);-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
-.check-item:hover{border-color:var(--brand);background:rgba(250,135,62,.06)}
+.check-item{display:flex;align-items:center;gap:.6rem;background:var(--brand-mist);border:1.5px solid rgba(31,50,65,.12);border-radius:8px;padding:.5rem .7rem;cursor:pointer;font-size:.72rem;color:var(--txt);transition:all var(--ease);-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.check-item:hover{border-color:var(--brand);background:rgba(76,140,161,.08)}
 .check-item input{display:none}
-.check-box{width:18px;height:18px;border-radius:5px;border:1.5px solid rgba(250,135,62,.3);background:transparent;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:transparent;flex-shrink:0;transition:all var(--ease)}
+.check-box{width:18px;height:18px;border-radius:5px;border:1.5px solid rgba(31,50,65,.2);background:transparent;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:transparent;flex-shrink:0;transition:all var(--ease)}
 .check-item input:checked~.check-box{background:var(--brand);border-color:var(--brand);color:#fff}
-.check-item:has(input:checked){border-color:var(--brand);background:rgba(250,135,62,.07)}
+.check-item:has(input:checked){border-color:var(--brand);background:rgba(76,140,161,.1)}
 .success-box{display:none;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.25);border-radius:12px;padding:1rem 1.1rem;margin-top:.8rem;font-size:.8rem;color:#1a7a40;line-height:1.65}
 .success-box strong{color:#145a30}
-.mobile-book-footer{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--parch);border-top:1px solid rgba(250,135,62,.2);padding:.9rem 1.2rem calc(.9rem + env(safe-area-inset-bottom));box-shadow:0 -8px 32px rgba(250,135,62,.15);z-index:900;flex-wrap:wrap;gap:.6rem;align-items:center}
+.mobile-book-footer{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid rgba(31,50,65,.08);padding:.9rem 1.2rem calc(.9rem + env(safe-area-inset-bottom));box-shadow:0 -10px 32px rgba(31,50,65,.08);z-index:900;flex-wrap:wrap;gap:.6rem;align-items:center}
 .mf-price{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--brand)}
 .mf-price small{font-size:.62rem;color:var(--txt-l);font-weight:400;font-family:'Josefin Sans',sans-serif}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
@@ -324,7 +318,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 
             <div class="bk-tabs">
               <button type="button" class="bk-tab active" onclick="switchBkTab('form', this)"><i class="bi bi-card-list me-1"></i>Book Online</button>
-              <button type="button" class="bk-tab" onclick="switchBkTab('wa', this)"><i class="bi bi-whatsapp me-1"></i>WhatsApp</button>
+              <button type="button" class="bk-tab" onclick="switchBkTab('wa', this)"><i class="bi bi-whatsapp me-1"></i>WhatsApp Chatbot</button>
             </div>
 
             <form id="bk-form" action="{{ route('bookings.store') }}" method="POST" class="bk-tab-content active" onsubmit="handleBookingSubmit(event)">
@@ -337,12 +331,12 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
                 <div class="dr-row">
                   <div class="date-field">
                     <span class="df-label"><i class="bi bi-calendar-check me-1"></i>Check-In</span>
-                    <input type="date" id="f-checkin" name="check_in" onchange="calcPrice()" required />
+                    <input type="text" id="f-checkin" name="check_in" onchange="calcPrice()" placeholder="YYYY-MM-DD" required />
                   </div>
                   <div class="dr-divider"></div>
                   <div class="date-field">
                     <span class="df-label"><i class="bi bi-calendar-x me-1"></i>Check-Out</span>
-                    <input type="date" id="f-checkout" name="check_out" onchange="calcPrice()" required />
+                    <input type="text" id="f-checkout" name="check_out" onchange="calcPrice()" placeholder="YYYY-MM-DD" required />
                   </div>
                 </div>
               </div>
@@ -426,29 +420,29 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
               <button class="btn-book-primary" type="submit">
                 <i class="bi bi-calendar-check"></i> Confirm Booking
               </button>
-              <a href="https://wa.me/918921021202?text={{ urlencode('Hi! I want to book ' . $property->name . '.') }}" target="_blank" class="btn-wa-book">
-                <i class="bi bi-whatsapp"></i> Or Book via WhatsApp
+              <a href="/chatbot?property={{ urlencode($property->name) }}" target="_blank" class="btn-wa-book">
+                <i class="bi bi-whatsapp"></i> Chat with WhatsApp Chatbot
               </a>
-              <div class="secure-note"><i class="bi bi-lock-fill"></i> Secured · Advance via Razorpay · Instant Confirmation</div>
+              <div class="secure-note"><i class="bi bi-lock-fill"></i> Secured · Instant booking request · We will follow up</div>
               <div class="success-box" id="successBox"></div>
             </form>
 
             <div class="bk-tab-content" id="bk-wa">
               <p class="eb" style="font-size:.95rem;color:var(--txt-m);line-height:1.7;margin-bottom:1.2rem">Chat directly with our team on WhatsApp. Select your preferred option below and we'll guide you through the entire booking process.</p>
               <div class="wa-option-list">
-                <a href="https://wa.me/918921021202?text={{ urlencode('Hi! I want to book ' . $property->name . '. Please share availability and pricing.') }}" target="_blank" class="wa-option-btn">
+                <a href="/chatbot?property={{ urlencode($property->name) }}" target="_blank" class="wa-option-btn">
                   <div class="wa-opt-icon green"><i class="bi bi-whatsapp"></i></div>
-                  <div class="wa-opt-text"><span class="t1">🏡 Book {{ $property->name }}</span><span class="t2">+91 89210 21202 · Tap to open WhatsApp</span></div>
+                  <div class="wa-opt-text"><span class="t1">🏡 Continue Booking</span><span class="t2">Open the WhatsApp chatbot for {{ $property->name }}</span></div>
                   <i class="bi bi-arrow-right wa-opt-arrow"></i>
                 </a>
-                <a href="https://wa.me/918921021202?text={{ urlencode('Hi! I want to enquire about event packages at ' . $property->name . '.') }}" target="_blank" class="wa-option-btn">
+                <a href="/chatbot?property={{ urlencode($property->name) }}" target="_blank" class="wa-option-btn">
                   <div class="wa-opt-icon orange"><i class="bi bi-stars"></i></div>
-                  <div class="wa-opt-text"><span class="t1">🎉 Enquire About Events</span><span class="t2">Party, gathering, corporate & more</span></div>
+                  <div class="wa-opt-text"><span class="t1">🎉 Ask About Events</span><span class="t2">Start a chat for party packages</span></div>
                   <i class="bi bi-arrow-right wa-opt-arrow"></i>
                 </a>
-                <a href="https://wa.me/918921021202?text={{ urlencode('Hi! I need a custom package at ' . $property->name . '. Can you help?') }}" target="_blank" class="wa-option-btn">
-                  <div class="wa-opt-icon orange" style="background:rgba(122,92,110,.12);color:#7a5c6e"><i class="bi bi-magic"></i></div>
-                  <div class="wa-opt-text"><span class="t1">✨ Request Custom Package</span><span class="t2">Tailored experience just for you</span></div>
+                <a href="/chatbot?property={{ urlencode($property->name) }}" target="_blank" class="wa-option-btn">
+                  <div class="wa-opt-icon orange" style="background:rgba(76,140,161,.12);color:#1f4e5f"><i class="bi bi-magic"></i></div>
+                  <div class="wa-opt-text"><span class="t1">✨ Request Custom Package</span><span class="t2">Tell us your ideal stay</span></div>
                   <i class="bi bi-arrow-right wa-opt-arrow"></i>
                 </a>
               </div>
@@ -483,15 +477,14 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;b
 
 <div class="mobile-book-footer">
   <div>
-    <div class="mf-price">₹{{ number_format($propertyPrice, 0) }} <small>/ night</small></div>
-    <div style="font-size:.62rem;color:var(--txt-l)">{{ $property->name }}</div>
+      <div style="font-size:.62rem;color:var(--txt-l);text-align:center">Ready to book? Use the form or continue with WhatsApp chatbot.</div>
   </div>
-  <a href="https://wa.me/918921021202?text={{ urlencode('Hi! I want to book ' . $property->name . '.') }}" target="_blank"
+  <a href="/chatbot?property={{ urlencode($property->name) }}" target="_blank"
      style="display:inline-flex;align-items:center;gap:.4rem;background:#25D366;color:#fff;border-radius:50px;padding:.6rem 1.2rem;font-size:.72rem;font-weight:700;text-decoration:none;flex-shrink:0">
-    <i class="bi bi-whatsapp"></i> Book Now
+    <i class="bi bi-whatsapp"></i> WhatsApp Chatbot
   </a>
   <button onclick="document.getElementById('bk-form').scrollIntoView({behavior:'smooth'})"
-     style="display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,var(--brand),var(--brand-d));color:#fff;border:none;border-radius:50px;padding:.6rem 1.2rem;font-size:.72rem;font-weight:700;flex-shrink:0;cursor:pointer">
+     style="display:inline-flex;align-items:center;gap:.4rem;background:var(--brand);color:#fff;border:none;border-radius:50px;padding:.6rem 1.2rem;font-size:.72rem;font-weight:700;flex-shrink:0;cursor:pointer">
     <i class="bi bi-calendar-check"></i> Reserve
   </button>
 </div>
@@ -544,7 +537,7 @@ function showMessage(html, success = true) {
 }
 async function handleBookingSubmit(event) {
   event.preventDefault();
-  const form = document.getElementById('bookingForm');
+  const form = document.getElementById('bk-form');
   const data = new FormData(form);
   const payload = {};
   data.forEach((value, key) => {
@@ -597,14 +590,32 @@ const obs = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-const today = new Date().toISOString().split('T')[0];
-document.getElementById('f-checkin').min = today;
-document.getElementById('f-checkout').min = today;
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('a,button,[onclick]').forEach(el => {
     el.style.webkitTapHighlightColor = 'transparent';
     el.style.touchAction = 'manipulation';
   });
+
+  // Fetch unavailable dates
+  let disabledDates = [];
+  try {
+    const response = await fetch(`/property/{{ $property->id }}/unavailable-dates`);
+    if (response.ok) {
+      disabledDates = await response.json();
+    }
+  } catch (error) {
+    console.error("Failed to load unavailable dates:", error);
+  }
+
+  const commonConfig = {
+    minDate: "today",
+    dateFormat: "Y-m-d",
+    disable: disabledDates,
+    onChange: calcPrice
+  };
+
+  flatpickr("#f-checkin", commonConfig);
+  flatpickr("#f-checkout", commonConfig);
 });
 </script>
 </body>

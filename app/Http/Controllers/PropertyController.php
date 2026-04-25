@@ -7,6 +7,12 @@ use App\Models\Property;
 
 class PropertyController extends Controller
 {
+    public function index()
+    {
+        $properties = Property::paginate(10);
+        return view('property.index', compact('properties'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
