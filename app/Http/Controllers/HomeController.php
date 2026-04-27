@@ -14,6 +14,12 @@ class HomeController extends Controller
     return view('design', compact('properties')); // Sends them to design.blade.php
 }
 
+    public function design()
+    {
+        $properties = Property::with('amenities')->get();
+        return view('design', compact('properties'));
+    }
+
     public function show($id)
     {
         \Log::info('Property show method called', ['property_id' => $id]);
@@ -31,20 +37,31 @@ class HomeController extends Controller
     {
         $bookings = Booking::where('property_id', $propertyId)
             ->whereIn('status', ['pending', 'confirmed'])
-            ->get(['check_in as start', 'check_out as end']);
-            
-        $blocks = \App\Models\BlockedDate::where('property_id', $propertyId)
-            ->get(['start_date as start', 'end_date as end']);
-            
-        $unavailable = $bookings->concat($blocks)->map(function($item) {
-            return [
-                'from' => \Carbon\Carbon::parse($item->start)->format('Y-m-d'),
-                'to' => \Carbon\Carbon::parse($item->end)->format('Y-m-d')
-            ];
-        });
+            ->get(['check_in', 'check_out']);
 
-        return response()->json($unavailable);
+        $blocks = \App\Models\BlockedDate::where('property_id', $propertyId)
+            ->get(['start_date', 'end_date']);
+
+        $dateRanges = [];
+
+        foreach ($bookings as $booking) {
+            $dateRanges[] = [
+                'from' => $booking->check_in->toDateString(),
+                'to'   => $booking->check_out->toDateString(),
+            ];
+        }
+
+        foreach ($blocks as $block) {
+            $dateRanges[] = [
+                'from' => $block->start_date->toDateString(),
+                'to'   => $block->end_date->toDateString(),
+            ];
+        }
+
+        return response()->json($dateRanges);
     }
+
+   
 
     public function storeBooking(Request $request)
     {
@@ -59,6 +76,8 @@ class HomeController extends Controller
             'event_type' => 'nullable|string|max:255',
             'package_name' => 'nullable|string|max:255',
             'amenities' => 'nullable|array',
+            'base_amount' => 'required|numeric',
+            'extra_amount' => 'required|numeric',
             'amount' => 'required|numeric'
         ]);
 
@@ -113,6 +132,10 @@ class HomeController extends Controller
             'event_type' => $request->event_type,
             'package_name' => $request->package_name,
             'amenities' => $request->amenities,
+            'base_price' => $request->base_amount,
+            'amenities_total' => $request->extra_amount,
+            'grand_total' => $request->amount,
+            'selected_amenities_json' => $request->amenities,
             'amount' => $request->amount,
             'status' => 'pending',
         ]);

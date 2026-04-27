@@ -19,9 +19,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/property/{id}', [HomeController::class, 'show'])->name('property.show');
 Route::get('/property/{id}/unavailable-dates', [HomeController::class, 'unavailableDates']);
 
-Route::get('/design', function () {
-    return view('design');
-})->name('design');
+Route::get('/design', [HomeController::class, 'design'])->name('design');
 
 Route::get('/chatbot', function () {
     return view('chatbot');
