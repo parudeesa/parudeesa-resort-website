@@ -3570,27 +3570,30 @@
                                         </div>
                                     </div>
                                     <div class="form-group"><label>Select Amenities</label>
-                                        <div class="amenity-check-grid">
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Kayaking" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🚣 Kayaking (₹500/pp)</label>
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Private Yacht" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>⛵
-                                                Private Yacht (₹2000/pp)</label>
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Food Package" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🍽️ Food
-                                                Package (₹1000/pp)</label>
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Decorations" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🎊 Decorations (₹5000)</label>
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Photography" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>📸 Photography (₹8000)</label>
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="DJ Setup" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🎵 DJ Setup (₹10000)</label>
+                                        <div id="amenities-list" style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))">
+                                            @php
+                                                $allAmenities = \App\Models\Amenity::where('status', true)->get();
+                                            @endphp
+                                            @forelse($allAmenities as $amenity)
+                                            <label class="amen-check-item" style="border:1px solid rgba(250,135,62,.18);border-radius:14px;padding:1rem;cursor:pointer;">
+                                                <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="{{ $amenity->id }}" data-amenity-name="{{ $amenity->name }}" data-amenity-price="{{ $amenity->price }}" data-amenity-type="{{ $amenity->pricing_type }}" value="{{ $amenity->name }}" onchange="updateSummary()" />
+                                                <span class="amen-check-box"><i class="bi bi-check"></i></span>
+                                                <strong>{{ $amenity->name }}</strong>
+                                                @if($amenity->pricing_type === 'per_person')
+                                                  (₹{{ number_format($amenity->price, 2) }}/person)
+                                                @else
+                                                  (₹{{ number_format($amenity->price, 2) }})
+                                                @endif
+                                                @if($amenity->pricing_type === 'per_person')
+                                                <div class="amenity-participants" style="margin-top:.85rem;display:none;">
+                                                    <label style="font-size:.9rem;color:#555;font-weight:600;display:block;margin-bottom:.35rem;">Persons participating</label>
+                                                    <input type="number" class="amenity-participants-input" min="1" value="1" disabled style="width:100%;max-width:120px;padding:.5rem;border:1px solid #ddd;border-radius:6px;font-size:.9rem;" />
+                                                </div>
+                                                @endif
+                                            </label>
+                                            @empty
+                                            <div style="color:#999;font-size:.95rem">No amenities available</div>
+                                            @endforelse
                                         </div>
                                     </div>
                                     <div class="form-group"><label>Event Package</label>
@@ -3616,15 +3619,10 @@
                                                 class="bi bi-instagram"></i> Instagram</a>
                                     </div>
                                     <div class="d-flex flex-column gap-2">
-                                        <button type="button" onclick="initiatePayment()"
-                                            class="btn-brand w-100 justify-content-center"
+                                        <button type="submit" class="btn-brand w-100 justify-content-center"
                                             style="border-radius:10px;padding:1rem;font-size:.88rem"><i
                                                 class="bi bi-credit-card me-2"></i>
-                                            Pay ₹5,000 Advance via Razorpay</button>
-                                        <button type="submit" class="btn-wa w-100 justify-content-center"
-                                            style="border-radius:10px;padding:1rem;font-size:.88rem"><i
-                                                class="bi bi-whatsapp me-2"></i>
-                                            Submit &amp; Continue on WhatsApp</button>
+                                            Book Now</button>
                                     </div>
                                     <p style="font-size:.63rem;color:var(--txt-m);text-align:center;margin-top:.6rem"><i
                                             class="bi bi-lock-fill me-1"></i> Razorpay · UPI · Card · Net Banking ·
@@ -3940,8 +3938,8 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="f-head">Contact & Booking</div>
                     <div style="font-size:.8rem;color:rgba(255,243,236,.45);line-height:2.2">
-                        <div><i class="bi bi-whatsapp me-2" style="color:#25D366"></i>Paradise: +91 89210 21202</div>
-                        <div><i class="bi bi-whatsapp me-2" style="color:#25D366"></i>Utopiya: +91 80757 41948</div>
+                        <div><i class="bi bi-telephone me-2" style="color:var(--brand)"></i><a href="tel:+918921021202" style="color:inherit;text-decoration:none">Paradise: +91 89210 21202</a></div>
+                        <div><i class="bi bi-telephone me-2" style="color:var(--brand)"></i><a href="tel:+918075741948" style="color:inherit;text-decoration:none">Utopiya: +91 80757 41948</a></div>
                         <div><i class="bi bi-envelope me-2" style="color:var(--brand-l)"></i>hello@parudeesa.in</div>
                         <div><i class="bi bi-geo-alt me-2" style="color:var(--brand)"></i>Kerala Backwaters, India</div>
                         <div><i class="bi bi-instagram me-2" style="color:#dc2743"></i>@parudeesa_utopiya &
@@ -4074,6 +4072,32 @@
             }
         }
 
+        /* ── Amenity participant handling ── */
+        function initializeAmenityListeners() {
+            document.querySelectorAll('.amenity-selector').forEach((checkbox) => {
+                checkbox.addEventListener('change', () => {
+                    const amenityItem = checkbox.closest('.amen-check-item');
+                    const participantsRow = amenityItem?.querySelector('.amenity-participants');
+                    const participantsInput = amenityItem?.querySelector('.amenity-participants-input');
+
+                    if (participantsRow) {
+                        participantsRow.style.display = checkbox.checked ? 'block' : 'none';
+                        participantsInput.disabled = !checkbox.checked;
+                    }
+                    updateSummary();
+                });
+            });
+
+            document.querySelectorAll('.amenity-participants-input').forEach((input) => {
+                input.addEventListener('input', () => {
+                    if (input.value < 1) {
+                        input.value = 1;
+                    }
+                    updateSummary();
+                });
+            });
+        }
+
         /* ── Live booking summary ── */
         function updateSummary() {
             const propSelect = document.getElementById('f-prop');
@@ -4101,20 +4125,31 @@
             let n = 0; if (ci && co) { const d = (new Date(co) - new Date(ci)) / 86400000; n = d > 0 ? d : 0; }
             el('sum-nights').textContent = n ? n + (n === 1 ? ' Night' : ' Nights') : '—';
             
-            // Calculate Amenities
+            // Calculate Amenities from data attributes
             let amenitiesTotal = 0;
             const checkedAmenities = Array.from(document.querySelectorAll('input[name="amenities"]:checked'));
             let amenityHtml = '';
             
             checkedAmenities.forEach(cb => {
-                const name = cb.value;
-                if (amenityPricing[name]) {
-                    const pricing = amenityPricing[name];
-                    let cost = pricing.price;
-                    if (pricing.perPerson) {
-                        cost = cost * (guests > 0 ? guests : 1);
-                    }
-                    amenitiesTotal += cost;
+                const name = cb.getAttribute('data-amenity-name') || cb.value;
+                const price = parseFloat(cb.getAttribute('data-amenity-price')) || 0;
+                const pricingType = cb.getAttribute('data-amenity-type') || 'fixed';
+                
+                let cost = price;
+                let participants = 1;
+                
+                if (pricingType === 'per_person') {
+                    // Find the participant input for this amenity
+                    const amenityItem = cb.closest('.amen-check-item');
+                    const participantsInput = amenityItem?.querySelector('.amenity-participants-input');
+                    participants = participantsInput ? parseInt(participantsInput.value) || 1 : 1;
+                    cost = price * participants;
+                }
+                
+                amenitiesTotal += cost;
+                if (pricingType === 'per_person') {
+                    amenityHtml += `<div class="brow"><span class="bl">${name} (${participants} × ₹${price.toFixed(2)})</span><span class="bv">₹${cost.toLocaleString('en-IN')}</span></div>`;
+                } else {
                     amenityHtml += `<div class="brow"><span class="bl">${name}</span><span class="bv">₹${cost.toLocaleString('en-IN')}</span></div>`;
                 }
             });
@@ -4127,8 +4162,34 @@
         }
 
         /* ── Form submit ── */
+        function buildAmenityPayload() {
+            const amenities = [];
+            document.querySelectorAll('input[name="amenities"]:checked').forEach((checkbox) => {
+                const amenityId = checkbox.getAttribute('data-amenity-id');
+                const name = checkbox.getAttribute('data-amenity-name') || checkbox.value;
+                const price = parseFloat(checkbox.getAttribute('data-amenity-price')) || 0;
+                const pricingType = checkbox.getAttribute('data-amenity-type') || 'fixed';
+                const guests = parseInt(document.getElementById('f-guests').value) || 1;
+                const participants = pricingType === 'per_person' ? guests : null;
+                const total = pricingType === 'per_person' ? price * guests : price;
+
+                amenities.push({
+                    id: amenityId,
+                    name,
+                    pricing_type: pricingType,
+                    price,
+                    participants,
+                    total
+                });
+            });
+            return amenities;
+        }
+
         async function handleFormSubmit(e) {
             e.preventDefault();
+            const form = document.getElementById('bookingForm');
+            const msgBox = document.getElementById('successMsg');
+            const submitBtn = form.querySelector('button[type="submit"]');
             const name = document.getElementById('f-name').value.trim();
             const phone = document.getElementById('f-phone').value.trim();
             const email = document.getElementById('f-email').value.trim();
@@ -4142,11 +4203,11 @@
             const pkgSelect = document.getElementById('f-pkg');
             const pkgName = pkgSelect.options[pkgSelect.selectedIndex]?.getAttribute('data-name') || '';
             const notes = document.getElementById('f-notes').value;
-            const amenElements = Array.from(document.querySelectorAll('input[name="amenities"]:checked')).map(c => c.value);
-            const amen = amenElements.join(', ') || 'None';
+            const amenities = buildAmenityPayload();
             const totalAmount = updateSummary();
             
             if (!name || !phone || !propId || !guests || !ci || !co) { alert('Please fill all required fields.'); return }
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Processing...'; }
             
             try {
                 const response = await fetch('/bookings', {
@@ -4165,31 +4226,32 @@
                         check_out: co,
                         guests: guests,
                         package_name: pkgName,
-                        amenities: amenElements,
+                        notes: notes,
+                        amenities: amenities,
                         amount: totalAmount
                     })
                 });
                 
                 const data = await response.json();
                 if (!data.success) {
-                    alert('Error saving booking: ' + JSON.stringify(data.errors || data.message));
-                    return;
+                    throw new Error(data.message || JSON.stringify(data.errors || 'Booking failed'));
                 }
                 
-                const waNum = propName.includes('Utopiya') ? '918075741948' : '918921021202';
-                document.getElementById('successMsg').innerHTML = '<strong style="color:var(--brand)">✅ Booking Request Saved & Submitted!</strong><br/><br/>' +
-                    '<strong>Name:</strong> ' + name + '<br/><strong>Property:</strong> ' + propName + '<br/><strong>Event:</strong> ' + event +
-                    '<br/><strong>Guests:</strong> ' + guests + '<br/><strong>Check-In:</strong> ' + ci + '<br/><strong>Check-Out:</strong> ' + co +
-                    '<br/><strong>Amenities:</strong> ' + amen + '<br/><strong>Package:</strong> ' + (pkgName || 'None') + (notes ? '<br/><strong>Requests:</strong> ' + notes : '') +
-                    '<br/><strong>Total Amount:</strong> ₹' + totalAmount.toLocaleString('en-IN') +
-                    '<br/><br/>Our team will contact you on WhatsApp shortly!';
-                document.getElementById('successMsg').style.display = 'block';
-                document.getElementById('bookingForm').reset(); updateSummary();
-                const t = encodeURIComponent('Hi! I want to book at Parudeesa.\n\nName: ' + name + '\nPhone: ' + phone + '\nProperty: ' + propName + '\nEvent: ' + event + '\nGuests: ' + guests + '\nCheck-In: ' + ci + '\nCheck-Out: ' + co + '\nAmenities: ' + amen + '\nPackage: ' + (pkgName || 'None') + (notes ? '\nRequests: ' + notes : '') + '\nTotal: ₹' + totalAmount.toLocaleString('en-IN'));
-                setTimeout(() => window.open("/chatbot", "_self"), 800);
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#E8F5E9';
+                msgBox.style.color = '#2E7D32';
+                msgBox.style.border = '1px solid #A5D6A7';
+                msgBox.innerHTML = '<strong style="color:var(--brand)">✅ Booking request saved!</strong><br/>Launching secure Razorpay payment...';
+                initiatePayment({ name, email, phone, propertyName: propName, amount: Math.round(totalAmount * 100) });
             } catch (err) {
-                alert('Something went wrong. Please try again.');
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#FFEBEE';
+                msgBox.style.color = '#C62828';
+                msgBox.style.border = '1px solid #FFCDD2';
+                msgBox.innerHTML = '<strong>Error!</strong><br/>' + (err.message || 'Please try again later or contact us for help.');
                 console.error(err);
+            } finally {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Book Now'; }
             }
         }
 
@@ -4380,14 +4442,11 @@
                 if (cbStep === 'name') { cbBooking.name = val; cbStep = 'phone'; cbAddBot("Your phone number?"); return }
                 if (cbStep === 'phone') {
                     cbBooking.phone = val; cbStep = null;
-                    const waNum = cbBooking.property === 'villa' ? '918075741948' : '918921021202';
-                    const t = encodeURIComponent('Hi! I want to book at Parudeesa.\n\nProperty: ' + cbBooking.propertyLabel + '\nEvent: ' + (cbBooking.event || 'Stay') + '\nGuests: ' + cbBooking.guests + '\nDate: ' + cbBooking.date + '\nName: ' + cbBooking.name + '\nPhone: ' + cbBooking.phone);
-                    cbAddBot('✅ Booking request received!\n\n🏡 ' + cbBooking.propertyLabel + '\n🎉 ' + (cbBooking.event || 'Stay') + '\n👥 ' + cbBooking.guests + ' guests\n📅 ' + cbBooking.date + '\n👤 ' + cbBooking.name + '\n📞 ' + cbBooking.phone + '\n\nOur team will contact you shortly!');
+                    cbAddBot('✅ Booking request received!\n\n🏡 ' + cbBooking.propertyLabel + '\n🎉 ' + (cbBooking.event || 'Stay') + '\n👥 ' + cbBooking.guests + ' guests\n📅 ' + cbBooking.date + '\n👤 ' + cbBooking.name + '\n📞 ' + cbBooking.phone + '\n\nOur team will contact you shortly.');
                     const w = document.createElement('div'); w.className = 'cb-qr-wrap';
-                    const a = document.createElement('a'); a.className = 'cb-wa-link'; a.href = 'https://wa.me/' + waNum + '?text=' + t; a.target = '_blank'; a.innerHTML = '<i class="bi bi-whatsapp"></i> Confirm on WhatsApp';
                     const b = document.createElement('button'); b.className = 'cb-qbtn'; b.textContent = '🏠 Main Menu';
                     b.onclick = () => { document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove()); cbBooking = {}; cbMenu() };
-                    w.appendChild(a); w.appendChild(b); document.getElementById('cbBody').appendChild(w);
+                    w.appendChild(b); document.getElementById('cbBody').appendChild(w);
                     document.getElementById('cbBody').scrollTop = 9999; return;
                 }
                 const v = val.toLowerCase();
@@ -4426,27 +4485,44 @@
         setTimeout(() => { showSpPopup(); setInterval(() => { setTimeout(showSpPopup, (Math.random() * 60 + 120) * 1000) }, 150000) }, 8000);
 
         /* ── Razorpay ── */
-        function initiatePayment() {
-            const name = (document.getElementById('f-name') || {}).value?.trim() || '';
-            const phone = (document.getElementById('f-phone') || {}).value?.trim() || '';
-            const email = (document.getElementById('f-email') || {}).value?.trim() || '';
-            const prop = (document.getElementById('f-prop') || {}).value || '';
-            if (!name || !phone || !email || !prop) { alert('Please fill Name, Phone, Email and Property first.'); return }
-            const pl = { cottage: 'Parudeesa The Paradise', villa: 'Parudeesa Utopiya' }[prop] || prop;
-            const waNum = prop === 'villa' ? '918075741948' : '918921021202';
+        function initiatePayment(data = {}) {
+            const name = data.name || (document.getElementById('f-name') || {}).value?.trim() || '';
+            const phone = data.phone || (document.getElementById('f-phone') || {}).value?.trim() || '';
+            const email = data.email || (document.getElementById('f-email') || {}).value?.trim() || '';
+            const property = data.propertyName || 'Parudeesa';
+            const amount = data.amount || 500000;
+            const msgBox = document.getElementById('successMsg');
             const opts = {
                 key: 'rzp_test_YourRazorpayKeyHere', // ← Replace with your Razorpay Key ID
-                amount: 500000, currency: 'INR',
+                amount: amount, currency: 'INR',
                 name: 'Parudeesa – The Lake View Resort',
-                description: 'Booking Advance — ' + pl,
+                description: 'Booking Advance — ' + property,
                 image: 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=100&q=80',
                 handler: function (res) {
-                    alert('✅ Payment successful!\nID: ' + res.razorpay_payment_id + '\n\nYour booking is confirmed.');
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = '#E8F5E9';
+                    msgBox.style.color = '#2E7D32';
+                    msgBox.style.border = '1px solid #A5D6A7';
+                    msgBox.innerHTML = '<strong>✅ Payment successful!</strong><br/>Payment ID: ' + res.razorpay_payment_id + '<br/>Your booking is confirmed. Our team will connect with you shortly.';
+                    document.getElementById('bookingForm')?.reset();
+                    updateSummary();
                 },
-                prefill: { name, email, contact: phone }, theme: { color: '#fa873e' }, modal: { ondismiss: () => { } }
+                prefill: { name, email, contact: phone }, theme: { color: '#fa873e' }, modal: { ondismiss: () => {
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = '#FFEBEE';
+                    msgBox.style.color = '#C62828';
+                    msgBox.style.border = '1px solid #FFCDD2';
+                    msgBox.innerHTML = '<strong>Payment not completed.</strong><br/>Please retry or contact us for help.';
+                } }
             };
             try { new Razorpay(opts).open() }
-            catch (e) { alert('Razorpay needs HTTPS.'); }
+            catch (e) {
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#FFEBEE';
+                msgBox.style.color = '#C62828';
+                msgBox.style.border = '1px solid #FFCDD2';
+                msgBox.innerHTML = '<strong>Error:</strong> Razorpay checkout could not be opened. Please ensure HTTPS or try again.';
+            }
         }
 
         /* ── iOS tap fix ── */

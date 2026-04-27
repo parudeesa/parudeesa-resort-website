@@ -209,7 +209,7 @@ var cbData = {
   events: "🎉 We host birthdays, anniversaries, weddings, kayaking events, yacht parties, and custom celebrations.",
   amenities: "⛵ Amenities include kayaking, private yacht, gourmet dining, custom decorations, bonfire, and lake view rooms.",
   book: "Great! Let's complete your booking.\nWhich property would you like to book?",
-  human: "Connecting you to our receptionist...\nClick below to chat instantly on WhatsApp."
+  human: "Our team is ready to assist you here. Please share your enquiry or return to the booking form."
 };
 
 function addMsg(text, user=false){
@@ -242,12 +242,8 @@ function cbReply(type){
       const msgContainer = document.getElementById("cbMsgs");
       const linkDiv = document.createElement("div");
       linkDiv.style.alignSelf = "flex-start";
-      const link = document.createElement("a");
-      link.href = "https://wa.me/918075741948?text=Hi!%20I%20want%20to%20talk%20to%20the%20receptionist";
-      link.target = "_blank";
-      link.innerText = "👉 Chat with Receptionist on WhatsApp";
-      link.className = "cb-wa-link";
-      linkDiv.appendChild(link);
+      linkDiv.style.maxWidth = '100%';
+      linkDiv.innerHTML = "<strong>For enquiries only:</strong><br/>Call <a href='tel:+918921021202'>+91 89210 21202</a> or <a href='tel:+918075741948'>+91 80757 41948</a><br/><br/><a href='/' class='cb-wa-link'>Return to Booking Form</a>";
       msgContainer.appendChild(linkDiv);
       msgContainer.scrollTop = msgContainer.scrollHeight;
     }, 300);

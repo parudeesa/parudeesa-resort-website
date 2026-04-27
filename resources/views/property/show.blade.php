@@ -54,6 +54,32 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:var(--font-sans);background:var(--bg-ivory);color:var(--text-dark);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
 h1,h2,h3,h4,h5{font-family:var(--font-serif);color:var(--text-dark);line-height:1.2}
 
+/* Flatpickr disabled dates styling */
+.flatpickr-calendar .flatpickr-day.disabled,
+.flatpickr-calendar .flatpickr-day.notAllowed {
+  background: #ffe0e0 !important;
+  border-color: #ff6b6b !important;
+  color: #999 !important;
+  cursor: not-allowed !important;
+  text-decoration: line-through;
+}
+.flatpickr-calendar .flatpickr-day.disabled:hover,
+.flatpickr-calendar .flatpickr-day.notAllowed:hover {
+  background: #ffcccc !important;
+  color: #666 !important;
+}
+.flatpickr-calendar .flatpickr-day.inRange {
+  background: #fff8e1 !important;
+  color: #ff9800 !important;
+}
+.flatpickr-calendar .flatpickr-day.selected,
+.flatpickr-calendar .flatpickr-day.startRange,
+.flatpickr-calendar .flatpickr-day.endRange {
+  background: #fa873e !important;
+  border-color: #e06828 !important;
+  color: #fff !important;
+}
+
 /* Navbar */
 .navbar{background:rgba(253, 251, 247, 0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(44,42,41,.05);padding:1rem 0;position:sticky;top:0;z-index:1050;transition:all var(--ease)}
 .navbar-brand{font-family:var(--font-serif);font-size:1.8rem;font-weight:700;color:var(--text-dark)!important;letter-spacing:.5px;line-height:1}
@@ -193,8 +219,8 @@ h1,h2,h3,h4,h5{font-family:var(--font-serif);color:var(--text-dark);line-height:
       <button class="btn-premium" onclick="document.getElementById('booking-section').scrollIntoView({behavior:'smooth'})">
         Book Now
       </button>
-      <a href="https://wa.me/918921021202?text={{ urlencode('Hi! I am interested in booking ' . $property->name . '.') }}" target="_blank" class="btn-outline-premium">
-        <i class="bi bi-whatsapp"></i> WhatsApp Enquiry
+      <a href="/chatbot" target="_blank" class="btn-outline-premium">
+        <i class="bi bi-whatsapp"></i> Book via WhatsApp
       </a>
     </div>
   </div>
@@ -388,7 +414,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-serif);color:var(--text-dark);line-height:
             <span class="e-tag">Romantic Events</span>
             <span class="e-tag">Private Celebrations</span>
           </div>
-          <a href="https://wa.me/918921021202?text=I%20would%20like%20to%20request%20a%20custom%20event%20package%20at%20{{ urlencode($property->name) }}" target="_blank" class="btn-premium mt-3">
+          <a href="/chatbot" target="_blank" class="btn-premium mt-3">
             Request Custom Event Package
           </a>
         </div>
@@ -404,41 +430,37 @@ h1,h2,h3,h4,h5{font-family:var(--font-serif);color:var(--text-dark);line-height:
           
           <div class="pricing-info">
             <div class="pi-row">
-              <span class="pi-label">Weekend (Up to 10 Guests)</span>
-              <span class="pi-val">₹12,000</span>
+              <span class="pi-label">Base Stay Price</span>
+              <span class="pi-val">₹{{ number_format($property->price ?: 11000, 2) }}</span>
             </div>
-            <div class="pi-row">
-              <span class="pi-label">Weekday (5 Guests)</span>
-              <span class="pi-val">₹8,000</span>
-            </div>
-            <div class="pi-row">
-              <span class="pi-label">Weekday (6 Guests)</span>
-              <span class="pi-val">₹8,500</span>
-            </div>
-            <div class="pi-row">
-              <span class="pi-label">Weekday (7 Guests)</span>
-              <span class="pi-val">₹9,000</span>
-            </div>
-            <div class="pi-row">
-              <span class="pi-label">Weekday (Up to 10)</span>
-              <span class="pi-val">₹11,000</span>
-            </div>
-            <span class="pi-note">*Children below 12: Free. Weekday prices may vary slightly.</span>
+            <span class="pi-note">*Amenities charges will be added based on your selections below.</span>
           </div>
 
           <form action="{{ route('bookings.store') }}" method="POST" id="bk-form" onsubmit="handleBookingSubmit(event)">
             @csrf
             <input type="hidden" name="property_id" value="{{ $property->id }}" />
-            <!-- Note: We are using a fixed amount or calculating simply for form submission, but emphasizing manual quote. -->
-            <input type="hidden" name="amount" id="form-amount" value="8000" />
+            <input type="hidden" name="amount" id="form-amount" value="{{ number_format($property->price ?: 0, 2, '.', '') }}" />
+            <input type="hidden" name="extra_amount" id="form-extra-amount" value="0" />
+            <input type="hidden" name="base_amount" id="form-base-amount" value="{{ number_format($property->price ?: 0, 2, '.', '') }}" />
 
             <div class="form-row">
-              <input type="text" class="bk-input" id="checkin" name="check_in" placeholder="Check-in Date" required />
-              <input type="text" class="bk-input" id="checkout" name="check_out" placeholder="Check-out Date" required />
+              <div>
+                <label style="font-size:.85rem;color:#666;font-weight:600;display:block;margin-bottom:.5rem;">Check-in Date</label>
+                <input type="text" class="bk-input" id="checkin" name="check_in" placeholder="YYYY-MM-DD" required />
+                <div style="font-size:.75rem;color:#e06828;margin-top:.3rem;">⛔ Red dates are unavailable</div>
+              </div>
+              <div>
+                <label style="font-size:.85rem;color:#666;font-weight:600;display:block;margin-bottom:.5rem;">Check-out Date</label>
+                <input type="text" class="bk-input" id="checkout" name="check_out" placeholder="YYYY-MM-DD" required />
+                <div style="font-size:.75rem;color:#666;margin-top:.3rem;">✓ Must be after check-in</div>
+              </div>
             </div>
             
             <div class="form-row">
-              <input type="number" class="bk-input" name="guests" placeholder="Total Guests" min="1" required />
+              <div>
+                <label style="font-size:.85rem;color:#666;font-weight:600;display:block;margin-bottom:.5rem;">Total Guests</label>
+                <input type="number" class="bk-input" id="total-guests" name="guests" placeholder="Total Guests" min="1" value="1" required />
+              </div>
               <input type="text" class="bk-input" name="name" placeholder="Full Name" required />
             </div>
 
@@ -447,11 +469,117 @@ h1,h2,h3,h4,h5{font-family:var(--font-serif);color:var(--text-dark);line-height:
               <input type="email" class="bk-input" name="email" placeholder="Email Address" required />
             </div>
 
+            <div class="form-group">
+              <label class="p-label">Select Amenities</label>
+              <div id="amenities-list" style="display:grid;gap:1rem;">
+                @forelse($property->amenities as $amenity)
+                <div class="amenity-card" style="border:2px solid #e06828;border-radius:14px;padding:1rem;background:#fff;margin-bottom:1rem;">
+                  <div style="font-size:1.1rem;font-weight:700;color:#333;margin-bottom:.5rem;">{{ $amenity->name }}</div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+                    <label style="display:flex;align-items:center;gap:.75rem;font-weight:700;cursor:pointer;flex:1;">
+                      <input type="checkbox" class="amenity-selector" data-amenity-id="{{ $amenity->id }}" data-amenity-name="{{ $amenity->name }}" data-amenity-price="{{ $amenity->price }}" data-amenity-type="{{ $amenity->pricing_type }}" name="amenities[{{ $amenity->id }}][selected]" value="1" style="width:1.2rem;height:1.2rem;" />
+                      <span>{{ $amenity->name }}</span>
+                    </label>
+                    <div style="text-align:right;min-width:140px;font-size:.95rem;color:#444;">
+                      @if($amenity->pricing_type === 'per_person')
+                        ₹{{ number_format($amenity->price,2) }} / person
+                      @else
+                        ₹{{ number_format($amenity->price,2) }} fixed
+                      @endif
+                    </div>
+                  </div>
+                  @if($amenity->pricing_type === 'per_person')
+                  <div class="amenity-participants" style="margin-top:.85rem;display:block;border-top:2px solid #e06828;padding-top:.85rem;background:#fef7f3;border-radius:8px;padding:1rem;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+                      <label style="font-size:1rem;color:#e06828;font-weight:700;">👥 Select Members</label>
+                      <div style="font-size:.9rem;color:#999;">
+                        <span style="color:#e06828;font-weight:700;" class="persons-label">1 Person</span>
+                      </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:1rem;">
+                      <button type="button" class="amenity-counter-btn amenity-decrease-btn" data-amenity-id="{{ $amenity->id }}" style="width:48px;height:48px;border-radius:10px;border:none;background:#e06828;color:#fff;font-weight:700;font-size:1.3rem;cursor:pointer;transition:all 0.3s ease;box-shadow:0 2px 8px rgba(224,104,40,0.2);">−</button>
+                      
+                      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem;">
+                        <input type="number" class="amenity-participants-input" name="amenities[{{ $amenity->id }}][participants]" min="1" value="1" style="width:100%;text-align:center;font-weight:700;font-size:1.8rem;border:2px solid #e06828;border-radius:8px;padding:.5rem;background:#fff;" data-amenity-price="{{ $amenity->price }}" data-amenity-name="{{ $amenity->name }}" />
+                        <div style="font-size:.75rem;color:#999;">₹{{ number_format($amenity->price, 2) }} each</div>
+                      </div>
+                      
+                      <button type="button" class="amenity-counter-btn amenity-increase-btn" data-amenity-id="{{ $amenity->id }}" style="width:48px;height:48px;border-radius:10px;border:none;background:#e06828;color:#fff;font-weight:700;font-size:1.3rem;cursor:pointer;transition:all 0.3s ease;box-shadow:0 2px 8px rgba(224,104,40,0.2);">+</button>
+                    </div>
+                    <div style="font-size:.85rem;color:#e06828;margin-top:1rem;text-align:center;font-weight:600;" class="amenity-total-display">Total: ₹{{ number_format($amenity->price, 2) }}</div>
+                  </div>
+                  @endif
+                  <input type="hidden" name="amenities[{{ $amenity->id }}][price]" value="{{ $amenity->price }}" />
+                  <input type="hidden" name="amenities[{{ $amenity->id }}][pricing_type]" value="{{ $amenity->pricing_type }}" />
+                  <input type="hidden" name="amenities[{{ $amenity->id }}][name]" value="{{ $amenity->name }}" />
+                </div>
+                @empty
+                <div class="text-muted" style="font-size:.95rem;color:#666;padding:2rem;border:2px dashed #e06828;border-radius:12px;background:#fef7f3;text-align:center;">
+                  <div style="font-size:1.2rem;margin-bottom:1rem;">🏄‍♂️ Sample Amenities</div>
+                  <div style="margin-bottom:1rem;">No amenities configured yet. Here's how member selection works:</div>
+                  
+                  <!-- Sample Kayaking -->
+                  <div class="amenity-card" style="border:2px solid #e06828;border-radius:14px;padding:1rem;background:#fff;margin:1rem 0;max-width:400px;margin-left:auto;margin-right:auto;">
+                    <div style="font-size:1.1rem;font-weight:700;color:#333;margin-bottom:.5rem;">🚣 Kayaking</div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.5rem;">
+                      <label style="display:flex;align-items:center;gap:.75rem;font-weight:700;cursor:pointer;flex:1;">
+                        <input type="checkbox" checked disabled style="width:1.2rem;height:1.2rem;" />
+                        <span>Kayaking</span>
+                      </label>
+                      <div style="text-align:right;min-width:140px;font-size:.95rem;color:#444;">₹700 / person</div>
+                    </div>
+                    <div class="amenity-participants" style="margin-top:.85rem;display:block;border-top:2px solid #e06828;padding-top:.85rem;background:#fef7f3;border-radius:8px;padding:.85rem;">
+                      <label style="font-size:1rem;color:#e06828;font-weight:700;display:block;margin-bottom:.5rem;">👥 Number of Members</label>
+                      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                        <button type="button" disabled style="width:45px;height:45px;border-radius:12px;border:2px solid #e06828;background:#fff;color:#e06828;font-weight:700;font-size:1.4rem;">-</button>
+                        <input type="number" value="2" disabled style="width:80px;max-width:100px;text-align:center;font-weight:600;font-size:1.1rem;border:2px solid #e06828;" />
+                        <button type="button" disabled style="width:45px;height:45px;border-radius:12px;border:2px solid #e06828;background:#fff;color:#e06828;font-weight:700;font-size:1.4rem;">+</button>
+                      </div>
+                      <div style="font-size:.9rem;color:#666;margin-top:.5rem;font-style:italic;">Select how many people will participate in this activity</div>
+                    </div>
+                  </div>
+                  
+                  <div style="margin-top:1rem;font-size:.9rem;color:#888;">When amenities are configured, you'll see member controls like this for per-person activities.</div>
+                </div>
+                @endforelse
+              </div>
+            </div>
+
+            <div id="booking-summary" style="margin-top:1.5rem;padding:1.2rem;border:1px solid rgba(250,135,62,.18);border-radius:16px;background:#fff;">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;">
+                <div>
+                  <div style="font-size:.9rem;color:#999;text-transform:uppercase;letter-spacing:.12em;font-weight:700;">Booking Summary</div>
+                  <div style="font-size:1.2rem;font-weight:700;color:#1f2937;">{{ $property->name }}</div>
+                </div>
+                <div style="text-align:right;min-width:150px;">
+                  <div style="font-size:.85rem;color:#555;">Base Stay Price</div>
+                  <div id="summary-base-price" style="font-size:1.25rem;font-weight:700;color:#e06828;">₹{{ number_format($property->price ?: 11000, 2) }}</div>
+                </div>
+              </div>
+              <div id="summary-amenities-list" style="margin-bottom:1rem;color:#444;">
+                <div style="font-weight:700;margin-bottom:.6rem;color:#333;">Amenities Charges</div>
+                <div id="summary-amenities-empty" style="color:#777;font-size:.95rem;">Choose amenities to see charges.</div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;border-top:1px solid rgba(229,231,235,.8);padding-top:1rem;">
+                <div style="font-size:.95rem;color:#555;">Extra Amenities Total</div>
+                <div id="summary-extra-total" style="font-size:1.1rem;font-weight:700;color:#111;">₹0.00</div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-top:.8rem;">
+                <div style="font-size:.95rem;color:#555;">Grand Total</div>
+                <div id="summary-grand-total" style="font-size:1.35rem;font-weight:800;color:#b45309;">₹{{ number_format($property->price ?: 11000, 2) }}</div>
+              </div>
+            </div>
+
             <button type="submit" class="btn-book-submit">Book Now</button>
             <div class="text-center my-3" style="font-size:0.8rem;color:var(--text-muted);font-weight:600;letter-spacing:0.1em;text-transform:uppercase">OR</div>
-            <a href="https://wa.me/918921021202?text=I%20want%20to%20book%20{{ urlencode($property->name) }}" target="_blank" class="btn-wa-alt">
-              <i class="bi bi-whatsapp"></i> Book via WhatsApp
+            <a href="/chatbot" target="_blank" class="btn-wa-alt">
+              <i class="bi bi-chat-left-text"></i> Chat with us
             </a>
+            <div class="contact-panel" style="margin-top:1.2rem;padding:1rem;border:1px solid rgba(0,0,0,0.08);border-radius:12px;background:#fafafa;font-size:.95rem">
+              <div style="font-weight:700;margin-bottom:.4rem">For enquiries only:</div>
+              <div><a href="tel:+918921021202">+91 89210 21202</a></div>
+              <div><a href="tel:+918075741948">+91 80757 41948</a></div>
+            </div>
 
             <div id="booking-msg" style="display:none;margin-top:1.5rem;padding:1rem;border-radius:var(--radius-sm);font-size:0.9rem;text-align:center"></div>
           </form>
@@ -476,42 +604,239 @@ const obs = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-// Flatpickr
+// Flatpickr with proper disabled date range validation
 document.addEventListener('DOMContentLoaded', async () => {
-  let disabledDates = [];
+  let dateRanges = [];
+
   try {
     const response = await fetch(`/property/{{ $property->id }}/unavailable-dates`);
     if (response.ok) {
-      disabledDates = await response.json();
+      dateRanges = await response.json();
     }
   } catch (error) {
     console.error("Failed to load unavailable dates:", error);
   }
 
-  const commonConfig = {
-    minDate: "today",
-    dateFormat: "Y-m-d",
-    disable: disabledDates
+  // Function to check if a date is within any blocked range
+  const isDateBlocked = (date) => {
+    const checkDate = new Date(date).toISOString().split('T')[0];
+    return dateRanges.some(range => {
+      return checkDate >= range.from && checkDate <= range.to;
+    });
   };
 
-  flatpickr("#checkin", commonConfig);
-  flatpickr("#checkout", commonConfig);
-});
+  // Function to disable dates for Flatpickr
+  const disableFunction = (date) => {
+    return isDateBlocked(date);
+  };
 
-// Form submission
+  const checkin = flatpickr("#checkin", {
+    minDate: "today",
+    dateFormat: "Y-m-d",
+    disable: [disableFunction],
+    onChange: function(selectedDates, dateStr) {
+      if (!selectedDates[0]) return;
+      const checkoutMinDate = new Date(selectedDates[0]);
+      checkoutMinDate.setDate(checkoutMinDate.getDate() + 1);
+      checkout.set('minDate', checkoutMinDate);
+
+      // Find next available checkout date after check-in
+      let maxDate = null;
+      let currentDate = new Date(checkoutMinDate);
+      while (currentDate <= new Date(new Date().setFullYear(new Date().getFullYear() + 1))) {
+        if (isDateBlocked(currentDate)) {
+          const beforeBlocked = new Date(currentDate);
+          beforeBlocked.setDate(beforeBlocked.getDate() - 1);
+          maxDate = beforeBlocked;
+          break;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      if (maxDate) {
+        checkout.set('maxDate', maxDate);
+      }
+    }
+  });
+
+  const checkout = flatpickr("#checkout", {
+    minDate: "today",
+    dateFormat: "Y-m-d",
+    disable: [disableFunction]
+  });
+
+  initializeAmenityListeners();
+  updateBookingSummary();
+});
+  
+
+function initializeAmenityListeners() {
+  document.querySelectorAll('.amenity-selector').forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+      const amenityCard = checkbox.closest('.amenity-card');
+      const participantsRow = amenityCard?.querySelector('.amenity-participants');
+      const participantsInput = amenityCard?.querySelector('.amenity-participants-input');
+
+      if (participantsRow) {
+        participantsRow.style.display = checkbox.checked ? 'block' : 'block';
+        participantsInput.disabled = false;
+      }
+      updateBookingSummary();
+    });
+  });
+
+  document.querySelectorAll('.amenity-participants-input').forEach((input) => {
+    input.addEventListener('input', () => {
+      if (input.value < 1) {
+        input.value = 1;
+      }
+      updateBookingSummary();
+    });
+  });
+
+  document.querySelectorAll('.quantity-button').forEach((button) => {
+    button.addEventListener('click', () => {
+      const action = button.dataset.action;
+      const amenityCard = button.closest('.amenity-card');
+      const input = amenityCard?.querySelector('.amenity-participants-input');
+      if (!input) return;
+      let current = parseInt(input.value || '1', 10);
+      current = action === 'increase' ? current + 1 : Math.max(1, current - 1);
+      input.value = current;
+      updateBookingSummary();
+    });
+  });
+}
+
+function buildAmenityPayload() {
+  const amenities = [];
+  document.querySelectorAll('.amenity-selector').forEach((checkbox) => {
+    if (!checkbox.checked) {
+      return;
+    }
+
+    const amenityId = checkbox.dataset.amenityId;
+    const name = checkbox.dataset.amenityName;
+    const price = parseFloat(checkbox.dataset.amenityPrice) || 0;
+    const pricingType = checkbox.dataset.amenityType;
+    const amenityCard = checkbox.closest('.amenity-card');
+    const participantsInput = amenityCard?.querySelector('.amenity-participants-input');
+    const members = pricingType === 'per_person' ? Math.max(1, parseInt(participantsInput?.value || '1')) : null;
+    const total = pricingType === 'per_person' ? price * members : price;
+
+    if (pricingType === 'per_person') {
+      amenities.push({
+        "name": name,
+        "type": "per_person",
+        "members": members,
+        "unit_price": price,
+        "total": total
+      });
+    } else {
+      amenities.push({
+        "name": name,
+        "type": "fixed",
+        "total": total
+      });
+    }
+  });
+
+  return amenities;
+}
+
+function updateBookingSummary() {
+  const baseAmount = parseFloat(document.getElementById('form-base-amount').value) || 0;
+  const amenities = buildAmenityPayload();
+  const summaryList = document.getElementById('summary-amenities-list');
+  const summaryEmpty = document.getElementById('summary-amenities-empty');
+  const extraTotalElem = document.getElementById('summary-extra-total');
+  const grandTotalElem = document.getElementById('summary-grand-total');
+  const formExtraAmount = document.getElementById('form-extra-amount');
+  const formAmount = document.getElementById('form-amount');
+
+  let extraTotal = 0;
+  summaryList.querySelectorAll('.summary-item').forEach(el => el.remove());
+
+  if (amenities.length === 0) {
+    summaryEmpty.style.display = 'block';
+  } else {
+    summaryEmpty.style.display = 'none';
+    amenities.forEach((amenity) => {
+      extraTotal += amenity.total;
+      const item = document.createElement('div');
+      item.className = 'summary-item';
+      item.style.marginBottom = '.65rem';
+      item.style.fontSize = '.96rem';
+      item.style.color = '#334155';
+      if (amenity.type === 'per_person') {
+        item.textContent = `${amenity.name} (${amenity.members} × ₹${amenity.unit_price.toFixed(2)}) = ₹${amenity.total.toFixed(2)}`;
+      } else {
+        item.textContent = `${amenity.name} = ₹${amenity.total.toFixed(2)}`;
+      }
+      summaryList.appendChild(item);
+    });
+  }
+
+  const grandTotal = baseAmount + extraTotal;
+  extraTotalElem.textContent = `₹${extraTotal.toFixed(2)}`;
+  grandTotalElem.textContent = `₹${grandTotal.toFixed(2)}`;
+  formExtraAmount.value = extraTotal.toFixed(2);
+  formAmount.value = grandTotal.toFixed(2);
+}
+
 async function handleBookingSubmit(event) {
   event.preventDefault();
   const form = document.getElementById('bk-form');
   const msgBox = document.getElementById('booking-msg');
   const submitBtn = form.querySelector('.btn-book-submit');
+  const amenities = buildAmenityPayload();
+  const formData = new FormData(form);
+  
+  // Validate dates
+  const checkInStr = formData.get('check_in');
+  const checkOutStr = formData.get('check_out');
+  
+  if (!checkInStr || !checkOutStr) {
+    msgBox.style.display = 'block';
+    msgBox.style.backgroundColor = '#FFEBEE';
+    msgBox.style.color = '#C62828';
+    msgBox.style.border = '1px solid #FFCDD2';
+    msgBox.innerHTML = '<strong>Error!</strong><br/>Please select both check-in and check-out dates.';
+    return;
+  }
+  
+  const checkIn = new Date(checkInStr);
+  const checkOut = new Date(checkOutStr);
+  
+  if (checkOut <= checkIn) {
+    msgBox.style.display = 'block';
+    msgBox.style.backgroundColor = '#FFEBEE';
+    msgBox.style.color = '#C62828';
+    msgBox.style.border = '1px solid #FFCDD2';
+    msgBox.innerHTML = '<strong>Error!</strong><br/>Check-out date must be after check-in date.';
+    return;
+  }
+  
+  const payload = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    phone: formData.get('phone'),
+    check_in: checkInStr,
+    check_out: checkOutStr,
+    guests: formData.get('guests'),
+    property_id: formData.get('property_id'),
+    event_type: formData.get('event_type') || null,
+    package_name: formData.get('package_name') || null,
+    notes: formData.get('notes') || null,
+    base_amount: parseFloat(formData.get('base_amount')) || 0,
+    extra_amount: parseFloat(formData.get('extra_amount')) || 0,
+    amount: parseFloat(formData.get('amount')) || 0,
+    amenities: amenities
+  };
   
   submitBtn.disabled = true;
   submitBtn.innerText = 'Processing...';
   
   try {
-    const data = new FormData(form);
-    const payload = Object.fromEntries(data.entries());
-    
     const response = await fetch(form.action, {
       method: 'POST',
       headers: {
@@ -529,8 +854,14 @@ async function handleBookingSubmit(event) {
       msgBox.style.backgroundColor = '#E8F5E9';
       msgBox.style.color = '#2E7D32';
       msgBox.style.border = '1px solid #A5D6A7';
-      msgBox.innerHTML = `<strong>Booking Confirmed!</strong><br/>We will contact you shortly to confirm pricing and details.`;
-      form.reset();
+      msgBox.innerHTML = `<strong>Booking saved.</strong><br/>Launching secure Razorpay payment...`;
+      initiatePayment({
+        name: payload.name,
+        email: payload.email,
+        phone: payload.phone,
+        propertyName: '{{ $property->name }}',
+        amount: Math.round(payload.amount * 100)
+      });
     } else {
       throw new Error(json.message || 'Booking failed');
     }
@@ -539,12 +870,58 @@ async function handleBookingSubmit(event) {
     msgBox.style.backgroundColor = '#FFEBEE';
     msgBox.style.color = '#C62828';
     msgBox.style.border = '1px solid #FFCDD2';
-    msgBox.innerHTML = `<strong>Error!</strong><br/>${error.message || 'Please try again later or contact us on WhatsApp.'}`;
+    msgBox.innerHTML = `<strong>Error!</strong><br/>${error.message || 'Please try again later or contact us through the chatbot.'}`;
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerText = 'Book Now';
   }
 }
+
+function initiatePayment(data) {
+  const msgBox = document.getElementById('booking-msg');
+  const amount = data.amount || 500000;
+  const opts = {
+    key: 'rzp_test_YourRazorpayKeyHere',
+    amount: amount,
+    currency: 'INR',
+    name: 'Parudeesa – The Lake View Resort',
+    description: 'Booking Advance — ' + (data.propertyName || 'Parudeesa'),
+    prefill: {
+      name: data.name || '',
+      email: data.email || '',
+      contact: data.phone || ''
+    },
+    theme: { color: '#fa873e' },
+    handler: function(res) {
+      msgBox.style.display = 'block';
+      msgBox.style.backgroundColor = '#E8F5E9';
+      msgBox.style.color = '#2E7D32';
+      msgBox.style.border = '1px solid #A5D6A7';
+      msgBox.innerHTML = '<strong>✅ Payment successful!</strong><br/>Payment ID: ' + res.razorpay_payment_id + '<br/>Your booking is confirmed. Our team will contact you shortly.';
+      document.getElementById('bk-form')?.reset();
+    },
+    modal: {
+      ondismiss: function() {
+        msgBox.style.display = 'block';
+        msgBox.style.backgroundColor = '#FFEBEE';
+        msgBox.style.color = '#C62828';
+        msgBox.style.border = '1px solid #FFCDD2';
+        msgBox.innerHTML = '<strong>Payment not completed.</strong><br/>Please retry or contact us for help.';
+      }
+    }
+  };
+  try {
+    new Razorpay(opts).open();
+  } catch (err) {
+    msgBox.style.display = 'block';
+    msgBox.style.backgroundColor = '#FFEBEE';
+    msgBox.style.color = '#C62828';
+    msgBox.style.border = '1px solid #FFCDD2';
+    msgBox.innerHTML = '<strong>Error:</strong> Razorpay checkout could not be opened. Please ensure HTTPS or try again.';
+    console.error(err);
+  }
+}
 </script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
 </html>

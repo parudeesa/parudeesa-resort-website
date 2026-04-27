@@ -18,9 +18,12 @@ class AmenityController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'pricing_type' => 'required|in:per_person,fixed',
+            'status' => 'sometimes|boolean',
         ]);
 
-        Amenity::create($request->all());
+        Amenity::create($request->only(['name', 'description', 'price', 'pricing_type', 'status']));
 
         return redirect()->back()->with('success', 'Amenity added successfully!');
     }
@@ -30,9 +33,12 @@ class AmenityController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'pricing_type' => 'required|in:per_person,fixed',
+            'status' => 'sometimes|boolean',
         ]);
 
-        $amenity->update($request->all());
+        $amenity->update($request->only(['name', 'description', 'price', 'pricing_type', 'status']));
 
         return redirect()->back()->with('success', 'Amenity updated successfully!');
     }

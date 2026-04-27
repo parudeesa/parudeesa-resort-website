@@ -31,8 +31,25 @@
                             <input id="name" name="name" type="text" class="p-input mt-1" placeholder="e.g. Infinity Pool" required />
                         </div>
                         <div>
+                            <label class="p-label">Price</label>
+                            <input id="price" name="price" type="number" min="0" step="0.01" class="p-input mt-1" placeholder="e.g. 1000" required />
+                        </div>
+                        <div>
+                            <label class="p-label">Pricing Type</label>
+                            <select id="pricing_type" name="pricing_type" class="p-input mt-1" required>
+                                <option value="fixed">Fixed</option>
+                                <option value="per_person">Per Person</option>
+                            </select>
+                        </div>
+                        <div>
                             <label class="p-label">Description (Optional)</label>
                             <textarea id="description" name="description" class="p-input mt-1" rows="3" placeholder="Brief details..."></textarea>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <label class="flex items-center gap-2 p-label">
+                                <input id="status" name="status" type="checkbox" value="1" checked class="p-checkbox" />
+                                Active
+                            </label>
                         </div>
                         <div class="pt-4 mt-2">
                             <button type="submit" class="p-btn w-full flex justify-center items-center">
@@ -65,6 +82,8 @@
                                 <thead style="background:rgba(250,135,62,.05)">
                                     <tr>
                                         <th class="px-6 py-4 text-left p-label rounded-tl-lg">Name</th>
+                                        <th class="px-6 py-4 text-left p-label">Price</th>
+                                        <th class="px-6 py-4 text-left p-label">Pricing Type</th>
                                         <th class="px-6 py-4 text-left p-label">Description</th>
                                         <th class="px-6 py-4 text-left p-label">Created</th>
                                         <th class="px-6 py-4 text-right p-label rounded-tr-lg">Actions</th>
@@ -77,6 +96,12 @@
                                                 <div class="font-bold p-text text-md">{{ $amenity->name }}</div>
                                             </td>
                                             <td class="px-6 py-4">
+                                                <div class="text-sm text-gray-700">₹{{ number_format($amenity->price, 2) }}</div>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold" style="background:rgba(250,135,62,.1);color:#b45309">{{ ucfirst(str_replace('_', ' ', $amenity->pricing_type)) }}</span>
+                                            </td>
+                                            <td class="px-6 py-4">
                                                 <div class="text-sm text-gray-600 truncate max-w-xs">{{ $amenity->description ?: '—' }}</div>
                                             </td>
                                             <td class="px-6 py-4">
@@ -86,7 +111,7 @@
                                                 <div class="flex justify-end space-x-2">
                                                     <!-- Edit Icon with Tooltip -->
                                                     <div class="relative flex items-center group/tooltip">
-                                                        <button @click="openEditModal({{ $amenity->id }}, '{{ addslashes($amenity->name) }}', '{{ addslashes($amenity->description ?? '') }}')" 
+                                                        <button @click="openEditModal({{ $amenity->id }}, '{{ addslashes($amenity->name) }}', {{ $amenity->price }}, '{{ $amenity->pricing_type }}', {{ $amenity->status ? 'true' : 'false' }}, '{{ addslashes($amenity->description ?? '') }}')" 
                                                                 class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-lg transition-colors">
                                                             <i data-lucide="pencil" class="w-4 h-4"></i>
                                                         </button>
@@ -156,8 +181,25 @@
                             <input type="text" name="name" x-model="editName" required class="p-input">
                         </div>
                         <div>
+                            <label class="p-label block mb-2">Price</label>
+                            <input type="number" name="price" x-model="editPrice" required min="0" step="0.01" class="p-input">
+                        </div>
+                        <div>
+                            <label class="p-label block mb-2">Pricing Type</label>
+                            <select name="pricing_type" x-model="editPricingType" class="p-input" required>
+                                <option value="fixed">Fixed</option>
+                                <option value="per_person">Per Person</option>
+                            </select>
+                        </div>
+                        <div>
                             <label class="p-label block mb-2">Description (Optional)</label>
                             <textarea name="description" x-model="editDescription" class="p-input" rows="3"></textarea>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <label class="flex items-center gap-2 p-label">
+                                <input type="checkbox" name="status" x-model="editStatus" value="1" class="p-checkbox" />
+                                Active
+                            </label>
                         </div>
                         <div class="flex space-x-3 pt-4 border-t border-orange-100">
                             <button type="button" @click="closeEditModal()" class="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-lg transition-colors uppercase text-sm tracking-wider">
@@ -219,13 +261,19 @@
                 isDeleteModalOpen: false,
                 editFormAction: '',
                 editName: '',
+                editPrice: 0,
+                editPricingType: 'fixed',
+                editStatus: true,
                 editDescription: '',
                 deleteFormAction: '',
                 deleteAmenityName: '',
 
-                openEditModal(id, name, description) {
+                openEditModal(id, name, price, pricingType, status, description) {
                     this.editFormAction = `/amenities/${id}`;
                     this.editName = name;
+                    this.editPrice = price;
+                    this.editPricingType = pricingType;
+                    this.editStatus = !!status;
                     this.editDescription = description;
                     this.isEditModalOpen = true;
                 },
