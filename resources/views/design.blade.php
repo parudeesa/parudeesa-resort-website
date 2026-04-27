@@ -2526,7 +2526,7 @@
                             </form>
                         </li>
                     @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">LOGIN</a></li>
                     @endauth
                 </ul>
             </div>
@@ -2715,7 +2715,7 @@
                     <a onclick="goPage('events')" class="btn-brand" style="cursor:pointer"><i
                             class="bi bi-stars me-1"></i>
                         Explore All Packages</a>
-                    <a href="https://wa.me/918921021202?text=Hi!%20I%20want%20to%20know%20about%20event%20packages%20at%20Parudeesa."
+                    <a href="/chatbot"
                         target="_blank" class="btn-ghost"><i class="bi bi-whatsapp me-1"></i> Enquire Now</a>
                 </div>
                 <div class="row g-3 mt-5 justify-content-center">
@@ -2978,7 +2978,7 @@
                                 <div class="ev-price" style="color:#8a6a20">Enquire<small> pricing</small></div>
                                 <p class="ev-desc">Team-building activities, bonfire evenings, kayaking, and a full
                                     catered retreat for your organisation.</p>
-                                <a href="https://wa.me/918075741948?text=Hi!%20I%20am%20interested%20in%20the%20Corporate%20Team%20Day%20Out."
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#8a6a20,#b89038)"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -2997,7 +2997,7 @@
                                 <div class="ev-price">Enquire<small> pricing</small></div>
                                 <p class="ev-desc">Perfect for birthdays or catching up with friends right by the lake.
                                 </p>
-                                <a href="https://wa.me/918921021202?text=Hi!%20I%20am%20interested%20in%20the%20Friends%20Day%20Out."
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
                             </div>
@@ -3015,7 +3015,7 @@
                                 <div class="ev-price" style="color:#2d7a6e">Enquire<small> pricing</small></div>
                                 <p class="ev-desc">A comfortable stay with delicious meals, kids play area, and bonding
                                     by the campfire.</p>
-                                <a href="https://wa.me/918921021202?text=Hi!%20I%20am%20interested%20in%20a%20Family%20Gathering."
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#2d7a6e,#1a5a52)"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -3034,7 +3034,7 @@
                                 <div class="ev-price" style="color:#7a5c6e">Enquire<small> pricing</small></div>
                                 <p class="ev-desc">Grand lakeside wedding with premium stage and decor, yacht access,
                                     and valet event coordination.</p>
-                                <a href="https://wa.me/918075741948?text=Hi!%20I%20want%20to%20plan%20a%20Wedding%20Function."
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#7a5c6e,#5a3f52)"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -3053,7 +3053,7 @@
                                 <div class="ev-price" style="color:#4a6a30">Custom <small>pricing</small></div>
                                 <p class="ev-desc">Have something unique in mind? We'll craft a bespoke lakeside
                                     experience just for you.</p>
-                                <a href="https://wa.me/918921021202?text=Hi!%20I%20want%20a%20custom%20event%20package."
+                                <a href="/chatbot"
                                     target="_blank" class="btn-brand w-100 justify-content-center"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
                             </div>
@@ -3349,7 +3349,7 @@
                                 <div class="ci-icon"><i class="bi bi-whatsapp"></i></div>
                                 <div>
                                     <div class="ci-label">WhatsApp — Parudeesa The Paradise</div>
-                                    <a href="https://wa.me/918921021202" target="_blank" class="ci-value"
+                                    <a href="/chatbot" target="_blank" class="ci-value"
                                         style="text-decoration:none;color:var(--brn-dk)">+91 89210 21202</a>
                                     <div class="ci-sub">Direct booking for Parudeesa The Paradise</div>
                                 </div>
@@ -3361,7 +3361,7 @@
                                 </div>
                                 <div>
                                     <div class="ci-label">WhatsApp — Parudeesa Utopiya</div>
-                                    <a href="https://wa.me/918075741948" target="_blank" class="ci-value"
+                                    <a href="/chatbot" target="_blank" class="ci-value"
                                         style="text-decoration:none;color:var(--brn-dk)">+91 80757 41948</a>
                                     <div class="ci-sub">Direct booking for Parudeesa Utopiya & Events</div>
                                 </div>
@@ -3461,7 +3461,7 @@
                                         style="border-radius:10px;padding:1rem;font-size:.88rem">
                                         <i class="bi bi-send me-2"></i> Send Message
                                     </button>
-                                    <a href="https://wa.me/918921021202?text=Hi!%20I%20found%20you%20on%20the%20Parudeesa%20website%20and%20have%20an%20enquiry."
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:10px;padding:1rem;font-size:.88rem">
                                         <i class="bi bi-whatsapp me-2"></i> Or Chat on WhatsApp
@@ -3605,10 +3605,10 @@
                                         <span
                                             style="font-size:.65rem;color:var(--txt-m);font-weight:700;letter-spacing:.08em;text-transform:uppercase">Also
                                             reach us:</span>
-                                        <a href="https://wa.me/918921021202" target="_blank"
+                                        <a href="/chatbot" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Paradise: 89210 21202</a>
-                                        <a href="https://wa.me/918075741948" target="_blank"
+                                        <a href="/chatbot" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Utopiya: 80757 41948</a>
                                         <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
@@ -3723,17 +3723,17 @@
                                     button for your
                                     property. Our team will guide you through dates, guests, packages and payment.</p>
                                 <div class="d-flex flex-column gap-3 mb-4">
-                                    <a href="https://wa.me/918921021202?text=Hi!%20I%20want%20to%20book%20the%20*Lakeside%20Cottage*%20at%20Parudeesa.%20Please%20share%20availability."
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-whatsapp"></i> 🏡 Book
                                         Parudeesa The Paradise (+91 89210 21202)</a>
-                                    <a href="https://wa.me/918075741948?text=Hi!%20I%20want%20to%20book%20the%20*Sunset%20Villa*%20at%20Parudeesa.%20Please%20share%20availability."
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-whatsapp"></i> 🌅 Book
                                         Parudeesa Utopiya (+91 80757 41948)</a>
-                                    <a href="https://wa.me/918921021202?text=Hi!%20I%20am%20interested%20in%20an%20*Event%20Package*%20at%20Parudeesa."
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-brand w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-calendar-event"></i> Enquire
@@ -3902,7 +3902,7 @@
                         lakeside
                         resort · Kerala Backwaters, India</p>
                     <div class="mt-3">
-                        <a href="https://wa.me/918921021202" target="_blank" class="soc"
+                        <a href="/chatbot" target="_blank" class="soc"
                             style="color:#25D366;border-color:rgba(37,211,102,.3)"><i class="bi bi-whatsapp"></i></a>
                         <a href="#" onclick="showIgModal();return false;" class="soc"
                             style="color:#dc2743;border-color:rgba(220,39,67,.3)"><i class="bi bi-instagram"></i></a>
@@ -3927,8 +3927,8 @@
                 <div class="col-6 col-md-3 col-lg-2">
                     <div class="f-head">Properties</div>
                     <ul class="f-links">
-                        <li><a href="https://wa.me/918921021202" target="_blank">Parudeesa The Paradise</a></li>
-                        <li><a href="https://wa.me/918075741948" target="_blank">Parudeesa Utopiya</a></li>
+                        <li><a href="/chatbot" target="_blank">Parudeesa The Paradise</a></li>
+                        <li><a href="/chatbot" target="_blank">Parudeesa Utopiya</a></li>
                     </ul>
                     <div class="f-head mt-3">Event Packages</div>
                     <ul class="f-links">
@@ -4186,7 +4186,7 @@
                 document.getElementById('successMsg').style.display = 'block';
                 document.getElementById('bookingForm').reset(); updateSummary();
                 const t = encodeURIComponent('Hi! I want to book at Parudeesa.\n\nName: ' + name + '\nPhone: ' + phone + '\nProperty: ' + propName + '\nEvent: ' + event + '\nGuests: ' + guests + '\nCheck-In: ' + ci + '\nCheck-Out: ' + co + '\nAmenities: ' + amen + '\nPackage: ' + (pkgName || 'None') + (notes ? '\nRequests: ' + notes : '') + '\nTotal: ₹' + totalAmount.toLocaleString('en-IN'));
-                setTimeout(() => window.open('https://wa.me/' + waNum + '?text=' + t, '_blank'), 800);
+                setTimeout(() => window.open("/chatbot", "_self"), 800);
             } catch (err) {
                 alert('Something went wrong. Please try again.');
                 console.error(err);
@@ -4204,7 +4204,7 @@
             document.getElementById('c-success').innerHTML = '<strong style="color:var(--brand)">✅ Message Sent!</strong><br/>Thank you, ' + name + '! Our team will reach you on WhatsApp within 4 hours.';
             document.getElementById('c-success').style.display = 'block';
             const t = encodeURIComponent('Hi! I sent a message via the Parudeesa website.\n\nName: ' + name + '\nPhone: ' + phone + '\nInterest: ' + interest + '\nMessage: ' + msg);
-            setTimeout(() => window.open('https://wa.me/918921021202?text=' + t, '_blank'), 800);
+            setTimeout(() => window.open('/chatbot?text=' + t, '_blank'), 800);
         }
 
         /* ── Scroll reveal ── */
@@ -4319,8 +4319,8 @@
                     cbAddBot("Sure! Connect directly with our team:");
                     setTimeout(() => {
                         const w = document.createElement('div'); w.className = 'cb-qr-wrap';
-                        const a1 = document.createElement('a'); a1.className = 'cb-wa-link'; a1.href = 'https://wa.me/918921021202?text=Hi!%20I%20want%20to%20talk%20to%20the%20Lakeside%20Cottage%20team.'; a1.target = '_blank'; a1.innerHTML = '<i class="bi bi-whatsapp"></i> 🏡 Paradise Team: +91 89210 21202';
-                        const a2 = document.createElement('a'); a2.className = 'cb-wa-link'; a2.href = 'https://wa.me/918075741948?text=Hi!%20I%20want%20to%20talk%20to%20the%20Sunset%20Villa%20team.'; a2.target = '_blank'; a2.innerHTML = '<i class="bi bi-whatsapp"></i> 🌅 Utopiya Team: +91 80757 41948';
+                        const a1 = document.createElement('a'); a1.className = 'cb-wa-link'; a1.href = '/chatbot?text=Hi!%20I%20want%20to%20talk%20to%20the%20Lakeside%20Cottage%20team.'; a1.target = '_blank'; a1.innerHTML = '<i class="bi bi-whatsapp"></i> 🏡 Paradise Team: +91 89210 21202';
+                        const a2 = document.createElement('a'); a2.className = 'cb-wa-link'; a2.href = '/chatbot?text=Hi!%20I%20want%20to%20talk%20to%20the%20Sunset%20Villa%20team.'; a2.target = '_blank'; a2.innerHTML = '<i class="bi bi-whatsapp"></i> 🌅 Utopiya Team: +91 80757 41948';
                         const a3 = document.createElement('a'); a3.className = 'cb-wa-link'; a3.href = 'https://www.instagram.com/Parudeesa_the_paradise'; a3.target = '_blank'; a3.style.background = 'linear-gradient(135deg,#f09433,#dc2743,#bc1888)'; a3.innerHTML = '<i class="bi bi-instagram"></i> DM on Instagram';
                         w.appendChild(a1); w.appendChild(a2); w.appendChild(a3);
                         document.getElementById('cbBody').appendChild(w);
@@ -4330,8 +4330,8 @@
                     cbAddBot(cbA.contact);
                     setTimeout(() => {
                         const w = document.createElement('div'); w.className = 'cb-qr-wrap';
-                        const a1 = document.createElement('a'); a1.className = 'cb-wa-link'; a1.href = 'https://wa.me/918921021202'; a1.target = '_blank'; a1.innerHTML = '<i class="bi bi-whatsapp"></i> Paradise: +91 89210 21202';
-                        const a2 = document.createElement('a'); a2.className = 'cb-wa-link'; a2.href = 'https://wa.me/918075741948'; a2.target = '_blank'; a2.innerHTML = '<i class="bi bi-whatsapp"></i> Utopiya: +91 80757 41948';
+                        const a1 = document.createElement('a'); a1.className = 'cb-wa-link'; a1.href = '/chatbot'; a1.target = '_blank'; a1.innerHTML = '<i class="bi bi-whatsapp"></i> Paradise: +91 89210 21202';
+                        const a2 = document.createElement('a'); a2.className = 'cb-wa-link'; a2.href = '/chatbot'; a2.target = '_blank'; a2.innerHTML = '<i class="bi bi-whatsapp"></i> Utopiya: +91 80757 41948';
                         w.appendChild(a1); w.appendChild(a2);
                         document.getElementById('cbBody').appendChild(w);
                         setTimeout(cbBackBtn, 400); document.getElementById('cbBody').scrollTop = 9999;
@@ -4441,13 +4441,12 @@
                 description: 'Booking Advance — ' + pl,
                 image: 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=100&q=80',
                 handler: function (res) {
-                    window.open('https://wa.me/' + waNum + '?text=' + encodeURIComponent('Hi! I paid ₹5,000 advance at Parudeesa.\nName: ' + name + '\nPhone: ' + phone + '\nProperty: ' + pl + '\nPayment ID: ' + res.razorpay_payment_id), '_blank');
-                    alert('✅ Payment successful!\nID: ' + res.razorpay_payment_id + '\n\nConfirmation on WhatsApp shortly!');
+                    alert('✅ Payment successful!\nID: ' + res.razorpay_payment_id + '\n\nYour booking is confirmed.');
                 },
                 prefill: { name, email, contact: phone }, theme: { color: '#fa873e' }, modal: { ondismiss: () => { } }
             };
             try { new Razorpay(opts).open() }
-            catch (e) { alert('Razorpay needs HTTPS. Redirecting to WhatsApp...'); window.open('https://wa.me/' + waNum + '?text=Hi!%20I%20want%20to%20pay%20advance%20for%20' + encodeURIComponent(pl), '_blank') }
+            catch (e) { alert('Razorpay needs HTTPS.'); }
         }
 
         /* ── iOS tap fix ── */

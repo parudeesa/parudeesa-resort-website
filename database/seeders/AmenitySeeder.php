@@ -14,14 +14,12 @@ class AmenitySeeder extends Seeder
     public function run(): void
     {
         $amenities = [
-            ['name' => 'Swimming Pool', 'description' => 'Private infinity pool with lake views'],
-            ['name' => 'WiFi', 'description' => 'High-speed internet throughout the property'],
-            ['name' => 'Air Conditioning', 'description' => 'Central AC in all rooms'],
-            ['name' => 'Kitchen', 'description' => 'Fully equipped modern kitchen'],
-            ['name' => 'Parking', 'description' => 'Secure parking space'],
-            ['name' => 'Lake View', 'description' => 'Direct lake access and views'],
-            ['name' => 'Fireplace', 'description' => 'Cozy fireplace for evening relaxation'],
-            ['name' => 'Garden', 'description' => 'Beautiful landscaped garden'],
+            ['name' => 'Kayaking', 'description' => 'Enjoy kayaking on the lake'],
+            ['name' => 'Boating', 'description' => 'Relaxing boat rides'],
+            ['name' => 'Grilling', 'description' => 'Outdoor BBQ and grilling area'],
+            ['name' => 'Fishing', 'description' => 'Fishing spots available'],
+            ['name' => 'Campfire', 'description' => 'Evening campfire setup'],
+            ['name' => 'Hookah(Shisha)', 'description' => 'Hookah/Shisha available on request'],
         ];
 
         foreach ($amenities as $amenity) {
