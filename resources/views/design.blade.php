@@ -14,6 +14,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <style>
         /* ═══════════════════════════════════════
@@ -2595,6 +2598,7 @@
                         </li>
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">LOGIN</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">LOGIN</a></li>
                     @endauth
                 </ul>
             </div>
@@ -2782,6 +2786,7 @@
                     <a onclick="goPage('events')" class="btn-brand" style="cursor:pointer"><i
                             class="bi bi-stars me-1"></i>
                         Explore All Packages</a>
+                    <a href="/chatbot"
                     <a href="/chatbot"
                         target="_blank" class="btn-ghost"><i class="bi bi-whatsapp me-1"></i> Enquire Now</a>
                 </div>
@@ -3046,6 +3051,7 @@
                                 <p class="ev-desc">Team-building activities, bonfire evenings, kayaking, and a full
                                     catered retreat for your organisation.</p>
                                 <a href="/chatbot"
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#8a6a20,#b89038)"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -3065,6 +3071,7 @@
                                 <p class="ev-desc">Perfect for birthdays or catching up with friends right by the lake.
                                 </p>
                                 <a href="/chatbot"
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
                             </div>
@@ -3082,6 +3089,7 @@
                                 <div class="ev-price" style="color:#2d7a6e">Enquire<small> pricing</small></div>
                                 <p class="ev-desc">A comfortable stay with delicious meals, kids play area, and bonding
                                     by the campfire.</p>
+                                <a href="/chatbot"
                                 <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#2d7a6e,#1a5a52)"><i
@@ -3102,6 +3110,7 @@
                                 <p class="ev-desc">Grand lakeside wedding with premium stage and decor, yacht access,
                                     and valet event coordination.</p>
                                 <a href="/chatbot"
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#7a5c6e,#5a3f52)"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -3120,6 +3129,7 @@
                                 <div class="ev-price" style="color:#4a6a30">Custom <small>pricing</small></div>
                                 <p class="ev-desc">Have something unique in mind? We'll craft a bespoke lakeside
                                     experience just for you.</p>
+                                <a href="/chatbot"
                                 <a href="/chatbot"
                                     target="_blank" class="btn-brand w-100 justify-content-center"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -3417,6 +3427,7 @@
                                 <div>
                                     <div class="ci-label">WhatsApp — Parudeesa The Paradise</div>
                                     <a href="/chatbot" target="_blank" class="ci-value"
+                                    <a href="/chatbot" target="_blank" class="ci-value"
                                         style="text-decoration:none;color:var(--brn-dk)">+91 89210 21202</a>
                                     <div class="ci-sub">Direct booking for Parudeesa The Paradise</div>
                                 </div>
@@ -3428,6 +3439,7 @@
                                 </div>
                                 <div>
                                     <div class="ci-label">WhatsApp — Parudeesa Utopiya</div>
+                                    <a href="/chatbot" target="_blank" class="ci-value"
                                     <a href="/chatbot" target="_blank" class="ci-value"
                                         style="text-decoration:none;color:var(--brn-dk)">+91 80757 41948</a>
                                     <div class="ci-sub">Direct booking for Parudeesa Utopiya & Events</div>
@@ -3529,6 +3541,7 @@
                                         <i class="bi bi-send me-2"></i> Send Message
                                     </button>
                                     <a href="/chatbot"
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:10px;padding:1rem;font-size:.88rem">
                                         <i class="bi bi-whatsapp me-2"></i> Or Chat on WhatsApp
@@ -3623,9 +3636,13 @@
                                             <div class="form-group"><label>Check-In <span
                                                         style="color:var(--brand)">*</span></label><input type="text"
                                                     id="f-checkin" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
+                                                        style="color:var(--brand)">*</span></label><input type="text"
+                                                    id="f-checkin" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group"><label>Check-Out <span
+                                                        style="color:var(--brand)">*</span></label><input type="text"
+                                                    id="f-checkout" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                                         style="color:var(--brand)">*</span></label><input type="text"
                                                     id="f-checkout" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                         </div>
@@ -3680,8 +3697,10 @@
                                             style="font-size:.65rem;color:var(--txt-m);font-weight:700;letter-spacing:.08em;text-transform:uppercase">Also
                                             reach us:</span>
                                         <a href="/chatbot" target="_blank"
+                                        <a href="/chatbot" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Paradise: 89210 21202</a>
+                                        <a href="/chatbot" target="_blank"
                                         <a href="/chatbot" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Utopiya: 80757 41948</a>
@@ -3691,8 +3710,10 @@
                                     </div>
                                     <div class="d-flex flex-column gap-2">
                                         <button type="submit" class="btn-brand w-100 justify-content-center"
+                                        <button type="submit" class="btn-brand w-100 justify-content-center"
                                             style="border-radius:10px;padding:1rem;font-size:.88rem"><i
                                                 class="bi bi-credit-card me-2"></i>
+                                            Book Now</button>
                                             Book Now</button>
                                     </div>
                                     <p style="font-size:.63rem;color:var(--txt-m);text-align:center;margin-top:.6rem"><i
@@ -3793,15 +3814,18 @@
                                     property. Our team will guide you through dates, guests, packages and payment.</p>
                                 <div class="d-flex flex-column gap-3 mb-4">
                                     <a href="/chatbot"
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-whatsapp"></i> 🏡 Book
                                         Parudeesa The Paradise (+91 89210 21202)</a>
                                     <a href="/chatbot"
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-whatsapp"></i> 🌅 Book
                                         Parudeesa Utopiya (+91 80757 41948)</a>
+                                    <a href="/chatbot"
                                     <a href="/chatbot"
                                         target="_blank" class="btn-brand w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
@@ -3830,6 +3854,7 @@
             <div class="ph-ct">
                 <span class="eyebrow" style="color:rgba(255,243,236,.65)">Welcome Back</span>
                 <h1 class="ph-title"><em>Login</em></h1>
+                <h1 class="ph-title"><em>Login</em></h1>
                 <div class="bc"><span onclick="goPage('home')">Home</span> / Login</div>
             </div>
         </div>
@@ -3838,6 +3863,7 @@
                 <div class="auth-card">
                     <div class="auth-header">
                         <div class="ornament-line"><span>Welcome Back</span></div>
+                        <h1><em>Login</em></h1>
                         <h1><em>Login</em></h1>
                     </div>
 
@@ -3871,6 +3897,7 @@
                         <a href="{{ route('password.request') }}" class="forgot-link">Forgot Password?</a>
 
                         <button type="submit" class="btn-brand w-100" style="margin-bottom: 1rem;">
+                            Login
                             Login
                         </button>
 
@@ -4010,6 +4037,8 @@
                 <div class="col-6 col-md-3 col-lg-2">
                     <div class="f-head">Properties</div>
                     <ul class="f-links">
+                        <li><a href="/chatbot" target="_blank">Parudeesa The Paradise</a></li>
+                        <li><a href="/chatbot" target="_blank">Parudeesa Utopiya</a></li>
                         <li><a href="/chatbot" target="_blank">Parudeesa The Paradise</a></li>
                         <li><a href="/chatbot" target="_blank">Parudeesa Utopiya</a></li>
                     </ul>
@@ -4230,11 +4259,31 @@
             el('sum-nights').textContent = n ? n + (n === 1 ? ' Night' : ' Nights') : '—';
             
             // Calculate Amenities from data attributes
+            // Calculate Amenities from data attributes
             let amenitiesTotal = 0;
             const checkedAmenities = Array.from(document.querySelectorAll('input[name="amenities"]:checked'));
             let amenityHtml = '';
             
             checkedAmenities.forEach(cb => {
+                const name = cb.getAttribute('data-amenity-name') || cb.value;
+                const price = parseFloat(cb.getAttribute('data-amenity-price')) || 0;
+                const pricingType = cb.getAttribute('data-amenity-type') || 'fixed';
+                
+                let cost = price;
+                let participants = 1;
+                
+                if (pricingType === 'per_person') {
+                    // Find the participant input for this amenity
+                    const amenityItem = cb.closest('.amen-check-item');
+                    const participantsInput = amenityItem?.querySelector('.amenity-participants-input');
+                    participants = participantsInput ? parseInt(participantsInput.value) || 1 : 1;
+                    cost = price * participants;
+                }
+                
+                amenitiesTotal += cost;
+                if (pricingType === 'per_person') {
+                    amenityHtml += `<div class="brow"><span class="bl">${name} (${participants} × ₹${price.toFixed(2)})</span><span class="bv">₹${cost.toLocaleString('en-IN')}</span></div>`;
+                } else {
                 const name = cb.getAttribute('data-amenity-name') || cb.value;
                 const price = parseFloat(cb.getAttribute('data-amenity-price')) || 0;
                 const pricingType = cb.getAttribute('data-amenity-type') || 'fixed';
@@ -4297,6 +4346,9 @@
             const form = document.getElementById('bookingForm');
             const msgBox = document.getElementById('successMsg');
             const submitBtn = form.querySelector('button[type="submit"]');
+            const form = document.getElementById('bookingForm');
+            const msgBox = document.getElementById('successMsg');
+            const submitBtn = form.querySelector('button[type="submit"]');
             const name = document.getElementById('f-name').value.trim();
             const phone = document.getElementById('f-phone').value.trim();
             const email = document.getElementById('f-email').value.trim();
@@ -4311,9 +4363,11 @@
             const pkgName = pkgSelect.options[pkgSelect.selectedIndex]?.getAttribute('data-name') || '';
             const notes = document.getElementById('f-notes').value;
             const amenities = buildAmenityPayload();
+            const amenities = buildAmenityPayload();
             const totalAmount = updateSummary();
             
             if (!name || !phone || !propId || !guests || !ci || !co) { alert('Please fill all required fields.'); return }
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Processing...'; }
             if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Processing...'; }
             
             try {
@@ -4335,6 +4389,8 @@
                         package_name: pkgName,
                         notes: notes,
                         amenities: amenities,
+                        notes: notes,
+                        amenities: amenities,
                         amount: totalAmount
                     })
                 });
@@ -4350,13 +4406,29 @@
                 msgBox.style.border = '1px solid #A5D6A7';
                 msgBox.innerHTML = '<strong style="color:var(--brand)">✅ Booking request saved!</strong><br/>Launching secure Razorpay payment...';
                 initiatePayment({ name, email, phone, propertyName: propName, amount: Math.round(totalAmount * 100) });
+                    throw new Error(data.message || JSON.stringify(data.errors || 'Booking failed'));
+                }
+                
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#E8F5E9';
+                msgBox.style.color = '#2E7D32';
+                msgBox.style.border = '1px solid #A5D6A7';
+                msgBox.innerHTML = '<strong style="color:var(--brand)">✅ Booking request saved!</strong><br/>Launching secure Razorpay payment...';
+                initiatePayment({ name, email, phone, propertyName: propName, amount: Math.round(totalAmount * 100) });
             } catch (err) {
                 msgBox.style.display = 'block';
                 msgBox.style.backgroundColor = '#FFEBEE';
                 msgBox.style.color = '#C62828';
                 msgBox.style.border = '1px solid #FFCDD2';
                 msgBox.innerHTML = '<strong>Error!</strong><br/>' + (err.message || 'Please try again later or contact us for help.');
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#FFEBEE';
+                msgBox.style.color = '#C62828';
+                msgBox.style.border = '1px solid #FFCDD2';
+                msgBox.innerHTML = '<strong>Error!</strong><br/>' + (err.message || 'Please try again later or contact us for help.');
                 console.error(err);
+            } finally {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Book Now'; }
             } finally {
                 if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Book Now'; }
             }
@@ -4373,6 +4445,7 @@
             document.getElementById('c-success').innerHTML = '<strong style="color:var(--brand)">✅ Message Sent!</strong><br/>Thank you, ' + name + '! Our team will reach you on WhatsApp within 4 hours.';
             document.getElementById('c-success').style.display = 'block';
             const t = encodeURIComponent('Hi! I sent a message via the Parudeesa website.\n\nName: ' + name + '\nPhone: ' + phone + '\nInterest: ' + interest + '\nMessage: ' + msg);
+            setTimeout(() => window.open('/chatbot?text=' + t, '_blank'), 800);
             setTimeout(() => window.open('/chatbot?text=' + t, '_blank'), 800);
         }
 
@@ -4446,10 +4519,18 @@
             const property = data.propertyName || 'Parudeesa';
             const amount = data.amount || 500000;
             const msgBox = document.getElementById('successMsg');
+        function initiatePayment(data = {}) {
+            const name = data.name || (document.getElementById('f-name') || {}).value?.trim() || '';
+            const phone = data.phone || (document.getElementById('f-phone') || {}).value?.trim() || '';
+            const email = data.email || (document.getElementById('f-email') || {}).value?.trim() || '';
+            const property = data.propertyName || 'Parudeesa';
+            const amount = data.amount || 500000;
+            const msgBox = document.getElementById('successMsg');
             const opts = {
                 key: '{{ config("services.razorpay.key") }}', // Use Laravel config for Razorpay key
                 amount: amount, currency: 'INR',
                 name: 'Parudeesa – The Lake View Resort',
+                description: 'Booking Advance — ' + property,
                 description: 'Booking Advance — ' + property,
                 image: 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=100&q=80',
                 handler: function (res) {
@@ -4460,7 +4541,21 @@
                     msgBox.innerHTML = '<strong>✅ Payment successful!</strong><br/>Payment ID: ' + res.razorpay_payment_id + '<br/>Your booking is confirmed. Our team will connect with you shortly.';
                     document.getElementById('bookingForm')?.reset();
                     updateSummary();
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = '#E8F5E9';
+                    msgBox.style.color = '#2E7D32';
+                    msgBox.style.border = '1px solid #A5D6A7';
+                    msgBox.innerHTML = '<strong>✅ Payment successful!</strong><br/>Payment ID: ' + res.razorpay_payment_id + '<br/>Your booking is confirmed. Our team will connect with you shortly.';
+                    document.getElementById('bookingForm')?.reset();
+                    updateSummary();
                 },
+                prefill: { name, email, contact: phone }, theme: { color: '#fa873e' }, modal: { ondismiss: () => {
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = '#FFEBEE';
+                    msgBox.style.color = '#C62828';
+                    msgBox.style.border = '1px solid #FFCDD2';
+                    msgBox.innerHTML = '<strong>Payment not completed.</strong><br/>Please retry or contact us for help.';
+                } }
                 prefill: { name, email, contact: phone }, theme: { color: '#fa873e' }, modal: { ondismiss: () => {
                     msgBox.style.display = 'block';
                     msgBox.style.backgroundColor = '#FFEBEE';
@@ -4477,6 +4572,13 @@
                 msgBox.style.border = '1px solid #FFCDD2';
                 msgBox.innerHTML = '<strong>Error:</strong> Razorpay checkout could not be opened. Please ensure HTTPS or try again.';
             }
+            catch (e) {
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#FFEBEE';
+                msgBox.style.color = '#C62828';
+                msgBox.style.border = '1px solid #FFCDD2';
+                msgBox.innerHTML = '<strong>Error:</strong> Razorpay checkout could not be opened. Please ensure HTTPS or try again.';
+            }
         }
 
         /* ── iOS tap fix ── */
@@ -4485,6 +4587,34 @@
                 el.style.webkitTapHighlightColor = 'transparent';
                 el.style.touchAction = 'manipulation';
             });
+            
+            // Initialize Flatpickr instances globally so we can update them later
+            window.fpCheckin = flatpickr("#f-checkin", { minDate: "today", dateFormat: "Y-m-d", onChange: updateSummary });
+            window.fpCheckout = flatpickr("#f-checkout", { minDate: "today", dateFormat: "Y-m-d", onChange: updateSummary });
+            
+            // Add event listener to the property dropdown
+            const propSelect = document.getElementById('f-prop');
+            if (propSelect) {
+                propSelect.addEventListener('change', async function() {
+                    const propertyId = this.value;
+                    if (!propertyId) {
+                        window.fpCheckin.set("disable", []);
+                        window.fpCheckout.set("disable", []);
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch(`/property/${propertyId}/unavailable-dates`);
+                        if (response.ok) {
+                            const disabledDates = await response.json();
+                            window.fpCheckin.set("disable", disabledDates);
+                            window.fpCheckout.set("disable", disabledDates);
+                        }
+                    } catch (error) {
+                        console.error("Failed to fetch unavailable dates:", error);
+                    }
+                });
+            }
             
             // Initialize Flatpickr instances globally so we can update them later
             window.fpCheckin = flatpickr("#f-checkin", { minDate: "today", dateFormat: "Y-m-d", onChange: updateSummary });

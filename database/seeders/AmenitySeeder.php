@@ -14,14 +14,12 @@ class AmenitySeeder extends Seeder
     public function run(): void
     {
         $amenities = [
-            ['name' => 'Swimming Pool', 'description' => 'Private infinity pool with lake views'],
-            ['name' => 'WiFi', 'description' => 'High-speed internet throughout the property'],
-            ['name' => 'Air Conditioning', 'description' => 'Central AC in all rooms'],
-            ['name' => 'Kitchen', 'description' => 'Fully equipped modern kitchen'],
-            ['name' => 'Parking', 'description' => 'Secure parking space'],
-            ['name' => 'Lake View', 'description' => 'Direct lake access and views'],
-            ['name' => 'Fireplace', 'description' => 'Cozy fireplace for evening relaxation'],
-            ['name' => 'Garden', 'description' => 'Beautiful landscaped garden'],
+            ['name' => 'Kayaking', 'description' => 'Enjoy kayaking on the lake', 'price' => 700, 'pricing_type' => 'per_person'],
+            ['name' => 'Boating', 'description' => 'Relaxing boat rides', 'price' => 600, 'pricing_type' => 'per_person'],
+            ['name' => 'Grilling', 'description' => 'Outdoor BBQ and grilling area', 'price' => 1000, 'pricing_type' => 'fixed'],
+            ['name' => 'Fishing', 'description' => 'Fishing spots available', 'price' => 500, 'pricing_type' => 'per_person'],
+            ['name' => 'Campfire', 'description' => 'Evening campfire setup', 'price' => 1500, 'pricing_type' => 'fixed'],
+            ['name' => 'Hookah/Shisha', 'description' => 'Hookah/Shisha available on request', 'price' => 300, 'pricing_type' => 'per_person'],
         ];
 
         foreach ($amenities as $amenity) {

@@ -10,7 +10,7 @@ class PropertyController extends Controller
     public function index()
     {
         $properties = Property::paginate(10);
-        return view('properties.index', compact('properties'));
+        return view('property.index', compact('properties'));
     }
 
     public function store(Request $request)

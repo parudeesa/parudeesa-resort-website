@@ -18,18 +18,12 @@ class AmenityController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'nullable|numeric|min:0',
-            'pricing_type' => 'nullable|in:fixed,per_person',
-            'status' => 'nullable|boolean'
+            'price' => 'required|numeric|min:0',
+            'pricing_type' => 'required|in:per_person,fixed',
+            'status' => 'sometimes|boolean',
         ]);
 
-        Amenity::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price ?? 0,
-            'pricing_type' => $request->pricing_type ?? 'fixed',
-            'status' => $request->has('status') ? (bool)$request->status : true
-        ]);
+        Amenity::create($request->only(['name', 'description', 'price', 'pricing_type', 'status']));
 
         return redirect()->back()->with('success', 'Amenity added successfully!');
     }
@@ -39,18 +33,12 @@ class AmenityController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'nullable|numeric|min:0',
-            'pricing_type' => 'nullable|in:fixed,per_person',
-            'status' => 'nullable|boolean'
+            'price' => 'required|numeric|min:0',
+            'pricing_type' => 'required|in:per_person,fixed',
+            'status' => 'sometimes|boolean',
         ]);
 
-        $amenity->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price ?? $amenity->price ?? 0,
-            'pricing_type' => $request->pricing_type ?? $amenity->pricing_type ?? 'fixed',
-            'status' => $request->has('status') ? (bool)$request->status : $amenity->status
-        ]);
+        $amenity->update($request->only(['name', 'description', 'price', 'pricing_type', 'status']));
 
         return redirect()->back()->with('success', 'Amenity updated successfully!');
     }

@@ -13,23 +13,30 @@ class Booking extends Model
         'check_in',
         'check_out',
         'guests',
-        'property_id',
         'amount',
         'status',
-        'payment_status',
+        'property_id',
         'event_type',
         'package_name',
-        'notes',
-        'google_event_id',
         'amenities',
-        'amenity_total',
-        'base_amount',
+        'payment_status',
+        'notes',
+        'created_by',
+        'google_event_id',
+        'base_price',
+        'amenities_total',
+        'grand_total',
+        'selected_amenities_json'
     ];
 
     protected $casts = [
         'amenities' => 'array',
+        'selected_amenities_json' => 'array',
         'check_in' => 'date',
         'check_out' => 'date',
+        'base_price' => 'decimal:2',
+        'amenities_total' => 'decimal:2',
+        'grand_total' => 'decimal:2',
     ];
 
     public function property()
