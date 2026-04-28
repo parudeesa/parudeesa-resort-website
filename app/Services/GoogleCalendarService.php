@@ -22,8 +22,18 @@ class GoogleCalendarService
         $this->client = new Client();
         $this->client->setApplicationName('Parudeesa Resort Booking');
         $this->client->setScopes(Calendar::CALENDAR_EVENTS);
-        $this->client->setAuthConfig(storage_path('app/google-credentials.json'));
-        $this->client->setSubject($this->serviceAccountEmail);
+
+        $credentialsPath = env('GOOGLE_APPLICATION_CREDENTIALS', storage_path('app/google-credentials.json'));
+        if (!file_exists($credentialsPath)) {
+            Log::error('Google Calendar credentials file not found', ['path' => $credentialsPath]);
+            return;
+        }
+
+        $this->client->setAuthConfig($credentialsPath);
+
+        if ($this->serviceAccountEmail) {
+            $this->client->setSubject($this->serviceAccountEmail);
+        }
     }
 
     public function createEvent($booking)

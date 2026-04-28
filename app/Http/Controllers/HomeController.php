@@ -12,10 +12,21 @@ use App\Models\Amenity;
 class HomeController extends Controller
 {
     public function index()
-{
-    $properties = \App\Models\Property::all(); // Fetches rooms from your DB
-    return view('design', compact('properties')); // Sends them to design.blade.php
-}
+    {
+        $properties = Property::all(); // Fetches rooms from your DB
+        //dd($properties);
+        return view('design', compact('properties')); // Sends them to design.blade.php
+    }
+    public function home()
+    {
+        return view('home');    
+    }
+
+    public function design()
+    {
+        $properties = Property::all();
+        return view('design', compact('properties'));
+    }
 
     public function show($id)
     {

@@ -124,10 +124,10 @@ body.cb-embed .cb-body{
 
 .cb-msg{
   max-width:88%;
-  padding:12px 14px;
+  padding:10px 12px;
   font-size:13px;
-  line-height:1.55;
-  border-radius:16px;
+  line-height:1.5;
+  border-radius:14px;
   white-space:pre-line;
 }
 
@@ -148,20 +148,20 @@ body.cb-embed .cb-body{
 .cb-stack{
   display:flex;
   flex-direction:column;
-  gap:8px;
+  gap:6px;
   max-width:92%;
 }
 
 .cb-panel{
   background:var(--surface);
   border:1px solid var(--line);
-  border-radius:16px;
-  padding:12px;
+  border-radius:14px;
+  padding:10px;
 }
 
 .cb-grid{
   display:grid;
-  gap:8px;
+  gap:6px;
 }
 
 .cb-action,
@@ -170,8 +170,8 @@ body.cb-embed .cb-body{
   border:1px solid rgba(250,135,62,.28);
   background:#fffaf6;
   color:var(--brand);
-  border-radius:14px;
-  padding:10px 12px;
+  border-radius:12px;
+  padding:8px 10px;
   text-align:left;
   font:inherit;
   cursor:pointer;
@@ -240,18 +240,18 @@ body.cb-embed .cb-body{
 }
 
 .cb-footer{
-  padding:12px;
+  padding:10px;
   background:var(--shell);
   display:flex;
-  gap:8px;
+  gap:6px;
   border-top:1px solid var(--line);
 }
 
 .cb-input{
   flex:1;
   border:1px solid rgba(250,135,62,.25);
-  border-radius:20px;
-  padding:10px 14px;
+  border-radius:18px;
+  padding:8px 12px;
   font-family:'Josefin Sans',sans-serif;
   font-size:13px;
   background:#fff;
@@ -263,14 +263,15 @@ body.cb-embed .cb-body{
 }
 
 .cb-send{
-  width:40px;
-  height:40px;
+  width:36px;
+  height:36px;
   border:none;
   border-radius:50%;
   background:linear-gradient(135deg,var(--brand-strong),var(--brand));
   color:#fff;
   font-size:16px;
   cursor:pointer;
+  flex-shrink:0;
 }
 
 .cb-note{

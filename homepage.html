@@ -14,6 +14,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <style>
         /* ═══════════════════════════════════════
@@ -1954,7 +1957,6 @@
         }
 
         /* ═══════ CHATBOT ═══════ */
-        
         .cb-bubble {
             position: fixed;
             bottom: calc(1.8rem + var(--safe-b));
@@ -2037,22 +2039,22 @@
 
         .cb-head {
             background: linear-gradient(135deg, #d96520, #fa873e);
-            padding: .7rem .9rem;
+            padding: .85rem 1rem;
             display: flex;
             align-items: center;
-            gap: .6rem;
+            gap: .7rem;
             flex-shrink: 0
         }
 
         .cb-av {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: rgba(255, 255, 255, .22);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             flex-shrink: 0
         }
 
@@ -2062,17 +2064,17 @@
 
         .cb-info strong {
             color: #fff;
-            font-size: .82rem;
+            font-size: .85rem;
             display: block;
             font-family: 'Josefin Sans', sans-serif
         }
 
         .cb-info span {
-            color: rgba(255, 255, 255, .8);
-            font-size: .65rem;
+            color: rgba(255, 255, 255, .78);
+            font-size: .68rem;
             display: flex;
             align-items: center;
-            gap: .2rem
+            gap: .3rem
         }
 
         .cb-dot {
@@ -2088,44 +2090,26 @@
             border: none;
             color: #fff;
             cursor: pointer;
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            font-size: .8rem;
+            font-size: .85rem;
             display: flex;
             align-items: center;
             justify-content: center;
             -webkit-tap-highlight-color: transparent;
-            flex-shrink: 0;
-            transition: background .2s ease
+            flex-shrink: 0
         }
 
-        .cb-close:hover {
-            background: rgba(255, 255, 255, .28)
+        .cb-body {
+            flex: 1;
+            padding: 0;
+            background: #fde9d8;
+            height: 620px;
+            min-height: 620px;
+            max-height: 620px;
+            overflow: hidden
         }
-
-      .cb-body {
-    display: flex;
-    flex-direction: column;
-    /* Change 'flex-end' back to 'flex-start' to fill from the top */
-    justify-content: flex-start; 
-    
-    flex: 1;
-    padding: 15px;
-    background: #fde9d8;
-    
-    /* Keep your comfortable height */
-    height: 450px; 
-    overflow-y: auto;
-}
-
-/* Add this to your message container to ensure it expands */
-.messages-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    /* This ensures that the messages don't have weird spacing between them */
-}
 
         .cb-frame {
             width: 100%;
@@ -2138,13 +2122,13 @@
         .cb-bot-msg {
             background: #fff;
             color: #3e2010;
-            border-radius: 4px 12px 12px 12px;
-            padding: .5rem .75rem;
-            font-size: .76rem;
-            line-height: 1.45;
+            border-radius: 4px 14px 14px 14px;
+            padding: .6rem .85rem;
+            font-size: .78rem;
+            line-height: 1.55;
             max-width: 85%;
             align-self: flex-start;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
             white-space: pre-line;
             font-family: 'Josefin Sans', sans-serif
         }
@@ -2152,20 +2136,20 @@
         .cb-user-msg {
             background: linear-gradient(135deg, #fa873e, #d96520);
             color: #fff;
-            border-radius: 12px 12px 4px 12px;
-            padding: .5rem .75rem;
-            font-size: .76rem;
-            line-height: 1.45;
+            border-radius: 14px 14px 4px 14px;
+            padding: .6rem .85rem;
+            font-size: .78rem;
+            line-height: 1.55;
             max-width: 85%;
             align-self: flex-end;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
             font-family: 'Josefin Sans', sans-serif
         }
 
         .cb-typing {
             background: #fff;
-            border-radius: 4px 12px 12px 12px;
-            padding: .4rem .75rem;
+            border-radius: 4px 14px 14px 14px;
+            padding: .5rem .85rem;
             align-self: flex-start;
             display: flex;
             gap: 4px;
@@ -2206,17 +2190,17 @@
         .cb-qr-wrap {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            margin-top: 3px
+            gap: 5px;
+            margin-top: 4px
         }
 
         .cb-qbtn {
-            background: rgba(250, 135, 62, .08);
-            border: 1.2px solid rgba(250, 135, 62, .3);
+            background: rgba(250, 135, 62, .1);
+            border: 1.5px solid rgba(250, 135, 62, .35);
             color: #d96520;
-            border-radius: 16px;
-            padding: .4rem .8rem;
-            font-size: .71rem;
+            border-radius: 20px;
+            padding: .5rem .9rem;
+            font-size: .72rem;
             font-weight: 600;
             cursor: pointer;
             text-align: left;
@@ -2233,15 +2217,15 @@
         .cb-wa-link {
             display: inline-flex;
             align-items: center;
-            gap: .3rem;
+            gap: .4rem;
             background: #25D366;
             color: #fff;
-            border-radius: 6px;
-            padding: .4rem .8rem;
-            font-size: .70rem;
+            border-radius: 8px;
+            padding: .5rem .9rem;
+            font-size: .72rem;
             font-weight: 700;
             text-decoration: none;
-            margin-top: 3px;
+            margin-top: 4px;
             -webkit-tap-highlight-color: transparent
         }
 
@@ -2259,8 +2243,8 @@
         }
 
         .reveal {
-            opacity: 1;
-            transform: translateY(0);
+            opacity: 0;
+            transform: translateY(26px);
             transition: opacity .7s ease, transform .7s ease
         }
 
@@ -2604,18 +2588,9 @@
                     <li class="nav-item"><a class="nav-link" onclick="goPage('gallery')">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" onclick="goPage('about')">About Us</a></li>
                     <li class="nav-item"><a class="nav-link" onclick="goPage('contact')">Contact</a></li>
-                    @auth
-                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="nav-item">
-                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                                @csrf
-                                <button type="submit" class="nav-link" style="background: none; border: none; color: inherit; cursor: pointer;">Logout</button>
-                            </form>
-                        </li>
-                    @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">LOGIN</a></li>
-                    @endauth
-                </ul>
+                                            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8001/login">LOGIN</a></li>
+                        <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8001/login">LOGIN</a></li>
+                                    </ul>
             </div>
         </div>
     </nav>
@@ -2664,35 +2639,55 @@
                     </p>
                 </div>
                 <div class="row g-4 justify-content-center">
-                    @foreach($properties as $property)
-                    <div class="col-md-6 reveal">
+                                        <div class="col-md-6 reveal">
                         <div class="prop-card">
                             <div class="prop-img">
                                 <a class="ig-link" onclick="showIgModal();return false;" title="View on Instagram">
-                                    <img src="{{ $property->image_url ?: 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=700&q=80' }}"
-                                        alt="{{ $property->name }}" loading="lazy" />
+                                    <img src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=700&amp;q=80"
+                                        alt="Parudeesa_The_Paradise" loading="lazy" />
                                 </a>
                                 <div class="prop-img-ov"></div>
-                                <div class="prop-price-b"><span class="amt">₹{{ number_format($property->price, 0) }}</span><span class="per">/
+                                <div class="prop-price-b"><span class="amt">₹6,500</span><span class="per">/
                                         Night</span></div>
                             </div>
                             <div class="prop-body">
-                                <h3 class="prop-name">{{ $property->name }}</h3>
-                                <p class="prop-desc">{{ $property->description ?: 'Beautiful lakeside property at Parudeesa.' }}</p>
+                                <h3 class="prop-name">Parudeesa_The_Paradise</h3>
+                                <p class="prop-desc">Tranquil lakeside escape with direct water access, sunrise views, and guided kayaking for intimate gatherings.</p>
                                 <div class="prop-pills">
-                                    <span class="pill"><i class="bi bi-geo-alt me-1"></i>{{ $property->location ?: 'Kerala, India' }}</span>
-                                    @if($property->phone)
-                                    <span class="pill"><i class="bi bi-telephone me-1"></i>{{ $property->phone }}</span>
-                                    @endif
-                                </div>
+                                    <span class="pill"><i class="bi bi-geo-alt me-1"></i>Kerala</span>
+                                                                        <span class="pill"><i class="bi bi-telephone me-1"></i>8921021202</span>
+                                                                    </div>
                                 <div class="prop-footer">
-                                    <a href="{{ route('property.show', $property) }}" class="btn-brand w-100 justify-content-center"><i class="bi bi-eye"></i> View Details</a>
+                                    <a href="http://127.0.0.1:8001/property/1" class="btn-brand w-100 justify-content-center"><i class="bi bi-eye"></i> View Details</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @endforeach
-                </div>
+                                        <div class="col-md-6 reveal">
+                        <div class="prop-card">
+                            <div class="prop-img">
+                                <a class="ig-link" onclick="showIgModal();return false;" title="View on Instagram">
+                                    <img src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=700&amp;q=80"
+                                        alt="Parudeesa Utopiya" loading="lazy" />
+                                </a>
+                                <div class="prop-img-ov"></div>
+                                <div class="prop-price-b"><span class="amt">₹9,000</span><span class="per">/
+                                        Night</span></div>
+                            </div>
+                            <div class="prop-body">
+                                <h3 class="prop-name">Parudeesa Utopiya</h3>
+                                <p class="prop-desc">Grand lakeside villa perfect for sunset lovers and large celebrations with panoramic water views.</p>
+                                <div class="prop-pills">
+                                    <span class="pill"><i class="bi bi-geo-alt me-1"></i>Kerala</span>
+                                                                        <span class="pill"><i class="bi bi-telephone me-1"></i>8075741948</span>
+                                                                    </div>
+                                <div class="prop-footer">
+                                    <a href="http://127.0.0.1:8001/property/2" class="btn-brand w-100 justify-content-center"><i class="bi bi-eye"></i> View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                    </div>
             </div>
         </section>
 
@@ -2801,6 +2796,7 @@
                     <a onclick="goPage('events')" class="btn-brand" style="cursor:pointer"><i
                             class="bi bi-stars me-1"></i>
                         Explore All Packages</a>
+                    <a href="/chatbot"
                     <a href="/chatbot"
                         target="_blank" class="btn-ghost"><i class="bi bi-whatsapp me-1"></i> Enquire Now</a>
                 </div>
@@ -3065,6 +3061,7 @@
                                 <p class="ev-desc">Team-building activities, bonfire evenings, kayaking, and a full
                                     catered retreat for your organisation.</p>
                                 <a href="/chatbot"
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#8a6a20,#b89038)"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -3084,6 +3081,7 @@
                                 <p class="ev-desc">Perfect for birthdays or catching up with friends right by the lake.
                                 </p>
                                 <a href="/chatbot"
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
                             </div>
@@ -3101,6 +3099,7 @@
                                 <div class="ev-price" style="color:#2d7a6e">Enquire<small> pricing</small></div>
                                 <p class="ev-desc">A comfortable stay with delicious meals, kids play area, and bonding
                                     by the campfire.</p>
+                                <a href="/chatbot"
                                 <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#2d7a6e,#1a5a52)"><i
@@ -3121,6 +3120,7 @@
                                 <p class="ev-desc">Grand lakeside wedding with premium stage and decor, yacht access,
                                     and valet event coordination.</p>
                                 <a href="/chatbot"
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#7a5c6e,#5a3f52)"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -3139,6 +3139,7 @@
                                 <div class="ev-price" style="color:#4a6a30">Custom <small>pricing</small></div>
                                 <p class="ev-desc">Have something unique in mind? We'll craft a bespoke lakeside
                                     experience just for you.</p>
+                                <a href="/chatbot"
                                 <a href="/chatbot"
                                     target="_blank" class="btn-brand w-100 justify-content-center"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -3436,6 +3437,7 @@
                                 <div>
                                     <div class="ci-label">WhatsApp — Parudeesa The Paradise</div>
                                     <a href="/chatbot" target="_blank" class="ci-value"
+                                    <a href="/chatbot" target="_blank" class="ci-value"
                                         style="text-decoration:none;color:var(--brn-dk)">+91 89210 21202</a>
                                     <div class="ci-sub">Direct booking for Parudeesa The Paradise</div>
                                 </div>
@@ -3447,6 +3449,7 @@
                                 </div>
                                 <div>
                                     <div class="ci-label">WhatsApp — Parudeesa Utopiya</div>
+                                    <a href="/chatbot" target="_blank" class="ci-value"
                                     <a href="/chatbot" target="_blank" class="ci-value"
                                         style="text-decoration:none;color:var(--brn-dk)">+91 80757 41948</a>
                                     <div class="ci-sub">Direct booking for Parudeesa Utopiya & Events</div>
@@ -3548,6 +3551,7 @@
                                         <i class="bi bi-send me-2"></i> Send Message
                                     </button>
                                     <a href="/chatbot"
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:10px;padding:1rem;font-size:.88rem">
                                         <i class="bi bi-whatsapp me-2"></i> Or Chat on WhatsApp
@@ -3606,11 +3610,11 @@
                                                 style="color:var(--brand)">*</span></label>
                                         <select id="f-prop" required onchange="updateSummary()">
                                             <option value="" data-price="0">Choose property...</option>
-                                            @foreach($properties as $property)
-                                            <option value="{{ $property->id }}" data-name="{{ $property->name }}" data-price="{{ $property->price }}">{{ $property->name }} — ₹{{ number_format($property->price, 0) }}/night
+                                                                                        <option value="1" data-name="Parudeesa_The_Paradise" data-price="6500.00">Parudeesa_The_Paradise — ₹6,500/night
                                             </option>
-                                            @endforeach
-                                        </select>
+                                                                                        <option value="2" data-name="Parudeesa Utopiya" data-price="9000.00">Parudeesa Utopiya — ₹9,000/night
+                                            </option>
+                                                                                    </select>
                                     </div>
                                     <div class="form-group"><label>Event Type</label>
                                         <select id="f-event" onchange="updatePackages(); updateSummary()">
@@ -3642,9 +3646,13 @@
                                             <div class="form-group"><label>Check-In <span
                                                         style="color:var(--brand)">*</span></label><input type="text"
                                                     id="f-checkin" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
+                                                        style="color:var(--brand)">*</span></label><input type="text"
+                                                    id="f-checkin" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group"><label>Check-Out <span
+                                                        style="color:var(--brand)">*</span></label><input type="text"
+                                                    id="f-checkout" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                                         style="color:var(--brand)">*</span></label><input type="text"
                                                     id="f-checkout" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                         </div>
@@ -3657,21 +3665,12 @@
                                     </div>
                                     <div class="form-group"><label>Select Amenities</label>
                                         <div id="amenities-list" style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))">
-                                            @php
-                                                $allAmenities = \App\Models\Amenity::where('status', true)->get();
-                                            @endphp
-                                            @forelse($allAmenities as $amenity)
-                                            <label class="amen-check-item" style="border:1px solid rgba(250,135,62,.18);border-radius:14px;padding:1rem;cursor:pointer;">
-                                                <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="{{ $amenity->id }}" data-amenity-name="{{ $amenity->name }}" data-amenity-price="{{ $amenity->price }}" data-amenity-type="{{ $amenity->pricing_type }}" value="{{ $amenity->name }}" onchange="updateSummary()" />
+                                                                                                                                    <label class="amen-check-item" style="border:1px solid rgba(250,135,62,.18);border-radius:14px;padding:1rem;cursor:pointer;">
+                                                <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="1" data-amenity-name="Kayaking" data-amenity-price="700.00" data-amenity-type="per_person" value="Kayaking" onchange="updateSummary()" />
                                                 <span class="amen-check-box"><i class="bi bi-check"></i></span>
-                                                <strong>{{ $amenity->name }}</strong>
-                                                @if($amenity->pricing_type === 'per_person')
-                                                  (₹{{ number_format($amenity->price, 2) }}/person)
-                                                @else
-                                                  (₹{{ number_format($amenity->price, 2) }})
-                                                @endif
-                                                @if($amenity->pricing_type === 'per_person')
-                                                <div class="amenity-participants" style="margin-top:.85rem;display:none;">
+                                                <strong>Kayaking</strong>
+                                                                                                  (₹700.00/person)
+                                                                                                                                                <div class="amenity-participants" style="margin-top:.85rem;display:none;">
                                                     <label style="font-size:.9rem;color:#555;font-weight:600;display:block;margin-bottom:.35rem;">Persons participating</label>
                                                     <div style="display:flex;align-items:center;gap:.5rem;">
                                                         <button type="button" class="amenity-decrement" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#f5f5f5;cursor:pointer;font-weight:bold;color:#555;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">−</button>
@@ -3679,12 +3678,62 @@
                                                         <button type="button" class="amenity-increment" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#fa873e;cursor:pointer;font-weight:bold;color:#fff;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">+</button>
                                                     </div>
                                                 </div>
-                                                @endif
-                                            </label>
-                                            @empty
-                                            <div style="color:#999;font-size:.95rem">No amenities available</div>
-                                            @endforelse
-                                        </div>
+                                                                                            </label>
+                                                                                        <label class="amen-check-item" style="border:1px solid rgba(250,135,62,.18);border-radius:14px;padding:1rem;cursor:pointer;">
+                                                <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="2" data-amenity-name="Boating" data-amenity-price="600.00" data-amenity-type="per_person" value="Boating" onchange="updateSummary()" />
+                                                <span class="amen-check-box"><i class="bi bi-check"></i></span>
+                                                <strong>Boating</strong>
+                                                                                                  (₹600.00/person)
+                                                                                                                                                <div class="amenity-participants" style="margin-top:.85rem;display:none;">
+                                                    <label style="font-size:.9rem;color:#555;font-weight:600;display:block;margin-bottom:.35rem;">Persons participating</label>
+                                                    <div style="display:flex;align-items:center;gap:.5rem;">
+                                                        <button type="button" class="amenity-decrement" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#f5f5f5;cursor:pointer;font-weight:bold;color:#555;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">−</button>
+                                                        <input type="number" class="amenity-participants-input" min="1" value="1" disabled style="width:60px;padding:.5rem;border:1px solid #ddd;border-radius:6px;font-size:.9rem;text-align:center;" />
+                                                        <button type="button" class="amenity-increment" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#fa873e;cursor:pointer;font-weight:bold;color:#fff;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">+</button>
+                                                    </div>
+                                                </div>
+                                                                                            </label>
+                                                                                        <label class="amen-check-item" style="border:1px solid rgba(250,135,62,.18);border-radius:14px;padding:1rem;cursor:pointer;">
+                                                <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="3" data-amenity-name="Grilling" data-amenity-price="1000.00" data-amenity-type="fixed" value="Grilling" onchange="updateSummary()" />
+                                                <span class="amen-check-box"><i class="bi bi-check"></i></span>
+                                                <strong>Grilling</strong>
+                                                                                                  (₹1,000.00)
+                                                                                                                                            </label>
+                                                                                        <label class="amen-check-item" style="border:1px solid rgba(250,135,62,.18);border-radius:14px;padding:1rem;cursor:pointer;">
+                                                <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="4" data-amenity-name="Fishing" data-amenity-price="500.00" data-amenity-type="per_person" value="Fishing" onchange="updateSummary()" />
+                                                <span class="amen-check-box"><i class="bi bi-check"></i></span>
+                                                <strong>Fishing</strong>
+                                                                                                  (₹500.00/person)
+                                                                                                                                                <div class="amenity-participants" style="margin-top:.85rem;display:none;">
+                                                    <label style="font-size:.9rem;color:#555;font-weight:600;display:block;margin-bottom:.35rem;">Persons participating</label>
+                                                    <div style="display:flex;align-items:center;gap:.5rem;">
+                                                        <button type="button" class="amenity-decrement" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#f5f5f5;cursor:pointer;font-weight:bold;color:#555;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">−</button>
+                                                        <input type="number" class="amenity-participants-input" min="1" value="1" disabled style="width:60px;padding:.5rem;border:1px solid #ddd;border-radius:6px;font-size:.9rem;text-align:center;" />
+                                                        <button type="button" class="amenity-increment" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#fa873e;cursor:pointer;font-weight:bold;color:#fff;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">+</button>
+                                                    </div>
+                                                </div>
+                                                                                            </label>
+                                                                                        <label class="amen-check-item" style="border:1px solid rgba(250,135,62,.18);border-radius:14px;padding:1rem;cursor:pointer;">
+                                                <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="5" data-amenity-name="Campfire" data-amenity-price="1500.00" data-amenity-type="fixed" value="Campfire" onchange="updateSummary()" />
+                                                <span class="amen-check-box"><i class="bi bi-check"></i></span>
+                                                <strong>Campfire</strong>
+                                                                                                  (₹1,500.00)
+                                                                                                                                            </label>
+                                                                                        <label class="amen-check-item" style="border:1px solid rgba(250,135,62,.18);border-radius:14px;padding:1rem;cursor:pointer;">
+                                                <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="6" data-amenity-name="Hookah(Shisha)" data-amenity-price="300.00" data-amenity-type="per_person" value="Hookah(Shisha)" onchange="updateSummary()" />
+                                                <span class="amen-check-box"><i class="bi bi-check"></i></span>
+                                                <strong>Hookah(Shisha)</strong>
+                                                                                                  (₹300.00/person)
+                                                                                                                                                <div class="amenity-participants" style="margin-top:.85rem;display:none;">
+                                                    <label style="font-size:.9rem;color:#555;font-weight:600;display:block;margin-bottom:.35rem;">Persons participating</label>
+                                                    <div style="display:flex;align-items:center;gap:.5rem;">
+                                                        <button type="button" class="amenity-decrement" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#f5f5f5;cursor:pointer;font-weight:bold;color:#555;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">−</button>
+                                                        <input type="number" class="amenity-participants-input" min="1" value="1" disabled style="width:60px;padding:.5rem;border:1px solid #ddd;border-radius:6px;font-size:.9rem;text-align:center;" />
+                                                        <button type="button" class="amenity-increment" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#fa873e;cursor:pointer;font-weight:bold;color:#fff;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">+</button>
+                                                    </div>
+                                                </div>
+                                                                                            </label>
+                                                                                    </div>
                                     </div>
                                     <div class="form-group"><label>Event Package</label>
                                         <select id="f-pkg" onchange="updateSummary()">
@@ -3699,8 +3748,10 @@
                                             style="font-size:.65rem;color:var(--txt-m);font-weight:700;letter-spacing:.08em;text-transform:uppercase">Also
                                             reach us:</span>
                                         <a href="/chatbot" target="_blank"
+                                        <a href="/chatbot" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Paradise: 89210 21202</a>
+                                        <a href="/chatbot" target="_blank"
                                         <a href="/chatbot" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Utopiya: 80757 41948</a>
@@ -3710,8 +3761,10 @@
                                     </div>
                                     <div class="d-flex flex-column gap-2">
                                         <button type="submit" class="btn-brand w-100 justify-content-center"
+                                        <button type="submit" class="btn-brand w-100 justify-content-center"
                                             style="border-radius:10px;padding:1rem;font-size:.88rem"><i
                                                 class="bi bi-credit-card me-2"></i>
+                                            Book Now</button>
                                             Book Now</button>
                                     </div>
                                     <p style="font-size:.63rem;color:var(--txt-m);text-align:center;margin-top:.6rem"><i
@@ -3812,15 +3865,18 @@
                                     property. Our team will guide you through dates, guests, packages and payment.</p>
                                 <div class="d-flex flex-column gap-3 mb-4">
                                     <a href="/chatbot"
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-whatsapp"></i> 🏡 Book
                                         Parudeesa The Paradise (+91 89210 21202)</a>
                                     <a href="/chatbot"
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-whatsapp"></i> 🌅 Book
                                         Parudeesa Utopiya (+91 80757 41948)</a>
+                                    <a href="/chatbot"
                                     <a href="/chatbot"
                                         target="_blank" class="btn-brand w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
@@ -3849,6 +3905,7 @@
             <div class="ph-ct">
                 <span class="eyebrow" style="color:rgba(255,243,236,.65)">Welcome Back</span>
                 <h1 class="ph-title"><em>Login</em></h1>
+                <h1 class="ph-title"><em>Login</em></h1>
                 <div class="bc"><span onclick="goPage('home')">Home</span> / Login</div>
             </div>
         </div>
@@ -3858,38 +3915,26 @@
                     <div class="auth-header">
                         <div class="ornament-line"><span>Welcome Back</span></div>
                         <h1><em>Login</em></h1>
+                        <h1><em>Login</em></h1>
                     </div>
 
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-                        @if ($errors->any())
-                        <div class="auth-error">
-                            @foreach ($errors->all() as $error)
-                                <div>{{ $error }}</div>
-                            @endforeach
-                        </div>
-                        @endif
-
+                    <form method="POST" action="http://127.0.0.1:8001/login">
+                        <input type="hidden" name="_token" value="0SG337PK3M9BjKTmE8GKGF1aED0poP1bO6VtxUVl" autocomplete="off">
+                        
                         <div class="form-group">
                             <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}" required autofocus autocomplete="username">
-                            @if ($errors->has('email'))
-                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('email') }}</div>
-                            @endif
-                        </div>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" value="" required autofocus autocomplete="username">
+                                                    </div>
 
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
-                            @if ($errors->has('password'))
-                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('password') }}</div>
-                            @endif
-                        </div>
+                                                    </div>
 
-                        <a href="{{ route('password.request') }}" class="forgot-link">Forgot Password?</a>
+                        <a href="http://127.0.0.1:8001/forgot-password" class="forgot-link">Forgot Password?</a>
 
                         <button type="submit" class="btn-brand w-100" style="margin-bottom: 1rem;">
+                            Login
                             Login
                         </button>
 
@@ -3921,48 +3966,28 @@
                         <h1>Create <em>Account</em></h1>
                     </div>
 
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
-
-                        @if ($errors->any())
-                        <div class="auth-error">
-                            @foreach ($errors->all() as $error)
-                                <div>{{ $error }}</div>
-                            @endforeach
-                        </div>
-                        @endif
-
+                    <form method="POST" action="http://127.0.0.1:8001/register">
+                        <input type="hidden" name="_token" value="0SG337PK3M9BjKTmE8GKGF1aED0poP1bO6VtxUVl" autocomplete="off">
+                        
                         <div class="form-group">
                             <label for="name">Full Name</label>
-                            <input type="text" id="name" name="name" placeholder="Enter your full name" value="{{ old('name') }}" required autofocus autocomplete="name">
-                            @if ($errors->has('name'))
-                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('name') }}</div>
-                            @endif
-                        </div>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" value="" required autofocus autocomplete="name">
+                                                    </div>
 
                         <div class="form-group">
                             <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}" required autocomplete="username">
-                            @if ($errors->has('email'))
-                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('email') }}</div>
-                            @endif
-                        </div>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" value="" required autocomplete="username">
+                                                    </div>
 
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" id="password" name="password" placeholder="Create a strong password" required autocomplete="new-password">
-                            @if ($errors->has('password'))
-                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('password') }}</div>
-                            @endif
-                        </div>
+                                                    </div>
 
                         <div class="form-group">
                             <label for="password_confirmation">Confirm Password</label>
                             <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm your password" required autocomplete="new-password">
-                            @if ($errors->has('password_confirmation'))
-                                <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('password_confirmation') }}</div>
-                            @endif
-                        </div>
+                                                    </div>
 
                         <button type="submit" class="btn-brand w-100" style="margin-bottom: 1rem;">
                             Create Account
@@ -4029,6 +4054,8 @@
                 <div class="col-6 col-md-3 col-lg-2">
                     <div class="f-head">Properties</div>
                     <ul class="f-links">
+                        <li><a href="/chatbot" target="_blank">Parudeesa The Paradise</a></li>
+                        <li><a href="/chatbot" target="_blank">Parudeesa Utopiya</a></li>
                         <li><a href="/chatbot" target="_blank">Parudeesa The Paradise</a></li>
                         <li><a href="/chatbot" target="_blank">Parudeesa Utopiya</a></li>
                     </ul>
@@ -4249,11 +4276,31 @@
             el('sum-nights').textContent = n ? n + (n === 1 ? ' Night' : ' Nights') : '—';
             
             // Calculate Amenities from data attributes
+            // Calculate Amenities from data attributes
             let amenitiesTotal = 0;
             const checkedAmenities = Array.from(document.querySelectorAll('input[name="amenities"]:checked'));
             let amenityHtml = '';
             
             checkedAmenities.forEach(cb => {
+                const name = cb.getAttribute('data-amenity-name') || cb.value;
+                const price = parseFloat(cb.getAttribute('data-amenity-price')) || 0;
+                const pricingType = cb.getAttribute('data-amenity-type') || 'fixed';
+                
+                let cost = price;
+                let participants = 1;
+                
+                if (pricingType === 'per_person') {
+                    // Find the participant input for this amenity
+                    const amenityItem = cb.closest('.amen-check-item');
+                    const participantsInput = amenityItem?.querySelector('.amenity-participants-input');
+                    participants = participantsInput ? parseInt(participantsInput.value) || 1 : 1;
+                    cost = price * participants;
+                }
+                
+                amenitiesTotal += cost;
+                if (pricingType === 'per_person') {
+                    amenityHtml += `<div class="brow"><span class="bl">${name} (${participants} × ₹${price.toFixed(2)})</span><span class="bv">₹${cost.toLocaleString('en-IN')}</span></div>`;
+                } else {
                 const name = cb.getAttribute('data-amenity-name') || cb.value;
                 const price = parseFloat(cb.getAttribute('data-amenity-price')) || 0;
                 const pricingType = cb.getAttribute('data-amenity-type') || 'fixed';
@@ -4316,6 +4363,9 @@
             const form = document.getElementById('bookingForm');
             const msgBox = document.getElementById('successMsg');
             const submitBtn = form.querySelector('button[type="submit"]');
+            const form = document.getElementById('bookingForm');
+            const msgBox = document.getElementById('successMsg');
+            const submitBtn = form.querySelector('button[type="submit"]');
             const name = document.getElementById('f-name').value.trim();
             const phone = document.getElementById('f-phone').value.trim();
             const email = document.getElementById('f-email').value.trim();
@@ -4330,9 +4380,11 @@
             const pkgName = pkgSelect.options[pkgSelect.selectedIndex]?.getAttribute('data-name') || '';
             const notes = document.getElementById('f-notes').value;
             const amenities = buildAmenityPayload();
+            const amenities = buildAmenityPayload();
             const totalAmount = updateSummary();
             
             if (!name || !phone || !propId || !guests || !ci || !co) { alert('Please fill all required fields.'); return }
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Processing...'; }
             if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Processing...'; }
             
             try {
@@ -4340,7 +4392,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': '0SG337PK3M9BjKTmE8GKGF1aED0poP1bO6VtxUVl'
                     },
                     body: JSON.stringify({
                         name: name,
@@ -4352,6 +4404,8 @@
                         check_out: co,
                         guests: guests,
                         package_name: pkgName,
+                        notes: notes,
+                        amenities: amenities,
                         notes: notes,
                         amenities: amenities,
                         amount: totalAmount
@@ -4369,13 +4423,29 @@
                 msgBox.style.border = '1px solid #A5D6A7';
                 msgBox.innerHTML = '<strong style="color:var(--brand)">✅ Booking request saved!</strong><br/>Launching secure Razorpay payment...';
                 initiatePayment({ name, email, phone, propertyName: propName, amount: Math.round(totalAmount * 100) });
+                    throw new Error(data.message || JSON.stringify(data.errors || 'Booking failed'));
+                }
+                
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#E8F5E9';
+                msgBox.style.color = '#2E7D32';
+                msgBox.style.border = '1px solid #A5D6A7';
+                msgBox.innerHTML = '<strong style="color:var(--brand)">✅ Booking request saved!</strong><br/>Launching secure Razorpay payment...';
+                initiatePayment({ name, email, phone, propertyName: propName, amount: Math.round(totalAmount * 100) });
             } catch (err) {
                 msgBox.style.display = 'block';
                 msgBox.style.backgroundColor = '#FFEBEE';
                 msgBox.style.color = '#C62828';
                 msgBox.style.border = '1px solid #FFCDD2';
                 msgBox.innerHTML = '<strong>Error!</strong><br/>' + (err.message || 'Please try again later or contact us for help.');
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#FFEBEE';
+                msgBox.style.color = '#C62828';
+                msgBox.style.border = '1px solid #FFCDD2';
+                msgBox.innerHTML = '<strong>Error!</strong><br/>' + (err.message || 'Please try again later or contact us for help.');
                 console.error(err);
+            } finally {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Book Now'; }
             } finally {
                 if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Book Now'; }
             }
@@ -4392,6 +4462,7 @@
             document.getElementById('c-success').innerHTML = '<strong style="color:var(--brand)">✅ Message Sent!</strong><br/>Thank you, ' + name + '! Our team will reach you on WhatsApp within 4 hours.';
             document.getElementById('c-success').style.display = 'block';
             const t = encodeURIComponent('Hi! I sent a message via the Parudeesa website.\n\nName: ' + name + '\nPhone: ' + phone + '\nInterest: ' + interest + '\nMessage: ' + msg);
+            setTimeout(() => window.open('/chatbot?text=' + t, '_blank'), 800);
             setTimeout(() => window.open('/chatbot?text=' + t, '_blank'), 800);
         }
 
@@ -4465,13 +4536,28 @@
             const property = data.propertyName || 'Parudeesa';
             const amount = data.amount || 500000;
             const msgBox = document.getElementById('successMsg');
+        function initiatePayment(data = {}) {
+            const name = data.name || (document.getElementById('f-name') || {}).value?.trim() || '';
+            const phone = data.phone || (document.getElementById('f-phone') || {}).value?.trim() || '';
+            const email = data.email || (document.getElementById('f-email') || {}).value?.trim() || '';
+            const property = data.propertyName || 'Parudeesa';
+            const amount = data.amount || 500000;
+            const msgBox = document.getElementById('successMsg');
             const opts = {
-                key: '{{ config("services.razorpay.key") }}', // Use Laravel config for Razorpay key
+                key: 'rzp_test_SinQ0DV3VASICL', // Use Laravel config for Razorpay key
                 amount: amount, currency: 'INR',
                 name: 'Parudeesa – The Lake View Resort',
                 description: 'Booking Advance — ' + property,
+                description: 'Booking Advance — ' + property,
                 image: 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=100&q=80',
                 handler: function (res) {
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = '#E8F5E9';
+                    msgBox.style.color = '#2E7D32';
+                    msgBox.style.border = '1px solid #A5D6A7';
+                    msgBox.innerHTML = '<strong>✅ Payment successful!</strong><br/>Payment ID: ' + res.razorpay_payment_id + '<br/>Your booking is confirmed. Our team will connect with you shortly.';
+                    document.getElementById('bookingForm')?.reset();
+                    updateSummary();
                     msgBox.style.display = 'block';
                     msgBox.style.backgroundColor = '#E8F5E9';
                     msgBox.style.color = '#2E7D32';
@@ -4487,8 +4573,22 @@
                     msgBox.style.border = '1px solid #FFCDD2';
                     msgBox.innerHTML = '<strong>Payment not completed.</strong><br/>Please retry or contact us for help.';
                 } }
+                prefill: { name, email, contact: phone }, theme: { color: '#fa873e' }, modal: { ondismiss: () => {
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = '#FFEBEE';
+                    msgBox.style.color = '#C62828';
+                    msgBox.style.border = '1px solid #FFCDD2';
+                    msgBox.innerHTML = '<strong>Payment not completed.</strong><br/>Please retry or contact us for help.';
+                } }
             };
             try { new Razorpay(opts).open() }
+            catch (e) {
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#FFEBEE';
+                msgBox.style.color = '#C62828';
+                msgBox.style.border = '1px solid #FFCDD2';
+                msgBox.innerHTML = '<strong>Error:</strong> Razorpay checkout could not be opened. Please ensure HTTPS or try again.';
+            }
             catch (e) {
                 msgBox.style.display = 'block';
                 msgBox.style.backgroundColor = '#FFEBEE';
@@ -4532,7 +4632,34 @@
                     }
                 });
             }
-            initReveals();
+            
+            // Initialize Flatpickr instances globally so we can update them later
+            window.fpCheckin = flatpickr("#f-checkin", { minDate: "today", dateFormat: "Y-m-d", onChange: updateSummary });
+            window.fpCheckout = flatpickr("#f-checkout", { minDate: "today", dateFormat: "Y-m-d", onChange: updateSummary });
+            
+            // Add event listener to the property dropdown
+            const propSelect = document.getElementById('f-prop');
+            if (propSelect) {
+                propSelect.addEventListener('change', async function() {
+                    const propertyId = this.value;
+                    if (!propertyId) {
+                        window.fpCheckin.set("disable", []);
+                        window.fpCheckout.set("disable", []);
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch(`/property/${propertyId}/unavailable-dates`);
+                        if (response.ok) {
+                            const disabledDates = await response.json();
+                            window.fpCheckin.set("disable", disabledDates);
+                            window.fpCheckout.set("disable", disabledDates);
+                        }
+                    } catch (error) {
+                        console.error("Failed to fetch unavailable dates:", error);
+                    }
+                });
+            }
         });
     </script>
 </body>
