@@ -11,9 +11,9 @@
     <title>Parudeesa – The Lake View Resort</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <style>
         /* ═══════════════════════════════════════
@@ -631,46 +631,32 @@
             pointer-events: none
         }
 
-        .prop-tag {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: var(--brand);
-            color: #fff;
-            border-radius: 6px;
-            padding: .22rem .75rem;
-            font-size: .6rem;
-            font-weight: 700;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            box-shadow: 0 2px 8px rgba(250, 135, 62, .4)
-        }
-
         .prop-price-b {
             position: absolute;
             bottom: 12px;
             right: 12px;
-            background: rgba(46, 26, 8, .88);
+            background: linear-gradient(135deg, rgba(255, 248, 240, .96), rgba(255, 234, 214, .92));
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(250, 135, 62, .3);
-            border-radius: 8px;
-            padding: .35rem .85rem
+            border: 1px solid rgba(250, 135, 62, .28);
+            border-radius: 12px;
+            padding: .48rem .95rem;
+            box-shadow: 0 10px 24px rgba(116, 62, 22, .18)
         }
 
         .prop-price-b .amt {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.15rem;
+            font-size: 1.22rem;
             font-weight: 700;
-            color: var(--brand-l);
+            color: #d96520;
             display: block;
             line-height: 1
         }
 
         .prop-price-b .per {
-            font-size: .55rem;
-            color: rgba(255, 243, 236, .55);
-            letter-spacing: .1em
+            font-size: .58rem;
+            color: rgba(99, 57, 27, .72);
+            letter-spacing: .12em
         }
 
         .prop-body {
@@ -1678,7 +1664,8 @@
 
         .f-links {
             list-style: none;
-            padding: 0
+            padding: 0;
+            margin: 0
         }
 
         .f-links li {
@@ -1697,6 +1684,43 @@
             color: var(--brand-l)
         }
 
+        .policy-list {
+            display: flex;
+            flex-direction: column;
+            gap: .75rem;
+            margin-top: .6rem
+        }
+
+        .policy-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: .3rem;
+            font-size: .8rem;
+            line-height: 1.65;
+            color: rgba(255, 243, 236, .45)
+        }
+
+        .policy-link {
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            color: var(--brand-pale)
+        }
+
+        .policy-link:hover {
+            color: var(--brand-l)
+        }
+
+        .policy-sep {
+            color: rgba(255, 243, 236, .35);
+            font-weight: 700
+        }
+
+        .policy-text {
+            flex: 1 1 220px
+        }
+
         .f-div {
             border-color: rgba(255, 255, 255, .06);
             margin: 2rem 0 1.2rem
@@ -1706,6 +1730,34 @@
             font-size: .68rem;
             opacity: .3;
             text-align: center
+        }
+
+        .footer-social {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .55rem
+        }
+
+        .footer-contact {
+            font-size: .8rem;
+            color: rgba(255, 243, 236, .45);
+            line-height: 2.05
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: .5rem
+        }
+
+        .footer-contact-item i {
+            margin-top: .42rem;
+            flex-shrink: 0
+        }
+
+        .footer-contact-item a {
+            color: inherit;
+            text-decoration: none
         }
 
         .soc {
@@ -1960,7 +2012,7 @@
             position: fixed;
             bottom: calc(5rem + var(--safe-b));
             right: 1.4rem;
-            width: 350px;
+            width: min(460px, calc(100vw - 2.4rem));
             max-width: calc(100vw - 2.8rem);
             background: #fff3ec;
             border-radius: 20px;
@@ -2048,15 +2100,20 @@
 
         .cb-body {
             flex: 1;
-            padding: .9rem;
+            padding: 0;
             background: #fde9d8;
-            min-height: 320px;
-            max-height: 380px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-            scroll-behavior: smooth
+            height: 620px;
+            min-height: 620px;
+            max-height: 620px;
+            overflow: hidden
+        }
+
+        .cb-frame {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+            background: #fde9d8
         }
 
         .cb-bot-msg {
@@ -2169,49 +2226,6 @@
             -webkit-tap-highlight-color: transparent
         }
 
-        .cb-footer {
-            padding: .6rem .8rem;
-            background: #fff3ec;
-            display: flex;
-            gap: .5rem;
-            flex-shrink: 0;
-            border-top: 1px solid rgba(250, 135, 62, .15)
-        }
-
-        .cb-inp {
-            flex: 1;
-            border: 1.5px solid rgba(250, 135, 62, .25);
-            border-radius: 50px;
-            padding: .55rem .9rem;
-            font-size: .78rem;
-            background: #fff;
-            outline: none;
-            font-family: 'Josefin Sans', sans-serif;
-            color: #2e1a08;
-            -webkit-appearance: none;
-            transition: border-color var(--ease)
-        }
-
-        .cb-inp:focus {
-            border-color: var(--brand)
-        }
-
-        .cb-send-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #fa873e, #d96520);
-            border: none;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: .85rem;
-            flex-shrink: 0;
-            -webkit-tap-highlight-color: transparent
-        }
-
         /* ═══════ ANIMATIONS & REVEALS ═══════ */
         @keyframes fadeUp {
             from {
@@ -2250,6 +2264,42 @@
         }
 
         @media(max-width:575px) {
+            footer {
+                padding: 52px 0 calc(24px + var(--safe-b))
+            }
+
+            footer .row>[class*='col-'] {
+                text-align: center
+            }
+
+            .footer-social {
+                justify-content: center
+            }
+
+            .footer-contact {
+                margin-top: .2rem
+            }
+
+            .footer-contact-item {
+                justify-content: center
+            }
+
+            .policy-row {
+                justify-content: center
+            }
+
+            .policy-text {
+                flex-basis: 100%
+            }
+
+            .f-head {
+                margin-bottom: .8rem
+            }
+
+            .f-copy {
+                line-height: 1.7
+            }
+
             .hero {
                 min-height: 88vh
             }
@@ -2258,6 +2308,12 @@
                 right: .7rem;
                 width: calc(100vw - 1.4rem);
                 bottom: calc(4.5rem + var(--safe-b))
+            }
+
+            .cb-body {
+                height: 70vh;
+                min-height: 0;
+                max-height: none
             }
 
             .cb-bubble {
@@ -2301,6 +2357,18 @@
         }
 
         @media(max-width:767px) {
+            .f-brand {
+                font-size: 1.55rem
+            }
+
+            .f-brand small,
+            .f-head {
+                letter-spacing: .14em
+            }
+
+            .f-links li {
+                margin-bottom: .55rem
+            }
 
             .hero-btns .btn-brand,
             .hero-btns .btn-wa,
@@ -2526,7 +2594,7 @@
                             </form>
                         </li>
                     @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">LOGIN</a></li>
                     @endauth
                 </ul>
             </div>
@@ -2586,7 +2654,6 @@
                                         alt="{{ $property->name }}" loading="lazy" />
                                 </a>
                                 <div class="prop-img-ov"></div>
-                                <span class="prop-tag">{{ $property->name }}</span>
                                 <div class="prop-price-b"><span class="amt">₹{{ number_format($property->price, 0) }}</span><span class="per">/
                                         Night</span></div>
                             </div>
@@ -2715,7 +2782,7 @@
                     <a onclick="goPage('events')" class="btn-brand" style="cursor:pointer"><i
                             class="bi bi-stars me-1"></i>
                         Explore All Packages</a>
-                    <a href="https://wa.me/918921021202?text=Hi!%20I%20want%20to%20know%20about%20event%20packages%20at%20Parudeesa."
+                    <a href="/chatbot"
                         target="_blank" class="btn-ghost"><i class="bi bi-whatsapp me-1"></i> Enquire Now</a>
                 </div>
                 <div class="row g-3 mt-5 justify-content-center">
@@ -2978,7 +3045,7 @@
                                 <div class="ev-price" style="color:#8a6a20">Enquire<small> pricing</small></div>
                                 <p class="ev-desc">Team-building activities, bonfire evenings, kayaking, and a full
                                     catered retreat for your organisation.</p>
-                                <a href="https://wa.me/918075741948?text=Hi!%20I%20am%20interested%20in%20the%20Corporate%20Team%20Day%20Out."
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#8a6a20,#b89038)"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -2997,7 +3064,7 @@
                                 <div class="ev-price">Enquire<small> pricing</small></div>
                                 <p class="ev-desc">Perfect for birthdays or catching up with friends right by the lake.
                                 </p>
-                                <a href="https://wa.me/918921021202?text=Hi!%20I%20am%20interested%20in%20the%20Friends%20Day%20Out."
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
                             </div>
@@ -3015,7 +3082,7 @@
                                 <div class="ev-price" style="color:#2d7a6e">Enquire<small> pricing</small></div>
                                 <p class="ev-desc">A comfortable stay with delicious meals, kids play area, and bonding
                                     by the campfire.</p>
-                                <a href="https://wa.me/918921021202?text=Hi!%20I%20am%20interested%20in%20a%20Family%20Gathering."
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#2d7a6e,#1a5a52)"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -3034,7 +3101,7 @@
                                 <div class="ev-price" style="color:#7a5c6e">Enquire<small> pricing</small></div>
                                 <p class="ev-desc">Grand lakeside wedding with premium stage and decor, yacht access,
                                     and valet event coordination.</p>
-                                <a href="https://wa.me/918075741948?text=Hi!%20I%20want%20to%20plan%20a%20Wedding%20Function."
+                                <a href="/chatbot"
                                     target="_blank" class="btn-wa w-100 justify-content-center"
                                     style="background:linear-gradient(135deg,#7a5c6e,#5a3f52)"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
@@ -3053,7 +3120,7 @@
                                 <div class="ev-price" style="color:#4a6a30">Custom <small>pricing</small></div>
                                 <p class="ev-desc">Have something unique in mind? We'll craft a bespoke lakeside
                                     experience just for you.</p>
-                                <a href="https://wa.me/918921021202?text=Hi!%20I%20want%20a%20custom%20event%20package."
+                                <a href="/chatbot"
                                     target="_blank" class="btn-brand w-100 justify-content-center"><i
                                         class="bi bi-whatsapp"></i> Enquire Now</a>
                             </div>
@@ -3349,7 +3416,7 @@
                                 <div class="ci-icon"><i class="bi bi-whatsapp"></i></div>
                                 <div>
                                     <div class="ci-label">WhatsApp — Parudeesa The Paradise</div>
-                                    <a href="https://wa.me/918921021202" target="_blank" class="ci-value"
+                                    <a href="/chatbot" target="_blank" class="ci-value"
                                         style="text-decoration:none;color:var(--brn-dk)">+91 89210 21202</a>
                                     <div class="ci-sub">Direct booking for Parudeesa The Paradise</div>
                                 </div>
@@ -3361,7 +3428,7 @@
                                 </div>
                                 <div>
                                     <div class="ci-label">WhatsApp — Parudeesa Utopiya</div>
-                                    <a href="https://wa.me/918075741948" target="_blank" class="ci-value"
+                                    <a href="/chatbot" target="_blank" class="ci-value"
                                         style="text-decoration:none;color:var(--brn-dk)">+91 80757 41948</a>
                                     <div class="ci-sub">Direct booking for Parudeesa Utopiya & Events</div>
                                 </div>
@@ -3461,7 +3528,7 @@
                                         style="border-radius:10px;padding:1rem;font-size:.88rem">
                                         <i class="bi bi-send me-2"></i> Send Message
                                     </button>
-                                    <a href="https://wa.me/918921021202?text=Hi!%20I%20found%20you%20on%20the%20Parudeesa%20website%20and%20have%20an%20enquiry."
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:10px;padding:1rem;font-size:.88rem">
                                         <i class="bi bi-whatsapp me-2"></i> Or Chat on WhatsApp
@@ -3554,13 +3621,13 @@
                                     <div class="row g-3">
                                         <div class="col-md-4">
                                             <div class="form-group"><label>Check-In <span
-                                                        style="color:var(--brand)">*</span></label><input type="date"
-                                                    id="f-checkin" required onchange="updateSummary()" /></div>
+                                                        style="color:var(--brand)">*</span></label><input type="text"
+                                                    id="f-checkin" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group"><label>Check-Out <span
-                                                        style="color:var(--brand)">*</span></label><input type="date"
-                                                    id="f-checkout" required onchange="updateSummary()" /></div>
+                                                        style="color:var(--brand)">*</span></label><input type="text"
+                                                    id="f-checkout" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group"><label>Guests <span
@@ -3570,27 +3637,34 @@
                                         </div>
                                     </div>
                                     <div class="form-group"><label>Select Amenities</label>
-                                        <div class="amenity-check-grid">
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Kayaking" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🚣 Kayaking (₹500/pp)</label>
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Private Yacht" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>⛵
-                                                Private Yacht (₹2000/pp)</label>
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Food Package" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🍽️ Food
-                                                Package (₹1000/pp)</label>
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Decorations" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🎊 Decorations (₹5000)</label>
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="Photography" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>📸 Photography (₹8000)</label>
-                                            <label class="amen-check-item"><input type="checkbox" name="amenities"
-                                                    value="DJ Setup" onchange="updateSummary()" /><span class="amen-check-box"><i
-                                                        class="bi bi-check"></i></span>🎵 DJ Setup (₹10000)</label>
+                                        <div id="amenities-list" style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))">
+                                            @php
+                                                $allAmenities = \App\Models\Amenity::where('status', true)->get();
+                                            @endphp
+                                            @forelse($allAmenities as $amenity)
+                                            <label class="amen-check-item" style="border:1px solid rgba(250,135,62,.18);border-radius:14px;padding:1rem;cursor:pointer;">
+                                                <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="{{ $amenity->id }}" data-amenity-name="{{ $amenity->name }}" data-amenity-price="{{ $amenity->price }}" data-amenity-type="{{ $amenity->pricing_type }}" value="{{ $amenity->name }}" onchange="updateSummary()" />
+                                                <span class="amen-check-box"><i class="bi bi-check"></i></span>
+                                                <strong>{{ $amenity->name }}</strong>
+                                                @if($amenity->pricing_type === 'per_person')
+                                                  (₹{{ number_format($amenity->price, 2) }}/person)
+                                                @else
+                                                  (₹{{ number_format($amenity->price, 2) }})
+                                                @endif
+                                                @if($amenity->pricing_type === 'per_person')
+                                                <div class="amenity-participants" style="margin-top:.85rem;display:none;">
+                                                    <label style="font-size:.9rem;color:#555;font-weight:600;display:block;margin-bottom:.35rem;">Persons participating</label>
+                                                    <div style="display:flex;align-items:center;gap:.5rem;">
+                                                        <button type="button" class="amenity-decrement" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#f5f5f5;cursor:pointer;font-weight:bold;color:#555;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">−</button>
+                                                        <input type="number" class="amenity-participants-input" min="1" value="1" disabled style="width:60px;padding:.5rem;border:1px solid #ddd;border-radius:6px;font-size:.9rem;text-align:center;" />
+                                                        <button type="button" class="amenity-increment" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#fa873e;cursor:pointer;font-weight:bold;color:#fff;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">+</button>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                            </label>
+                                            @empty
+                                            <div style="color:#999;font-size:.95rem">No amenities available</div>
+                                            @endforelse
                                         </div>
                                     </div>
                                     <div class="form-group"><label>Event Package</label>
@@ -3605,10 +3679,10 @@
                                         <span
                                             style="font-size:.65rem;color:var(--txt-m);font-weight:700;letter-spacing:.08em;text-transform:uppercase">Also
                                             reach us:</span>
-                                        <a href="https://wa.me/918921021202" target="_blank"
+                                        <a href="/chatbot" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Paradise: 89210 21202</a>
-                                        <a href="https://wa.me/918075741948" target="_blank"
+                                        <a href="/chatbot" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Utopiya: 80757 41948</a>
                                         <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
@@ -3616,15 +3690,10 @@
                                                 class="bi bi-instagram"></i> Instagram</a>
                                     </div>
                                     <div class="d-flex flex-column gap-2">
-                                        <button type="button" onclick="initiatePayment()"
-                                            class="btn-brand w-100 justify-content-center"
+                                        <button type="submit" class="btn-brand w-100 justify-content-center"
                                             style="border-radius:10px;padding:1rem;font-size:.88rem"><i
                                                 class="bi bi-credit-card me-2"></i>
-                                            Pay ₹5,000 Advance via Razorpay</button>
-                                        <button type="submit" class="btn-wa w-100 justify-content-center"
-                                            style="border-radius:10px;padding:1rem;font-size:.88rem"><i
-                                                class="bi bi-whatsapp me-2"></i>
-                                            Submit &amp; Continue on WhatsApp</button>
+                                            Book Now</button>
                                     </div>
                                     <p style="font-size:.63rem;color:var(--txt-m);text-align:center;margin-top:.6rem"><i
                                             class="bi bi-lock-fill me-1"></i> Razorpay · UPI · Card · Net Banking ·
@@ -3723,17 +3792,17 @@
                                     button for your
                                     property. Our team will guide you through dates, guests, packages and payment.</p>
                                 <div class="d-flex flex-column gap-3 mb-4">
-                                    <a href="https://wa.me/918921021202?text=Hi!%20I%20want%20to%20book%20the%20*Lakeside%20Cottage*%20at%20Parudeesa.%20Please%20share%20availability."
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-whatsapp"></i> 🏡 Book
                                         Parudeesa The Paradise (+91 89210 21202)</a>
-                                    <a href="https://wa.me/918075741948?text=Hi!%20I%20want%20to%20book%20the%20*Sunset%20Villa*%20at%20Parudeesa.%20Please%20share%20availability."
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-whatsapp"></i> 🌅 Book
                                         Parudeesa Utopiya (+91 80757 41948)</a>
-                                    <a href="https://wa.me/918921021202?text=Hi!%20I%20am%20interested%20in%20an%20*Event%20Package*%20at%20Parudeesa."
+                                    <a href="/chatbot"
                                         target="_blank" class="btn-brand w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-calendar-event"></i> Enquire
@@ -3760,7 +3829,7 @@
             <div class="ph-ov"></div>
             <div class="ph-ct">
                 <span class="eyebrow" style="color:rgba(255,243,236,.65)">Welcome Back</span>
-                <h1 class="ph-title">Member <em>Sign In</em></h1>
+                <h1 class="ph-title"><em>Login</em></h1>
                 <div class="bc"><span onclick="goPage('home')">Home</span> / Login</div>
             </div>
         </div>
@@ -3769,7 +3838,7 @@
                 <div class="auth-card">
                     <div class="auth-header">
                         <div class="ornament-line"><span>Welcome Back</span></div>
-                        <h1>Member <em>Sign In</em></h1>
+                        <h1><em>Login</em></h1>
                     </div>
 
                     <form method="POST" action="{{ route('login') }}">
@@ -3802,7 +3871,7 @@
                         <a href="{{ route('password.request') }}" class="forgot-link">Forgot Password?</a>
 
                         <button type="submit" class="btn-brand w-100" style="margin-bottom: 1rem;">
-                            Sign In
+                            Login
                         </button>
 
                         <div class="auth-footer">
@@ -3901,8 +3970,8 @@
                     <p style="font-size:.75rem;color:rgba(255,243,236,.3);margin-top:.6rem;line-height:1.65">Premium
                         lakeside
                         resort · Kerala Backwaters, India</p>
-                    <div class="mt-3">
-                        <a href="https://wa.me/918921021202" target="_blank" class="soc"
+                    <div class="footer-social mt-3">
+                        <a href="/chatbot" target="_blank" class="soc"
                             style="color:#25D366;border-color:rgba(37,211,102,.3)"><i class="bi bi-whatsapp"></i></a>
                         <a href="#" onclick="showIgModal();return false;" class="soc"
                             style="color:#dc2743;border-color:rgba(220,39,67,.3)"><i class="bi bi-instagram"></i></a>
@@ -3918,17 +3987,31 @@
                         <li><a onclick="goPage('gallery')">Gallery</a></li>
                         <li><a onclick="goPage('about')">About Us</a></li>
                         <li><a onclick="goPage('contact')">Contact</a></li>
-                        <li><a onclick=\"goPage('booking')\">Book Now</a></li>
-                        <li><a href=\"#\">Terms and Conditions</a></li>
-                        <li><a href=\"#\">Privacy Policy</a></li>
-                        <li><a href=\"#\">Cancellation Policy</a></li>
+                        <li><a onclick="goPage('booking')">Book Now</a></li>
                     </ul>
+                    <div class="policy-list">
+                        <div class="policy-row">
+                            <a href="#" class="policy-link">Terms & Conditions</a>
+                            <span class="policy-sep">:</span>
+                            <span class="policy-text">Booking, stay, and guest-use rules for all Parudeesa experiences.</span>
+                        </div>
+                        <div class="policy-row">
+                            <a href="#" class="policy-link">Privacy Policy</a>
+                            <span class="policy-sep">:</span>
+                            <span class="policy-text">How we collect, store, and protect your personal booking information.</span>
+                        </div>
+                        <div class="policy-row">
+                            <a href="#" class="policy-link">Cancellation Policy</a>
+                            <span class="policy-sep">:</span>
+                            <span class="policy-text">Refund, rescheduling, and cancellation timelines for reservations.</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-6 col-md-3 col-lg-2">
                     <div class="f-head">Properties</div>
                     <ul class="f-links">
-                        <li><a href="https://wa.me/918921021202" target="_blank">Parudeesa The Paradise</a></li>
-                        <li><a href="https://wa.me/918075741948" target="_blank">Parudeesa Utopiya</a></li>
+                        <li><a href="/chatbot" target="_blank">Parudeesa The Paradise</a></li>
+                        <li><a href="/chatbot" target="_blank">Parudeesa Utopiya</a></li>
                     </ul>
                     <div class="f-head mt-3">Event Packages</div>
                     <ul class="f-links">
@@ -3939,20 +4022,20 @@
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="f-head">Contact & Booking</div>
-                    <div style="font-size:.8rem;color:rgba(255,243,236,.45);line-height:2.2">
-                        <div><i class="bi bi-whatsapp me-2" style="color:#25D366"></i>Paradise: +91 89210 21202</div>
-                        <div><i class="bi bi-whatsapp me-2" style="color:#25D366"></i>Utopiya: +91 80757 41948</div>
-                        <div><i class="bi bi-envelope me-2" style="color:var(--brand-l)"></i>hello@parudeesa.in</div>
-                        <div><i class="bi bi-geo-alt me-2" style="color:var(--brand)"></i>Kerala Backwaters, India</div>
-                        <div><i class="bi bi-instagram me-2" style="color:#dc2743"></i>@parudeesa_utopiya &
-                            @Parudeesa_the_paradise</div>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item"><i class="bi bi-telephone" style="color:var(--brand)"></i><a href="tel:+918921021202">Paradise: +91 89210 21202</a></div>
+                        <div class="footer-contact-item"><i class="bi bi-telephone" style="color:var(--brand)"></i><a href="tel:+918075741948">Utopiya: +91 80757 41948</a></div>
+                        <div class="footer-contact-item"><i class="bi bi-envelope" style="color:var(--brand-l)"></i><a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a></div>
+                        <div class="footer-contact-item"><i class="bi bi-geo-alt" style="color:var(--brand)"></i><span>Kerala Backwaters, India</span></div>
+                        <div class="footer-contact-item"><i class="bi bi-instagram" style="color:#dc2743"></i><span>@parudeesa_utopiya &
+                            @Parudeesa_the_paradise</span></div>
                     </div>
                     <a href="#" onclick="toggleChatbot();return false;" class="btn-wa mt-3 d-inline-flex"
                         style="font-size:.72rem;padding:.55rem 1.2rem"><i class="bi bi-whatsapp"></i> Chat with Us</a>
                 </div>
             </div>
             <hr class="f-div" />
-            <p class="f-copy">© 2026 Parudeesa – The Lake View Resort. All rights reserved. · Made with ♥ in Kerala</p>
+            <p class="f-copy">&copy; 2026 Parudeesa - The Lake View Resort. All rights reserved. Made with love in Kerala.</p>
         </div>
     </footer>
 
@@ -3970,15 +4053,12 @@
             <div class="cb-av">🏡</div>
             <div class="cb-info">
                 <strong>Parudeesa Resort</strong>
-                <span><span class="cb-dot"></span>Online · Replies instantly</span>
+                <span><span class="cb-dot"></span>Live booking assistant</span>
             </div>
             <button class="cb-close" onclick="toggleChatbot()">✕</button>
         </div>
-        <div class="cb-body" id="cbBody"></div>
-        <div class="cb-footer">
-            <input class="cb-inp" id="cbInput" placeholder="Type a message..." autocomplete="off"
-                onkeydown="if(event.key==='Enter')cbUserSend()" />
-            <button class="cb-send-btn" onclick="cbUserSend()"><i class="bi bi-send-fill"></i></button>
+        <div class="cb-body">
+            <iframe id="cbFrame" class="cb-frame" src="about:blank" title="Parudeesa Chatbot" loading="lazy"></iframe>
         </div>
     </div>
     <div class="cb-bubble" id="cbBubble" onclick="toggleChatbot()">
@@ -4074,6 +4154,54 @@
             }
         }
 
+        /* ── Amenity participant handling ── */
+        function initializeAmenityListeners() {
+            document.querySelectorAll('.amenity-selector').forEach((checkbox) => {
+                checkbox.addEventListener('change', () => {
+                    const amenityItem = checkbox.closest('.amen-check-item');
+                    const participantsRow = amenityItem?.querySelector('.amenity-participants');
+                    const participantsInput = amenityItem?.querySelector('.amenity-participants-input');
+
+                    if (participantsRow) {
+                        participantsRow.style.display = checkbox.checked ? 'block' : 'none';
+                        participantsInput.disabled = !checkbox.checked;
+                        if (checkbox.checked) {
+                            syncAmenityParticipantLimits();
+                        }
+                    }
+                    updateSummary();
+                });
+            });
+
+            document.querySelectorAll('.amenity-participants-input').forEach((input) => {
+                input.addEventListener('input', () => {
+                    if (input.value < 1) {
+                        input.value = 1;
+                    }
+                    syncAmenityParticipantLimits();
+                    updateSummary();
+                });
+            });
+
+            const guestInput = document.getElementById('f-guests');
+            if (guestInput) {
+                guestInput.addEventListener('input', () => {
+                    syncAmenityParticipantLimits();
+                    updateSummary();
+                });
+            }
+        }
+
+        function syncAmenityParticipantLimits() {
+            const guestCount = Math.max(1, parseInt(document.getElementById('f-guests')?.value) || 1);
+            document.querySelectorAll('.amenity-participants-input').forEach((input) => {
+                input.max = guestCount;
+                if (parseInt(input.value || '1') > guestCount) {
+                    input.value = guestCount;
+                }
+            });
+        }
+
         /* ── Live booking summary ── */
         function updateSummary() {
             const propSelect = document.getElementById('f-prop');
@@ -4101,20 +4229,31 @@
             let n = 0; if (ci && co) { const d = (new Date(co) - new Date(ci)) / 86400000; n = d > 0 ? d : 0; }
             el('sum-nights').textContent = n ? n + (n === 1 ? ' Night' : ' Nights') : '—';
             
-            // Calculate Amenities
+            // Calculate Amenities from data attributes
             let amenitiesTotal = 0;
             const checkedAmenities = Array.from(document.querySelectorAll('input[name="amenities"]:checked'));
             let amenityHtml = '';
             
             checkedAmenities.forEach(cb => {
-                const name = cb.value;
-                if (amenityPricing[name]) {
-                    const pricing = amenityPricing[name];
-                    let cost = pricing.price;
-                    if (pricing.perPerson) {
-                        cost = cost * (guests > 0 ? guests : 1);
-                    }
-                    amenitiesTotal += cost;
+                const name = cb.getAttribute('data-amenity-name') || cb.value;
+                const price = parseFloat(cb.getAttribute('data-amenity-price')) || 0;
+                const pricingType = cb.getAttribute('data-amenity-type') || 'fixed';
+                
+                let cost = price;
+                let participants = 1;
+                
+                if (pricingType === 'per_person') {
+                    // Find the participant input for this amenity
+                    const amenityItem = cb.closest('.amen-check-item');
+                    const participantsInput = amenityItem?.querySelector('.amenity-participants-input');
+                    participants = participantsInput ? parseInt(participantsInput.value) || 1 : 1;
+                    cost = price * participants;
+                }
+                
+                amenitiesTotal += cost;
+                if (pricingType === 'per_person') {
+                    amenityHtml += `<div class="brow"><span class="bl">${name} (${participants} × ₹${price.toFixed(2)})</span><span class="bv">₹${cost.toLocaleString('en-IN')}</span></div>`;
+                } else {
                     amenityHtml += `<div class="brow"><span class="bl">${name}</span><span class="bv">₹${cost.toLocaleString('en-IN')}</span></div>`;
                 }
             });
@@ -4127,8 +4266,37 @@
         }
 
         /* ── Form submit ── */
+        function buildAmenityPayload() {
+            const amenities = [];
+            document.querySelectorAll('input[name="amenities"]:checked').forEach((checkbox) => {
+                const amenityId = checkbox.getAttribute('data-amenity-id');
+                const name = checkbox.getAttribute('data-amenity-name') || checkbox.value;
+                const price = parseFloat(checkbox.getAttribute('data-amenity-price')) || 0;
+                const pricingType = checkbox.getAttribute('data-amenity-type') || 'fixed';
+                const amenityItem = checkbox.closest('.amen-check-item');
+                const participantsInput = amenityItem?.querySelector('.amenity-participants-input');
+                const participants = pricingType === 'per_person'
+                    ? Math.max(1, parseInt(participantsInput?.value || '1'))
+                    : null;
+                const total = pricingType === 'per_person' ? price * participants : price;
+
+                amenities.push({
+                    id: amenityId,
+                    name,
+                    pricing_type: pricingType,
+                    price,
+                    participants,
+                    total
+                });
+            });
+            return amenities;
+        }
+
         async function handleFormSubmit(e) {
             e.preventDefault();
+            const form = document.getElementById('bookingForm');
+            const msgBox = document.getElementById('successMsg');
+            const submitBtn = form.querySelector('button[type="submit"]');
             const name = document.getElementById('f-name').value.trim();
             const phone = document.getElementById('f-phone').value.trim();
             const email = document.getElementById('f-email').value.trim();
@@ -4142,11 +4310,11 @@
             const pkgSelect = document.getElementById('f-pkg');
             const pkgName = pkgSelect.options[pkgSelect.selectedIndex]?.getAttribute('data-name') || '';
             const notes = document.getElementById('f-notes').value;
-            const amenElements = Array.from(document.querySelectorAll('input[name="amenities"]:checked')).map(c => c.value);
-            const amen = amenElements.join(', ') || 'None';
+            const amenities = buildAmenityPayload();
             const totalAmount = updateSummary();
             
             if (!name || !phone || !propId || !guests || !ci || !co) { alert('Please fill all required fields.'); return }
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Processing...'; }
             
             try {
                 const response = await fetch('/bookings', {
@@ -4165,31 +4333,32 @@
                         check_out: co,
                         guests: guests,
                         package_name: pkgName,
-                        amenities: amenElements,
+                        notes: notes,
+                        amenities: amenities,
                         amount: totalAmount
                     })
                 });
                 
                 const data = await response.json();
                 if (!data.success) {
-                    alert('Error saving booking: ' + JSON.stringify(data.errors || data.message));
-                    return;
+                    throw new Error(data.message || JSON.stringify(data.errors || 'Booking failed'));
                 }
                 
-                const waNum = propName.includes('Utopiya') ? '918075741948' : '918921021202';
-                document.getElementById('successMsg').innerHTML = '<strong style="color:var(--brand)">✅ Booking Request Saved & Submitted!</strong><br/><br/>' +
-                    '<strong>Name:</strong> ' + name + '<br/><strong>Property:</strong> ' + propName + '<br/><strong>Event:</strong> ' + event +
-                    '<br/><strong>Guests:</strong> ' + guests + '<br/><strong>Check-In:</strong> ' + ci + '<br/><strong>Check-Out:</strong> ' + co +
-                    '<br/><strong>Amenities:</strong> ' + amen + '<br/><strong>Package:</strong> ' + (pkgName || 'None') + (notes ? '<br/><strong>Requests:</strong> ' + notes : '') +
-                    '<br/><strong>Total Amount:</strong> ₹' + totalAmount.toLocaleString('en-IN') +
-                    '<br/><br/>Our team will contact you on WhatsApp shortly!';
-                document.getElementById('successMsg').style.display = 'block';
-                document.getElementById('bookingForm').reset(); updateSummary();
-                const t = encodeURIComponent('Hi! I want to book at Parudeesa.\n\nName: ' + name + '\nPhone: ' + phone + '\nProperty: ' + propName + '\nEvent: ' + event + '\nGuests: ' + guests + '\nCheck-In: ' + ci + '\nCheck-Out: ' + co + '\nAmenities: ' + amen + '\nPackage: ' + (pkgName || 'None') + (notes ? '\nRequests: ' + notes : '') + '\nTotal: ₹' + totalAmount.toLocaleString('en-IN'));
-                setTimeout(() => window.open('https://wa.me/' + waNum + '?text=' + t, '_blank'), 800);
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#E8F5E9';
+                msgBox.style.color = '#2E7D32';
+                msgBox.style.border = '1px solid #A5D6A7';
+                msgBox.innerHTML = '<strong style="color:var(--brand)">✅ Booking request saved!</strong><br/>Launching secure Razorpay payment...';
+                initiatePayment({ name, email, phone, propertyName: propName, amount: Math.round(totalAmount * 100) });
             } catch (err) {
-                alert('Something went wrong. Please try again.');
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#FFEBEE';
+                msgBox.style.color = '#C62828';
+                msgBox.style.border = '1px solid #FFCDD2';
+                msgBox.innerHTML = '<strong>Error!</strong><br/>' + (err.message || 'Please try again later or contact us for help.');
                 console.error(err);
+            } finally {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Book Now'; }
             }
         }
 
@@ -4204,7 +4373,7 @@
             document.getElementById('c-success').innerHTML = '<strong style="color:var(--brand)">✅ Message Sent!</strong><br/>Thank you, ' + name + '! Our team will reach you on WhatsApp within 4 hours.';
             document.getElementById('c-success').style.display = 'block';
             const t = encodeURIComponent('Hi! I sent a message via the Parudeesa website.\n\nName: ' + name + '\nPhone: ' + phone + '\nInterest: ' + interest + '\nMessage: ' + msg);
-            setTimeout(() => window.open('https://wa.me/918921021202?text=' + t, '_blank'), 800);
+            setTimeout(() => window.open('/chatbot?text=' + t, '_blank'), 800);
         }
 
         /* ── Scroll reveal ── */
@@ -4228,180 +4397,24 @@
         function closeIgModal(e) { if (!e || e.target === document.getElementById('igModal')) document.getElementById('igModal').classList.remove('open') }
 
         /* ── Social proof popup ── */
-        function showSpPopup() {
-            const titles = [
-                '124 people viewed this resort',
-                '89 people checked availability',
-                '156 people liked our photos',
-                '67 people inquired today',
-                '203 people visited our site'
-            ];
-            const subs = [
-                'in the last 1 hour',
-                'in the last 2 hours',
-                'in the last 30 minutes',
-                'today',
-                'this week'
-            ];
-            const icons = ['👁️', '📅', '❤️', '💬', '🌟'];
-            const randomIndex = Math.floor(Math.random() * titles.length);
-            document.getElementById('spTitle').textContent = titles[randomIndex];
-            document.getElementById('spSub').textContent = subs[randomIndex];
-            document.getElementById('spIcon').textContent = icons[randomIndex];
-            document.getElementById('spPopup').classList.add('show');
-            setTimeout(() => document.getElementById('spPopup').classList.remove('show'), 4000);
-        }
-        function closeSpPopup() { document.getElementById('spPopup').classList.remove('show') }
-        setInterval(showSpPopup, 12000); // Show every 12 seconds
+        /* ── Chatbot Widget ── */
+        let cbOpen = false;
+        let cbFrameLoaded = false;
 
-        /* ── Chatbot Engine ── */
-        var cbOpen = false, cbStep = null, cbBooking = {};
-        var cbA = {
-            availability: "✅ Both properties have availability!\n\n🏡 Parudeesa The Paradise — weekdays & weekends\n🌅 Parudeesa Utopiya — select dates available\n\nFor specific dates, tap 'Book Now' or chat with our team.",
-            price: "💰 Our Pricing:\n\n🏡 Parudeesa The Paradise — ₹6,500/night\n🌅 Parudeesa Utopiya — ₹9,000/night\n\n🎉 Party Package — ₹25,000 (40–50 guests)\n✨ Grand Celebration — ₹75,000 (200 guests)\n💑 Anniversary — ₹12,000\n🏢 Corporate Retreat — ₹35,000",
-            properties: "🏡 Parudeesa The Paradise\nIdeal for 40–50 guests. Cozy, with sunrise views, kayaking dock & bonfire pit.\nBooking: +91 89210 21202\n\n🌅 Parudeesa Utopiya\nGrand villa for up to 200 guests. Sunset deck, private dock & yacht.\nBooking: +91 80757 41948",
-            events: "🎉 Our Event Packages:\n\n🎂 Party Package — ₹25,000 (40–50 guests)\n👑 Grand Celebration — ₹75,000 (200 guests)\n💑 Romantic Anniversary — ₹12,000\n🏢 Corporate Retreat — ₹35,000\n💍 Sunset Proposal — ₹6,500\n✨ Custom Package — enquire\n\nTap 'Events Page' to see full details!",
-            amenities: "✨ Parudeesa Amenities:\n\n🚣 Kayaking at sunrise\n⛵ Private yacht cruises\n🍽️ Gourmet lakeside dining\n🎊 Custom event decorations\n📸 Photography setups\n🎵 DJ / Live music\n🔥 Bonfire evenings\n📶 High-speed WiFi",
-            location: "📍 Location:\nParudeesa is on the Kerala Backwaters, India.\n\nClose to major Kerala cities — 1–3 hrs drive.\nExact address shared after booking confirmation.",
-            contact: "📞 Contact Parudeesa:\n\n🏡 Parudeesa The Paradise:\n+91 89210 21202\n\n🌅 Parudeesa Utopiya:\n+91 80757 41948\n\n📸 Instagram:\n@parudeesa_utopiya & @Parudeesa_the_paradise\n\n📧 hello@parudeesa.in"
-        };
+        function ensureChatbotFrame() {
+            const frame = document.getElementById('cbFrame');
+            if (!frame || cbFrameLoaded) return;
+            frame.src = '/chatbot?embed=1';
+            cbFrameLoaded = true;
+        }
 
         function toggleChatbot() {
             cbOpen = !cbOpen;
             document.getElementById('cbWin').classList.toggle('open', cbOpen);
             if (cbOpen) {
                 document.getElementById('cbNotif').classList.add('hidden');
-                if (!document.getElementById('cbBody').hasChildNodes()) cbInit();
-                setTimeout(() => document.getElementById('cbBody').scrollTop = 9999, 100);
+                ensureChatbotFrame();
             }
-        }
-
-        function cbInit() {
-            document.getElementById('cbBody').innerHTML = ''; cbStep = null; cbBooking = {};
-            cbAddBot("👋 Welcome to <strong>Parudeesa – The Lake View Resort!</strong>\nI'm your virtual host. How can I help you today?", true);
-            setTimeout(cbMenu, 600);
-        }
-
-        function cbMenu() {
-            const btns = [
-                { l: '📅 Check Availability', k: 'availability' }, { l: '💰 View Pricing', k: 'price' },
-                { l: '🏠 Our Properties', k: 'properties' }, { l: '🎉 Event Packages', k: 'events' },
-                { l: '✨ Amenities', k: 'amenities' }, { l: '📍 Location', k: 'location' },
-                { l: '✅ Book Now', k: 'book' }, { l: '📞 Contact Us', k: 'contact' },
-                { l: '🙋 Talk to a Person', k: 'human' },
-            ];
-            const w = document.createElement('div'); w.className = 'cb-qr-wrap';
-            btns.forEach(b => {
-                const btn = document.createElement('button'); btn.className = 'cb-qbtn'; btn.textContent = b.l;
-                btn.onclick = () => cbHandle(b.k, b.l); w.appendChild(btn);
-            });
-            document.getElementById('cbBody').appendChild(w);
-            document.getElementById('cbBody').scrollTop = 9999;
-        }
-
-        function cbHandle(key, label) {
-            cbAddUser(label); document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove());
-            cbTyping();
-            setTimeout(() => {
-                cbRmTyping();
-                if (key === 'book') {
-                    cbStep = 'property'; cbAddBot("Great! Which property would you like?\n\n🏡 Parudeesa The Paradise (40–50 guests)\n🌅 Parudeesa Utopiya (up to 200 guests)");
-                    setTimeout(() => {
-                        const w = document.createElement('div'); w.className = 'cb-qr-wrap';
-                        [['🏡 Parudeesa The Paradise', 'cottage'], ['🌅 Parudeesa Utopiya', 'villa']].forEach(([l, v]) => {
-                            const btn = document.createElement('button'); btn.className = 'cb-qbtn'; btn.textContent = l;
-                            btn.onclick = () => { cbBooking.property = v; cbBooking.propertyLabel = l; cbAddUser(l); document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove()); cbStep = 'event'; cbTyping(); setTimeout(() => { cbRmTyping(); cbAddBot("What type of event?\n\n(e.g. Birthday, Wedding, Anniversary, Corporate, Just a stay)") }, 700) };
-                            w.appendChild(btn);
-                        });
-                        document.getElementById('cbBody').appendChild(w); document.getElementById('cbBody').scrollTop = 9999;
-                    }, 300);
-                } else if (key === 'human') {
-                    cbAddBot("Sure! Connect directly with our team:");
-                    setTimeout(() => {
-                        const w = document.createElement('div'); w.className = 'cb-qr-wrap';
-                        const a1 = document.createElement('a'); a1.className = 'cb-wa-link'; a1.href = 'https://wa.me/918921021202?text=Hi!%20I%20want%20to%20talk%20to%20the%20Lakeside%20Cottage%20team.'; a1.target = '_blank'; a1.innerHTML = '<i class="bi bi-whatsapp"></i> 🏡 Paradise Team: +91 89210 21202';
-                        const a2 = document.createElement('a'); a2.className = 'cb-wa-link'; a2.href = 'https://wa.me/918075741948?text=Hi!%20I%20want%20to%20talk%20to%20the%20Sunset%20Villa%20team.'; a2.target = '_blank'; a2.innerHTML = '<i class="bi bi-whatsapp"></i> 🌅 Utopiya Team: +91 80757 41948';
-                        const a3 = document.createElement('a'); a3.className = 'cb-wa-link'; a3.href = 'https://www.instagram.com/Parudeesa_the_paradise'; a3.target = '_blank'; a3.style.background = 'linear-gradient(135deg,#f09433,#dc2743,#bc1888)'; a3.innerHTML = '<i class="bi bi-instagram"></i> DM on Instagram';
-                        w.appendChild(a1); w.appendChild(a2); w.appendChild(a3);
-                        document.getElementById('cbBody').appendChild(w);
-                        setTimeout(cbBackBtn, 400); document.getElementById('cbBody').scrollTop = 9999;
-                    }, 300);
-                } else if (key === 'contact') {
-                    cbAddBot(cbA.contact);
-                    setTimeout(() => {
-                        const w = document.createElement('div'); w.className = 'cb-qr-wrap';
-                        const a1 = document.createElement('a'); a1.className = 'cb-wa-link'; a1.href = 'https://wa.me/918921021202'; a1.target = '_blank'; a1.innerHTML = '<i class="bi bi-whatsapp"></i> Paradise: +91 89210 21202';
-                        const a2 = document.createElement('a'); a2.className = 'cb-wa-link'; a2.href = 'https://wa.me/918075741948'; a2.target = '_blank'; a2.innerHTML = '<i class="bi bi-whatsapp"></i> Utopiya: +91 80757 41948';
-                        w.appendChild(a1); w.appendChild(a2);
-                        document.getElementById('cbBody').appendChild(w);
-                        setTimeout(cbBackBtn, 400); document.getElementById('cbBody').scrollTop = 9999;
-                    }, 300);
-                } else {
-                    cbAddBot(cbA[key] || "I'll help you with that shortly!");
-                    setTimeout(cbBackBtn, 400);
-                }
-            }, 900);
-        }
-
-        function cbBackBtn() {
-            const w = document.createElement('div'); w.className = 'cb-qr-wrap';
-            const b1 = document.createElement('button'); b1.className = 'cb-qbtn'; b1.textContent = '🔙 Main Menu';
-            b1.onclick = () => { document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove()); cbMenu() };
-            const b2 = document.createElement('button'); b2.className = 'cb-qbtn'; b2.textContent = '✅ Book Now';
-            b2.onclick = () => { document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove()); cbHandle('book', '✅ Book Now') };
-            w.appendChild(b1); w.appendChild(b2);
-            document.getElementById('cbBody').appendChild(w);
-            document.getElementById('cbBody').scrollTop = 9999;
-        }
-
-        function cbAddBot(html, isHtml) {
-            const d = document.createElement('div'); d.className = 'cb-bot-msg';
-            if (isHtml) d.innerHTML = html; else d.textContent = html;
-            document.getElementById('cbBody').appendChild(d);
-            document.getElementById('cbBody').scrollTop = 9999;
-        }
-        function cbAddUser(t) {
-            const d = document.createElement('div'); d.className = 'cb-user-msg'; d.textContent = t;
-            document.getElementById('cbBody').appendChild(d);
-            document.getElementById('cbBody').scrollTop = 9999;
-        }
-        function cbTyping() { const t = document.createElement('div'); t.className = 'cb-typing'; t.id = 'cbT'; t.innerHTML = '<span></span><span></span><span></span>'; document.getElementById('cbBody').appendChild(t); document.getElementById('cbBody').scrollTop = 9999 }
-        function cbRmTyping() { const t = document.getElementById('cbT'); if (t) t.remove() }
-
-        function cbUserSend() {
-            const inp = document.getElementById('cbInput'); const val = inp.value.trim(); if (!val) return;
-            inp.value = ''; cbAddUser(val); document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove());
-            cbTyping();
-            setTimeout(() => {
-                cbRmTyping();
-                if (cbStep === 'event') { cbBooking.event = val; cbStep = 'guests'; cbAddBot("How many guests are expected? 🎊"); return }
-                if (cbStep === 'guests') { cbBooking.guests = val; cbStep = 'date'; cbAddBot("Preferred check-in date?\n(e.g. 15 August 2025)"); return }
-                if (cbStep === 'date') { cbBooking.date = val; cbStep = 'name'; cbAddBot("Your full name? 😊"); return }
-                if (cbStep === 'name') { cbBooking.name = val; cbStep = 'phone'; cbAddBot("Your phone number?"); return }
-                if (cbStep === 'phone') {
-                    cbBooking.phone = val; cbStep = null;
-                    const waNum = cbBooking.property === 'villa' ? '918075741948' : '918921021202';
-                    const t = encodeURIComponent('Hi! I want to book at Parudeesa.\n\nProperty: ' + cbBooking.propertyLabel + '\nEvent: ' + (cbBooking.event || 'Stay') + '\nGuests: ' + cbBooking.guests + '\nDate: ' + cbBooking.date + '\nName: ' + cbBooking.name + '\nPhone: ' + cbBooking.phone);
-                    cbAddBot('✅ Booking request received!\n\n🏡 ' + cbBooking.propertyLabel + '\n🎉 ' + (cbBooking.event || 'Stay') + '\n👥 ' + cbBooking.guests + ' guests\n📅 ' + cbBooking.date + '\n👤 ' + cbBooking.name + '\n📞 ' + cbBooking.phone + '\n\nOur team will contact you shortly!');
-                    const w = document.createElement('div'); w.className = 'cb-qr-wrap';
-                    const a = document.createElement('a'); a.className = 'cb-wa-link'; a.href = 'https://wa.me/' + waNum + '?text=' + t; a.target = '_blank'; a.innerHTML = '<i class="bi bi-whatsapp"></i> Confirm on WhatsApp';
-                    const b = document.createElement('button'); b.className = 'cb-qbtn'; b.textContent = '🏠 Main Menu';
-                    b.onclick = () => { document.querySelectorAll('.cb-qr-wrap').forEach(w => w.remove()); cbBooking = {}; cbMenu() };
-                    w.appendChild(a); w.appendChild(b); document.getElementById('cbBody').appendChild(w);
-                    document.getElementById('cbBody').scrollTop = 9999; return;
-                }
-                const v = val.toLowerCase();
-                if (v.includes('cottage') || v.includes('lakeside')) cbHandle('properties', '🏠 Our Properties');
-                else if (v.includes('villa') || v.includes('sunset')) cbHandle('properties', '🏠 Our Properties');
-                else if (v.includes('price') || v.includes('cost') || v.includes('₹')) cbHandle('price', '💰 View Pricing');
-                else if (v.includes('avail') || v.includes('book')) cbHandle('availability', '📅 Check Availability');
-                else if (v.includes('event') || v.includes('birthday') || v.includes('wedding') || v.includes('party')) cbHandle('events', '🎉 Event Packages');
-                else if (v.includes('amen') || v.includes('kayak') || v.includes('yacht')) cbHandle('amenities', '✨ Amenities');
-                else if (v.includes('location') || v.includes('where') || v.includes('address')) cbHandle('location', '📍 Location');
-                else if (v.includes('contact') || v.includes('call') || v.includes('number')) cbHandle('contact', '📞 Contact Us');
-                else if (v.includes('hi') || v.includes('hello') || v.includes('hey')) { cbAddBot("Hello! 👋 Great to connect. How can I help?"); setTimeout(cbMenu, 400) }
-                else { cbAddBot("I'm here to help! 😊 Please choose from below:"); setTimeout(cbMenu, 400) }
-            }, 800);
         }
 
         /* ── Social Proof Popups ── */
@@ -4426,28 +4439,44 @@
         setTimeout(() => { showSpPopup(); setInterval(() => { setTimeout(showSpPopup, (Math.random() * 60 + 120) * 1000) }, 150000) }, 8000);
 
         /* ── Razorpay ── */
-        function initiatePayment() {
-            const name = (document.getElementById('f-name') || {}).value?.trim() || '';
-            const phone = (document.getElementById('f-phone') || {}).value?.trim() || '';
-            const email = (document.getElementById('f-email') || {}).value?.trim() || '';
-            const prop = (document.getElementById('f-prop') || {}).value || '';
-            if (!name || !phone || !email || !prop) { alert('Please fill Name, Phone, Email and Property first.'); return }
-            const pl = { cottage: 'Parudeesa The Paradise', villa: 'Parudeesa Utopiya' }[prop] || prop;
-            const waNum = prop === 'villa' ? '918075741948' : '918921021202';
+        function initiatePayment(data = {}) {
+            const name = data.name || (document.getElementById('f-name') || {}).value?.trim() || '';
+            const phone = data.phone || (document.getElementById('f-phone') || {}).value?.trim() || '';
+            const email = data.email || (document.getElementById('f-email') || {}).value?.trim() || '';
+            const property = data.propertyName || 'Parudeesa';
+            const amount = data.amount || 500000;
+            const msgBox = document.getElementById('successMsg');
             const opts = {
-                key: 'rzp_test_YourRazorpayKeyHere', // ← Replace with your Razorpay Key ID
-                amount: 500000, currency: 'INR',
+                key: '{{ config("services.razorpay.key") }}', // Use Laravel config for Razorpay key
+                amount: amount, currency: 'INR',
                 name: 'Parudeesa – The Lake View Resort',
-                description: 'Booking Advance — ' + pl,
+                description: 'Booking Advance — ' + property,
                 image: 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=100&q=80',
                 handler: function (res) {
-                    window.open('https://wa.me/' + waNum + '?text=' + encodeURIComponent('Hi! I paid ₹5,000 advance at Parudeesa.\nName: ' + name + '\nPhone: ' + phone + '\nProperty: ' + pl + '\nPayment ID: ' + res.razorpay_payment_id), '_blank');
-                    alert('✅ Payment successful!\nID: ' + res.razorpay_payment_id + '\n\nConfirmation on WhatsApp shortly!');
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = '#E8F5E9';
+                    msgBox.style.color = '#2E7D32';
+                    msgBox.style.border = '1px solid #A5D6A7';
+                    msgBox.innerHTML = '<strong>✅ Payment successful!</strong><br/>Payment ID: ' + res.razorpay_payment_id + '<br/>Your booking is confirmed. Our team will connect with you shortly.';
+                    document.getElementById('bookingForm')?.reset();
+                    updateSummary();
                 },
-                prefill: { name, email, contact: phone }, theme: { color: '#fa873e' }, modal: { ondismiss: () => { } }
+                prefill: { name, email, contact: phone }, theme: { color: '#fa873e' }, modal: { ondismiss: () => {
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = '#FFEBEE';
+                    msgBox.style.color = '#C62828';
+                    msgBox.style.border = '1px solid #FFCDD2';
+                    msgBox.innerHTML = '<strong>Payment not completed.</strong><br/>Please retry or contact us for help.';
+                } }
             };
             try { new Razorpay(opts).open() }
-            catch (e) { alert('Razorpay needs HTTPS. Redirecting to WhatsApp...'); window.open('https://wa.me/' + waNum + '?text=Hi!%20I%20want%20to%20pay%20advance%20for%20' + encodeURIComponent(pl), '_blank') }
+            catch (e) {
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = '#FFEBEE';
+                msgBox.style.color = '#C62828';
+                msgBox.style.border = '1px solid #FFCDD2';
+                msgBox.innerHTML = '<strong>Error:</strong> Razorpay checkout could not be opened. Please ensure HTTPS or try again.';
+            }
         }
 
         /* ── iOS tap fix ── */
@@ -4456,6 +4485,34 @@
                 el.style.webkitTapHighlightColor = 'transparent';
                 el.style.touchAction = 'manipulation';
             });
+            
+            // Initialize Flatpickr instances globally so we can update them later
+            window.fpCheckin = flatpickr("#f-checkin", { minDate: "today", dateFormat: "Y-m-d", onChange: updateSummary });
+            window.fpCheckout = flatpickr("#f-checkout", { minDate: "today", dateFormat: "Y-m-d", onChange: updateSummary });
+            
+            // Add event listener to the property dropdown
+            const propSelect = document.getElementById('f-prop');
+            if (propSelect) {
+                propSelect.addEventListener('change', async function() {
+                    const propertyId = this.value;
+                    if (!propertyId) {
+                        window.fpCheckin.set("disable", []);
+                        window.fpCheckout.set("disable", []);
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch(`/property/${propertyId}/unavailable-dates`);
+                        if (response.ok) {
+                            const disabledDates = await response.json();
+                            window.fpCheckin.set("disable", disabledDates);
+                            window.fpCheckout.set("disable", disabledDates);
+                        }
+                    } catch (error) {
+                        console.error("Failed to fetch unavailable dates:", error);
+                    }
+                });
+            }
         });
     </script>
 </body>

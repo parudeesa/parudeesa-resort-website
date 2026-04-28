@@ -16,9 +16,14 @@ class Booking extends Model
         'property_id',
         'amount',
         'status',
+        'payment_status',
         'event_type',
         'package_name',
-        'amenities'
+        'notes',
+        'google_event_id',
+        'amenities',
+        'amenity_total',
+        'base_amount',
     ];
 
     protected $casts = [
@@ -30,5 +35,15 @@ class Booking extends Model
     public function property()
     {
         return $this->belongsTo(Property::class);
+    }
+
+    public function bookingAmenities()
+    {
+        return $this->hasMany(BookingAmenity::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
     }
 }

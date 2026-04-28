@@ -28,6 +28,14 @@ class GoogleCalendarService
 
     public function createEvent($booking)
     {
+        // Skip if calendar ID is not configured
+        if (!$this->calendarId || $this->calendarId === 'your_provided_calendar_id_here') {
+            Log::info('Google Calendar not configured, skipping event creation', [
+                'booking_id' => $booking->id,
+            ]);
+            return false;
+        }
+
         try {
             $service = new Calendar($this->client);
 
@@ -62,6 +70,42 @@ class GoogleCalendarService
             return false;
         }
     }
+    public function createBlockedDate($blockedDate)
+{
+    try {
+        $service = new Calendar($this->client);
+
+        $event = new Event([
+            'summary' => "Blocked: " . $blockedDate->property->name,
+            'description' => $blockedDate->reason ?: "Date blocked manually",
+            'start' => [
+                'date' => $blockedDate->blocked_date,
+                'timeZone' => 'Asia/Kolkata',
+            ],
+            'end' => [
+                'date' => date('Y-m-d', strtotime($blockedDate->blocked_date . ' +1 day')),
+                'timeZone' => 'Asia/Kolkata',
+            ],
+        ]);
+
+        $createdEvent = $service->events->insert($this->calendarId, $event);
+
+        Log::info('Blocked date added to Google Calendar', [
+            'blocked_date_id' => $blockedDate->id,
+            'event_id' => $createdEvent->id,
+        ]);
+
+        return $createdEvent;
+
+    } catch (\Exception $e) {
+        Log::error('Failed to block date in Google Calendar', [
+            'blocked_date_id' => $blockedDate->id,
+            'error' => $e->getMessage(),
+        ]);
+
+        return false;
+    }
+}
 
     private function buildEventDescription($booking)
     {

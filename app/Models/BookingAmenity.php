@@ -4,20 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class BookingAmenity extends Model
 {
     protected $fillable = [
         'booking_id',
-        'order_id',
-        'payment_id',
-        'signature',
-        'status',
-        'failure_reason',
-        'amount'
+        'amenity_id',
+        'quantity',
+        'unit_price',
+        'amount',
     ];
 
     public function booking()
     {
         return $this->belongsTo(Booking::class);
+    }
+
+    public function amenity()
+    {
+        return $this->belongsTo(Amenity::class);
     }
 }

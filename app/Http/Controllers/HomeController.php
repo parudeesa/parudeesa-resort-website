@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\Property;
 use App\Models\Booking;
+use App\Models\BlockedDate;
+use App\Models\Amenity;
 
 class HomeController extends Controller
 {
@@ -18,7 +21,54 @@ class HomeController extends Controller
     {
         \Log::info('Property show method called', ['property_id' => $id]);
         $property = Property::with('amenities')->findOrFail($id);
-        return view('property.show', compact('property'));
+        $amenities = Amenity::where('status', true)->orderBy('name')->get();
+
+        return view('properties.show', compact('property', 'amenities'));
+    }
+
+    public function unavailableDates($id)
+    {
+        $property = Property::findOrFail($id);
+
+        $bookings = Booking::where('property_id', $property->id)
+            ->where(function ($query) {
+                $query->whereNull('status')
+                      ->orWhere('status', '!=', 'cancelled');
+            })
+            ->get();
+
+        $blockedDates = BlockedDate::where('property_id', $property->id)->get();
+
+        $disabled = [];
+
+        foreach ($blockedDates as $blockedDate) {
+            $current = Carbon::parse($blockedDate->start_date);
+            $end = Carbon::parse($blockedDate->end_date);
+
+            while ($current->lte($end)) {
+                $disabled[] = $current->format('Y-m-d');
+                $current->addDay();
+            }
+        }
+
+        foreach ($bookings as $booking) {
+            if (! $booking->check_in || ! $booking->check_out) {
+                continue;
+            }
+
+            $current = Carbon::parse($booking->check_in);
+            $end = Carbon::parse($booking->check_out);
+
+            while ($current->lte($end)) {
+                $disabled[] = $current->format('Y-m-d');
+                $current->addDay();
+            }
+        }
+
+        $disabled = array_values(array_unique($disabled));
+        sort($disabled);
+
+        return response()->json($disabled);
     }
 
     public function storeBooking(Request $request)
@@ -65,4 +115,9 @@ class HomeController extends Controller
             'calendar_synced' => $calendarSynced !== false
         ]);
     }
+    public function bookingsIndex()
+{
+    $bookings = Booking::with('property')->latest()->paginate(10);
+    return view('bookings.index', compact('bookings'));
+}
 }

@@ -18,9 +18,18 @@ class AmenityController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'price' => 'nullable|numeric|min:0',
+            'pricing_type' => 'nullable|in:fixed,per_person',
+            'status' => 'nullable|boolean'
         ]);
 
-        Amenity::create($request->all());
+        Amenity::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price ?? 0,
+            'pricing_type' => $request->pricing_type ?? 'fixed',
+            'status' => $request->has('status') ? (bool)$request->status : true
+        ]);
 
         return redirect()->back()->with('success', 'Amenity added successfully!');
     }
@@ -30,9 +39,18 @@ class AmenityController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'price' => 'nullable|numeric|min:0',
+            'pricing_type' => 'nullable|in:fixed,per_person',
+            'status' => 'nullable|boolean'
         ]);
 
-        $amenity->update($request->all());
+        $amenity->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price ?? $amenity->price ?? 0,
+            'pricing_type' => $request->pricing_type ?? $amenity->pricing_type ?? 'fixed',
+            'status' => $request->has('status') ? (bool)$request->status : $amenity->status
+        ]);
 
         return redirect()->back()->with('success', 'Amenity updated successfully!');
     }
