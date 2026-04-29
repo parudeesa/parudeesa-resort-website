@@ -17,10 +17,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        \App\Models\User::updateOrCreate(
+    ['email' => 'admin@parudeesa.com'], // This is the unique field it checks first
+    [
+        'name' => 'Amina',
+        'password' => bcrypt('password123'),
+        'is_super_admin' => true
+    ]
+);
 
         $this->call([
             AmenitySeeder::class,
