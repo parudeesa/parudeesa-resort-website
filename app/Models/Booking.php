@@ -24,6 +24,8 @@ class Booking extends Model
         'amenities',
         'amenity_total',
         'base_amount',
+        'coupon_id',
+        'discount_amount',
     ];
 
     protected $casts = [
@@ -35,6 +37,11 @@ class Booking extends Model
     public function property()
     {
         return $this->belongsTo(Property::class);
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 
     public function bookingAmenities()

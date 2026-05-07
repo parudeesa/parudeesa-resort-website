@@ -16,10 +16,10 @@ class AmenityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'nullable|numeric|min:0',
-            'pricing_type' => 'nullable|in:fixed,per_person',
+            'name' => 'required|string|min:3|max:255',
+            'description' => 'nullable|string|max:1000',
+            'price' => 'nullable|numeric|min:0|max:100000',
+            'pricing_type' => 'required|in:fixed,per_person',
             'status' => 'nullable|boolean'
         ]);
 
@@ -40,10 +40,10 @@ class AmenityController extends Controller
     public function update(Request $request, Amenity $amenity)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'nullable|numeric|min:0',
-            'pricing_type' => 'nullable|in:fixed,per_person',
+            'name' => 'required|string|min:3|max:255',
+            'description' => 'nullable|string|max:1000',
+            'price' => 'nullable|numeric|min:0|max:100000',
+            'pricing_type' => 'required|in:fixed,per_person',
             'status' => 'nullable|boolean'
         ]);
 

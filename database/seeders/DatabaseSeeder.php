@@ -19,24 +19,19 @@ class DatabaseSeeder extends Seeder
 
 
         \App\Models\User::updateOrCreate(
-    ['email' => 'admin@parudeesa.com'], // This is the unique field it checks first
-    [
-        'name' => 'Amina',
-        'password' => bcrypt('password123'),
-        'is_super_admin' => true
-    ]
-);
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'admin@parudeesa.com',
-            'password' => bcrypt('password'),                  
-        ]);
-
+            ['email' => 'admin@parudeesa.com'],
+            [
+                'name' => 'Amina',
+                'password' => bcrypt('password123'),
+                'is_super_admin' => true,
+                'role' => 'superadmin'
+            ]
+        );
 
         $this->call([
             AmenitySeeder::class,
             EventPackageSeeder::class,
+            PropertyGallerySeeder::class,
         ]);
     }
 }

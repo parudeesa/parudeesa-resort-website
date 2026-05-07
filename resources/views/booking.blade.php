@@ -147,6 +147,60 @@ button:hover{
         transform:translateY(0);
     }
 }
+
+.coupon-section {
+    background: rgba(250,135,62,0.08);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 18px;
+    border: 1px dashed rgba(250,135,62,0.3);
+}
+.coupon-badge {
+    display: inline-block;
+    background: #fff;
+    border: 1px solid #fa873e;
+    color: #fa873e;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    margin: 5px;
+    cursor: pointer;
+}
+.price-summary {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+.final-total {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+    font-weight: 800;
+    color: #fa873e;
+    font-size: 18px;
+}
+.error-msg {
+    color: #dc3545;
+    font-size: 11px;
+    margin-top: 4px;
+    display: none;
+}
+input:invalid:not(:placeholder-shown) {
+    border-color: #dc3545;
+}
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
 </style>
 </head>
 <body>
@@ -169,33 +223,72 @@ button:hover{
 
         <div class="form-group">
             <label>Check-in Date</label>
-            <input type="date" id="check_in" name="check_in" required>
+            <input type="date" id="check_in" name="check_in" required min="{{ date('Y-m-d') }}">
+            <div class="error-msg" id="err-check_in">Check-in date is required</div>
         </div>
 
         <div class="form-group">
             <label>Check-out Date</label>
             <input type="date" id="check_out" name="check_out" required>
+            <div class="error-msg" id="err-check_out">Check-out date must be after check-in</div>
         </div>
 
         <div class="form-group">
             <label>Number of Guests</label>
-            <input type="number" id="guests" name="guests" placeholder="Enter guest count" required>
+            <input type="number" id="guests" name="guests" placeholder="Enter guest count" required min="1" max="20">
+            <div class="error-msg" id="err-guests">Please enter a valid guest count (1-20)</div>
         </div>
 
         <div class="form-group">
             <label>Your Name</label>
-            <input type="text" id="name" name="name" placeholder="Enter your name" required>
-        </div>
-
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required minlength="3">
+            <div class="error-msg" id="err-name">Name is required (min 3 characters)</div>
         </div>
 
         <div class="form-group">
             <label>Phone Number</label>
-            <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
+            <input type="tel" id="phone" name="phone" placeholder="e.g. 9876543210" required pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+            <div class="error-msg" id="err-phone">Phone number must contain exactly 10 digits. Only numbers allowed.</div>
         </div>
+
+        <div class="coupon-section">
+            <label>Available Coupons</label>
+            <div style="margin-bottom: 15px;">
+                @foreach($activeCoupons as $c)
+                <span class="coupon-badge" onclick="document.getElementById('coupon_code').value = '{{ $c->code }}'">
+                    {{ $c->code }} - {{ $c->type === 'percentage' ? $c->value.'%' : '₹'.$c->value }} OFF
+                </span>
+                @endforeach
+            </div>
+            
+            <label>Have a Coupon?</label>
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="coupon_code" placeholder="Enter code" style="flex:1;">
+                <button type="button" id="applyBtn" style="width:auto; padding:10px 20px; margin:0;">Apply</button>
+                <button type="button" id="removeCouponBtn" style="width:auto; padding:10px 20px; margin:0; background: #6a3b1c; display:none;">Remove</button>
+            </div>
+            <div id="couponMsg" style="font-size:12px; margin-top:5px; display:none;"></div>
+        </div>
+
+        <div class="price-summary">
+            <div class="price-row">
+                <span>Base Amount</span>
+                <span id="display_base">₹0</span>
+            </div>
+            <div class="price-row" id="discount_row" style="display:none; color: green;">
+                <span>Discount</span>
+                <span id="display_discount">-₹0</span>
+            </div>
+            <div class="price-row final-total">
+                <span>Final Payable</span>
+                <span id="display_total">₹0</span>
+            </div>
+        </div>
+
+        <input type="hidden" name="amount" id="amount_val">
+        <input type="hidden" name="base_amount" id="base_amount_val">
+        <input type="hidden" name="coupon_id" id="coupon_id_val">
+        <input type="hidden" name="discount_amount" id="discount_val">
 
         <button type="submit">Confirm Booking</button>
     </form>
@@ -223,7 +316,6 @@ document.getElementById("bookingForm").addEventListener("submit", function(e){
             let msg = `
                 <strong>✅ Booking request submitted successfully!</strong><br><br>
                 <strong>Name:</strong> ${formData.get('name')}<br>
-                <strong>Email:</strong> ${formData.get('email')}<br>
                 <strong>Phone:</strong> ${formData.get('phone')}<br>
                 <strong>Property ID:</strong> ${formData.get('property_id')}<br>
                 <strong>Check-in:</strong> ${formData.get('check_in')}<br>
@@ -251,6 +343,148 @@ document.getElementById("bookingForm").addEventListener("submit", function(e){
         alert('Error submitting booking. Please try again.');
     });
 });
+
+const propertySelect = document.getElementById('property_id');
+const amountInput = document.getElementById('amount_val');
+const displayBase = document.getElementById('display_base');
+const displayTotal = document.getElementById('display_total');
+
+function updatePrice() {
+    const selected = propertySelect.options[propertySelect.selectedIndex];
+    if (!selected.value) return;
+    
+    // Extract price from text (hacky but works for this demo) or better, use data attribute
+    const text = selected.text;
+    const price = parseInt(text.match(/₹(\d+)/)[1]);
+    
+    amountInput.value = price;
+    document.getElementById('base_amount_val').value = price;
+    displayBase.innerText = '₹' + price.toLocaleString();
+    displayTotal.innerText = '₹' + price.toLocaleString();
+    
+    // Reset coupon if property changes
+    resetCoupon();
+}
+
+propertySelect.addEventListener('change', updatePrice);
+
+// Date Validation Logic
+const checkInInput = document.getElementById('check_in');
+const checkOutInput = document.getElementById('check_out');
+
+checkInInput.addEventListener('change', function() {
+    checkOutInput.min = this.value;
+    if (checkOutInput.value && checkOutInput.value <= this.value) {
+        checkOutInput.value = '';
+        document.getElementById('err-check_out').style.display = 'block';
+    } else {
+        document.getElementById('err-check_out').style.display = 'none';
+    }
+});
+
+checkOutInput.addEventListener('change', function() {
+    if (this.value <= checkInInput.value) {
+        document.getElementById('err-check_out').style.display = 'block';
+    } else {
+        document.getElementById('err-check_out').style.display = 'none';
+    }
+});
+
+// Simple Real-time Validation
+document.querySelectorAll('#bookingForm input, #bookingForm select').forEach(input => {
+    input.addEventListener('input', function() {
+        const err = document.getElementById('err-' + this.id);
+        if (err) {
+            if (this.checkValidity()) {
+                err.style.display = 'none';
+                this.style.borderColor = '';
+            } else {
+                err.style.display = 'block';
+                this.style.borderColor = '#dc3545';
+            }
+        }
+    });
+});
+
+document.getElementById('applyBtn').addEventListener('click', function() {
+    const code = document.getElementById('coupon_code').value;
+    const baseTotal = document.getElementById('base_amount_val').value;
+    const applyBtn = this;
+    
+    if (!code || !baseTotal || baseTotal == 0) {
+        alert('Please select a property and enter a code.');
+        return;
+    }
+    
+    // Disable button and show loading
+    applyBtn.disabled = true;
+    applyBtn.innerText = 'Applying...';
+    
+    fetch('/coupons/validate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ code: code, total: baseTotal })
+    })
+    .then(r => r.json())
+    .then(data => {
+        const msg = document.getElementById('couponMsg');
+        msg.style.display = 'block';
+        
+        if (data.success) {
+            msg.innerText = data.message;
+            msg.style.color = 'green';
+            
+            document.getElementById('coupon_id_val').value = data.coupon_id;
+            document.getElementById('discount_val').value = data.discount;
+            document.getElementById('amount_val').value = data.new_total;
+            
+            document.getElementById('discount_row').style.display = 'flex';
+            document.getElementById('display_discount').innerText = '-₹' + data.discount.toLocaleString();
+            document.getElementById('display_total').innerText = '₹' + data.new_total.toLocaleString();
+            
+            document.getElementById('removeCouponBtn').style.display = 'block';
+            applyBtn.style.display = 'none';
+            document.getElementById('coupon_code').readOnly = true;
+        } else {
+            msg.innerText = data.message;
+            msg.style.color = 'red';
+            applyBtn.disabled = false;
+            applyBtn.innerText = 'Apply';
+        }
+    })
+    .catch(() => {
+        applyBtn.disabled = false;
+        applyBtn.innerText = 'Apply';
+    });
+});
+
+document.getElementById('removeCouponBtn').addEventListener('click', function() {
+    resetCoupon();
+    document.getElementById('coupon_code').value = '';
+    document.getElementById('couponMsg').style.display = 'none';
+});
+
+function resetCoupon() {
+    document.getElementById('coupon_id_val').value = '';
+    document.getElementById('discount_val').value = 0;
+    document.getElementById('discount_row').style.display = 'none';
+    
+    const basePrice = parseFloat(document.getElementById('base_amount_val').value);
+    if (!isNaN(basePrice)) {
+        amountInput.value = basePrice;
+        displayTotal.innerText = '₹' + basePrice.toLocaleString();
+    }
+    
+    document.getElementById('applyBtn').style.display = 'block';
+    document.getElementById('applyBtn').disabled = false;
+    document.getElementById('applyBtn').innerText = 'Apply';
+    document.getElementById('removeCouponBtn').style.display = 'none';
+    document.getElementById('coupon_code').readOnly = false;
+}
 </script>
 
 </body>

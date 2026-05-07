@@ -24,6 +24,11 @@ class RoleMiddleware
 
         $user = auth()->user();
 
+        if ($user->status === 'inactive') {
+            auth()->logout();
+            return redirect('login')->with('error', 'Your account has been deactivated. Please contact the super admin.');
+        }
+
         foreach ($roles as $role) {
             if ($user->role === $role) {
                 return $next($request);

@@ -44,11 +44,13 @@ Route::post('/chatbot/payment/failure', [ChatbotBookingController::class, 'markF
 
 Route::get('/booking', function () {
     $properties = \App\Models\Property::all();
-    return view('booking', compact('properties'));
+    $activeCoupons = \App\Models\Coupon::where('is_active', true)->get();
+    return view('booking', compact('properties', 'activeCoupons'));
 });
 
 Route::post('/bookings', [HomeController::class, 'storeBooking'])->name('bookings.store');
 Route::get('/api/check-phone-bookings/{phone}', [HomeController::class, 'checkPhoneBookings']);
+Route::post('/coupons/validate', [\App\Http\Controllers\CouponController::class, 'validateCoupon'])->name('coupons.validate');
 
 /*
 |--------------------------------------------------------------------------
@@ -106,7 +108,17 @@ Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
-    Route::post('/admin/create', [AdminController::class, 'storeAdmin'])->name('admin.store');
+    Route::get('/admin/admins', [AdminController::class, 'adminsIndex'])->name('admin.admins.index');
+    Route::post('/admin/admins', [AdminController::class, 'storeAdmin'])->name('admin.admins.store');
+    Route::patch('/admin/admins/{id}', [AdminController::class, 'updateAdmin'])->name('admin.admins.update');
+    Route::delete('/admin/admins/{id}', [AdminController::class, 'destroyAdmin'])->name('admin.admins.delete');
+    Route::post('/admin/admins/{id}/toggle-status', [AdminController::class, 'toggleAdminStatus'])->name('admin.admins.toggle_status');
+
+    // Coupons Management
+    Route::get('/admin/coupons', [\App\Http\Controllers\CouponController::class, 'index'])->name('admin.coupons.index');
+    Route::post('/admin/coupons', [\App\Http\Controllers\CouponController::class, 'store'])->name('admin.coupons.store');
+    Route::post('/admin/coupons/{id}/toggle', [\App\Http\Controllers\CouponController::class, 'toggleStatus'])->name('admin.coupons.toggle_status');
+    Route::delete('/admin/coupons/{id}', [\App\Http\Controllers\CouponController::class, 'destroy'])->name('admin.coupons.destroy');
 });
 
 require __DIR__.'/auth.php';

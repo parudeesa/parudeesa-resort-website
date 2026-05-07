@@ -47,6 +47,7 @@ class ChatbotController extends Controller
         return view('chatbot', [
             'properties' => $properties,
             'chatbotProperties' => $chatbotProperties,
+            'activeCoupons' => \App\Models\Coupon::where('is_active', true)->get(),
             'selectedPropertyId' => $request->integer('property_id') ?: null,
             'isEmbed' => $request->boolean('embed'),
         ]);

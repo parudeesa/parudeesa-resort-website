@@ -46,7 +46,7 @@
                         </div>
                         <div>
                             <label class="p-label">WhatsApp Number</label>
-                            <input id="phone" name="phone" type="text" class="p-input mt-1" placeholder="918921021202" />
+                            <input id="phone" name="phone" type="text" class="p-input mt-1" placeholder="8921021202" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" pattern="[0-9]{10}" title="Please enter a 10-digit phone number." />
                         </div>
                         <div>
                             <label class="p-label">Assign Admin</label>
@@ -202,7 +202,7 @@
                                                 </div>
                                                 <div>
                                                     <label class="p-label">WhatsApp Number</label>
-                                                    <input name="phone" type="text" value="{{ $property->phone }}" class="p-input mt-1">
+                                                    <input name="phone" type="text" value="{{ $property->phone }}" class="p-input mt-1" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" pattern="[0-9]{10}" title="Please enter a 10-digit phone number.">
                                                  </div>
                                                  @if(auth()->user()->isSuperAdmin())
                                                  <div>
@@ -282,32 +282,6 @@
                     </div>
                 </div>
 
-                @if(auth()->user()->isSuperAdmin())
-                <!-- Create Admin Card -->
-                <div class="p-card p-6 sm:p-8">
-                    <h3 class="p-serif text-2xl font-bold mb-6 border-b pb-3 flex items-center" style="color:#3e2010; border-color:rgba(250,135,62,.15)">
-                        <i data-lucide="user-plus" class="w-5 h-5 mr-2 text-[#e06828]"></i> Create Admin User
-                    </h3>
-                    <form action="{{ route('admin.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        @csrf
-                        <div>
-                            <label class="p-label">Full Name</label>
-                            <input name="name" type="text" class="p-input mt-1" placeholder="John Doe" required>
-                        </div>
-                        <div>
-                            <label class="p-label">Username</label>
-                            <input name="username" type="text" class="p-input mt-1" placeholder="admin_john" required>
-                        </div>
-                        <div>
-                            <label class="p-label">Password</label>
-                            <input name="password" type="password" class="p-input mt-1" placeholder="••••••••" required>
-                        </div>
-                        <div class="md:col-span-3 flex justify-end mt-2">
-                            <button type="submit" class="p-btn px-8">Create Admin Account</button>
-                        </div>
-                    </form>
-                </div>
-                @endif
             </div>
         </div>
     </div>

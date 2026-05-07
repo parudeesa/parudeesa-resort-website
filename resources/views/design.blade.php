@@ -3457,7 +3457,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="fg"><label>Phone / WhatsApp *</label><input type="tel" id="c-phone"
-                                                placeholder="+91 98765 43210" required /></div>
+                                                placeholder="9876543210" required maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" pattern="[0-9]{10}" title="Please enter a 10-digit phone number." /></div>
                                     </div>
                                     <div class="col-12">
                                         <div class="fg"><label>Email Address</label><input type="email" id="c-email"
@@ -3577,7 +3577,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group"><label>Phone / WhatsApp <span
                                                         style="color:var(--brand)">*</span></label><input type="tel"
-                                                    id="f-phone" placeholder="+91 98765 43210" required /></div>
+                                                    id="f-phone" placeholder="9876543210" required maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" pattern="[0-9]{10}" title="Please enter a 10-digit phone number." /></div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group"><label>Email <span
@@ -3873,7 +3873,7 @@
 
                         <div class="form-group">
                             <label for="name">Full Name</label>
-                            <input type="text" id="name" name="name" placeholder="Enter your full name" value="{{ old('name') }}" required autofocus autocomplete="name">
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" value="{{ old('name') }}" required autofocus autocomplete="name" pattern="[A-Za-z\s]+" title="Name should only contain letters.">
                             @if ($errors->has('name'))
                                 <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('name') }}</div>
                             @endif

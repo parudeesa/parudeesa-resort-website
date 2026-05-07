@@ -333,7 +333,7 @@ body.cb-embed .cb-body{
     <div class="cb-body" id="cbMsgs"></div>
 
     <div class="cb-footer">
-      <input class="cb-input" id="cbInput" placeholder="Type your reply..." onkeydown="if(event.key==='Enter') cbSend()">
+      <input class="cb-input" id="cbInput" placeholder="Type your reply..." onkeydown="if(event.key==='Enter') cbSend()" oninput="if(state.step==='phone') this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
       <button class="cb-send" onclick="cbSend()">></button>
     </div>
   </div>
@@ -343,6 +343,7 @@ body.cb-embed .cb-body{
 <script>
 const chatbotData = {
   properties: @json($chatbotProperties),
+  activeCoupons: @json($activeCoupons),
   selectedPropertyId: @json($selectedPropertyId),
 };
 
@@ -368,6 +369,7 @@ function emptyBooking() {
     name: '',
     email: '',
     phone: '',
+    coupon_code: '',
   };
 }
 
@@ -690,14 +692,32 @@ function askName() {
   state.step = 'name';
 }
 
-function askEmail() {
-  addMsg('Please enter your email address.');
-  state.step = 'email';
+function askPhone() {
+  addMsg('Please enter your phone number (10 digits).');
+  state.step = 'phone';
 }
 
-function askPhone() {
-  addMsg('Please enter your phone number.');
-  state.step = 'phone';
+function askCoupon() {
+  const coupons = chatbotData.activeCoupons;
+  let text = 'Do you have a coupon code?';
+  if (coupons && coupons.length > 0) {
+    const codes = coupons.map(c => `${c.code} (${c.type === 'percentage' ? c.value+'%' : 'Rs '+c.value} OFF)`).join(', ');
+    text += `\n\nAvailable offers: ${codes}`;
+  }
+  addMsg(text);
+  renderActions('You can skip this if you don\'t have one.', [
+    { label: 'Skip', onClick: () => {
+      addMsg('Skip', true);
+      respond(showSummary);
+    } }
+  ]);
+  state.step = 'coupon';
+}
+
+function removeChatbotCoupon() {
+  state.booking.coupon_code = '';
+  addMsg('Coupon removed', true);
+  respond(showSummary);
 }
 
 async function showSummary() {
@@ -711,11 +731,18 @@ async function showSummary() {
       <div class="cb-panel cb-summary">${summaryHtml}</div>
     `);
 
-    renderActions('Do you want to continue to payment?', [
+    const actions = [
       { label: 'Confirm and pay', onClick: beginCheckout },
       { label: 'Change amenities', onClick: restartAmenities },
-      { label: 'Start over', onClick: restartFromMenu },
-    ]);
+    ];
+
+    if (state.booking.coupon_code) {
+      actions.push({ label: 'Remove coupon', onClick: removeChatbotCoupon });
+    }
+
+    actions.push({ label: 'Start over', onClick: restartFromMenu });
+
+    renderActions('Do you want to continue to payment?', actions);
 
     state.step = 'summary';
   } catch (error) {
@@ -743,6 +770,7 @@ function buildSummaryHtml(quote) {
     ${amenityHtml}
     <div style="margin-top:8px"><strong>Room total:</strong> Rs ${quote.base_amount.toFixed(2)}</div>
     <div><strong>Amenity total:</strong> Rs ${quote.amenity_total.toFixed(2)}</div>
+    ${quote.discount_amount > 0 ? `<div style="color:green;"><strong>Discount (${quote.coupon_code}):</strong> -Rs ${quote.discount_amount.toFixed(2)}</div>` : ''}
     <div><strong>Final payable amount:</strong> Rs ${quote.amount.toFixed(2)}</div>
   `;
 }
@@ -754,6 +782,7 @@ function buildQuotePayload() {
     check_out: state.booking.check_out,
     guests: Number(state.booking.guests),
     event_type: state.booking.event_type,
+    coupon_code: state.booking.coupon_code,
     amenities: state.booking.amenities.map((amenity) => ({
       id: amenity.id,
       quantity: amenity.quantity || 1,
@@ -765,7 +794,6 @@ function buildCheckoutPayload() {
   return {
     ...buildQuotePayload(),
     name: state.booking.name,
-    email: state.booking.email,
     phone: state.booking.phone,
   };
 }
@@ -800,7 +828,6 @@ function openRazorpay(response) {
     description: `Booking for ${response.booking.property_name}`,
     prefill: {
       name: response.booking.name,
-      email: response.booking.email,
       contact: response.booking.phone,
     },
     theme: {
@@ -902,7 +929,11 @@ function parseEmail(value) {
 }
 
 function parsePhone(value) {
-  return /^[0-9+\-\s]{7,20}$/.test(value);
+  return /^[0-9]{10}$/.test(value);
+}
+
+function parseName(value) {
+  return /^[A-Za-z\s]+$/.test(value);
 }
 
 function cbSend() {
@@ -973,27 +1004,31 @@ function cbSend() {
   }
 
   if (state.step === 'name') {
-    state.booking.name = value;
-    respond(askEmail);
-    return;
-  }
-
-  if (state.step === 'email') {
-    if (!parseEmail(value)) {
-      addMsg('Please enter a valid email address.');
+    if (value.length < 3) {
+      addMsg('Please enter your full name (min 3 characters).');
       return;
     }
-    state.booking.email = value;
+    if (!parseName(value)) {
+      addMsg('Your name should only contain letters (no numbers or special characters).');
+      return;
+    }
+    state.booking.name = value;
     respond(askPhone);
     return;
   }
 
   if (state.step === 'phone') {
     if (!parsePhone(value)) {
-      addMsg('Please enter a valid phone number.');
+      addMsg('Please enter a valid 10-digit phone number.');
       return;
     }
     state.booking.phone = value;
+    respond(askCoupon);
+    return;
+  }
+
+  if (state.step === 'coupon') {
+    state.booking.coupon_code = value;
     respond(showSummary);
     return;
   }

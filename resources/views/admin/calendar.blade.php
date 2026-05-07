@@ -231,11 +231,11 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="p-label block mb-1">Guest Name *</label>
-                                <input type="text" name="name" x-model="formData.name" required class="p-input" placeholder="Guest Name">
+                                <input type="text" name="name" x-model="formData.name" required class="p-input" placeholder="Guest Name" minlength="3" maxlength="255">
                             </div>
                             <div>
                                 <label class="p-label block mb-1">Phone Number (Optional)</label>
-                                <input type="text" name="phone" x-model="formData.phone" class="p-input" placeholder="Phone">
+                                <input type="text" name="phone" x-model="formData.phone" class="p-input" placeholder="Phone" pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" title="Please enter a 10-digit phone number.">
                             </div>
                         </div>
 

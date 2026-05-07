@@ -59,6 +59,18 @@
                             <i data-lucide="sparkles" class="w-5 h-5 mr-3"></i>
                             Amenities
                         </a>
+
+                        @if(auth()->user()->isSuperAdmin())
+                        <a href="{{ route('admin.admins.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.admins.*') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">
+                            <i data-lucide="users" class="w-5 h-5 mr-3"></i>
+                            Admins
+                        </a>
+
+                        <a href="{{ route('admin.coupons.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.coupons.*') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">
+                            <i data-lucide="ticket" class="w-5 h-5 mr-3"></i>
+                            Coupons
+                        </a>
+                        @endif
                         @endif
 
                         <a href="{{ route('bookings.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('bookings.*') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">

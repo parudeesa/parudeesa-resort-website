@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->foreignId('coupon_id')->nullable()->constrained('coupons')->onDelete('set null');
-            $table->decimal('discount_amount', 10, 2)->default(0)->after('amount');
+            $table->string('email')->nullable()->change();
         });
     }
 
@@ -23,8 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('coupon_id');
-            $table->dropColumn('discount_amount');
+            $table->string('email')->nullable(false)->change();
         });
     }
 };

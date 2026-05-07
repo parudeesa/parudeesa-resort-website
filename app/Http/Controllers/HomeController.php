@@ -8,9 +8,12 @@ use App\Models\Property;
 use App\Models\Booking;
 use App\Models\BlockedDate;
 use App\Models\Amenity;
+use App\Services\BookingPricingService;
 
 class HomeController extends Controller
 {
+    public function __construct(protected BookingPricingService $pricingService) {}
+
     public function index()
     {
         $properties = Property::with('amenities')->get(); // Fetches rooms from your DB
@@ -33,8 +36,9 @@ class HomeController extends Controller
         \Log::info('Property show method called', ['property_id' => $id]);
         $property = Property::with('amenities')->findOrFail($id);
         $amenities = Amenity::where('status', true)->orderBy('name')->get();
+        $activeCoupons = \App\Models\Coupon::where('is_active', true)->get();
 
-        return view('properties.show', compact('property', 'amenities'));
+        return view('properties.show', compact('property', 'amenities', 'activeCoupons'));
     }
 
     public function unavailableDates($id)
@@ -85,32 +89,37 @@ class HomeController extends Controller
     public function storeBooking(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
-            'check_in' => 'required|date',
-            'check_out' => 'required|date',
-            'guests' => 'required|integer|min:1',
+            'name' => 'required|string|min:3|max:255|regex:/^[a-zA-Z\s]+$/',
+            'phone' => 'required|numeric|digits:10',
+            'check_in' => 'required|date|after_or_equal:today',
+            'check_out' => 'required|date|after:check_in',
+            'guests' => 'required|integer|min:1|max:50',
             'property_id' => 'required|exists:properties,id',
             'event_type' => 'nullable|string|max:255',
             'package_name' => 'nullable|string|max:255',
             'amenities' => 'nullable|array',
-            'amount' => 'required|numeric'
+            'amount' => 'required|numeric',
+            'coupon_id' => 'nullable|exists:coupons,id',
+            'discount_amount' => 'nullable|numeric'
         ]);
+
+        $quote = $this->pricingService->quote($request->all());
 
         $booking = Booking::create([
             'user_id' => auth()->id(), // Link to logged-in user if available
             'name' => $request->name,
-            'email' => $request->email,
             'phone' => $request->phone,
-            'check_in' => $request->check_in,
-            'check_out' => $request->check_out,
-            'guests' => $request->guests,
-            'property_id' => $request->property_id,
+            'check_in' => $quote['check_in'],
+            'check_out' => $quote['check_out'],
+            'guests' => $quote['guests'],
+            'property_id' => $quote['property']['id'],
             'event_type' => $request->event_type,
             'package_name' => $request->package_name,
-            'amenities' => $request->amenities,
-            'amount' => $request->amount,
+            'amenities' => $quote['amenities'],
+            'base_amount' => $quote['base_amount'],
+            'amount' => $quote['amount'],
+            'coupon_id' => $quote['coupon_id'],
+            'discount_amount' => $quote['discount_amount'],
             'status' => 'pending',
         ]);
 

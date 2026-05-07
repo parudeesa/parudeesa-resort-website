@@ -56,7 +56,6 @@ class ChatbotBookingController extends Controller
             DB::transaction(function () use ($data, $quote, &$booking, &$payment) {
                 $booking = Booking::create([
                     'name' => $data['name'],
-                    'email' => $data['email'],
                     'phone' => $data['phone'],
                     'check_in' => $quote['check_in'],
                     'check_out' => $quote['check_out'],
@@ -67,6 +66,8 @@ class ChatbotBookingController extends Controller
                     'notes' => $data['notes'] ?? null,
                     'amenities' => $quote['amenities'],
                     'amenity_total' => $quote['amenity_total'],
+                    'coupon_id' => $quote['coupon_id'] ?? null,
+                    'discount_amount' => $quote['discount_amount'] ?? 0,
                     'base_amount' => $quote['base_amount'],
                     'amount' => $quote['amount'],
                     'status' => 'pending',
@@ -252,21 +253,21 @@ class ChatbotBookingController extends Controller
     {
         $rules = [
             'property_id' => ['required', 'integer', 'exists:properties,id'],
-            'check_in' => ['required', 'date'],
+            'check_in' => ['required', 'date', 'after_or_equal:today'],
             'check_out' => ['required', 'date', 'after:check_in'],
-            'guests' => ['required', 'integer', 'min:1'],
+            'guests' => ['required', 'integer', 'min:1', 'max:50'],
             'event_type' => ['nullable', 'string', 'max:255'],
             'package_name' => ['nullable', 'string', 'max:255'],
-            'notes' => ['nullable', 'string'],
+            'notes' => ['nullable', 'string', 'max:1000'],
             'amenities' => ['nullable', 'array'],
             'amenities.*.id' => ['required', 'integer', 'exists:amenities,id'],
             'amenities.*.quantity' => ['nullable', 'integer', 'min:1'],
+            'coupon_code' => ['nullable', 'string', 'max:50'],
         ];
 
         if ($requireContactDetails) {
-            $rules['name'] = ['required', 'string', 'max:255'];
-            $rules['email'] = ['required', 'email', 'max:255'];
-            $rules['phone'] = ['required', 'string', 'max:20'];
+            $rules['name'] = ['required', 'string', 'min:3', 'max:255', 'regex:/^[a-zA-Z\s]+$/'];
+            $rules['phone'] = ['required', 'numeric', 'digits:10'];
         }
 
         return $request->validate($rules);

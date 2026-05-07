@@ -885,11 +885,14 @@ footer {
                   <input type="number" class="bk-input" name="guests" id="guests-input" placeholder="Total Guests" min="1" required />
                   <div id="guest-error" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;line-height:1.2;"></div>
                 </div>
-                <input type="text"   class="bk-input" name="name"   placeholder="Full Name"     required />
-              </div>
-              <div class="form-row">
-                <input type="tel"   class="bk-input" name="phone" placeholder="Phone Number"    required />
-                <input type="email" class="bk-input" name="email" placeholder="Email Address"   required />
+                <div style="position: relative;">
+                  <input type="text" class="bk-input" name="name" placeholder="Full Name" required minlength="3" pattern="[A-Za-z\s]+" title="Name should only contain letters." />
+                  <div class="error-msg" id="err-name" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;">Name is required (min 3 letters, no numbers)</div>
+                </div>
+                <div style="position: relative;">
+                  <input type="tel" class="bk-input" name="phone" placeholder="Phone Number" required pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" />
+                  <div class="error-msg" id="err-phone" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;">Phone number must contain exactly 10 digits.</div>
+                </div>
               </div>
 
               {{-- Amenities --}}
@@ -1076,11 +1079,48 @@ footer {
               
               <div id="wizard-summary-amenities" class="mb-3"></div>
 
+              {{-- Coupon Section in Wizard --}}
+              <div class="coupon-wizard-section mb-3 p-3 rounded-3" style="background:#fff; border:1px dashed var(--gold);">
+                  <div style="font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.5rem;">Have a coupon?</div>
+                  <div class="d-flex gap-2">
+                      <input type="text" id="wizard_coupon_code" placeholder="Enter code" class="form-control form-control-sm" style="border-color:var(--gold-light);">
+                      <button type="button" id="wizard_apply_btn" class="btn btn-sm btn-premium py-1 px-3" onclick="applyWizardCoupon()" style="box-shadow:none; font-size:0.75rem;">Apply</button>
+                      <button type="button" id="wizard_remove_btn" class="btn btn-sm btn-outline-secondary py-1 px-3" onclick="resetWizardCoupon()" style="display:none; font-size:0.75rem; border-radius:50px;">Remove</button>
+                  </div>
+                  <div id="wizard_coupon_msg" style="font-size:0.7rem; margin-top:5px; display:none;"></div>
+                  
+                  <div class="mt-2" id="wizard_available_coupons">
+                      <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px; font-weight: 600;">Available Offers:</div>
+                      <div class="d-flex flex-wrap gap-2">
+                          @foreach($activeCoupons as $c)
+                          <span class="badge bg-white text-orange border border-orange py-2 px-3 rounded-pill" 
+                                style="font-size:0.65rem; cursor:pointer; font-weight: 700; transition: all 0.2s;" 
+                                onclick="if(!currentWizardCoupon){ document.getElementById('wizard_coupon_code').value='{{ $c->code }}'; applyWizardCoupon(); }"
+                                onmouseover="this.style.background='var(--orange-soft)'; this.style.color='white';"
+                                onmouseout="this.style.background='white'; this.style.color='var(--orange)';"
+                                >
+                              <i class="fas fa-tag me-1"></i> {{ $c->code }} — {{ $c->type === 'percentage' ? $c->value.'%' : '₹'.$c->value }} OFF
+                          </span>
+                          @endforeach
+                      </div>
+                  </div>
+              </div>
+
+              <div id="wizard-summary-discount-row" style="display:none; color:#2E7D32; font-weight:700; font-size:0.9rem;" class="mb-2">
+                  <div class="d-flex justify-content-between">
+                      <span>Discount:</span>
+                      <span id="wizard-summary-discount"></span>
+                  </div>
+              </div>
+
               <div class="d-flex justify-content-between align-items-center pt-2">
                 <span style="font-weight:700; font-size:1.1rem; color:var(--text-dark);">Total Amount:</span>
                 <span id="wizard-summary-total" style="font-weight:800; color:var(--gold); font-size:1.5rem;"></span>
               </div>
             </div>
+            <input type="hidden" name="coupon_id" id="form-coupon-id">
+            <input type="hidden" name="discount_amount" id="form-discount-amount">
+
             <div class="d-flex gap-2 mt-4">
               <button type="button" class="btn btn-outline-secondary w-50" style="border-radius:12px; font-weight:600;" onclick="wizardGoToStep(1)">Back</button>
               <button type="button" class="btn-book-submit w-100 mb-0" onclick="handleBookingSubmit(event)">PROCEED TO PAYMENT</button>
@@ -1139,6 +1179,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fpCfg = { minDate: 'today', dateFormat: 'Y-m-d', disable: disabledDates };
   flatpickr('#checkin',  fpCfg);
   flatpickr('#checkout', fpCfg);
+
+  // Sidebar Form Validation
+  const sidebarForm = document.getElementById('bk-form');
+  const sidebarInputs = sidebarForm.querySelectorAll('.bk-input');
+  
+  sidebarInputs.forEach(input => {
+    input.addEventListener('input', function() {
+        const err = this.parentElement.querySelector('.error-msg');
+        if (err) {
+            if (this.checkValidity()) {
+                err.style.display = 'none';
+                this.style.borderColor = '';
+            } else {
+                err.style.display = 'block';
+                this.style.borderColor = '#dc3545';
+            }
+        }
+    });
+  });
 
   initAmenityListeners();
   initStayOptionListeners();
@@ -1221,6 +1280,110 @@ function updateWizardSummary() {
   // Sync values back to hidden form inputs for final submission
   document.getElementById('form-package-name').value = packageName;
   document.getElementById('form-amount').value = grandTotal;
+  
+  // Re-apply coupon if active, ensuring it's calculated from the NEW grandTotal
+  if (currentWizardCoupon) {
+      applyWizardCoupon(true); // true means silent re-apply
+  }
+}
+
+let currentWizardCoupon = null;
+
+async function applyWizardCoupon(isSilent = false) {
+    const codeInput = document.getElementById('wizard_coupon_code');
+    const code = codeInput.value;
+    const msg = document.getElementById('wizard_coupon_msg');
+    const applyBtn = document.getElementById('wizard_apply_btn');
+    const removeBtn = document.getElementById('wizard_remove_btn');
+    
+    // Crucial: Calculate base total from scratch to avoid double deduction
+    const guestCount = getGuestCount();
+    const selectedPackage = document.querySelector('input[name="wizard_package_option"]:checked');
+    const packagePricePerPerson = parseFloat(selectedPackage.value);
+    const baseTotal = parseFloat(document.getElementById('form-base-amount').value) || 0;
+    const packageTotal = packagePricePerPerson * guestCount;
+    const amenitiesTotal = parseFloat(document.getElementById('form-extra-amount').value) || 0;
+    const rawTotal = baseTotal + packageTotal + amenitiesTotal;
+    
+    if (!code) return;
+
+    if (!isSilent) {
+        applyBtn.disabled = true;
+        applyBtn.innerText = '...';
+    }
+
+    try {
+        const response = await fetch('/coupons/validate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ code: code, total: rawTotal })
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+            currentWizardCoupon = data;
+            if (!isSilent) {
+                msg.style.display = 'block';
+                msg.textContent = data.message;
+                msg.style.color = 'green';
+            }
+            
+            document.getElementById('form-coupon-id').value = data.coupon_id;
+            document.getElementById('form-discount-amount').value = data.discount;
+            document.getElementById('form-amount').value = data.new_total;
+            
+            document.getElementById('wizard-summary-discount-row').style.display = 'block';
+            document.getElementById('wizard-summary-discount').textContent = `-₹${data.discount.toLocaleString()}`;
+            document.getElementById('wizard-summary-total').textContent = `₹${data.new_total.toLocaleString()}`;
+            
+            // UI state
+            applyBtn.style.display = 'none';
+            removeBtn.style.display = 'block';
+            codeInput.readOnly = true;
+        } else {
+            if (!isSilent) {
+                msg.style.display = 'block';
+                msg.textContent = data.message;
+                msg.style.color = 'red';
+                applyBtn.disabled = false;
+                applyBtn.innerText = 'Apply';
+            }
+            resetWizardCoupon();
+        }
+    } catch (e) {
+        console.error(e);
+        if (!isSilent) {
+            applyBtn.disabled = false;
+            applyBtn.innerText = 'Apply';
+        }
+    }
+}
+
+function resetWizardCoupon() {
+    currentWizardCoupon = null;
+    document.getElementById('form-coupon-id').value = '';
+    document.getElementById('form-discount-amount').value = '';
+    document.getElementById('wizard-summary-discount-row').style.display = 'none';
+    document.getElementById('wizard_coupon_msg').style.display = 'none';
+    
+    // UI Reset
+    const applyBtn = document.getElementById('wizard_apply_btn');
+    const removeBtn = document.getElementById('wizard_remove_btn');
+    const codeInput = document.getElementById('wizard_coupon_code');
+    
+    applyBtn.style.display = 'block';
+    applyBtn.disabled = false;
+    applyBtn.innerText = 'Apply';
+    removeBtn.style.display = 'none';
+    codeInput.readOnly = false;
+    codeInput.value = '';
+    
+    // Re-calculate total from base + package + amenities
+    updateWizardSummary();
 }
 
 /* ── Stay Option listeners ────────────────────────────────────────────── */
@@ -1624,6 +1787,8 @@ async function handleBookingSubmit(event) {
     base_amount:  parseFloat(formData.get('base_amount'))  || 0,
     extra_amount: parseFloat(formData.get('extra_amount')) || 0,
     amount:       totalAmount,
+    coupon_id:    formData.get('coupon_id'),
+    discount_amount: parseFloat(formData.get('discount_amount')) || 0,
     amenities:    buildAmenityPayload()
   };
 

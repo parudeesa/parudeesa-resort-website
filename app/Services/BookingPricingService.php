@@ -6,6 +6,7 @@ use App\Models\Amenity;
 use App\Models\BlockedDate;
 use App\Models\Booking;
 use App\Models\Property;
+use App\Models\Coupon;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 
@@ -16,6 +17,13 @@ class BookingPricingService
         $property = Property::with(['amenities' => function ($query) {
             $query->where('status', true);
         }])->findOrFail($payload['property_id']);
+
+        $coupon = null;
+        if (!empty($payload['coupon_code'])) {
+            $coupon = Coupon::where('code', $payload['coupon_code'])->where('is_active', true)->first();
+        } elseif (!empty($payload['coupon_id'])) {
+            $coupon = Coupon::where('id', $payload['coupon_id'])->where('is_active', true)->first();
+        }
 
         $checkIn = Carbon::parse($payload['check_in'])->startOfDay();
         $checkOut = Carbon::parse($payload['check_out'])->startOfDay();
@@ -78,6 +86,12 @@ class BookingPricingService
         }
 
         $totalAmount = round($baseAmount + $amenityTotal, 2);
+        
+        $discountAmount = 0;
+        if ($coupon) {
+            $discountAmount = $coupon->calculateDiscount($totalAmount);
+            $totalAmount = max(0, $totalAmount - $discountAmount);
+        }
 
         return [
             'property' => [
@@ -91,6 +105,9 @@ class BookingPricingService
             'guests' => $guests,
             'base_amount' => $baseAmount,
             'amenity_total' => round($amenityTotal, 2),
+            'discount_amount' => round($discountAmount, 2),
+            'coupon_id' => $coupon ? $coupon->id : null,
+            'coupon_code' => $coupon ? $coupon->code : null,
             'amount' => $totalAmount,
             'amenities' => $amenityLines,
         ];

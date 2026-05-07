@@ -45,22 +45,86 @@ class AdminController extends Controller
     }
 
     // --- ADMIN MANAGEMENT (Superadmin only) ---
+    public function adminsIndex()
+    {
+        $admins = \App\Models\User::where('role', 'admin')->latest()->get();
+        return view('admin.admins.index', compact('admins'));
+    }
+
     public function storeAdmin(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|alpha_dash|min:4|max:255|unique:users',
+            'email' => 'nullable|email|max:255|unique:users',
+            'password' => 'required|string|min:8|max:255',
+            'name' => 'required|string|min:3|max:255|regex:/^[a-zA-Z\s]+$/',
         ]);
 
         \App\Models\User::create([
             'name' => $request->name,
             'username' => $request->username,
+            'email' => $request->email,
             'password' => \Illuminate\Support\Facades\Hash::make($request->password),
             'role' => 'admin',
+            'status' => 'active',
         ]);
 
-        return back()->with('success', 'Admin user created successfully.');
+        return redirect()->route('admin.admins.index')->with('success', 'Admin user created successfully.');
+    }
+
+    public function updateAdmin(Request $request, $id)
+    {
+        $admin = \App\Models\User::findOrFail($id);
+        
+        $request->validate([
+            'username' => 'required|string|alpha_dash|min:4|max:255|unique:users,username,' . $id,
+            'email' => 'nullable|email|max:255|unique:users,email,' . $id,
+            'name' => 'required|string|min:3|max:255|regex:/^[a-zA-Z\s]+$/',
+            'password' => 'nullable|string|min:8|max:255',
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
+        }
+
+        $admin->update($data);
+
+        return back()->with('success', 'Admin user updated successfully.');
+    }
+
+    public function destroyAdmin($id)
+    {
+        $admin = \App\Models\User::findOrFail($id);
+        
+        // Prevent deleting self
+        if ($admin->id === auth()->id()) {
+            return back()->with('error', 'You cannot delete yourself.');
+        }
+
+        $admin->delete();
+
+        return back()->with('success', 'Admin user deleted successfully.');
+    }
+
+    public function toggleAdminStatus($id)
+    {
+        $admin = \App\Models\User::findOrFail($id);
+        
+        // Prevent deactivating self
+        if ($admin->id === auth()->id()) {
+            return back()->with('error', 'You cannot deactivate yourself.');
+        }
+
+        $admin->status = ($admin->status === 'active') ? 'inactive' : 'active';
+        $admin->save();
+
+        return back()->with('success', 'Admin status updated successfully.');
     }
 
     // --- BLOCKED DATES ---
@@ -69,10 +133,10 @@ class AdminController extends Controller
     {
         $request->validate([
             'property_id' => 'required|exists:properties,id',
-            'reason' => 'required|string|max:255',
-            'start_date' => 'required|date',
+            'reason' => 'required|string|min:3|max:255',
+            'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string|max:1000'
         ]);
 
         // Authorization check for admin
@@ -166,13 +230,13 @@ class AdminController extends Controller
     {
         $request->validate([
             'property_id' => 'required|exists:properties,id',
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'check_in' => 'required|date',
+            'name' => 'required|string|min:3|max:255',
+            'phone' => 'nullable|numeric|digits:10',
+            'check_in' => 'required|date|after_or_equal:today',
             'check_out' => 'required|date|after_or_equal:check_in',
-            'amount' => 'nullable|numeric',
+            'amount' => 'nullable|numeric|min:0',
             'payment_status' => 'required|string|in:Paid,Pending,Failed',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string|max:1000'
         ]);
 
         // Authorization check for admin

@@ -30,11 +30,11 @@ class PropertyController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric',
-            'location' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'name' => 'required|string|min:3|max:255',
+            'description' => 'required|string|min:10|max:5000',
+            'price' => 'required|numeric|min:0|max:1000000',
+            'location' => 'required|string|min:3|max:255',
+            'phone' => 'nullable|numeric|digits:10',
             'admin_id' => 'nullable|exists:users,id',
             'image_url' => 'nullable|url',
             'gallery_images' => 'nullable|array',
@@ -61,11 +61,11 @@ class PropertyController extends Controller
         }
 
         $rules = [
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'location' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'name' => 'required|string|min:3|max:255',
+            'description' => 'nullable|string|min:10|max:5000',
+            'price' => 'required|numeric|min:0|max:1000000',
+            'location' => 'nullable|string|min:3|max:255',
+            'phone' => 'nullable|numeric|digits:10',
             'image_url' => 'nullable|url',
             'gallery_images' => 'nullable|array',
             'gallery_images.*' => 'nullable|url',

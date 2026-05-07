@@ -28,11 +28,11 @@
                         @csrf
                         <div>
                             <label class="p-label">Amenity Name</label>
-                            <input id="name" name="name" type="text" class="p-input mt-1" placeholder="e.g. Infinity Pool" required />
+                            <input id="name" name="name" type="text" class="p-input mt-1" placeholder="e.g. Infinity Pool" required minlength="3" maxlength="255" />
                         </div>
                         <div>
                             <label class="p-label">Price</label>
-                            <input id="price" name="price" type="number" min="0" step="0.01" class="p-input mt-1" placeholder="e.g. 1000" required />
+                            <input id="price" name="price" type="number" min="0" max="1000000" step="0.01" class="p-input mt-1" placeholder="e.g. 1000" required />
                         </div>
                         <div>
                             <label class="p-label">Pricing Type</label>
@@ -43,15 +43,15 @@
                         </div>
                         <div>
                             <label class="p-label">Description (Optional)</label>
-                            <textarea id="description" name="description" class="p-input mt-1" rows="3" placeholder="Brief details..."></textarea>
+                            <textarea id="description" name="description" class="p-input mt-1" rows="3" placeholder="Brief details..." maxlength="2000"></textarea>
                         </div>
                         <div>
                             <label class="p-label">Image URL (Optional)</label>
-                            <input id="image_url" name="image_url" type="url" class="p-input mt-1" placeholder="https://images.unsplash.com/..." />
+                            <input id="image_url" name="image_url" type="url" class="p-input mt-1" placeholder="https://images.unsplash.com/..." maxlength="2048" />
                         </div>
                         <div>
                             <label class="p-label">Condition Note (Optional)</label>
-                            <input id="condition_note" name="condition_note" type="text" class="p-input mt-1" placeholder="e.g. ₹1000 / person (below 5 people)" />
+                            <input id="condition_note" name="condition_note" type="text" class="p-input mt-1" placeholder="e.g. ₹1000 / person (below 5 people)" maxlength="255" />
                         </div>
                         <div class="flex items-center gap-6">
                             <label class="flex items-center gap-2 p-label">
@@ -196,11 +196,11 @@
                         @method('PATCH')
                         <div>
                             <label class="p-label block mb-2">Amenity Name</label>
-                            <input type="text" name="name" x-model="editName" required class="p-input">
+                            <input type="text" name="name" x-model="editName" required minlength="3" maxlength="255" class="p-input">
                         </div>
                         <div>
                             <label class="p-label block mb-2">Price</label>
-                            <input type="number" name="price" x-model="editPrice" required min="0" step="0.01" class="p-input">
+                            <input type="number" name="price" x-model="editPrice" required min="0" max="1000000" step="0.01" class="p-input">
                         </div>
                         <div>
                             <label class="p-label block mb-2">Pricing Type</label>
@@ -211,15 +211,15 @@
                         </div>
                         <div>
                             <label class="p-label block mb-2">Description (Optional)</label>
-                            <textarea name="description" x-model="editDescription" class="p-input" rows="3"></textarea>
+                            <textarea name="description" x-model="editDescription" class="p-input" rows="3" maxlength="2000"></textarea>
                         </div>
                         <div>
                             <label class="p-label block mb-2">Image URL (Optional)</label>
-                            <input type="url" name="image_url" x-model="editImageUrl" class="p-input">
+                            <input type="url" name="image_url" x-model="editImageUrl" maxlength="2048" class="p-input">
                         </div>
                         <div>
                             <label class="p-label block mb-2">Condition Note (Optional)</label>
-                            <input type="text" name="condition_note" x-model="editConditionNote" class="p-input">
+                            <input type="text" name="condition_note" x-model="editConditionNote" maxlength="255" class="p-input">
                         </div>
                         <div class="flex items-center gap-6">
                             <label class="flex items-center gap-2 p-label">

@@ -19,6 +19,11 @@ class GoogleCalendarService
         $this->calendarId = env('GOOGLE_CALENDAR_ID');
         $this->serviceAccountEmail = env('GOOGLE_SERVICE_ACCOUNT_EMAIL');
 
+        if (!class_exists('\Google\Client')) {
+            Log::warning('Google API Client class not found. Calendar functionality is disabled.');
+            return;
+        }
+
         $this->client = new Client();
         $this->client->setApplicationName('Parudeesa Resort Booking');
         $this->client->setScopes(Calendar::CALENDAR_EVENTS);
@@ -43,6 +48,11 @@ class GoogleCalendarService
             Log::info('Google Calendar not configured, skipping event creation', [
                 'booking_id' => $booking->id,
             ]);
+            return false;
+        }
+
+        if (!$this->client) {
+            Log::warning('Google Client not initialized, skipping event creation');
             return false;
         }
 
@@ -82,6 +92,10 @@ class GoogleCalendarService
     }
     public function createBlockedDate($blockedDate)
 {
+    if (!$this->client) {
+        Log::warning('Google Client not initialized, skipping blocked date creation');
+        return false;
+    }
     try {
         $service = new Calendar($this->client);
 
@@ -89,11 +103,11 @@ class GoogleCalendarService
             'summary' => "Blocked: " . $blockedDate->property->name,
             'description' => $blockedDate->reason ?: "Date blocked manually",
             'start' => [
-                'date' => $blockedDate->blocked_date,
+                'date' => $blockedDate->start_date->format('Y-m-d'),
                 'timeZone' => 'Asia/Kolkata',
             ],
             'end' => [
-                'date' => date('Y-m-d', strtotime($blockedDate->blocked_date . ' +1 day')),
+                'date' => $blockedDate->end_date->addDay()->format('Y-m-d'),
                 'timeZone' => 'Asia/Kolkata',
             ],
         ]);
