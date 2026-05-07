@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+
         \App\Models\User::updateOrCreate(
     ['email' => 'admin@parudeesa.com'], // This is the unique field it checks first
     [
@@ -25,6 +26,13 @@ class DatabaseSeeder extends Seeder
         'is_super_admin' => true
     ]
 );
+
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'admin@parudeesa.com',
+            'password' => bcrypt('password'),                  
+        ]);
+
 
         $this->call([
             AmenitySeeder::class,
