@@ -23,6 +23,19 @@ Route::get('/property/{id}/unavailable-dates', [HomeController::class, 'unavaila
 
 Route::get('/design', [HomeController::class, 'design'])->name('design');
 
+// Policy Pages
+Route::get('/terms-and-conditions', function () {
+    return view('policies.terms-and-conditions');
+});
+
+Route::get('/privacy-policy', function () {
+    return view('policies.privacy-policy');
+});
+
+Route::get('/cancellation-policy', function () {
+    return view('policies.cancellation-policy');
+});
+
 Route::get('/chatbot', [ChatbotController::class, 'show'])->name('chatbot.show');
 Route::post('/chatbot/quote', [ChatbotBookingController::class, 'quote'])->name('chatbot.quote');
 Route::post('/chatbot/checkout', [ChatbotBookingController::class, 'checkout'])->name('chatbot.checkout');
@@ -35,6 +48,7 @@ Route::get('/booking', function () {
 });
 
 Route::post('/bookings', [HomeController::class, 'storeBooking'])->name('bookings.store');
+Route::get('/api/check-phone-bookings/{phone}', [HomeController::class, 'checkPhoneBookings']);
 
 /*
 |--------------------------------------------------------------------------
@@ -44,19 +58,11 @@ Route::post('/bookings', [HomeController::class, 'storeBooking'])->name('booking
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified', 'superadmin'])->name('dashboard');
+})->middleware(['auth', 'verified', 'role:superadmin'])->name('dashboard');
 
-Route::middleware(['auth', 'superadmin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/bookings', [HomeController::class, 'bookingsIndex'])->name('bookings.index');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Authenticated User Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware('auth')->group(function () {
+    Route::patch('/bookings/{booking}/status', [HomeController::class, 'updateBookingStatus'])->name('bookings.update_status');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -64,13 +70,14 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Super Admin Routes
+| Admin & Super Admin Routes
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'superadmin'])->group(function () {
+Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
     Route::post('/property/add', [PropertyController::class, 'store'])->name('property.store');
+    Route::patch('/property/{property}', [PropertyController::class, 'update'])->name('property.update');
     Route::delete('/property/delete/{id}', [PropertyController::class, 'destroy'])->name('property.delete');
 
     // Amenities management
@@ -91,6 +98,15 @@ Route::middleware(['auth', 'superadmin'])->group(function () {
     Route::delete('/calendar/reservations/{id}', [AdminController::class, 'destroyReservation'])->name('admin.calendar.destroy_reservation');
     
     Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Super Admin Only Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
+    Route::post('/admin/create', [AdminController::class, 'storeAdmin'])->name('admin.store');
 });
 
 require __DIR__.'/auth.php';

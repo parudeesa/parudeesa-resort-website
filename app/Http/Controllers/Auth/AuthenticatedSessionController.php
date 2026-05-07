@@ -29,10 +29,12 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
-        if ($user->is_super_admin) {
+        if ($user->role === 'superadmin' || $user->is_super_admin) {
             return redirect()->intended(route('dashboard', absolute: false));
+        } elseif ($user->role === 'admin') {
+            return redirect()->intended(route('properties.index', absolute: false));
         } else {
-            return redirect()->intended(route('home', absolute: false));
+            return redirect()->intended(route('bookings.index', absolute: false));
         }
     }
 

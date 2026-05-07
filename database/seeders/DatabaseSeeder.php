@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             AmenitySeeder::class,
+            EventPackageSeeder::class,
         ]);
     }
 }

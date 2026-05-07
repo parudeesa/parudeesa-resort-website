@@ -310,16 +310,19 @@
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url('/') }}">
-                Parudeesa <small>The Lake View Resort</small>
+                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 75px; width: auto; object-fit: contain;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}"><i class="bi bi-arrow-left me-1"></i> Back to Home</a>
-                    </li>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav mx-auto gap-1">
+                    <li class="nav-item"><a class="nav-link" href="/design">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/design#events">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/design#gallery">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/design#about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/design#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link anav" style="background: rgba(250, 135, 62, .1); color: var(--brand-d) !important;" href="/login">Login</a></li>
                 </ul>
             </div>
         </div>
@@ -330,6 +333,7 @@
         <div class="login-bg"></div>
         <div class="login-card">
             <div class="login-header">
+                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 100px; width: auto; object-fit: contain; margin-bottom: 1.2rem;">
                 <div class="ornament-line"><span>Welcome Back</span></div>
                 <h1><em>Login</em></h1>
             </div>
@@ -346,16 +350,16 @@
                 @endif
 
                 <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}" required autofocus autocomplete="username">
-                    @if ($errors->has('email'))
-                        <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('email') }}</div>
+                    <label for="login">Email / Username / Phone</label>
+                    <input type="text" id="login" name="login" placeholder="Enter email, username or phone" value="{{ old('login') }}" required autofocus autocomplete="username">
+                    @if ($errors->has('login'))
+                        <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('login') }}</div>
                     @endif
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                    <label for="password">Password (Optional for Customers)</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password">
                     @if ($errors->has('password'))
                         <div style="color: #dc3545; font-size: 0.75rem; margin-top: 0.3rem;">{{ $errors->first('password') }}</div>
                     @endif
@@ -379,6 +383,48 @@
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Real-time phone validation
+        const loginInput = document.getElementById('login');
+        const loginForm = loginInput.closest('form');
+        let validationTimeout = null;
+
+        loginInput.addEventListener('input', function() {
+            clearTimeout(validationTimeout);
+            const value = this.value.trim();
+            
+            // Only validate if it looks like a phone number (numeric)
+            if (value && /^\d+$/.test(value)) {
+                validationTimeout = setTimeout(() => {
+                    fetch(`/api/check-phone-bookings/${value}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            const errorDivId = 'phone-validation-error';
+                            let errorDiv = document.getElementById(errorDivId);
+                            
+                            if (!data.exists) {
+                                if (!errorDiv) {
+                                    errorDiv = document.createElement('div');
+                                    errorDiv.id = errorDivId;
+                                    errorDiv.style.color = '#dc3545';
+                                    errorDiv.style.fontSize = '0.75rem';
+                                    errorDiv.style.marginTop = '0.3rem';
+                                    errorDiv.innerText = 'No bookings found with this phone number. Please make a booking first.';
+                                    loginInput.parentNode.appendChild(errorDiv);
+                                }
+                                loginInput.style.borderColor = '#dc3545';
+                            } else {
+                                if (errorDiv) errorDiv.remove();
+                                loginInput.style.borderColor = '';
+                            }
+                        });
+                }, 500);
+            } else {
+                const errorDiv = document.getElementById('phone-validation-error');
+                if (errorDiv) errorDiv.remove();
+                loginInput.style.borderColor = '';
             }
         });
     </script>

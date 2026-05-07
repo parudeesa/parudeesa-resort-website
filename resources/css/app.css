@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --font-heading: 'Playfair Display', serif;
+        --font-body: 'Poppins', sans-serif;
+        --color-heading: #3b2a22;
+        --color-body: #5a5a5a;
+    }
+
+    body {
+        font-family: var(--font-body);
+        font-weight: 400;
+        line-height: 1.7;
+        color: var(--color-body);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, h4 {
+        font-family: var(--font-heading) !important;
+        font-weight: 600;
+        line-height: 1.25;
+        letter-spacing: 0.02em;
+        color: var(--color-heading);
+    }
+
+    p {
+        line-height: 1.8;
+        color: var(--color-body);
+    }
+
+    button, .btn, nav, a, input, select, textarea {
+        font-family: var(--font-body);
+    }
+}

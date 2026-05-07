@@ -12,7 +12,16 @@ class Property extends Model
         'price',
         'location',
         'image_url',
-        'phone'
+        'gallery_images',
+        'highlights',
+        'phone',
+        'admin_id'
+    ];
+
+    protected $casts = [
+        'gallery_images' => 'array',
+        'highlights' => 'array',
+        'amenity_data' => 'array',
     ];
 
     public function amenities()

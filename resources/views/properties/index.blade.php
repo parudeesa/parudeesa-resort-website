@@ -16,7 +16,8 @@
         </div>
         @endif
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 {{ auth()->user()->isSuperAdmin() ? 'lg:grid-cols-3' : '' }} gap-8">
+            @if(auth()->user()->isSuperAdmin())
             <!-- Add Property Form -->
             <div class="lg:col-span-1">
                 <div class="p-card p-6 sm:p-8 h-full sticky top-8">
@@ -48,8 +49,48 @@
                             <input id="phone" name="phone" type="text" class="p-input mt-1" placeholder="918921021202" />
                         </div>
                         <div>
+                            <label class="p-label">Assign Admin</label>
+                            <select name="admin_id" class="p-input mt-1">
+                                <option value="">Select an Admin (Optional)</option>
+                                @foreach($admins as $admin)
+                                <option value="{{ $admin->id }}">{{ $admin->name }} ({{ $admin->username }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
                             <label class="p-label">Cover Image URL</label>
                             <input id="image_url" name="image_url" type="url" class="p-input mt-1" placeholder="https://..." />
+                        </div>
+                        <div>
+                            <label class="p-label">Carousel Images</label>
+                            <div class="space-y-2 mt-1">
+                                @for($i = 0; $i < 5; $i++)
+                                <input name="gallery_images[]" type="url" class="p-input" placeholder="Carousel image {{ $i + 1 }} URL" />
+                                @endfor
+                            </div>
+                        </div>
+                        <div>
+                            <label class="p-label">Amenities shown on card</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                                @foreach($amenities as $amenity)
+                                <label class="flex items-center gap-2 text-sm text-gray-700">
+                                    <input type="checkbox" name="amenities[]" value="{{ $amenity->id }}" class="p-checkbox">
+                                    {{ $amenity->name }}
+                                </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div>
+                            <label class="p-label">Highlights</label>
+                            <div class="space-y-3 mt-2">
+                                @for($i = 0; $i < 5; $i++)
+                                <div class="grid grid-cols-1 gap-2 p-3 rounded-lg bg-orange-50/60 border border-orange-100">
+                                    <input name="highlights[{{ $i }}][label]" type="text" class="p-input" placeholder="Highlight text">
+                                    <input name="highlights[{{ $i }}][icon]" type="text" class="p-input" placeholder="Bootstrap icon, e.g. bi-stars">
+                                    <input name="highlights[{{ $i }}][image]" type="url" class="p-input" placeholder="Highlight image URL">
+                                </div>
+                                @endfor
+                            </div>
                         </div>
                         <div class="pt-4 mt-2">
                             <button type="submit" class="p-btn w-full flex justify-center items-center">
@@ -59,9 +100,10 @@
                     </form>
                 </div>
             </div>
+            @endif
 
             <!-- List Properties Card -->
-            <div class="lg:col-span-2 flex flex-col gap-8">
+            <div class="{{ auth()->user()->isSuperAdmin() ? 'lg:col-span-2' : 'lg:col-span-3' }} flex flex-col gap-8">
                 <div class="p-card p-6 sm:p-8 flex-1">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b pb-3" style="border-color:rgba(250,135,62,.15)">
                         <h3 class="p-serif text-2xl font-bold flex items-center" style="color:#3e2010;">
@@ -100,21 +142,18 @@
                                             <div>
                                                 <div class="p-serif text-lg font-bold p-text">{{ $property->name }}</div>
                                                 <div class="text-xs text-gray-500 mt-0.5">ID: #{{ str_pad($property->id, 4, '0', STR_PAD_LEFT) }}</div>
+                                                @if(auth()->user()->isSuperAdmin() && $property->admin_id)
+                                                <div class="text-[10px] text-orange-600 font-bold uppercase tracking-tighter">Admin: {{ \App\Models\User::find($property->admin_id)->name ?? 'Unknown' }}</div>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex flex-col gap-1">
                                             <div class="flex items-center text-sm text-gray-600">
-                                                <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1.5 text-orange-400"></i>
-                                                {{ $property->location }}
+                                                <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1.5 text-orange-400"></i>
+                                                {{ $property->amenities->pluck('name')->take(3)->join(', ') ?: 'Amenities not set' }}
                                             </div>
-                                            @if($property->phone)
-                                            <div class="flex items-center text-sm text-gray-600">
-                                                <i data-lucide="phone" class="w-3.5 h-3.5 mr-1.5 text-orange-400"></i>
-                                                {{ $property->phone }}
-                                            </div>
-                                            @endif
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -127,9 +166,10 @@
                                             <a href="{{ route('property.show', $property->id) }}" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg transition-colors" title="View Property">
                                                 <i data-lucide="external-link" class="w-4 h-4"></i>
                                             </a>
-                                            <button class="bg-orange-100 hover:bg-orange-200 text-[#e06828] p-2 rounded-lg transition-colors" title="Edit Property">
+                                            <a href="#edit-property-{{ $property->id }}" onclick="document.querySelector('#edit-property-{{ $property->id }} details')?.setAttribute('open', 'open')" class="bg-orange-100 hover:bg-orange-200 text-[#e06828] p-2 rounded-lg transition-colors" title="Edit Property">
                                                 <i data-lucide="pencil" class="w-4 h-4"></i>
-                                            </button>
+                                            </a>
+                                            @if(auth()->user()->isSuperAdmin())
                                             <form action="{{ route('property.delete', $property->id) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to securely delete {{ $property->name }}?');">
                                                 @csrf
                                                 @method('DELETE')
@@ -137,7 +177,89 @@
                                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                                 </button>
                                             </form>
+                                            @endif
                                         </div>
+                                    </td>
+                                </tr>
+                                <tr id="edit-property-{{ $property->id }}" class="bg-orange-50/30">
+                                    <td colspan="4" class="px-6 py-5">
+                                        <details class="rounded-xl border border-orange-100 bg-white p-4">
+                                            <summary class="cursor-pointer font-bold text-[#e06828]">Edit {{ $property->name }} details, carousel, highlights, and amenities</summary>
+                                            <form action="{{ route('property.update', $property) }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                                @csrf
+                                                @method('PATCH')
+                                                <div>
+                                                    <label class="p-label">Property Name</label>
+                                                    <input name="name" type="text" value="{{ $property->name }}" class="p-input mt-1" required>
+                                                </div>
+                                                <div>
+                                                    <label class="p-label">Price (INR)</label>
+                                                    <input name="price" type="number" step="0.01" value="{{ $property->price }}" class="p-input mt-1" required>
+                                                </div>
+                                                <div>
+                                                    <label class="p-label">Location</label>
+                                                    <input name="location" type="text" value="{{ $property->location }}" class="p-input mt-1">
+                                                </div>
+                                                <div>
+                                                    <label class="p-label">WhatsApp Number</label>
+                                                    <input name="phone" type="text" value="{{ $property->phone }}" class="p-input mt-1">
+                                                 </div>
+                                                 @if(auth()->user()->isSuperAdmin())
+                                                 <div>
+                                                     <label class="p-label">Assign Admin</label>
+                                                     <select name="admin_id" class="p-input mt-1">
+                                                         <option value="">Select an Admin</option>
+                                                         @foreach($admins as $admin)
+                                                         <option value="{{ $admin->id }}" @selected($property->admin_id == $admin->id)>{{ $admin->name }} ({{ $admin->username }})</option>
+                                                         @endforeach
+                                                     </select>
+                                                 </div>
+                                                 @endif
+                                                <div class="md:col-span-2">
+                                                    <label class="p-label">Description</label>
+                                                    <textarea name="description" class="p-input mt-1" rows="2">{{ $property->description }}</textarea>
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <label class="p-label">Cover Image URL</label>
+                                                    <input name="image_url" type="url" value="{{ $property->image_url }}" class="p-input mt-1">
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <label class="p-label">Carousel Images</label>
+                                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1">
+                                                        @for($i = 0; $i < 5; $i++)
+                                                        <input name="gallery_images[]" type="url" value="{{ $property->gallery_images[$i] ?? '' }}" class="p-input" placeholder="Carousel image {{ $i + 1 }} URL">
+                                                        @endfor
+                                                    </div>
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <label class="p-label">Amenities shown on card</label>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
+                                                        @foreach($amenities as $amenity)
+                                                        <label class="flex items-center gap-2 text-sm text-gray-700">
+                                                            <input type="checkbox" name="amenities[]" value="{{ $amenity->id }}" class="p-checkbox" @checked($property->amenities->contains($amenity->id))>
+                                                            {{ $amenity->name }}
+                                                        </label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <label class="p-label">Highlights</label>
+                                                    <div class="grid grid-cols-1 gap-3 mt-2">
+                                                        @for($i = 0; $i < 5; $i++)
+                                                        @php($highlight = $property->highlights[$i] ?? [])
+                                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 p-3 rounded-lg bg-orange-50/60 border border-orange-100">
+                                                            <input name="highlights[{{ $i }}][label]" type="text" value="{{ $highlight['label'] ?? '' }}" class="p-input" placeholder="Highlight text">
+                                                            <input name="highlights[{{ $i }}][icon]" type="text" value="{{ $highlight['icon'] ?? '' }}" class="p-input" placeholder="Bootstrap icon, e.g. bi-stars">
+                                                            <input name="highlights[{{ $i }}][image]" type="url" value="{{ $highlight['image'] ?? '' }}" class="p-input" placeholder="Highlight image URL">
+                                                        </div>
+                                                        @endfor
+                                                    </div>
+                                                </div>
+                                                <div class="md:col-span-2 flex justify-end">
+                                                    <button type="submit" class="p-btn px-8">Update Property</button>
+                                                </div>
+                                            </form>
+                                        </details>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -159,6 +281,33 @@
                         {{ $properties->links() }}
                     </div>
                 </div>
+
+                @if(auth()->user()->isSuperAdmin())
+                <!-- Create Admin Card -->
+                <div class="p-card p-6 sm:p-8">
+                    <h3 class="p-serif text-2xl font-bold mb-6 border-b pb-3 flex items-center" style="color:#3e2010; border-color:rgba(250,135,62,.15)">
+                        <i data-lucide="user-plus" class="w-5 h-5 mr-2 text-[#e06828]"></i> Create Admin User
+                    </h3>
+                    <form action="{{ route('admin.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        @csrf
+                        <div>
+                            <label class="p-label">Full Name</label>
+                            <input name="name" type="text" class="p-input mt-1" placeholder="John Doe" required>
+                        </div>
+                        <div>
+                            <label class="p-label">Username</label>
+                            <input name="username" type="text" class="p-input mt-1" placeholder="admin_john" required>
+                        </div>
+                        <div>
+                            <label class="p-label">Password</label>
+                            <input name="password" type="password" class="p-input mt-1" placeholder="••••••••" required>
+                        </div>
+                        <div class="md:col-span-3 flex justify-end mt-2">
+                            <button type="submit" class="p-btn px-8">Create Admin Account</button>
+                        </div>
+                    </form>
+                </div>
+                @endif
             </div>
         </div>
     </div>

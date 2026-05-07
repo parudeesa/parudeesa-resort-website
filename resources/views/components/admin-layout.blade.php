@@ -8,9 +8,9 @@
         <title>{{ config('app.name', 'Parudeesa Resort') }} - Super Admin</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
         
         <!-- Lucide Icons -->
         <script src="https://unpkg.com/lucide@latest"></script>
@@ -19,8 +19,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <style>
-            .parudeesa-bg { background-color: #fff3ec !important; font-family: 'Josefin Sans', sans-serif !important; }
-            .p-serif { font-family: 'Cormorant Garamond', serif !important; }
+            .parudeesa-bg { background-color: #fff3ec !important; font-family: 'Poppins', sans-serif !important; }
+            .p-serif { font-family: 'Playfair Display', serif !important; }
             .p-card { background: #fff8f3; border: 1px solid rgba(250,135,62,.15); box-shadow: 0 6px 32px rgba(250,135,62,.15); border-radius: 16px; }
             .p-btn { background: linear-gradient(135deg, #fa873e, #e06828); color: white; border: none; padding: 0.6rem 1.5rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em; border-radius: 8px; box-shadow: 0 4px 18px rgba(250,135,62,.35); transition: transform 0.3s ease; }
             .p-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(250,135,62,.45); color: white; }
@@ -42,34 +42,50 @@
                 </div>
                 <div class="flex-1 overflow-y-auto py-4">
                     <nav class="px-4 space-y-2">
+                        @if(auth()->user()->isSuperAdmin())
                         <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('dashboard') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">
                             <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i>
                             Dashboard
                         </a>
+                        @endif
+
+                        @if(!auth()->user()->isCustomer())
                         <a href="{{ route('properties.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('properties.*') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">
                             <i data-lucide="home" class="w-5 h-5 mr-3"></i>
-                            Properties
+                            {{ auth()->user()->isSuperAdmin() ? 'Properties' : 'My Properties' }}
                         </a>
+
                         <a href="{{ route('amenities.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('amenities.*') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">
                             <i data-lucide="sparkles" class="w-5 h-5 mr-3"></i>
                             Amenities
                         </a>
+                        @endif
+
                         <a href="{{ route('bookings.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('bookings.*') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">
                             <i data-lucide="calendar-check" class="w-5 h-5 mr-3"></i>
-                            Bookings
+                            {{ auth()->user()->isCustomer() ? 'My Bookings' : 'Bookings' }}
                         </a>
+
+                        @if(!auth()->user()->isCustomer())
                         <a href="{{ route('admin.calendar') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.calendar') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">
                             <i data-lucide="calendar-days" class="w-5 h-5 mr-3"></i>
                             Google Calendar
                         </a>
+
+                        @if(auth()->user()->isSuperAdmin())
                         <a href="{{ route('admin.settings') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.settings') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">
                             <i data-lucide="settings" class="w-5 h-5 mr-3"></i>
                             Settings
                         </a>
+                        @endif
+
+                        @if(auth()->user()->isSuperAdmin())
                         <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('profile.edit') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">
                             <i data-lucide="user-cog" class="w-5 h-5 mr-3"></i>
                             Profile Settings
                         </a>
+                        @endif
+                        @endif
                     </nav>
                 </div>
                 <div class="p-4 border-t border-orange-100">

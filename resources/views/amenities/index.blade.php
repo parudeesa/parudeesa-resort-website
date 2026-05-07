@@ -45,10 +45,22 @@
                             <label class="p-label">Description (Optional)</label>
                             <textarea id="description" name="description" class="p-input mt-1" rows="3" placeholder="Brief details..."></textarea>
                         </div>
-                        <div class="flex items-center gap-3">
+                        <div>
+                            <label class="p-label">Image URL (Optional)</label>
+                            <input id="image_url" name="image_url" type="url" class="p-input mt-1" placeholder="https://images.unsplash.com/..." />
+                        </div>
+                        <div>
+                            <label class="p-label">Condition Note (Optional)</label>
+                            <input id="condition_note" name="condition_note" type="text" class="p-input mt-1" placeholder="e.g. ₹1000 / person (below 5 people)" />
+                        </div>
+                        <div class="flex items-center gap-6">
                             <label class="flex items-center gap-2 p-label">
                                 <input id="status" name="status" type="checkbox" value="1" checked class="p-checkbox" />
                                 Active
+                            </label>
+                            <label class="flex items-center gap-2 p-label">
+                                <input id="is_premium" name="is_premium" type="checkbox" value="1" class="p-checkbox" />
+                                Premium
                             </label>
                         </div>
                         <div class="pt-4 mt-2">
@@ -84,7 +96,7 @@
                                         <th class="px-6 py-4 text-left p-label rounded-tl-lg">Name</th>
                                         <th class="px-6 py-4 text-left p-label">Price</th>
                                         <th class="px-6 py-4 text-left p-label">Pricing Type</th>
-                                        <th class="px-6 py-4 text-left p-label">Description</th>
+                                        <th class="px-6 py-4 text-left p-label">Details</th>
                                         <th class="px-6 py-4 text-left p-label">Created</th>
                                         <th class="px-6 py-4 text-right p-label rounded-tr-lg">Actions</th>
                                     </tr>
@@ -103,6 +115,12 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 <div class="text-sm text-gray-600 truncate max-w-xs">{{ $amenity->description ?: '—' }}</div>
+                                                @if($amenity->condition_note)
+                                                    <div class="text-[10px] text-orange-500 font-bold uppercase mt-1 italic">{{ $amenity->condition_note }}</div>
+                                                @endif
+                                                @if($amenity->is_premium)
+                                                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold mt-1 bg-yellow-100 text-yellow-800 uppercase tracking-tighter">Premium</span>
+                                                @endif
                                             </td>
                                             <td class="px-6 py-4">
                                                 <div class="text-sm text-gray-500">{{ $amenity->created_at->format('M d, Y') }}</div>
@@ -111,7 +129,7 @@
                                                 <div class="flex justify-end space-x-2">
                                                     <!-- Edit Icon with Tooltip -->
                                                     <div class="relative flex items-center group/tooltip">
-                                                        <button @click="openEditModal({{ $amenity->id }}, '{{ addslashes($amenity->name) }}', {{ $amenity->price }}, '{{ $amenity->pricing_type }}', {{ $amenity->status ? 'true' : 'false' }}, '{{ addslashes($amenity->description ?? '') }}')" 
+                                                        <button @click="openEditModal({{ $amenity->id }}, '{{ addslashes($amenity->name) }}', {{ $amenity->price }}, '{{ $amenity->pricing_type }}', {{ $amenity->status ? 'true' : 'false' }}, '{{ addslashes($amenity->description ?? '') }}', {{ $amenity->is_premium ? 'true' : 'false' }}, '{{ $amenity->image_url ?? '' }}', '{{ addslashes($amenity->condition_note ?? '') }}')" 
                                                                 class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-lg transition-colors">
                                                             <i data-lucide="pencil" class="w-4 h-4"></i>
                                                         </button>
@@ -195,10 +213,22 @@
                             <label class="p-label block mb-2">Description (Optional)</label>
                             <textarea name="description" x-model="editDescription" class="p-input" rows="3"></textarea>
                         </div>
-                        <div class="flex items-center gap-3">
+                        <div>
+                            <label class="p-label block mb-2">Image URL (Optional)</label>
+                            <input type="url" name="image_url" x-model="editImageUrl" class="p-input">
+                        </div>
+                        <div>
+                            <label class="p-label block mb-2">Condition Note (Optional)</label>
+                            <input type="text" name="condition_note" x-model="editConditionNote" class="p-input">
+                        </div>
+                        <div class="flex items-center gap-6">
                             <label class="flex items-center gap-2 p-label">
                                 <input type="checkbox" name="status" x-model="editStatus" value="1" class="p-checkbox" />
                                 Active
+                            </label>
+                            <label class="flex items-center gap-2 p-label">
+                                <input type="checkbox" name="is_premium" x-model="editIsPremium" value="1" class="p-checkbox" />
+                                Premium
                             </label>
                         </div>
                         <div class="flex space-x-3 pt-4 border-t border-orange-100">
@@ -265,16 +295,22 @@
                 editPricingType: 'fixed',
                 editStatus: true,
                 editDescription: '',
+                editIsPremium: false,
+                editImageUrl: '',
+                editConditionNote: '',
                 deleteFormAction: '',
                 deleteAmenityName: '',
 
-                openEditModal(id, name, price, pricingType, status, description) {
+                openEditModal(id, name, price, pricingType, status, description, isPremium, imageUrl, conditionNote) {
                     this.editFormAction = `/amenities/${id}`;
                     this.editName = name;
                     this.editPrice = price;
                     this.editPricingType = pricingType;
                     this.editStatus = !!status;
                     this.editDescription = description;
+                    this.editIsPremium = !!isPremium;
+                    this.editImageUrl = imageUrl;
+                    this.editConditionNote = conditionNote;
                     this.isEditModalOpen = true;
                 },
 

@@ -11,7 +11,9 @@
     <title>Parudeesa – The Lake View Resort</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -35,9 +37,9 @@
             --brn-l: #c8895a;
             --olive: #7a7040;
             --olive-l: #a09858;
-            --txt: #2e1a08;
-            --txt-m: #7a5a3a;
-            --txt-l: #b08060;
+            --txt: #3b2a22;
+            --txt-m: #5a5a5a;
+            --txt-l: #7a5a3a;
             --r: 16px;
             --ease: .35s cubic-bezier(.4, 0, .2, 1);
             --sh-s: 0 2px 16px rgba(250, 135, 62, .1);
@@ -61,9 +63,9 @@
         }
 
         body {
-            font-family: 'Josefin Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: var(--brand-pale);
-            color: var(--txt);
+            color: var(--txt-m);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased
         }
@@ -73,11 +75,11 @@
         h3,
         h4,
         h5 {
-            font-family: 'Cormorant Garamond', serif
-        }
-
-        .eb {
-            font-family: 'EB Garamond', serif
+            font-family: 'Playfair Display', serif;
+            color: var(--txt);
+            font-weight: 600;
+            line-height: 1.25;
+            letter-spacing: 0.02em;
         }
 
         body::after {
@@ -193,7 +195,7 @@
             border: none;
             border-radius: 10px;
             padding: .7rem 1.6rem;
-            font-family: 'Josefin Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: .73rem;
             font-weight: 700;
             letter-spacing: .08em;
@@ -220,7 +222,7 @@
             border: none;
             border-radius: 10px;
             padding: .7rem 1.6rem;
-            font-family: 'Josefin Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: .73rem;
             font-weight: 700;
             letter-spacing: .08em;
@@ -245,7 +247,7 @@
             border: 1.5px solid var(--brand);
             border-radius: 10px;
             padding: .68rem 1.6rem;
-            font-family: 'Josefin Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: .73rem;
             font-weight: 700;
             letter-spacing: .08em;
@@ -271,7 +273,7 @@
             border: 1.5px solid rgba(255, 255, 255, .4);
             border-radius: 10px;
             padding: .7rem 1.6rem;
-            font-family: 'Josefin Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: .73rem;
             font-weight: 600;
             letter-spacing: .08em;
@@ -381,7 +383,7 @@
         }
 
         .ph-title {
-            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-size: clamp(1.8rem, 4.2vw, 3.2rem);
             font-weight: 700;
             font-style: italic;
             line-height: 1.1
@@ -460,7 +462,7 @@
         }
 
         .hero-name {
-            font-size: clamp(3.2rem, 9vw, 7.5rem);
+            font-size: clamp(2.5rem, 6.5vw, 4.8rem);
             font-weight: 700;
             font-style: italic;
             line-height: 1.0;
@@ -468,6 +470,8 @@
             text-shadow: 0 4px 40px rgba(0, 0, 0, .45);
             animation: fadeUp .9s ease both
         }
+
+
 
         .hero-sub {
             font-size: clamp(.82rem, 2vw, 1.05rem);
@@ -672,8 +676,8 @@
         }
 
         .prop-desc {
-            font-family: 'EB Garamond', serif;
-            font-size: .98rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: .88rem;
             color: var(--txt-m);
             line-height: 1.65;
             margin-bottom: 1rem
@@ -723,44 +727,62 @@
         }
 
         .amen-card {
-            text-align: center;
-            padding: 2.2rem 1.4rem;
-            background: rgba(255, 243, 236, .06);
-            border: 1px solid rgba(255, 243, 236, .12);
-            border-radius: var(--r);
-            transition: background var(--ease), border-color var(--ease), transform var(--ease)
+            background: #7d5a44; /* Lighter shade of brown */
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
         .amen-card:hover {
-            background: rgba(250, 135, 62, .12);
-            border-color: rgba(250, 135, 62, .3);
-            transform: translateY(-5px)
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
         }
 
-        .amen-icon {
-            width: 68px;
-            height: 68px;
-            background: linear-gradient(135deg, rgba(250, 135, 62, .22), rgba(200, 90, 40, .14));
-            border: 1px solid rgba(250, 135, 62, .25);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.7rem;
-            margin: 0 auto 1.1rem
+        .amen-img-box {
+            position: relative;
+            width: 100%;
+            padding-top: 60%; /* Slightly taller than 16:9 for this look */
+            overflow: hidden;
+        }
+
+        .amen-img-box img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .amen-card:hover .amen-img-box img {
+            transform: scale(1.08);
+        }
+
+        .amen-footer {
+            padding: 1.5rem 1rem;
+            text-align: center;
+            background: #7d5a44; /* Lighter shade of brown */
         }
 
         .amen-title {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--brand-pale);
-            margin-bottom: .4rem
+            color: #fff8f3;
+            margin: 0;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 0.05em;
         }
 
-        .amen-desc {
-            font-size: .78rem;
-            color: rgba(255, 243, 236, .5);
-            line-height: 1.65
+        @media (max-width: 768px) {
+            .amen-title {
+                font-size: 1.1rem;
+            }
         }
 
         /* ═══════ EVENTS BANNER (home) ═══════ */
@@ -796,12 +818,16 @@
         }
 
         .review-card {
+            display: block;
             background: var(--parch);
             border: 1px solid rgba(250, 135, 62, .15);
             border-radius: var(--r);
             padding: 1.6rem;
             height: 100%;
             box-shadow: var(--sh-s);
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
             transition: transform var(--ease), box-shadow var(--ease)
         }
 
@@ -864,7 +890,9 @@
             font-size: .65rem;
             font-weight: 700;
             color: var(--brand-d);
-            margin-bottom: 1.5rem
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            text-decoration: none
         }
 
         /* ═══════ INSTAGRAM REELS ═══════ */
@@ -1703,13 +1731,13 @@
 
         .policy-link {
             font-weight: 700;
-            text-decoration: underline;
-            text-underline-offset: 3px;
+            text-decoration: none;
             color: var(--brand-pale)
         }
 
         .policy-link:hover {
-            color: var(--brand-l)
+            color: var(--brand-l);
+            text-decoration: none
         }
 
         .policy-sep {
@@ -1784,7 +1812,7 @@
         /* ═══════ FLOAT STACK ═══════ */
         .float-stack {
             position: fixed;
-            bottom: calc(8rem + var(--safe-b));
+            bottom: calc(10.2rem + var(--safe-b));
             right: 1.4rem;
             display: flex;
             flex-direction: column;
@@ -1793,13 +1821,13 @@
         }
 
         .float-btn {
-            width: 50px;
-            height: 50px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             color: #fff;
             text-decoration: none;
             box-shadow: 0 4px 20px rgba(0, 0, 0, .25);
@@ -1815,6 +1843,13 @@
 
         .fig {
             background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)
+        }
+
+        .home-ig-float {
+            position: fixed;
+            bottom: calc(6rem + var(--safe-b));
+            right: 1.4rem;
+            z-index: 995
         }
 
         .fbtt {
@@ -2343,6 +2378,10 @@
                 right: .8rem
             }
 
+            .home-ig-float {
+                right: .8rem
+            }
+
             .sp-popup {
                 left: .8rem;
                 max-width: calc(100vw - 5.5rem)
@@ -2565,36 +2604,14 @@
 
 <body>
 
-    <!-- ██ INSTAGRAM MODAL ██ -->
-    <div class="ig-modal-bg" id="igModal" onclick="closeIgModal(event)">
-        <div class="ig-modal">
-            <div class="ig-modal-icon"><i class="bi bi-instagram"></i></div>
-            <h4>Choose Instagram Account</h4>
-            <p>Explore our properties on Instagram:</p>
-            <div class="d-flex gap-2 flex-column">
-                <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
-                    class="btn-brand w-100 justify-content-center mb-2" style="border-radius:10px" onclick="closeIgModal()">
-                    <i class="bi bi-instagram"></i> @Parudeesa_the_paradise (Paradise)
-                </a>
-                <a href="https://www.instagram.com/parudeesa_utopiya" target="_blank"
-                    class="btn-brand w-100 justify-content-center mb-2" style="border-radius:10px" onclick="closeIgModal()">
-                    <i class="bi bi-instagram"></i> @parudeesa_utopiya (Utopiya)
-                </a>
-            </div>
-            <button onclick="closeIgModal()"
-                style="font-size:.72rem;color:var(--txt-m);background:none;border:none;cursor:pointer;margin-top:.3rem;padding:.4rem 1rem">Maybe
-                later</button>
-        </div>
-    </div>
-
     <!-- ██ NAVBAR ██ -->
     <nav class="navbar navbar-expand-lg" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="#" onclick="goPage('home');return false;">
-                Parudeesa <small>The Lake View Resort</small>
+            <a class="navbar-brand" href="#" onclick="goPage('home');return false;" style="display: flex; align-items: center;">
+                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 75px; width: auto; object-fit: contain;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
-                aria-label="Toggle navigation">
+                aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="nav">
@@ -2623,32 +2640,41 @@
     <!-- ████████████████████ PAGE: HOME ████████████████████ -->
     <div id="page-home" class="page active">
 
+        <!-- INSTAGRAM MODAL -->
+        <div class="ig-modal-bg" id="igModal" onclick="closeIgModal(event)">
+            <div class="ig-modal">
+                <div class="ig-modal-icon"><i class="bi bi-instagram"></i></div>
+                <h4>Choose Instagram Account</h4>
+                <p>Explore our properties on Instagram:</p>
+                <div class="d-flex gap-2 flex-column">
+                    <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
+                        class="btn-brand w-100 justify-content-center mb-2" style="border-radius:10px" onclick="closeIgModal()">
+                        <i class="bi bi-instagram"></i> @Parudeesa_the_paradise (Paradise)
+                    </a>
+                    <a href="https://www.instagram.com/parudeesa_utopiya" target="_blank"
+                        class="btn-brand w-100 justify-content-center mb-2" style="border-radius:10px" onclick="closeIgModal()">
+                        <i class="bi bi-instagram"></i> @parudeesa_utopiya (Utopiya)
+                    </a>
+                </div>
+                <button onclick="closeIgModal()"
+                    style="font-size:.72rem;color:var(--txt-m);background:none;border:none;cursor:pointer;margin-top:.3rem;padding:.4rem 1rem">Maybe
+                    later</button>
+            </div>
+        </div>
+        <div class="home-ig-float">
+            <a href="#" onclick="showIgModal();return false;" class="float-btn fig"
+                title="Instagram" aria-label="Open Instagram accounts"><i class="bi bi-instagram"></i></a>
+        </div>
+
         <!-- HERO -->
         <section class="hero">
             <div class="hero-bg"></div>
             <div class="hero-ov"></div>
             <div class="hero-vig"></div>
             <div class="hero-frame"></div>
-            <div class="container hero-ct py-5">
-                <p
-                    style="font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,243,236,.5);margin-bottom:.6rem;animation:fadeUp .9s ease both">
-                    ✦ Kerala, India ✦</p>
+            <div class="container hero-ct py-5" style="display:flex;align-items:center;justify-content:center;min-height:100%">
                 <h1 class="hero-name">Parudeesa</h1>
-                <p class="hero-sub">The Lake View Resort</p>
-                <div class="hero-div"><span>✦</span></div>
-                <p class="hero-tag">"Experience Serenity by the Lake"</p>
-                <div class="hero-btns">
-                    <a onclick="goPage('booking')" class="btn-brand"><i class="bi bi-calendar-check"></i> Book Now</a>
-                    <a onclick="goPage('events')" class="btn-ghost"><i class="bi bi-stars"></i> Explore Events</a>
-                    <a href="#" onclick="toggleChatbot();return false;" class="btn-wa"><i class="bi bi-whatsapp"></i>
-                        Chat with
-                        Us</a>
-                </div>
-                <div class="wa-note mt-3" style="color:rgba(255,243,236,.55)">
-                    <i class="bi bi-whatsapp" style="color:#25D366"></i> Instant booking via WhatsApp
-                </div>
             </div>
-            <div class="scroll-hint"><i class="bi bi-chevron-double-down d-block mb-1"></i>Scroll</div>
         </section>
 
         <!-- FEATURED PROPERTIES -->
@@ -2673,17 +2699,15 @@
                                         alt="{{ $property->name }}" loading="lazy" />
                                 </a>
                                 <div class="prop-img-ov"></div>
-                                <div class="prop-price-b"><span class="amt">₹{{ number_format($property->price, 0) }}</span><span class="per">/
-                                        Night</span></div>
                             </div>
                             <div class="prop-body">
                                 <h3 class="prop-name">{{ $property->name }}</h3>
-                                <p class="prop-desc">{{ $property->description ?: 'Beautiful lakeside property at Parudeesa.' }}</p>
                                 <div class="prop-pills">
-                                    <span class="pill"><i class="bi bi-geo-alt me-1"></i>{{ $property->location ?: 'Kerala, India' }}</span>
-                                    @if($property->phone)
-                                    <span class="pill"><i class="bi bi-telephone me-1"></i>{{ $property->phone }}</span>
-                                    @endif
+                                    @forelse($property->amenities->take(4) as $amenity)
+                                    <span class="pill"><i class="bi bi-stars me-1"></i>{{ $amenity->name }}</span>
+                                    @empty
+                                    <span class="pill"><i class="bi bi-stars me-1"></i>Sunset lake stay</span>
+                                    @endforelse
                                 </div>
                                 <div class="prop-footer">
                                     <a href="{{ route('property.show', $property) }}" class="btn-brand w-100 justify-content-center"><i class="bi bi-eye"></i> View Details</a>
@@ -2707,75 +2731,69 @@
                 </div>
                 <div class="row g-4 justify-content-center">
                     <!-- Infinity Pool -->
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                    <div class="col-12 col-md-6 col-lg-4 reveal">
                         <div class="amen-card">
-                            <div class="amen-icon">🏊‍♂️</div>
-                            <div class="amen-title">Infinity Pool</div>
-                            <p class="amen-desc">Relax with seamlessly blended lake views in our premium pool.</p>
-                        </div>
-                    </div>
-                    <!-- Lake View Dining -->
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
-                        <div class="amen-card">
-                            <div class="amen-icon">🍽️</div>
-                            <div class="amen-title">Lake View Dining</div>
-                            <p class="amen-desc">Curated sunset dining directly by the tranquil waters.</p>
+                            <div class="amen-img-box">
+                                <img src="{{ asset('images/experiences/infinity-pool.png') }}" alt="Infinity Pool" loading="lazy">
+                            </div>
+                            <div class="amen-footer">
+                                <h3 class="amen-title">Infinity Pool</h3>
+                            </div>
                         </div>
                     </div>
                     <!-- Campfire Area -->
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                    <div class="col-12 col-md-6 col-lg-4 reveal">
                         <div class="amen-card">
-                            <div class="amen-icon">🔥</div>
-                            <div class="amen-title">Campfire Area</div>
-                            <p class="amen-desc">Cozy evenings under the stars with dedicated pit spots.</p>
-                        </div>
-                    </div>
-                    <!-- Free WiFi -->
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
-                        <div class="amen-card">
-                            <div class="amen-icon">📶</div>
-                            <div class="amen-title">Free WiFi</div>
-                            <p class="amen-desc">Stay connected seamlessly throughout your staycover.</p>
-                        </div>
-                    </div>
-                    <!-- Indoor Games -->
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
-                        <div class="amen-card">
-                            <div class="amen-icon">🎱</div>
-                            <div class="amen-title">Indoor Games</div>
-                            <p class="amen-desc">A fun assortment of games for families and casual evenings.</p>
-                        </div>
-                    </div>
-                    <!-- Kids Play Area -->
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
-                        <div class="amen-card">
-                            <div class="amen-icon">🛝</div>
-                            <div class="amen-title">Kids Play Area</div>
-                            <p class="amen-desc">Safe, engaging zones specially designed for younger guests.</p>
+                            <div class="amen-img-box">
+                                <img src="{{ asset('images/experiences/campfire.png') }}" alt="Campfire Area" loading="lazy">
+                            </div>
+                            <div class="amen-footer">
+                                <h3 class="amen-title">Campfire Area</h3>
+                            </div>
                         </div>
                     </div>
                     <!-- Boating -->
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                    <div class="col-12 col-md-6 col-lg-4 reveal">
                         <div class="amen-card">
-                            <div class="amen-icon">🚣</div>
-                            <div class="amen-title">Boating</div>
-                            <p class="amen-desc">Explore the waters at your pace with dawn and dusk rides.</p>
+                            <div class="amen-img-box">
+                                <img src="{{ asset('images/experiences/boating.png') }}" alt="Boating" loading="lazy">
+                            </div>
+                            <div class="amen-footer">
+                                <h3 class="amen-title">Boating Experience</h3>
+                            </div>
                         </div>
                     </div>
                     <!-- Event Space -->
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                    <div class="col-12 col-md-6 col-lg-4 reveal">
                         <div class="amen-card">
-                            <div class="amen-icon">🎊</div>
-                            <div class="amen-title">Event Space</div>
-                            <p class="amen-desc">Stunning backdrops tailored for grand and intimate celebrations.</p>
+                            <div class="amen-img-box">
+                                <img src="{{ asset('images/experiences/event-space.png') }}" alt="Event Space" loading="lazy">
+                            </div>
+                            <div class="amen-footer">
+                                <h3 class="amen-title">Lakeside Events</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- High-Speed WiFi -->
+                    <div class="col-12 col-md-6 col-lg-4 reveal">
+                        <div class="amen-card">
+                            <div class="amen-img-box">
+                                <img src="{{ asset('images/experiences/wifi.png') }}" alt="High-Speed WiFi" loading="lazy">
+                            </div>
+                            <div class="amen-footer">
+                                <h3 class="amen-title">Free WiFi</h3>
+                            </div>
                         </div>
                     </div>
                     <!-- Parking Facility -->
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
+                    <div class="col-12 col-md-6 col-lg-4 reveal">
                         <div class="amen-card">
-                            <div class="amen-icon">🅿️</div>
-                            <div class="amen-title">Parking Facility</div>
-                            <p class="amen-desc">Spacious, secure parking for all staying and visiting guests.</p>
+                            <div class="amen-img-box">
+                                <img src="{{ asset('images/experiences/parking.png') }}" alt="Parking Facility" loading="lazy">
+                            </div>
+                            <div class="amen-footer">
+                                <h3 class="amen-title">Parking Facility</h3>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2786,81 +2804,62 @@
         <section class="ev-banner">
             <div class="ev-banner-bg"></div>
             <div class="ev-banner-ov"></div>
-            <div class="container ev-banner-ct reveal">
-                <span class="eyebrow" style="color:rgba(255,243,236,.7)">Celebrations at Parudeesa</span>
+            <div class="container ev-banner-ct reveal text-center">
+                <span class="eyebrow" style="color:rgba(255,243,236,.7); letter-spacing:0.2em; text-transform:uppercase; font-size:0.6rem; font-weight:700; display:block; margin-bottom:1rem;">CELEBRATIONS AT PARUDEESA</span>
                 <h2
-                    style="font-size:clamp(2rem,5vw,4rem);font-weight:700;font-style:italic;color:var(--brand-pale);margin-bottom:1rem">
-                    Make Every Moment <em style="color:var(--brand-l)">Unforgettable</em></h2>
-                <p class="eb mb-4"
-                    style="color:rgba(255,243,236,.75);font-size:1.1rem;max-width:540px;margin:0 auto 2rem;line-height:1.75">
-                    From
-                    intimate birthday celebrations to grand 200-person weddings — Parudeesa is Kerala's premier lakeside
-                    events
-                    destination.</p>
-                <div class="d-flex gap-3 justify-content-center flex-wrap">
-                    <a onclick="goPage('events')" class="btn-brand" style="cursor:pointer"><i
-                            class="bi bi-stars me-1"></i>
-                        Explore All Packages</a>
-                    <a href="/chatbot"
-                        target="_blank" class="btn-ghost"><i class="bi bi-whatsapp me-1"></i> Enquire Now</a>
+                    style="font-size:clamp(2.5rem,5vw,4.5rem);font-weight:700;color:var(--brand-pale);margin-bottom:1rem;font-family:'Cormorant Garamond',serif">
+                    Make Every Moment <em style="color:var(--brand-l);font-style:italic">Unforgettable</em></h2>
+                <p class="eb mb-5"
+                    style="color:rgba(255,243,236,.85);font-size:1rem;margin:0 auto;line-height:1.75;max-width:500px">
+                    Premier lakeside events destination.</p>
+
+                <div class="row justify-content-center gap-3 mb-5 px-3">
+                    <div class="col-6 col-md-3" style="max-width: 220px;">
+                        <div style="padding: 1.8rem 1rem; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--r); height: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+                            <div style="font-weight:700; color:var(--brand-l); font-size:1.1rem; letter-spacing:0.1em; margin-bottom:0.5rem; font-family:'Cormorant Garamond',serif">PREMIUM</div>
+                            <div style="font-size:0.65rem; color:rgba(255,255,255,0.9); letter-spacing:0.15em; font-weight:700; text-transform:uppercase">PARTY PACKAGE</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3" style="max-width: 220px;">
+                        <div style="padding: 1.8rem 1rem; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--r); height: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+                            <div style="font-weight:700; color:var(--brand-l); font-size:1.1rem; letter-spacing:0.1em; margin-bottom:0.5rem; font-family:'Cormorant Garamond',serif">GRAND</div>
+                            <div style="font-size:0.65rem; color:rgba(255,255,255,0.9); letter-spacing:0.15em; font-weight:700; text-transform:uppercase">CELEBRATION</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3" style="max-width: 220px;">
+                        <div style="padding: 1.8rem 1rem; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--r); height: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+                            <div style="font-weight:700; color:var(--brand-l); font-size:1.1rem; letter-spacing:0.1em; margin-bottom:0.5rem; font-family:'Cormorant Garamond',serif">200+</div>
+                            <div style="font-size:0.65rem; color:rgba(255,255,255,0.9); letter-spacing:0.15em; font-weight:700; text-transform:uppercase">GUEST CAPACITY</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3" style="max-width: 220px;">
+                        <div style="padding: 1.8rem 1rem; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--r); height: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+                            <div style="font-weight:700; color:var(--brand-l); font-size:1.1rem; letter-spacing:0.1em; margin-bottom:0.5rem; font-family:'Cormorant Garamond',serif">100%</div>
+                            <div style="font-size:0.65rem; color:rgba(255,255,255,0.9); letter-spacing:0.15em; font-weight:700; text-transform:uppercase">CUSTOMISABLE</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="row g-3 mt-5 justify-content-center">
-                    <div class="col-6 col-md-3">
-                        <div
-                            style="background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:1.2rem;text-align:center">
-                            <div
-                                style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--brand-l)">
-                                ₹25K</div>
-                            <div
-                                style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,243,236,.65);margin-top:.2rem">
-                                Party Package</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div
-                            style="background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:1.2rem;text-align:center">
-                            <div
-                                style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--brand-l)">
-                                ₹75K</div>
-                            <div
-                                style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,243,236,.65);margin-top:.2rem">
-                                Grand Celebration</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div
-                            style="background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:1.2rem;text-align:center">
-                            <div
-                                style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--brand-l)">
-                                200+</div>
-                            <div
-                                style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,243,236,.65);margin-top:.2rem">
-                                Guest Capacity</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div
-                            style="background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:1.2rem;text-align:center">
-                            <div
-                                style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--brand-l)">
-                                100%</div>
-                            <div
-                                style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,243,236,.65);margin-top:.2rem">
-                                Customisable</div>
-                        </div>
-                    </div>
+
+                <div class="d-flex justify-content-center">
+                    <a onclick="goPage('events')" class="btn-brand" style="cursor:pointer; display:inline-flex; width:auto; padding:0.8rem 2rem;"><i
+                            class="bi bi-stars me-1"></i>
+                        EXPLORE ALL PACKAGES</a>
                 </div>
             </div>
         </section>
 
         <!-- GOOGLE REVIEWS / TESTIMONIALS -->
+        @php
+            $googleReviewsUrl = 'https://www.google.com/travel/search?q=parudeesa%20resort&g2lb=4965990%2C72471280%2C72560029%2C72573224%2C72647020%2C72686036%2C72803964%2C72882230%2C72958624%2C73059275%2C73064764%2C73249150%2C121529349%2C121608705&hl=en-IN&gl=in&ssta=1&ts=CAEaRwopEicyJTB4M2IwODEzZTEyZmU0OWMzOToweDgxMzcxYzE5NGU1Zjc4NDYSGhIUCgcI6g8QBRgEEgcI6g8QBRgFGAEyAhAA&qs=CAEyFENnc0l4dkQ5OHBTRHg1dUJBUkFCOAJCCQlGeF9OGRw3gUIJCUZ4X04ZHDeB&ap=ugEHcmV2aWV3cw&ictx=111&ved=0CAAQ5JsGahcKEwjI-8rUrZeUAxUAAAAAHQAAAAAQBA';
+        @endphp
         <section class="reviews-sec">
             <div class="container">
                 <div class="text-center mb-5 reveal">
                     <div class="ornament-line"><span>What Guests Say</span></div>
                     <span class="eyebrow">Guest Reviews</span>
                     <h2 class="sec-title">Memories <em>Made Here</em></h2>
-                    <a href="https://share.google/1u2VEy60cnApQDgkK" target="_blank" class="google-badge mt-3">
+                    <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="google-badge mt-3"
+                        aria-label="Open Parudeesa Resort Google Travel reviews">
                         <svg width="16" height="16" viewBox="0 0 48 48">
                             <path fill="#EA4335"
                                 d="M24 9.5c3.5 0 6.3 1.2 8.4 3.2l6.3-6.3C34.6 2.7 29.7.5 24 .5 14.6.5 6.7 6.1 3 14.1l7.4 5.7C12.1 13 17.6 9.5 24 9.5z" />
@@ -2871,87 +2870,93 @@
                             <path fill="#34A853"
                                 d="M24 45.5c5.7 0 10.5-1.9 14-5.1l-7.4-5.7c-1.9 1.3-4.4 2.1-6.6 2.1-6.4 0-11.9-3.5-13.6-9.8l-7.4 5.7C6.7 40.9 14.6 45.5 24 45.5z" />
                         </svg>
-                        5.0 ★ Google Reviews · 200+ Happy Guests
+                        5.0 - Google Reviews - 200+ Happy Guests
                     </a>
                 </div>
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-4 reveal">
-                        <div class="review-card">
+                        <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="review-card"
+                            aria-label="Open Google Travel review by Sona Babu">
                             <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Amazing place! The views were spectacular, and the service was
-                                absolutely top-notch."</p>
+                            <p class="review-text">"Beautiful lakeside resort with great service, perfect for events and
+                                relaxing with friends and family."</p>
                             <div class="d-flex align-items-center gap-3">
-                                <div class="review-av">SJ</div>
+                                <div class="review-av">SB</div>
                                 <div>
-                                    <div class="review-name">Sarah J.</div>
+                                    <div class="review-name">Sona Babu</div>
                                     <div class="review-src">Google Review</div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-md-4 reveal">
-                        <div class="review-card">
+                        <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="review-card"
+                            aria-label="Open Google Travel review by Raseena P S">
                             <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Parudeesa The Paradise made our friend's gathering unforgettably
-                                beautiful! Highly recommend the sunset views."</p>
+                            <p class="review-text">"Budget-friendly and peaceful place near the city, ideal for
+                                gatherings and get-togethers."</p>
                             <div class="d-flex align-items-center gap-3">
-                                <div class="review-av">AK</div>
+                                <div class="review-av">RP</div>
                                 <div>
-                                    <div class="review-name">Amit K.</div>
+                                    <div class="review-name">Raseena P S</div>
                                     <div class="review-src">Google Review</div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-md-4 reveal">
-                        <div class="review-card">
+                        <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="review-card"
+                            aria-label="Open Google Travel review by Mathew Varghese">
                             <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Our wedding at Parudeesa Utopiya was a dream come true. The event
-                                space handled all 200 guests effortlessly."</p>
+                            <p class="review-text">"Nice natural atmosphere with amazing lake views, especially at night
+                                - great place to hang out."</p>
                             <div class="d-flex align-items-center gap-3">
-                                <div class="review-av">RN</div>
+                                <div class="review-av">MV</div>
                                 <div>
-                                    <div class="review-name">Riya N.</div>
+                                    <div class="review-name">Mathew Varghese</div>
                                     <div class="review-src">Google Review</div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-md-4 reveal">
-                        <div class="review-card">
+                        <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="review-card"
+                            aria-label="Open Google Travel review by Jess N George">
                             <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"We loved the lake view dining and the complimentary boating! Best
-                                family gathering spot."</p>
+                            <p class="review-text">"Calm and comfortable resort with scenic beauty, perfect for relaxing
+                                stays and private events."</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="review-av">JG</div>
+                                <div>
+                                    <div class="review-name">Jess. N. George</div>
+                                    <div class="review-src">Google Review</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4 reveal">
+                        <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="review-card"
+                            aria-label="Open Google Travel review by Midhun Dev">
+                            <div class="review-stars">★★★★★</div>
+                            <p class="review-text">"Amazing stay with friends, great lake views, friendly staff, and
+                                excellent facilities."</p>
                             <div class="d-flex align-items-center gap-3">
                                 <div class="review-av">MD</div>
                                 <div>
-                                    <div class="review-name">Manoj D.</div>
-                                    <div class="review-src">Google Review</div>
+                                    <div class="review-name">Midhun Dev</div>
+                                    <div class="review-src">Google Review - 6 months ago</div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 reveal">
-                        <div class="review-card">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Corporate retreat was fantastic. Superb WiFi, great campfire area,
-                                and infinity pool."</p>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="review-av">PT</div>
-                                <div>
-                                    <div class="review-name">Priya T.</div>
-                                    <div class="review-src">Google Review</div>
-                                </div>
-                            </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
                 <div class="text-center mt-4 reveal">
-                    <a href="https://share.google/1u2VEy60cnApQDgkK" target="_blank" class="btn-outline-brand">Read All
+                    <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="btn-outline-brand">Read All
                         Reviews on Google <i class="bi bi-arrow-right ms-1"></i></a>
                 </div>
             </div>
         </section>
+
         <!-- INSTAGRAM REELS -->
         <section class="reels-sec">
             <div class="container">
@@ -3061,13 +3066,7 @@
                                 <div class="ev-cap"><i class="bi bi-briefcase-fill me-1"></i>50 People</div>
                             </div>
                             <div class="ev-body">
-                                <div class="ev-price" style="color:#8a6a20">Enquire<small> pricing</small></div>
-                                <p class="ev-desc">Team-building activities, bonfire evenings, kayaking, and a full
-                                    catered retreat for your organisation.</p>
-                                <a href="/chatbot"
-                                    target="_blank" class="btn-wa w-100 justify-content-center"
-                                    style="background:linear-gradient(135deg,#8a6a20,#b89038)"><i
-                                        class="bi bi-whatsapp"></i> Enquire Now</a>
+                                <p class="ev-desc">Elegant lakeside team experience</p>
                             </div>
                         </div>
                     </div>
@@ -3080,12 +3079,7 @@
                                 <div class="ev-cap"><i class="bi bi-people-fill me-1"></i>Small Group Gathering</div>
                             </div>
                             <div class="ev-body">
-                                <div class="ev-price">Enquire<small> pricing</small></div>
-                                <p class="ev-desc">Perfect for birthdays or catching up with friends right by the lake.
-                                </p>
-                                <a href="/chatbot"
-                                    target="_blank" class="btn-wa w-100 justify-content-center"><i
-                                        class="bi bi-whatsapp"></i> Enquire Now</a>
+                                <p class="ev-desc">Perfect for intimate moments by the lake</p>
                             </div>
                         </div>
                     </div>
@@ -3098,13 +3092,7 @@
                                 <div class="ev-cap"><i class="bi bi-house-heart fill me-1"></i>All Ages</div>
                             </div>
                             <div class="ev-body">
-                                <div class="ev-price" style="color:#2d7a6e">Enquire<small> pricing</small></div>
-                                <p class="ev-desc">A comfortable stay with delicious meals, kids play area, and bonding
-                                    by the campfire.</p>
-                                <a href="/chatbot"
-                                    target="_blank" class="btn-wa w-100 justify-content-center"
-                                    style="background:linear-gradient(135deg,#2d7a6e,#1a5a52)"><i
-                                        class="bi bi-whatsapp"></i> Enquire Now</a>
+                                <p class="ev-desc">Memorable moments for all ages</p>
                             </div>
                         </div>
                     </div>
@@ -3117,13 +3105,7 @@
                                 <div class="ev-cap"><i class="bi bi-heart-fill me-1"></i>200 People</div>
                             </div>
                             <div class="ev-body">
-                                <div class="ev-price" style="color:#7a5c6e">Enquire<small> pricing</small></div>
-                                <p class="ev-desc">Grand lakeside wedding with premium stage and decor, yacht access,
-                                    and valet event coordination.</p>
-                                <a href="/chatbot"
-                                    target="_blank" class="btn-wa w-100 justify-content-center"
-                                    style="background:linear-gradient(135deg,#7a5c6e,#5a3f52)"><i
-                                        class="bi bi-whatsapp"></i> Enquire Now</a>
+                                <p class="ev-desc">Grand venue for special days</p>
                             </div>
                         </div>
                     </div>
@@ -3136,12 +3118,7 @@
                                 <div class="ev-cap"><i class="bi bi-stars me-1"></i>Fully Tailored</div>
                             </div>
                             <div class="ev-body">
-                                <div class="ev-price" style="color:#4a6a30">Custom <small>pricing</small></div>
-                                <p class="ev-desc">Have something unique in mind? We'll craft a bespoke lakeside
-                                    experience just for you.</p>
-                                <a href="/chatbot"
-                                    target="_blank" class="btn-brand w-100 justify-content-center"><i
-                                        class="bi bi-whatsapp"></i> Enquire Now</a>
+                                <p class="ev-desc">Bespoke experiences crafted for you</p>
                             </div>
                         </div>
                     </div>
@@ -3179,57 +3156,42 @@
                     <button class="gal-btn" onclick="filterGal(this,'food')">Dining</button>
                 </div>
                 <div class="gal-grid reveal" id="galGrid">
-                    <div class="gal-item wide" data-cat="lake" onclick="showIgModal()"><img
+                    <div class="gal-item wide" data-cat="lake"><img
                             src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80"
                             alt="Lakeside sunset" loading="lazy" />
-                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
                     </div>
-                    <div class="gal-item tall" data-cat="property" onclick="showIgModal()"><img
+                    <div class="gal-item tall" data-cat="property"><img
                             src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=500&q=80"
                             alt="Parudeesa The Paradise" loading="lazy" />
-                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
                     </div>
-                    <div class="gal-item" data-cat="events" onclick="showIgModal()"><img
+                    <div class="gal-item" data-cat="events"><img
                             src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&q=80"
                             alt="Event celebration" loading="lazy" />
-                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
                     </div>
-                    <div class="gal-item" data-cat="lake" onclick="showIgModal()"><img
+                    <div class="gal-item" data-cat="lake"><img
                             src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=500&q=80"
                             alt="Lake view" loading="lazy" />
-                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
                     </div>
-                    <div class="gal-item" data-cat="property" onclick="showIgModal()"><img
+                    <div class="gal-item" data-cat="property"><img
                             src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=500&q=80"
                             alt="Parudeesa Utopiya" loading="lazy" />
-                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
                     </div>
-                    <div class="gal-item wide" data-cat="events" onclick="showIgModal()"><img
+                    <div class="gal-item wide" data-cat="events"><img
                             src="https://images.unsplash.com/photo-1519741497674-611481863552?w=900&q=80"
                             alt="Wedding setup" loading="lazy" />
-                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
                     </div>
-                    <div class="gal-item" data-cat="food" onclick="showIgModal()"><img
+                    <div class="gal-item" data-cat="food"><img
                             src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&q=80"
                             alt="Lakeside dining" loading="lazy" />
-                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
                     </div>
-                    <div class="gal-item" data-cat="lake" onclick="showIgModal()"><img
+                    <div class="gal-item" data-cat="lake"><img
                             src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500&q=80"
                             alt="Lake cabin" loading="lazy" />
-                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
                     </div>
-                    <div class="gal-item" data-cat="events" onclick="showIgModal()"><img
+                    <div class="gal-item" data-cat="events"><img
                             src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&q=80"
                             alt="Party night" loading="lazy" />
-                        <div class="gal-item-ov"><i class="bi bi-instagram"></i></div>
                     </div>
-                </div>
-                <div class="text-center mt-4 reveal">
-                    <a href="#" onclick="showIgModal();return false;" class="btn-brand"
-                        style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888)">
-                        <i class="bi bi-instagram me-1"></i> View on Instagram
-                    </a>
                 </div>
             </div>
         </section>
@@ -3283,8 +3245,6 @@
                             <a onclick="goPage('contact')" class="btn-brand" style="cursor:pointer"><i
                                     class="bi bi-telephone"></i>
                                 Get in Touch</a>
-                            <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
-                                class="btn-outline-brand"><i class="bi bi-instagram"></i> Follow Us</a>
                         </div>
                     </div>
                 </div>
@@ -3453,20 +3413,6 @@
                                 </div>
                             </div>
                             <div class="contact-info-item">
-                                <div class="ci-icon"
-                                    style="color:#dc2743;background:rgba(220,39,67,.1);border-color:rgba(220,39,67,.2)">
-                                    <i class="bi bi-instagram"></i>
-                                </div>
-                                <div>
-                                    <div class="ci-label">Instagram</div>
-                                    <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
-                                        class="ci-value"
-                                        style="text-decoration:none;color:var(--brn-dk)">@parudeesa_utopiya &
-                                        @Parudeesa_the_paradise</a>
-                                    <div class="ci-sub">DMs open for enquiries</div>
-                                </div>
-                            </div>
-                            <div class="contact-info-item">
                                 <div class="ci-icon"><i class="bi bi-envelope"></i></div>
                                 <div>
                                     <div class="ci-label">Email</div>
@@ -3485,11 +3431,13 @@
                         </div>
 
                         <!-- Map -->
-                        <div class="map-embed mt-3 reveal">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63064.6!2d76.5!3d9.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b062ba16a5f9a1b%3A0x1234567890abcdef!2sKerala%20Backwaters!5e0!3m2!1sen!2sin!4v1234567890"
-                                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
+                        <a href="https://www.google.com/maps/place/Parudeesa+:+The+Lakeview+Resort/@10.0268921,76.2646621,17z/data=!4m9!3m8!1s0x3b0813e12fe49c39:0x81371c194e5f7846!5m2!4m1!1i2!8m2!3d10.0268921!4d76.267237!16s%2Fg%2F11rvgn8spk?hl=en-US&entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" style="text-decoration:none; display:block;">
+                            <div class="map-embed mt-3 reveal">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63064.6!2d76.5!3d9.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b062ba16a5f9a1b%3A0x1234567890abcdef!2sKerala%20Backwaters!5e0!3m2!1sen!2sin!4v1234567890"
+                                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                        </a>
                     </div>
 
                     <!-- RIGHT: Contact Form -->
@@ -3704,9 +3652,6 @@
                                         <a href="/chatbot" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Utopiya: 80757 41948</a>
-                                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
-                                            style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#dc2743;font-weight:700;text-decoration:none"><i
-                                                class="bi bi-instagram"></i> Instagram</a>
                                     </div>
                                     <div class="d-flex flex-column gap-2">
                                         <button type="submit" class="btn-brand w-100 justify-content-center"
@@ -3826,12 +3771,6 @@
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-calendar-event"></i> Enquire
                                         About Event Packages</a>
-                                </div>
-                                <div style="border-top:1px solid rgba(250,135,62,.15);padding-top:1rem">
-                                    <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
-                                        class="btn-outline-brand justify-content-center w-100"
-                                        style="border-radius:12px;padding:.9rem"><i class="bi bi-instagram"></i>
-                                        @parudeesa_utopiya & @Parudeesa_the_paradise</a>
                                 </div>
                             </div>
                         </div>
@@ -3981,25 +3920,24 @@
     <footer>
         <div class="container">
             <div class="row g-5">
-                <div class="col-lg-4 col-md-6">
-                    <div class="f-brand">Parudeesa<small>The Lake View Resort</small></div>
+                <!-- SECTION 1: ADDRESS -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="f-head">Address</div>
+                    <div class="f-brand">
+                        <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 85px; width: auto; object-fit: contain;">
+                    </div>
+                    <p style="font-size:.8rem;color:rgba(255,243,236,.55);margin-top:1rem;line-height:1.75">
+                        Kerala Backwaters<br/>
+                        India
+                    </p>
                     <p class="eb mt-2"
                         style="font-style:italic;color:rgba(255,243,236,.4);font-size:.95rem;line-height:1.65">
                         "Experience Serenity by the Lake"</p>
-                    <p style="font-size:.75rem;color:rgba(255,243,236,.3);margin-top:.6rem;line-height:1.65">Premium
-                        lakeside
-                        resort · Kerala Backwaters, India</p>
-                    <div class="footer-social mt-3">
-                        <a href="/chatbot" target="_blank" class="soc"
-                            style="color:#25D366;border-color:rgba(37,211,102,.3)"><i class="bi bi-whatsapp"></i></a>
-                        <a href="#" onclick="showIgModal();return false;" class="soc"
-                            style="color:#dc2743;border-color:rgba(220,39,67,.3)"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="soc"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="soc"><i class="bi bi-youtube"></i></a>
-                    </div>
                 </div>
+
+                <!-- SECTION 2: NAVIGATION -->
                 <div class="col-6 col-md-3 col-lg-2">
-                    <div class="f-head">Navigate</div>
+                    <div class="f-head">Navigation</div>
                     <ul class="f-links">
                         <li><a onclick="goPage('home')">Home</a></li>
                         <li><a onclick="goPage('events')">Events</a></li>
@@ -4008,49 +3946,31 @@
                         <li><a onclick="goPage('contact')">Contact</a></li>
                         <li><a onclick="goPage('booking')">Book Now</a></li>
                     </ul>
+                </div>
+
+                <!-- SECTION 3: POLICIES -->
+                <div class="col-6 col-md-3 col-lg-3">
+                    <div class="f-head">Policies</div>
                     <div class="policy-list">
                         <div class="policy-row">
-                            <a href="#" class="policy-link">Terms & Conditions</a>
-                            <span class="policy-sep">:</span>
-                            <span class="policy-text">Booking, stay, and guest-use rules for all Parudeesa experiences.</span>
+                            <a href="/terms-and-conditions" class="policy-link">Terms & Conditions</a>
                         </div>
                         <div class="policy-row">
-                            <a href="#" class="policy-link">Privacy Policy</a>
-                            <span class="policy-sep">:</span>
-                            <span class="policy-text">How we collect, store, and protect your personal booking information.</span>
+                            <a href="/privacy-policy" class="policy-link">Privacy Policy</a>
                         </div>
                         <div class="policy-row">
-                            <a href="#" class="policy-link">Cancellation Policy</a>
-                            <span class="policy-sep">:</span>
-                            <span class="policy-text">Refund, rescheduling, and cancellation timelines for reservations.</span>
+                            <a href="/cancellation-policy" class="policy-link">Cancellation Policy</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 col-lg-2">
-                    <div class="f-head">Properties</div>
-                    <ul class="f-links">
-                        <li><a href="/chatbot" target="_blank">Parudeesa The Paradise</a></li>
-                        <li><a href="/chatbot" target="_blank">Parudeesa Utopiya</a></li>
-                    </ul>
-                    <div class="f-head mt-3">Event Packages</div>
-                    <ul class="f-links">
-                        <li><a onclick="goPage('events')">Party Package</a></li>
-                        <li><a onclick="goPage('events')">Grand Celebration</a></li>
-                        <li><a onclick="goPage('events')">Corporate Retreat</a></li>
-                    </ul>
-                </div>
+
+                <!-- SECTION 4: CONTACT US -->
                 <div class="col-md-6 col-lg-4">
-                    <div class="f-head">Contact & Booking</div>
+                    <div class="f-head">Contact Us</div>
                     <div class="footer-contact">
-                        <div class="footer-contact-item"><i class="bi bi-telephone" style="color:var(--brand)"></i><a href="tel:+918921021202">Paradise: +91 89210 21202</a></div>
-                        <div class="footer-contact-item"><i class="bi bi-telephone" style="color:var(--brand)"></i><a href="tel:+918075741948">Utopiya: +91 80757 41948</a></div>
+                        <div class="footer-contact-item"><i class="bi bi-telephone" style="color:var(--brand)"></i><a href="tel:+918921021202">+91 89210 21202</a></div>
                         <div class="footer-contact-item"><i class="bi bi-envelope" style="color:var(--brand-l)"></i><a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a></div>
-                        <div class="footer-contact-item"><i class="bi bi-geo-alt" style="color:var(--brand)"></i><span>Kerala Backwaters, India</span></div>
-                        <div class="footer-contact-item"><i class="bi bi-instagram" style="color:#dc2743"></i><span>@parudeesa_utopiya &
-                            @Parudeesa_the_paradise</span></div>
                     </div>
-                    <a href="#" onclick="toggleChatbot();return false;" class="btn-wa mt-3 d-inline-flex"
-                        style="font-size:.72rem;padding:.55rem 1.2rem"><i class="bi bi-whatsapp"></i> Chat with Us</a>
                 </div>
             </div>
             <hr class="f-div" />
@@ -4062,8 +3982,6 @@
     <div class="float-stack">
         <button class="float-btn fbtt" id="bttBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})"
             title="Back to top"><i class="bi bi-chevron-up"></i></button>
-        <a href="#" onclick="showIgModal();return false;" class="float-btn fig"
-            title="Instagram"><i class="bi bi-instagram"></i></a>
     </div>
 
     <!-- CHATBOT WIDGET -->
@@ -4110,6 +4028,13 @@
             if (nc && nc.classList.contains('show')) { try { new bootstrap.Collapse(nc).hide() } catch (e) { } }
             setTimeout(initReveals, 80);
         }
+
+        window.addEventListener('load', function() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById('page-' + hash)) {
+                goPage(hash);
+            }
+        });
 
         /* ── Tab switcher ── */
         function switchTab(tab, btn) {

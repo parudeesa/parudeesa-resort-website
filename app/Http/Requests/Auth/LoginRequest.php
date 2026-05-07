@@ -28,8 +28,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
+            'login' => ['required', 'string'],
+            'password' => ['nullable', 'string'],
         ];
     }
 
@@ -42,12 +42,42 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+        $login = $this->input('login');
+        $password = $this->input('password');
+        
+        // Determine login field
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : (is_numeric($login) ? 'phone' : 'username');
 
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
+        // If it's a phone login, restrict to existing bookings only
+        if ($field === 'phone') {
+            // Check if phone exists in bookings table
+            $hasBooking = \App\Models\Booking::where('phone', $login)->exists();
+            
+            if (!$hasBooking) {
+                RateLimiter::hit($this->throttleKey());
+                throw ValidationException::withMessages([
+                    'login' => 'No bookings found with this phone number. Please make a booking first.',
+                ]);
+            }
+
+            // Find the user or create one only because a booking exists
+            $user = \App\Models\User::where('phone', $login)->first();
+            if (!$user) {
+                $user = \App\Models\User::create([
+                    'name' => 'Customer ' . $login,
+                    'phone' => $login,
+                    'role' => 'customer',
+                ]);
+            }
+            Auth::login($user, $this->boolean('remember'));
+        } else {
+            if (! Auth::attempt([$field => $login, 'password' => $password], $this->boolean('remember'))) {
+                RateLimiter::hit($this->throttleKey());
+
+                throw ValidationException::withMessages([
+                    'login' => trans('auth.failed'),
+                ]);
+            }
         }
 
         RateLimiter::clear($this->throttleKey());
@@ -69,7 +99,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'login' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -81,6 +111,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('login')).'|'.$this->ip());
     }
 }

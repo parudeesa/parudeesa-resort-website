@@ -8,16 +8,29 @@ class AdminController extends Controller
 {
     public function calendar()
     {
-        $properties = \App\Models\Property::all();
+        $user = auth()->user();
+        $query = \App\Models\Property::query();
         
-        $blockedDates = \App\Models\BlockedDate::with(['property', 'creator'])->get()->map(function($item) {
+        if ($user->role === 'admin') {
+            $query->where('admin_id', $user->id);
+        }
+        
+        $properties = $query->get();
+        $propertyIds = $properties->pluck('id');
+        
+        $blockedDates = \App\Models\BlockedDate::with(['property', 'creator'])
+            ->whereIn('property_id', $propertyIds)
+            ->get()->map(function($item) {
             $item->is_block = true;
             $item->display_type = $item->reason;
             $item->display_name = 'Block: ' . $item->reason;
             return $item;
         });
         
-        $manualReservations = \App\Models\Booking::with(['property', 'creator'])->whereNotNull('created_by')->get()->map(function($item) {
+        $manualReservations = \App\Models\Booking::with(['property', 'creator'])
+            ->whereNotNull('created_by')
+            ->whereIn('property_id', $propertyIds)
+            ->get()->map(function($item) {
             $item->is_block = false;
             $item->display_type = 'Manual Reservation';
             $item->display_name = $item->name;
@@ -31,6 +44,25 @@ class AdminController extends Controller
         return view('admin.calendar', compact('properties', 'events'));
     }
 
+    // --- ADMIN MANAGEMENT (Superadmin only) ---
+    public function storeAdmin(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'name' => 'required|string|max:255',
+        ]);
+
+        \App\Models\User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+            'role' => 'admin',
+        ]);
+
+        return back()->with('success', 'Admin user created successfully.');
+    }
+
     // --- BLOCKED DATES ---
 
     public function storeBlock(Request $request)
@@ -42,6 +74,14 @@ class AdminController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
             'notes' => 'nullable|string'
         ]);
+
+        // Authorization check for admin
+        if (auth()->user()->role === 'admin') {
+            $property = \App\Models\Property::find($request->property_id);
+            if ($property->admin_id !== auth()->id()) {
+                abort(403, 'Unauthorized access to this property.');
+            }
+        }
 
         $blockedDate = \App\Models\BlockedDate::create([
             'property_id' => $request->property_id,
@@ -76,6 +116,13 @@ class AdminController extends Controller
             'notes' => 'nullable|string'
         ]);
 
+        // Authorization check for admin
+        if (auth()->user()->role === 'admin') {
+            if ($blockedDate->property->admin_id !== auth()->id()) {
+                abort(403, 'Unauthorized access to this property.');
+            }
+        }
+
         $blockedDate->update([
             'property_id' => $request->property_id,
             'reason' => $request->reason,
@@ -96,6 +143,13 @@ class AdminController extends Controller
     {
         $blockedDate = \App\Models\BlockedDate::findOrFail($id);
         
+        // Authorization check for admin
+        if (auth()->user()->role === 'admin') {
+            if ($blockedDate->property->admin_id !== auth()->id()) {
+                abort(403, 'Unauthorized access to this property.');
+            }
+        }
+
         if ($blockedDate->google_event_id) {
             $calendarService = app(\App\Services\GoogleCalendarService::class);
             $calendarService->deleteEvent($blockedDate->google_event_id);
@@ -120,6 +174,14 @@ class AdminController extends Controller
             'payment_status' => 'required|string|in:Paid,Pending,Failed',
             'notes' => 'nullable|string'
         ]);
+
+        // Authorization check for admin
+        if (auth()->user()->role === 'admin') {
+            $property = \App\Models\Property::find($request->property_id);
+            if ($property->admin_id !== auth()->id()) {
+                abort(403, 'Unauthorized access to this property.');
+            }
+        }
 
         $booking = \App\Models\Booking::create([
             'property_id' => $request->property_id,
@@ -163,6 +225,13 @@ class AdminController extends Controller
             'notes' => 'nullable|string'
         ]);
 
+        // Authorization check for admin
+        if (auth()->user()->role === 'admin') {
+            if ($booking->property->admin_id !== auth()->id()) {
+                abort(403, 'Unauthorized access to this property.');
+            }
+        }
+
         $booking->update([
             'property_id' => $request->property_id,
             'name' => $request->name,
@@ -196,6 +265,13 @@ class AdminController extends Controller
     {
         $booking = \App\Models\Booking::findOrFail($id);
         
+        // Authorization check for admin
+        if (auth()->user()->role === 'admin') {
+            if ($booking->property->admin_id !== auth()->id()) {
+                abort(403, 'Unauthorized access to this property.');
+            }
+        }
+
         if ($booking->google_event_id) {
             $calendarService = app(\App\Services\GoogleCalendarService::class);
             $calendarService->deleteEvent($booking->google_event_id);

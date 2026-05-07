@@ -15,7 +15,7 @@ class IsSuperAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || !auth()->user()->is_super_admin) {
+        if (!auth()->check() || !auth()->user()->isSuperAdmin()) {
             abort(403, 'Unauthorized action. Super Admin required.');
         }
         return $next($request);

@@ -13,7 +13,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $properties = Property::all(); // Fetches rooms from your DB
+        $properties = Property::with('amenities')->get(); // Fetches rooms from your DB
         //dd($properties);
         return view('design', compact('properties')); // Sends them to design.blade.php
     }
@@ -24,7 +24,7 @@ class HomeController extends Controller
 
     public function design()
     {
-        $properties = Property::all();
+        $properties = Property::with('amenities')->get();
         return view('design', compact('properties'));
     }
 
@@ -99,6 +99,7 @@ class HomeController extends Controller
         ]);
 
         $booking = Booking::create([
+            'user_id' => auth()->id(), // Link to logged-in user if available
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
@@ -127,8 +128,65 @@ class HomeController extends Controller
         ]);
     }
     public function bookingsIndex()
-{
-    $bookings = Booking::with('property')->latest()->paginate(10);
-    return view('bookings.index', compact('bookings'));
-}
+    {
+        $user = auth()->user();
+        $query = Booking::with('property');
+
+        if ($user->role === 'admin') {
+            $query->whereHas('property', function($q) use ($user) {
+                $q->where('admin_id', $user->id);
+            });
+        } elseif ($user->role === 'customer') {
+            $query->where(function($q) use ($user) {
+                $q->where('user_id', $user->id)
+                  ->orWhere('phone', $user->phone);
+            });
+        }
+
+        if ($user->isCustomer()) {
+            $all = $query->latest()->get();
+            $upcomingBookings = $all->filter(function($b) {
+                $checkOut = Carbon::parse($b->check_out)->startOfDay();
+                $today = Carbon::today();
+                return $checkOut->gte($today);
+            });
+            $pastBookings = $all->filter(function($b) {
+                $checkOut = Carbon::parse($b->check_out)->startOfDay();
+                $today = Carbon::today();
+                return $checkOut->lt($today);
+            });
+            return view('bookings.index', compact('upcomingBookings', 'pastBookings'));
+        }
+
+        $bookings = $query->latest()->paginate(10);
+        return view('bookings.index', compact('bookings'));
+    }
+
+    public function updateBookingStatus(Request $request, Booking $booking)
+    {
+        $user = auth()->user();
+        
+        // Authorization check
+        if ($user->role === 'admin') {
+            if (!$booking->property || $booking->property->admin_id !== $user->id) {
+                abort(403, 'Unauthorized to manage this booking.');
+            }
+        } elseif ($user->role !== 'superadmin' && !$user->is_super_admin) {
+            abort(403);
+        }
+
+        $request->validate([
+            'status' => 'required|string|in:confirmed,pending,cancelled',
+        ]);
+
+        $booking->update(['status' => $request->status]);
+
+        return back()->with('success', 'Booking status updated to ' . $request->status . ' successfully.');
+    }
+
+    public function checkPhoneBookings($phone)
+    {
+        $exists = \App\Models\Booking::where('phone', $phone)->exists();
+        return response()->json(['exists' => $exists]);
+    }
 }

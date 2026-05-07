@@ -14,18 +14,20 @@ class AmenitySeeder extends Seeder
     public function run(): void
     {
         $amenities = [
-            ['name' => 'Swimming Pool', 'description' => 'Private infinity pool with lake views'],
-            ['name' => 'WiFi', 'description' => 'High-speed internet throughout the property'],
-            ['name' => 'Air Conditioning', 'description' => 'Central AC in all rooms'],
-            ['name' => 'Kitchen', 'description' => 'Fully equipped modern kitchen'],
-            ['name' => 'Parking', 'description' => 'Secure parking space'],
-            ['name' => 'Lake View', 'description' => 'Direct lake access and views'],
-            ['name' => 'Fireplace', 'description' => 'Cozy fireplace for evening relaxation'],
-            ['name' => 'Garden', 'description' => 'Beautiful landscaped garden'],
+            ['name' => 'Swimming Pool', 'description' => 'Private infinity pool with lake views', 'price' => 0, 'pricing_type' => 'fixed'],
+            ['name' => 'WiFi', 'description' => 'High-speed internet throughout the property', 'price' => 0, 'pricing_type' => 'fixed'],
+            ['name' => 'Air Conditioning', 'description' => 'Central AC in all rooms', 'price' => 0, 'pricing_type' => 'fixed'],
+            ['name' => 'Kitchen', 'description' => 'Fully equipped modern kitchen', 'price' => 0, 'pricing_type' => 'fixed'],
+            ['name' => 'Parking', 'description' => 'Secure parking space', 'price' => 0, 'pricing_type' => 'fixed'],
+            ['name' => 'Lake View', 'description' => 'Direct lake access and views', 'price' => 0, 'pricing_type' => 'fixed'],
+            ['name' => 'Fireplace', 'description' => 'Cozy fireplace for evening relaxation', 'price' => 0, 'pricing_type' => 'fixed'],
+            ['name' => 'Garden', 'description' => 'Beautiful landscaped garden', 'price' => 0, 'pricing_type' => 'fixed'],
+            ['name' => 'Premium Yacht', 'description' => 'Premium yacht add-on', 'price' => 0, 'pricing_type' => 'fixed'],
+            ['name' => 'Canopy Boat Pickup Experience', 'description' => 'Boat pickup to the kayaking center with refreshments provided.', 'price' => 700, 'pricing_type' => 'per_person'],
         ];
 
         foreach ($amenities as $amenity) {
-            Amenity::create($amenity);
+            Amenity::updateOrCreate(['name' => $amenity['name']], $amenity + ['status' => true]);
         }
     }
 }

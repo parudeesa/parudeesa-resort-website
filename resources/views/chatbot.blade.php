@@ -6,7 +6,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Parudeesa Resort Chatbot</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Cormorant+Garamond:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 html{
   height:100%;
@@ -29,7 +29,7 @@ body{
   margin:0;
   min-height:100vh;
   padding:24px;
-  font-family:'Josefin Sans',sans-serif;
+  font-family:'Poppins',sans-serif;
   background:radial-gradient(circle at top,#fffdf9 0,#fff8f2 45%,#fde9d8 100%);
   color:var(--text);
 }
@@ -252,7 +252,7 @@ body.cb-embed .cb-body{
   border:1px solid rgba(250,135,62,.25);
   border-radius:18px;
   padding:8px 12px;
-  font-family:'Josefin Sans',sans-serif;
+  font-family:'Poppins',sans-serif;
   font-size:13px;
   background:#fff;
 }

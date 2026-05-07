@@ -12,8 +12,15 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+                serif: ['Playfair Display', ...defaultTheme.fontFamily.serif],
             },
+            colors: {
+                resort: {
+                    heading: '#3b2a22',
+                    body: '#5a5a5a',
+                }
+            }
         },
     },
 

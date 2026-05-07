@@ -28,7 +28,10 @@ class AmenityController extends Controller
             'description' => $request->description,
             'price' => $request->price ?? 0,
             'pricing_type' => $request->pricing_type ?? 'fixed',
-            'status' => $request->has('status') ? (bool)$request->status : true
+            'status' => $request->has('status') ? (bool)$request->status : true,
+            'is_premium' => $request->has('is_premium') ? (bool)$request->is_premium : false,
+            'image_url' => $request->image_url,
+            'condition_note' => $request->condition_note
         ]);
 
         return redirect()->back()->with('success', 'Amenity added successfully!');
@@ -49,7 +52,10 @@ class AmenityController extends Controller
             'description' => $request->description,
             'price' => $request->price ?? $amenity->price ?? 0,
             'pricing_type' => $request->pricing_type ?? $amenity->pricing_type ?? 'fixed',
-            'status' => $request->has('status') ? (bool)$request->status : $amenity->status
+            'status' => $request->has('status') ? (bool)$request->status : $amenity->status,
+            'is_premium' => $request->has('is_premium') ? (bool)$request->is_premium : $amenity->is_premium,
+            'image_url' => $request->image_url ?? $amenity->image_url,
+            'condition_note' => $request->condition_note ?? $amenity->condition_note
         ]);
 
         return redirect()->back()->with('success', 'Amenity updated successfully!');
