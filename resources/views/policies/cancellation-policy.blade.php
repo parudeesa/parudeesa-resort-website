@@ -118,9 +118,9 @@
         }
 
         .nav-link {
-            font-size: .65rem;
+            font-size: .82rem;
             font-weight: 600;
-            letter-spacing: .12em;
+            letter-spacing: .08em;
             text-transform: uppercase;
             color: var(--txt-m) !important;
             padding: .45rem .85rem !important;
@@ -306,15 +306,64 @@
         }
 
         .f-copy {
-            font-size: .68rem;
-            opacity: .3;
+            font-size: .7rem;
             text-align: center;
-            margin-top: 1.5rem;
+            color: rgba(255, 243, 236, .4);
         }
 
         .f-div {
             border-color: rgba(255, 255, 255, .06);
             margin: 2rem 0 1.2rem;
+        }
+
+        .footer-social .fs-link {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 243, 236, 0.7);
+            font-size: 1.1rem;
+            transition: all var(--ease);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-social .fs-link:hover {
+            background: var(--brand);
+            color: #fff;
+            transform: translateY(-3px);
+            border-color: var(--brand);
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .footer-contact-item i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .footer-contact-item a {
+            color: rgba(255, 243, 236, 0.7);
+            text-decoration: none;
+            transition: color var(--ease);
+        }
+
+        .footer-contact-item a:hover {
+            color: var(--brand-l);
         }
 
         @media (max-width: 768px) {
@@ -352,7 +401,7 @@
     <nav class="navbar navbar-expand-lg" id="mainNav">
         <div class="container">
             <a class="navbar-brand" href="/design">
-                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 60px; width: auto; object-fit: contain;">
+                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 55px; width: auto; object-fit: contain;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
                 aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -453,17 +502,22 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
             <div class="row g-5">
+                <!-- SECTION 1: BRAND & ADDRESS -->
                 <div class="col-lg-3 col-md-6">
-                    <div class="f-brand">
-                        <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 80px; width: auto; object-fit: contain; margin-bottom: 1rem;">
-                        <p>"Experience Serenity by the Lake"</p>
+                    <div class="f-brand mb-3" style="font-family: 'Cormorant Garamond', serif; font-weight:700;">
+                        <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 90px; width: auto; object-fit: contain;">
                     </div>
+                    <p style="font-size:.85rem;color:rgba(255,243,236,.6);line-height:1.8">
+                        Kerala Backwaters, India
+                    </p>
+                    <p style="font-style:italic;color:rgba(255,243,236,.4);font-size:1rem;line-height:1.6; font-family:'EB Garamond', serif; margin-top: 1rem;">
+                        "Experience Serenity by the Lake"</p>
                 </div>
 
+                <!-- SECTION 2: NAVIGATION -->
                 <div class="col-6 col-md-3 col-lg-2">
                     <div class="f-head">Navigation</div>
                     <ul class="f-links">
@@ -471,25 +525,41 @@
                         <li><a href="/design#events">Events</a></li>
                         <li><a href="/design#gallery">Gallery</a></li>
                         <li><a href="/design#about">About Us</a></li>
+                        <li><a href="/design#contact">Contact</a></li>
+                        <li><a href="/booking">Book Now</a></li>
                     </ul>
                 </div>
 
+                <!-- SECTION 3: POLICIES -->
                 <div class="col-6 col-md-3 col-lg-3">
                     <div class="f-head">Policies</div>
-                    <ul class="f-links">
-                        <li><a href="/terms-and-conditions">Terms & Conditions</a></li>
-                        <li><a href="/privacy-policy">Privacy Policy</a></li>
-                        <li><a href="/cancellation-policy">Cancellation Policy</a></li>
-                    </ul>
+                    <div class="policy-list" style="display:flex; flex-direction:column; gap:.5rem;">
+                        <a href="/terms-and-conditions" class="policy-link" style="font-size:.8rem; text-decoration:none; color:rgba(255,243,236,.45); transition:all var(--ease);">Terms & Conditions</a>
+                        <a href="/privacy-policy" class="policy-link" style="font-size:.8rem; text-decoration:none; color:rgba(255,243,236,.45); transition:all var(--ease);">Privacy Policy</a>
+                        <a href="/cancellation-policy" class="policy-link" style="font-size:.8rem; text-decoration:none; color:rgba(255,243,236,.45); transition:all var(--ease);">Cancellation Policy</a>
+                    </div>
                 </div>
 
+                <!-- SECTION 4: CONTACT US -->
                 <div class="col-md-6 col-lg-4">
                     <div class="f-head">Contact Us</div>
-                    <p style="font-size:.85rem;color:rgba(255,243,236,.45);line-height:1.8;font-family:'EB Garamond',serif">
-                        <i class="bi bi-telephone" style="color:var(--brand)"></i> +91 89210 21202<br/>
-                        <i class="bi bi-envelope" style="color:var(--brand-l)"></i> hello@parudeesa.in<br/>
-                        <i class="bi bi-geo-alt" style="color:var(--brand-l)"></i> Kerala Backwaters, India
-                    </p>
+                    <div class="footer-contact mb-4">
+                        <div class="footer-contact-item">
+                            <i class="bi bi-telephone" style="color:var(--brand)"></i>
+                            <a href="tel:+918921021202">+91 89210 21202</a>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="bi bi-envelope" style="color:var(--brand-l)"></i>
+                            <a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a>
+                        </div>
+                    </div>
+                    
+                    <div class="f-head" style="margin-top: 2rem;">Follow Us</div>
+                    <div class="footer-social d-flex gap-3">
+                        <a href="https://instagram.com/parudeesa" target="_blank" class="fs-link" title="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="https://facebook.com/parudeesa" target="_blank" class="fs-link" title="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="https://youtube.com/parudeesa" target="_blank" class="fs-link" title="YouTube"><i class="bi bi-youtube"></i></a>
+                    </div>
                 </div>
             </div>
             <hr class="f-div" />

@@ -61,11 +61,19 @@
                                         <div class="text-[10px] text-gray-400">Booked: {{ $booking->created_at->format('M d, Y H:i') }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm p-text font-semibold">{{ $booking->property->name ?? 'N/A' }}</div>
-                                        <div class="text-xs text-gray-500">
-                                            {{ \Carbon\Carbon::parse($booking->check_in)->format('M d') }} - {{ \Carbon\Carbon::parse($booking->check_out)->format('M d, Y') }}
-                                        </div>
-                                        <div class="text-[10px] text-orange-600 font-bold uppercase">{{ $booking->package_name ?? 'Base Package' }}</div>
+                                        @if($booking->type === 'yacht')
+                                            <div class="text-sm p-text font-semibold">{{ $booking->yacht->name ?? 'Luxury Yacht' }}</div>
+                                            <div class="text-xs text-gray-500">
+                                                {{ \Carbon\Carbon::parse($booking->check_in)->format('M d, Y') }}
+                                            </div>
+                                            <div class="text-[10px] text-blue-600 font-bold uppercase">Independent Yacht Charter</div>
+                                        @else
+                                            <div class="text-sm p-text font-semibold">{{ $booking->property->name ?? 'N/A' }}</div>
+                                            <div class="text-xs text-gray-500">
+                                                {{ \Carbon\Carbon::parse($booking->check_in)->format('M d') }} - {{ \Carbon\Carbon::parse($booking->check_out)->format('M d, Y') }}
+                                            </div>
+                                            <div class="text-[10px] text-orange-600 font-bold uppercase">{{ $booking->package_name ?? 'Base Package' }}</div>
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-bold" style="color:#e06828">₹{{ number_format($booking->amount, 2) }}</div>
@@ -123,11 +131,18 @@
                                             </div>
                                             <div class="space-y-3">
                                                 <h4 class="font-bold p-text uppercase text-[10px] tracking-widest border-b border-orange-100 pb-1">Stay Details</h4>
-                                                <p><span class="text-gray-500 font-medium">Property:</span> <span class="p-text font-semibold">{{ $booking->property->name ?? 'N/A' }}</span></p>
-                                                <p><span class="text-gray-500 font-medium">Stay Type:</span> <span class="p-text font-semibold">{{ $booking->event_type ?? 'Standard Stay' }}</span></p>
-                                                <p><span class="text-gray-500 font-medium">Package:</span> <span class="p-text font-semibold">{{ $booking->package_name ?? 'Base Plan' }}</span></p>
-                                                <p><span class="text-gray-500 font-medium">Check-In:</span> <span class="p-text font-semibold">{{ \Carbon\Carbon::parse($booking->check_in)->format('l, M d, Y') }}</span></p>
-                                                <p><span class="text-gray-500 font-medium">Check-Out:</span> <span class="p-text font-semibold">{{ \Carbon\Carbon::parse($booking->check_out)->format('l, M d, Y') }}</span></p>
+                                                @if($booking->type === 'yacht')
+                                                    <p><span class="text-gray-500 font-medium">Type:</span> <span class="p-text font-semibold text-blue-600">Yacht Booking</span></p>
+                                                    <p><span class="text-gray-500 font-medium">Yacht:</span> <span class="p-text font-semibold">{{ $booking->yacht->name ?? 'Luxury Yacht' }}</span></p>
+                                                    <p><span class="text-gray-500 font-medium">Date:</span> <span class="p-text font-semibold">{{ \Carbon\Carbon::parse($booking->check_in)->format('l, M d, Y') }}</span></p>
+                                                    <p><span class="text-gray-500 font-medium">Duration:</span> <span class="p-text font-semibold">{{ $booking->yacht->duration ?? '5 Hours' }}</span></p>
+                                                @else
+                                                    <p><span class="text-gray-500 font-medium">Property:</span> <span class="p-text font-semibold">{{ $booking->property->name ?? 'N/A' }}</span></p>
+                                                    <p><span class="text-gray-500 font-medium">Stay Type:</span> <span class="p-text font-semibold">{{ $booking->event_type ?? 'Standard Stay' }}</span></p>
+                                                    <p><span class="text-gray-500 font-medium">Package:</span> <span class="p-text font-semibold">{{ $booking->package_name ?? 'Base Plan' }}</span></p>
+                                                    <p><span class="text-gray-500 font-medium">Check-In:</span> <span class="p-text font-semibold">{{ \Carbon\Carbon::parse($booking->check_in)->format('l, M d, Y') }}</span></p>
+                                                    <p><span class="text-gray-500 font-medium">Check-Out:</span> <span class="p-text font-semibold">{{ \Carbon\Carbon::parse($booking->check_out)->format('l, M d, Y') }}</span></p>
+                                                @endif
                                             </div>
                                             <div class="space-y-3">
                                                 <h4 class="font-bold p-text uppercase text-[10px] tracking-widest border-b border-orange-100 pb-1">Pricing & Amenities</h4>
@@ -149,6 +164,13 @@
                                                     </div>
                                                 @else
                                                     <p class="text-gray-400 italic text-xs">No extra amenities selected.</p>
+                                                @endif
+
+                                                @if($booking->notes)
+                                                    <div class="mt-3 p-2 bg-blue-50 border border-blue-100 rounded text-[11px]">
+                                                        <span class="font-bold text-blue-700 block mb-1">SPECIAL REQUESTS:</span>
+                                                        <span class="text-blue-900">{{ $booking->notes }}</span>
+                                                    </div>
                                                 @endif
                                                 <div class="pt-2 border-t border-orange-100 flex justify-between items-center">
                                                     <span class="font-bold p-text">Total Price:</span>

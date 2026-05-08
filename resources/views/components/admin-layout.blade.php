@@ -10,7 +10,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
         
         <!-- Lucide Icons -->
         <script src="https://unpkg.com/lucide@latest"></script>
@@ -19,7 +19,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <style>
-            .parudeesa-bg { background-color: #fff3ec !important; font-family: 'Poppins', sans-serif !important; }
+            .parudeesa-bg { background-color: #fff3ec !important; font-family: 'Outfit', sans-serif !important; font-weight: 300; }
             .p-serif { font-family: 'Playfair Display', serif !important; }
             .p-card { background: #fff8f3; border: 1px solid rgba(250,135,62,.15); box-shadow: 0 6px 32px rgba(250,135,62,.15); border-radius: 16px; }
             .p-btn { background: linear-gradient(135deg, #fa873e, #e06828); color: white; border: none; padding: 0.6rem 1.5rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em; border-radius: 8px; box-shadow: 0 4px 18px rgba(250,135,62,.35); transition: transform 0.3s ease; }
@@ -59,6 +59,13 @@
                             <i data-lucide="sparkles" class="w-5 h-5 mr-3"></i>
                             Amenities
                         </a>
+
+                        @if(auth()->user()->isSuperAdmin())
+                        <a href="{{ route('admin.yachts.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.yachts.*') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">
+                            <i data-lucide="ship" class="w-5 h-5 mr-3"></i>
+                            Yachts
+                        </a>
+                        @endif
 
                         @if(auth()->user()->isSuperAdmin())
                         <a href="{{ route('admin.admins.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.admins.*') ? 'bg-orange-100 text-[#e06828] font-semibold' : 'text-gray-600 hover:bg-orange-50 hover:text-[#e06828]' }}">

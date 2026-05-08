@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="description"
@@ -13,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -63,10 +64,11 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Outfit', sans-serif;
             background: var(--brand-pale);
             color: var(--txt-m);
             overflow-x: hidden;
+            font-weight: 300;
             -webkit-font-smoothing: antialiased
         }
 
@@ -139,9 +141,9 @@
         }
 
         .nav-link {
-            font-size: .65rem;
+            font-size: .82rem;
             font-weight: 600;
-            letter-spacing: .12em;
+            letter-spacing: .08em;
             text-transform: uppercase;
             color: var(--txt-m) !important;
             padding: .45rem .85rem !important;
@@ -1709,40 +1711,82 @@
         }
 
         .f-links a:hover {
-            color: var(--brand-l)
+            color: var(--brand-l);
+            padding-left: 5px;
         }
 
         .policy-list {
             display: flex;
             flex-direction: column;
-            gap: .75rem;
+            gap: .5rem;
             margin-top: .6rem
         }
 
-        .policy-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: baseline;
-            gap: .3rem;
-            font-size: .8rem;
-            line-height: 1.65;
-            color: rgba(255, 243, 236, .45)
-        }
-
         .policy-link {
-            font-weight: 700;
+            font-size: .8rem;
             text-decoration: none;
-            color: var(--brand-pale)
+            color: rgba(255, 243, 236, .45);
+            transition: all var(--ease);
         }
 
         .policy-link:hover {
             color: var(--brand-l);
-            text-decoration: none
+            padding-left: 5px;
         }
 
         .policy-sep {
             color: rgba(255, 243, 236, .35);
             font-weight: 700
+        }
+
+        .footer-social .fs-link {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 243, 236, 0.7);
+            font-size: 1.1rem;
+            transition: all var(--ease);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-social .fs-link:hover {
+            background: var(--brand);
+            color: #fff;
+            transform: translateY(-3px);
+            border-color: var(--brand);
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .footer-contact-item i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .footer-contact-item a {
+            color: rgba(255, 243, 236, 0.7);
+            text-decoration: none;
+            transition: color var(--ease);
+        }
+
+        .footer-contact-item a:hover {
+            color: var(--brand-l);
         }
 
         .policy-text {
@@ -2280,6 +2324,20 @@
             -webkit-tap-highlight-color: transparent
         }
 
+        /* YACHT SECTION STYLES */
+        .yacht-sec { background: var(--parch); }
+        .yacht-gallery img { width: 100%; height: auto; max-height: 500px; object-fit: cover; border-radius: 24px; }
+        .premium-badge { position: absolute; top: 20px; left: 20px; background: linear-gradient(135deg, #d4af37, #b8860b); color: #fff; padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .stat-item { flex: 1; padding: 1.2rem; background: var(--cream); border: 1px solid rgba(250, 135, 62, 0.15); border-radius: 16px; text-align: center; }
+        .stat-item i { font-size: 1.5rem; color: var(--brand); display: block; }
+        .stat-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--txt-m); margin-bottom: 0.2rem; }
+        .stat-value { font-weight: 700; color: var(--brn-dk); font-size: 0.95rem; }
+        .price-label { font-size: 0.8rem; color: var(--txt-m); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 0.2rem; }
+        .price-value { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 700; color: var(--brand-d); margin: 0; }
+        .p-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--txt-l); display: block; margin-bottom: 0.4rem; }
+        .p-input { width: 100%; padding: 0.8rem 1rem; background: #fff; border: 1.5px solid rgba(250, 135, 62, 0.15); border-radius: 12px; font-size: 0.9rem; color: var(--txt); transition: all var(--ease); outline: none; }
+        .p-input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(250, 135, 62, 0.1); }
+
         /* ═══════ ANIMATIONS & REVEALS ═══════ */
         @keyframes fadeUp {
             from {
@@ -2608,7 +2666,7 @@
     <nav class="navbar navbar-expand-lg" id="mainNav">
         <div class="container">
             <a class="navbar-brand" href="#" onclick="goPage('home');return false;" style="display: flex; align-items: center;">
-                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 75px; width: auto; object-fit: contain;">
+                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 55px; width: auto; object-fit: contain;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
                 aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -2719,6 +2777,51 @@
                 </div>
             </div>
         </section>
+
+        <!-- YACHT EXPERIENCE -->
+        @if(isset($yachts) && $yachts->count() > 0)
+        @foreach($yachts as $yacht)
+        <section class="yacht-sec py-5" id="yacht">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-7 reveal">
+                        <div class="yacht-gallery position-relative">
+                            <img src="{{ $yacht->image_url }}" alt="{{ $yacht->name }}" class="img-fluid rounded-4 shadow-lg">
+                            <div class="premium-badge">Premium Experience</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 reveal">
+                        <div class="ornament-line justify-content-start"><span>Private Charter</span></div>
+                        <h2 class="sec-title mb-3">Luxury <em>Yacht</em> Experience</h2>
+                        <p class="eb mb-4" style="color:var(--txt-m); font-size:1.05rem; line-height:1.8">
+                            {{ $yacht->description }}
+                        </p>
+                        <div class="yacht-stats d-flex gap-4 mb-4">
+                            <div class="stat-item">
+                                <i class="bi bi-clock-history mb-2"></i>
+                                <div class="stat-label">Duration</div>
+                                <div class="stat-value">{{ $yacht->duration }}</div>
+                            </div>
+                            <div class="stat-item">
+                                <i class="bi bi-people mb-2"></i>
+                                <div class="stat-label">Capacity</div>
+                                <div class="stat-value">Up to {{ $yacht->capacity }} People</div>
+                            </div>
+                        </div>
+                        <div class="yacht-pricing mb-4">
+                            <span class="price-label">Starting from</span>
+                            <h3 class="price-value">₹{{ number_format($yacht->price, 0) }}</h3>
+                        </div>
+                        <div class="yacht-actions d-flex gap-3">
+                            <button onclick="openYachtBooking({{ $yacht->id }}, '{{ $yacht->name }}', {{ $yacht->price }})" class="btn-brand px-4 py-3">Book Yacht Now</button>
+                            <a href="#" onclick="goPage('contact'); return false;" class="btn-outline-brand px-4 py-3">Enquire Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        @endforeach
+        @endif
 
         <!-- AMENITIES -->
         <section class="amen-sec">
@@ -3920,18 +4023,15 @@
     <footer>
         <div class="container">
             <div class="row g-5">
-                <!-- SECTION 1: ADDRESS -->
+                <!-- SECTION 1: BRAND & ADDRESS -->
                 <div class="col-lg-3 col-md-6">
-                    <div class="f-head">Address</div>
-                    <div class="f-brand">
-                        <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 85px; width: auto; object-fit: contain;">
+                    <div class="f-brand mb-3" style="font-family: 'Cormorant Garamond', serif; font-weight:700;">
+                        <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 90px; width: auto; object-fit: contain;">
                     </div>
-                    <p style="font-size:.8rem;color:rgba(255,243,236,.55);margin-top:1rem;line-height:1.75">
-                        Kerala Backwaters<br/>
-                        India
+                    <p style="font-size:.85rem;color:rgba(255,243,236,.6);line-height:1.8">
+                        Kerala Backwaters, India
                     </p>
-                    <p class="eb mt-2"
-                        style="font-style:italic;color:rgba(255,243,236,.4);font-size:.95rem;line-height:1.65">
+                    <p style="font-style:italic;color:rgba(255,243,236,.4);font-size:1rem;line-height:1.6; font-family:'EB Garamond', serif; margin-top: 1rem;">
                         "Experience Serenity by the Lake"</p>
                 </div>
 
@@ -3952,24 +4052,31 @@
                 <div class="col-6 col-md-3 col-lg-3">
                     <div class="f-head">Policies</div>
                     <div class="policy-list">
-                        <div class="policy-row">
-                            <a href="/terms-and-conditions" class="policy-link">Terms & Conditions</a>
-                        </div>
-                        <div class="policy-row">
-                            <a href="/privacy-policy" class="policy-link">Privacy Policy</a>
-                        </div>
-                        <div class="policy-row">
-                            <a href="/cancellation-policy" class="policy-link">Cancellation Policy</a>
-                        </div>
+                        <a href="/terms-and-conditions" class="policy-link">Terms & Conditions</a>
+                        <a href="/privacy-policy" class="policy-link">Privacy Policy</a>
+                        <a href="/cancellation-policy" class="policy-link">Cancellation Policy</a>
                     </div>
                 </div>
 
                 <!-- SECTION 4: CONTACT US -->
                 <div class="col-md-6 col-lg-4">
                     <div class="f-head">Contact Us</div>
-                    <div class="footer-contact">
-                        <div class="footer-contact-item"><i class="bi bi-telephone" style="color:var(--brand)"></i><a href="tel:+918921021202">+91 89210 21202</a></div>
-                        <div class="footer-contact-item"><i class="bi bi-envelope" style="color:var(--brand-l)"></i><a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a></div>
+                    <div class="footer-contact mb-4">
+                        <div class="footer-contact-item">
+                            <i class="bi bi-telephone" style="color:var(--brand)"></i>
+                            <a href="tel:+918921021202">+91 89210 21202</a>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="bi bi-envelope" style="color:var(--brand-l)"></i>
+                            <a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a>
+                        </div>
+                    </div>
+                    
+                    <div class="f-head" style="margin-top: 2rem;">Follow Us</div>
+                    <div class="footer-social d-flex gap-3">
+                        <a href="https://instagram.com/parudeesa" target="_blank" class="fs-link" title="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="https://facebook.com/parudeesa" target="_blank" class="fs-link" title="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="https://youtube.com/parudeesa" target="_blank" class="fs-link" title="YouTube"><i class="bi bi-youtube"></i></a>
                     </div>
                 </div>
             </div>
@@ -4459,7 +4566,264 @@
             }
             initReveals();
         });
+
+        let currentYachtName = '';
+        let currentYachtPrice = 0;
+
+        function openYachtBooking(id, name, price) {
+            currentYachtName = name;
+            currentYachtPrice = price;
+            document.getElementById('yachtIdInput').value = id;
+            document.getElementById('yachtTotalPrice').textContent = '₹' + price.toLocaleString();
+            
+            // Reset to form step
+            backToYachtForm();
+            
+            const modal = new bootstrap.Modal(document.getElementById('yachtBookingModal'));
+            modal.show();
+            
+            flatpickr("#yachtBookingDate", {
+                minDate: "today",
+                dateFormat: "Y-m-d",
+            });
+        }
+
+        function showYachtSummary() {
+            const form = document.getElementById('yachtBookingForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Fill summary
+            document.getElementById('summYachtName').textContent = currentYachtName;
+            document.getElementById('summGuestName').textContent = document.getElementById('yachtNameInput').value;
+            document.getElementById('summGuestPhone').textContent = document.getElementById('yachtPhoneInput').value;
+            document.getElementById('summBookingDate').textContent = document.getElementById('yachtBookingDate').value;
+            document.getElementById('summGuests').textContent = document.getElementById('yachtGuestsInput').value;
+            document.getElementById('summTotalAmount').textContent = '₹' + currentYachtPrice.toLocaleString();
+
+            // Toggle views
+            document.getElementById('yachtStepForm').style.display = 'none';
+            document.getElementById('yachtStepSummary').style.display = 'block';
+        }
+
+        function backToYachtForm() {
+            document.getElementById('yachtStepForm').style.display = 'block';
+            document.getElementById('yachtStepSummary').style.display = 'none';
+            document.getElementById('yachtStepPayment').style.display = 'none';
+        }
+
+        function togglePayMethod(method) {
+            if (method === 'upi') {
+                document.getElementById('payDetailsUpi').style.display = 'block';
+                document.getElementById('payDetailsBank').style.display = 'none';
+            } else {
+                document.getElementById('payDetailsUpi').style.display = 'none';
+                document.getElementById('payDetailsBank').style.display = 'block';
+            }
+        }
+
+        function closeYachtModal() {
+            bootstrap.Modal.getInstance(document.getElementById('yachtBookingModal')).hide();
+        }
+
+        async function submitYachtBooking() {
+            const form = document.getElementById('yachtBookingForm');
+            const btn = document.getElementById('yachtSubmitBtn');
+            const formData = new FormData(form);
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+            
+            try {
+                const response = await fetch('/book-yacht', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Update payment amount
+                    document.querySelectorAll('.pay-amount-val').forEach(el => {
+                        el.textContent = currentYachtPrice.toLocaleString();
+                    });
+                    
+                    // Switch to Payment step
+                    document.getElementById('yachtStepSummary').style.display = 'none';
+                    document.getElementById('yachtStepPayment').style.display = 'block';
+                    form.reset();
+                } else {
+                    alert('Error: ' + (result.message || 'Something went wrong'));
+                }
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'PROCEED TO PAYMENT';
+            }
+        }
     </script>
+    <!-- YACHT BOOKING MODAL -->
+    <div class="modal fade" id="yachtBookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header" style="background: linear-gradient(135deg, #1e0a02 0%, #3e2010 100%); padding: 1.5rem;">
+                    <div>
+                        <h5 class="modal-title text-white" style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700;">Book Your Yacht Experience</h5>
+                        <p class="text-white-50 mb-0" style="font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Luxury Awaits You</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0 bg-white">
+                    <!-- Step 1: Booking Form -->
+                    <div id="yachtStepForm" class="p-4">
+                        <form id="yachtBookingForm">
+                            @csrf
+                            <input type="hidden" name="yacht_id" id="yachtIdInput">
+                            <input type="hidden" name="type" value="yacht">
+                            
+                            <div class="mb-3">
+                                <label class="p-label mb-2"><i class="bi bi-person me-2"></i>Full Name</label>
+                                <input type="text" name="name" id="yachtNameInput" class="p-input" placeholder="Enter your name" required style="border-radius: 10px;">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="p-label mb-2"><i class="bi bi-telephone me-2"></i>Phone Number</label>
+                                <input type="tel" name="phone" id="yachtPhoneInput" class="p-input" placeholder="10-digit mobile number" required pattern="[0-9]{10}" maxlength="10" style="border-radius: 10px;">
+                            </div>
+                            
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="p-label mb-2"><i class="bi bi-calendar-event me-2"></i>Booking Date</label>
+                                    <input type="text" name="booking_date" id="yachtBookingDate" class="p-input" placeholder="Select Date" required style="border-radius: 10px;">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="p-label mb-2"><i class="bi bi-people me-2"></i>Number of Guests</label>
+                                    <input type="number" name="guests" id="yachtGuestsInput" class="p-input" min="1" max="15" value="1" required style="border-radius: 10px;">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="p-label mb-2"><i class="bi bi-chat-left-dots me-2"></i>Special Requests (Optional)</label>
+                                <textarea name="special_requests" id="yachtRequestsInput" class="p-input" rows="3" placeholder="Any specific requirements for your cruise..." style="border-radius: 10px;"></textarea>
+                            </div>
+                            
+                            <div class="btotal p-3 rounded-4 mb-4" style="background: rgba(250,135,62,0.05); border: 1px dashed var(--brand); flex-direction: column; align-items: stretch; gap: 0.5rem;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--txt-m); text-transform: uppercase; letter-spacing: 0.05em;">Estimated Total</span>
+                                    <span id="yachtTotalPrice" style="font-size: 1.5rem; font-weight: 800; color: var(--brand-d);">₹0</span>
+                                </div>
+                            </div>
+                            
+                            <button type="button" onclick="showYachtSummary()" class="btn-brand w-100 py-3 rounded-3" style="font-weight: 700; letter-spacing: 0.05em; font-size: 1rem;">REVIEW BOOKING</button>
+                        </form>
+                    </div>
+
+                    <!-- Step 2: Booking Summary -->
+                    <div id="yachtStepSummary" class="p-4" style="display: none;">
+                        <div class="text-center mb-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success rounded-circle mb-3" style="width: 60px; height: 60px;">
+                                <i class="bi bi-check-lg fs-2"></i>
+                            </div>
+                            <h4 style="font-family: 'Cormorant Garamond', serif; font-weight: 700;">Booking Summary</h4>
+                            <p class="text-muted small">Please review your reservation details</p>
+                        </div>
+
+                        <div class="bg-light rounded-4 p-4 mb-4">
+                            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                                <span class="text-muted small">Experience</span>
+                                <span class="fw-bold" id="summYachtName">-</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                                <span class="text-muted small">Guest Name</span>
+                                <span class="fw-bold" id="summGuestName">-</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                                <span class="text-muted small">Phone</span>
+                                <span class="fw-bold" id="summGuestPhone">-</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                                <span class="text-muted small">Booking Date</span>
+                                <span class="fw-bold" id="summBookingDate">-</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                                <span class="text-muted small">No. of Guests</span>
+                                <span class="fw-bold" id="summGuests">-</span>
+                            </div>
+                            <div class="d-flex justify-content-between pt-2 mt-2" style="border-top: 2px solid #fff;">
+                                <span class="fw-bold" style="color: var(--brand-d);">Total Payable</span>
+                                <span class="fw-bold h4 mb-0" style="color: var(--brand-d);" id="summTotalAmount">₹0</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3">
+                            <button type="button" onclick="backToYachtForm()" class="btn btn-outline-secondary flex-1 py-3 rounded-3 fw-bold">BACK</button>
+                            <button type="button" onclick="submitYachtBooking()" id="yachtSubmitBtn" class="btn-brand flex-fill py-3 rounded-3 fw-bold">PROCEED TO PAYMENT</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Payment Details -->
+                    <div id="yachtStepPayment" class="p-4" style="display: none;">
+                        <div class="text-center mb-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle mb-3" style="width: 60px; height: 60px;">
+                                <i class="bi bi-credit-card fs-2"></i>
+                            </div>
+                            <h4 style="font-family: 'Cormorant Garamond', serif; font-weight: 700;">Complete Your Payment</h4>
+                            <p class="text-muted small">Choose your preferred payment method</p>
+                        </div>
+
+                        <div class="payment-options d-flex flex-column gap-3 mb-4">
+                            <label class="p-3 border rounded-4 d-flex align-items-center gap-3" style="cursor: pointer; background: #fff; border-color: var(--brand-pale) !important;">
+                                <input type="radio" name="pay_method" value="upi" checked onchange="togglePayMethod('upi')">
+                                <div class="fs-4 text-primary"><i class="bi bi-qr-code-scan"></i></div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-bold" style="font-size: 0.9rem;">UPI Payment</div>
+                                    <div class="text-muted small">GPay, PhonePe, Paytm</div>
+                                </div>
+                            </label>
+                            
+                            <label class="p-3 border rounded-4 d-flex align-items-center gap-3" style="cursor: pointer; background: #fff; border-color: var(--brand-pale) !important;">
+                                <input type="radio" name="pay_method" value="bank" onchange="togglePayMethod('bank')">
+                                <div class="fs-4 text-primary"><i class="bi bi-bank"></i></div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-bold" style="font-size: 0.9rem;">Bank Transfer</div>
+                                    <div class="text-muted small">NEFT / IMPS</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div id="payDetailsUpi" class="bg-light p-3 rounded-3 mb-4 text-center">
+                            <div class="mb-2"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=parudeesa@upi&pn=Parudeesa%20Resort&cu=INR" alt="QR Code" style="width: 120px; border-radius: 12px; border: 4px solid #fff;"></div>
+                            <div class="fw-bold" style="font-size: 0.85rem;">parudeesa@upi</div>
+                            <div class="text-muted" style="font-size: 0.7rem;">Scan to pay ₹<span class="pay-amount-val">0</span></div>
+                        </div>
+
+                        <div id="payDetailsBank" class="bg-light p-3 rounded-3 mb-4" style="display: none;">
+                            <div style="font-size: 0.8rem; line-height: 1.6;">
+                                <div class="d-flex justify-content-between mb-1"><strong>Bank:</strong> <span>Federal Bank</span></div>
+                                <div class="d-flex justify-content-between mb-1"><strong>Acc Name:</strong> <span>Parudeesa Resorts</span></div>
+                                <div class="d-flex justify-content-between mb-1"><strong>Acc No:</strong> <span>12345678901234</span></div>
+                                <div class="d-flex justify-content-between"><strong>IFSC:</strong> <span>FDRL0001234</span></div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning py-2 px-3 rounded-3 mb-4 d-flex gap-2 align-items-center" style="font-size: 0.7rem; border: none; background: rgba(250,135,62,0.1); color: var(--brand-d);">
+                            <i class="bi bi-info-circle fs-6"></i> <span>Please share a screenshot of the payment on WhatsApp for instant confirmation.</span>
+                        </div>
+
+                        <button type="button" onclick="closeYachtModal()" class="btn-brand w-100 py-3 rounded-3 fw-bold">I HAVE PAID</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

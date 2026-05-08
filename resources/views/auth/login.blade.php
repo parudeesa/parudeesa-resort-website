@@ -114,9 +114,9 @@
         }
 
         .nav-link {
-            font-size: .65rem;
+            font-size: .82rem;
             font-weight: 600;
-            letter-spacing: .12em;
+            letter-spacing: .08em;
             text-transform: uppercase;
             color: var(--txt-m) !important;
             padding: .45rem .85rem !important;
@@ -310,7 +310,7 @@
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 75px; width: auto; object-fit: contain;">
+                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 55px; width: auto; object-fit: contain;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

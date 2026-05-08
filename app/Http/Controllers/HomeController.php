@@ -8,6 +8,7 @@ use App\Models\Property;
 use App\Models\Booking;
 use App\Models\BlockedDate;
 use App\Models\Amenity;
+use App\Models\Yacht;
 use App\Services\BookingPricingService;
 
 class HomeController extends Controller
@@ -16,9 +17,9 @@ class HomeController extends Controller
 
     public function index()
     {
-        $properties = Property::with('amenities')->get(); // Fetches rooms from your DB
-        //dd($properties);
-        return view('design', compact('properties')); // Sends them to design.blade.php
+        $properties = Property::with('amenities')->get();
+        $yachts = Yacht::where('status', true)->get();
+        return view('design', compact('properties', 'yachts'));
     }
     public function home()
     {
@@ -28,7 +29,8 @@ class HomeController extends Controller
     public function design()
     {
         $properties = Property::with('amenities')->get();
-        return view('design', compact('properties'));
+        $yachts = Yacht::where('status', true)->get();
+        return view('design', compact('properties', 'yachts'));
     }
 
     public function show($id)
@@ -100,10 +102,16 @@ class HomeController extends Controller
             'amenities' => 'nullable|array',
             'amount' => 'required|numeric',
             'coupon_id' => 'nullable|exists:coupons,id',
-            'discount_amount' => 'nullable|numeric'
+            'discount_amount' => 'nullable|numeric',
+            'pets' => 'nullable|integer|min:0'
         ]);
 
         $quote = $this->pricingService->quote($request->all());
+
+        $notes = $request->notes;
+        if ($request->pets > 0) {
+            $notes = ($notes ? $notes . "\n" : "") . "Pets: " . $request->pets;
+        }
 
         $booking = Booking::create([
             'user_id' => auth()->id(), // Link to logged-in user if available
@@ -120,6 +128,7 @@ class HomeController extends Controller
             'amount' => $quote['amount'],
             'coupon_id' => $quote['coupon_id'],
             'discount_amount' => $quote['discount_amount'],
+            'notes' => $notes,
             'status' => 'pending',
         ]);
 
@@ -139,7 +148,7 @@ class HomeController extends Controller
     public function bookingsIndex()
     {
         $user = auth()->user();
-        $query = Booking::with('property');
+        $query = Booking::with(['property', 'yacht']);
 
         if ($user->role === 'admin') {
             $query->whereHas('property', function($q) use ($user) {

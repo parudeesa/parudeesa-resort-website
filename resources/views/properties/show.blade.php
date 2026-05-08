@@ -9,7 +9,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -59,13 +59,13 @@
   --radius-sm: 10px;
   --ease: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   --font-serif: 'Playfair Display', serif;
-  --font-sans: 'Poppins', sans-serif;
-  --font-body: 'Poppins', sans-serif;
+  --font-sans: 'Outfit', sans-serif;
+  --font-body: 'Outfit', sans-serif;
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{font-family:var(--font-sans);background:var(--bg-ivory);color:var(--text-dark);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+body{font-family:var(--font-sans);background:var(--bg-ivory);color:var(--text-dark);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.8;font-weight: 300;letter-spacing: 0.01em;}
 h1,h2,h3,h4,h5{font-family:var(--font-serif);color:var(--text-dark);line-height:1.2}
 
 /* Navbar */
@@ -103,9 +103,9 @@ h1,h2,h3,h4,h5{font-family:var(--font-serif);color:var(--text-dark);line-height:
     margin-top: .1rem
 }
 .nav-link {
-    font-size: .65rem;
+    font-size: .82rem;
     font-weight: 600;
-    letter-spacing: .12em;
+    letter-spacing: .08em;
     text-transform: uppercase;
     color: var(--text-muted) !important;
     padding: .45rem .85rem !important;
@@ -398,12 +398,35 @@ footer {
 .f-copy {
     font-size: .7rem;
     text-align: center;
-    color: rgba(255, 243, 236, .35)
+    color: rgba(255, 243, 236, .4);
+}
+.footer-social .fs-link {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 243, 236, 0.7);
+    font-size: 1.1rem;
+    transition: all var(--ease);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer-social .fs-link:hover {
+    background: var(--brand);
+    color: #fff;
+    transform: translateY(-3px);
+    border-color: var(--brand);
+}
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
 }
 .footer-contact-item {
     display: flex;
     align-items: center;
-    gap: .8rem;
     margin-bottom: .8rem;
     font-size: .85rem
 }
@@ -587,6 +610,12 @@ footer {
   .content-section{padding:1.5rem}
   .special-content p{max-width:100%}
 }
+
+.section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(250,135,62,0.15), transparent);
+    margin: 2.5rem 0;
+}
 .stay-option-card.is-selected {
   border-color: #fa873e;
   background: #fffaf7;
@@ -594,6 +623,11 @@ footer {
 }
 .stay-option-card {
   transition: all var(--ease);
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
 </style>
 </head>
@@ -603,7 +637,7 @@ footer {
     <nav class="navbar navbar-expand-lg" id="mainNav">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}" style="display: flex; align-items: center;">
-                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 75px; width: auto; object-fit: contain;">
+                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 55px; width: auto; object-fit: contain;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
                 aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -655,6 +689,8 @@ footer {
   </div>
 </div>
 
+
+
 <div class="container mb-5 pb-5">
   <div class="row g-5">
 
@@ -664,7 +700,7 @@ footer {
       <div class="content-section reveal">
         <h2 class="section-title">About Stay</h2>
         <p class="about-text">
-          A simple lakeside stay shaped by calm sunset views and easy private moments.
+          {{ $property->description }}
         </p>
         <h2 class="section-title mt-4">Highlights</h2>
         <div class="highlight-grid">
@@ -735,20 +771,22 @@ footer {
                 <img src="{{ $amenity->image_url ?: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80' }}" alt="{{ $amenity->name }}" loading="lazy">
               </div>
               <div class="exp-body">
-                <div class="exp-title">{{ $amenity->name }}</div>
-                <div class="exp-price">
+                <div class="exp-title" style="font-size: 1.25rem; margin-bottom: 0.75rem;">{{ $amenity->name }}</div>
+                <div class="exp-price" style="display: flex; flex-direction: column; margin-bottom: 1rem;">
                   @if($amenity->price > 0)
-                    ₹{{ number_format($amenity->price, 0) }}{{ $amenity->pricing_type === 'per_person' ? ' / person' : '' }}
+                    <span style="font-size: 1.2rem; font-weight: 800; color: var(--gold);">₹{{ number_format($amenity->price, 0) }}{{ str_contains(strtolower($amenity->name), 'sheesha') ? ' / unit' : (($amenity->pricing_type === 'per_person' && !str_contains(strtolower($amenity->name), 'campfire') && !str_contains(strtolower($amenity->name), 'speaker')) ? ' / person' : '') }}</span>
+                    @if(str_contains(strtolower($amenity->name), 'kayaking'))
+                      <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400; margin-top: -2px;">₹1,000 / person (below 5 people)</span>
+                    @endif
                   @else
-                    Premium Add-on
+                    <span style="font-size: 1.1rem; font-weight: 800; color: var(--gold);">Premium Add-on</span>
                   @endif
                 </div>
-                @if($amenity->condition_note)
+                @if($amenity->condition_note && !str_contains(strtolower($amenity->name), 'kayaking'))
                   <div class="exp-condition">{{ $amenity->condition_note }}</div>
                 @endif
-                <div class="exp-desc">{{ $amenity->description }}</div>
-                <button class="btn-add-exp" onclick="openAddonModal('{{ strtolower($amenity->name) }}', '{{ $amenity->name }}')">
-                  <i class="bi bi-plus-lg"></i> Add
+                <button class="btn-add-exp" style="padding: 0.5rem 1.6rem; font-size: 0.75rem; font-weight: 800;" onclick="openAddonModal('{{ strtolower($amenity->name) }}', '{{ $amenity->name }}')">
+                  <i class="bi bi-plus-lg"></i> ADD
                 </button>
               </div>
             </div>
@@ -763,18 +801,15 @@ footer {
           <div class="special-bg" style="background-image: url('{{ $yachtAmenity->image_url ?: 'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1400&q=80' }}');"></div>
           <div class="special-overlay"></div>
           <div class="special-content">
-            <h4 style="font-size: 1.2rem; margin-bottom: 0.5rem;">{{ $yachtAmenity->name }}</h4>
-            <p>{{ $yachtAmenity->description }}</p>
+            <h4 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.25rem;">{{ $yachtAmenity->name }}</h4>
+            <div style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.75rem;">₹{{ number_format($yachtAmenity->price, 0) }}</div>
+            <div style="font-size: 0.9rem; color: rgba(255,255,255,0.9); margin-bottom: 1.5rem; display: flex; gap: 1.2rem;">
+                <span><i class="bi bi-clock me-1"></i> 5 Hours</span>
+                <span><i class="bi bi-people me-1"></i> Up to 10 People</span>
+            </div>
             <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-              <span class="special-price">
-                @if($yachtAmenity->price > 0)
-                  ₹{{ number_format($yachtAmenity->price, 0) }}
-                @else
-                  Premium Add-on
-                @endif
-              </span>
-              <button class="btn-add-exp" style="background: #fff; color: var(--text-dark); border: none;" onclick="openAddonModal('{{ strtolower($yachtAmenity->name) }}', '{{ $yachtAmenity->name }}')">
-                <i class="bi bi-plus-lg"></i> Add to Booking
+              <button class="btn-add-exp" style="background: #fff; color: var(--text-dark); border: none; padding: 0.6rem 1.8rem; font-weight: 800; border-radius: 50px; font-size: 0.8rem;" onclick="openAddonModal('{{ strtolower($yachtAmenity->name) }}', '{{ $yachtAmenity->name }}')">
+                <i class="bi bi-plus-lg"></i> ADD TO BOOKING
               </button>
             </div>
           </div>
@@ -822,48 +857,43 @@ footer {
       <div class="booking-sticky reveal">
         <div class="booking-card">
           {{-- 1. Pricing Options (LOW -> HIGH) --}}
-          <div style="font-family:var(--font-sans);font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.85rem;">
-            Select Stay Option
-          </div>
-          <div class="pricing-options-grid mb-4" style="display: flex; flex-direction: column; gap: 0.75rem;">
-            {{-- 1. Weekday (Up to 5 Guests) --}}
-            <label class="amenity-card stay-option-card" style="cursor: pointer;">
-                <input type="radio" name="stay_option_radio" value="8000" data-label="Weekday (Up to 5 Guests)" style="display: none;">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div style="font-weight: 700; color: var(--text-dark);">Weekday (Up to 5 Guests)</div>
-                    </div>
-                    <div class="stay-price-display" style="font-weight: 800; color: var(--gold);">₹8,000</div>
-                </div>
-            </label>
-            {{-- 2. Weekday (Up to 10 Guests) --}}
-            <label class="amenity-card stay-option-card" style="cursor: pointer;">
-                <input type="radio" name="stay_option_radio" value="11000" data-label="Weekday (Up to 10 Guests)" style="display: none;">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div style="font-weight: 700; color: var(--text-dark);">Weekday (Up to 10 Guests)</div>
-                    </div>
-                    <div class="stay-price-display" style="font-weight: 800; color: var(--gold);">₹11,000</div>
-                </div>
-            </label>
-            {{-- 3. Weekend (Up to 10 Guests) --}}
-            <label class="amenity-card stay-option-card is-selected" style="cursor: pointer;">
-                <input type="radio" name="stay_option_radio" value="12000" data-label="Weekend (Up to 10 Guests)" checked style="display: none;">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div style="font-weight: 700; color: var(--text-dark);">Weekend (Up to 10 Guests)</div>
-                    </div>
-                    <div class="stay-price-display" style="font-weight: 800; color: var(--gold);">₹12,000</div>
-                </div>
-            </label>
+          {{-- 1. Pricing Options (STATIC) --}}
+          <div style="background: rgba(250,135,62,0.05); border: 1px solid rgba(250,135,62,0.15); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
+            <div style="font-family:var(--font-sans);font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-d);margin-bottom:1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="bi bi-info-circle"></i> STAY OPTIONS
+            </div>
+            <div class="pricing-options-grid" style="display: flex; flex-direction: column; gap: 0.85rem;">
+              {{-- Hidden Radios for Logic --}}
+              <input type="radio" name="stay_option_radio" id="radio-opt-1" value="8000" data-label="Weekday (Up to 5 Guests)" style="display: none;">
+              <input type="radio" name="stay_option_radio" id="radio-opt-2" value="11000" data-label="Weekday (Up to 10 Guests)" style="display: none;">
+              <input type="radio" name="stay_option_radio" id="radio-opt-3" value="12000" data-label="Weekend (Up to 10 Guests)" checked style="display: none;">
+
+              {{-- 1. Weekday (Up to 5 Guests) --}}
+              <div id="stay-opt-1" style="padding: 1rem 1.25rem; border-radius: 12px; background: #fff; border: 1px solid rgba(250,135,62,0.1); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
+                <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">Weekday <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">(Up to 5 Guests)</span></div>
+                <div style="font-weight: 800; color: var(--gold); font-size: 1rem;">₹8,000</div>
+              </div>
+              {{-- 2. Weekday (Up to 10 Guests) --}}
+              <div id="stay-opt-2" style="padding: 1rem 1.25rem; border-radius: 12px; background: #fff; border: 1px solid rgba(250,135,62,0.1); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
+                <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">Weekday <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">(Up to 10 Guests)</span></div>
+                <div style="font-weight: 800; color: var(--gold); font-size: 1rem;">₹11,000</div>
+              </div>
+              {{-- 3. Weekend (Up to 10 Guests) --}}
+              <div id="stay-opt-3" style="padding: 1rem 1.25rem; border-radius: 12px; background: #fff; border: 1px solid rgba(250,135,62,0.1); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
+                <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">Weekend <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">(Up to 10 Guests)</span></div>
+                <div style="font-weight: 800; color: var(--gold); font-size: 1rem;">₹12,000</div>
+              </div>
+            </div>
           </div>
 
-          {{-- 2. BOOK VIA CHATBOT Button (Reduced size) --}}
+          {{-- 2. BOOK VIA CHATBOT Button --}}
           <div class="text-center mb-4">
-            <a href="/chatbot" class="btn-wa-alt d-inline-flex justify-content-center align-items-center" style="background: linear-gradient(135deg, #25D366, #1aa854); color: #fff; padding: 0.5rem 1.5rem; font-size: 0.85rem; border-radius: 30px; width: auto; gap: 0.5rem;">
+            <a href="/chatbot" class="btn-wa-alt d-inline-flex justify-content-center align-items-center" style="background: linear-gradient(135deg, #25D366, #1aa854); color: #fff; padding: 0.5rem 1.5rem; font-size: 0.85rem; border-radius: 30px; width: auto; gap: 0.5rem; border: none; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);">
               <i class="bi bi-robot"></i> BOOK VIA CHATBOT
             </a>
           </div>
+
+          <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(250,135,62,0.2), transparent); margin: 2rem 0;"></div>
 
           <form action="{{ route('bookings.store') }}" method="POST" id="bk-form">
             @csrf
@@ -876,22 +906,41 @@ footer {
 
             <!-- Sidebar Form Content (Always Visible) -->
             <div id="booking-details-sidebar">
+              <div style="font-family:var(--font-serif); font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1.5rem; text-align: center;">Book Your Stay</div>
+              
               <div class="form-row">
-                <input type="text"   class="bk-input" id="checkin"  name="check_in"  placeholder="Check-in Date"  required />
-                <input type="text"   class="bk-input" id="checkout" name="check_out" placeholder="Check-out Date" required />
+                <div class="mb-3">
+                    <label class="p-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; display: block;">Check-in Date</label>
+                    <input type="text"   class="bk-input" id="checkin"  name="check_in"  placeholder="Select Date"  required />
+                </div>
+                <div class="mb-3">
+                    <label class="p-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; display: block;">Check-out Date</label>
+                    <input type="text"   class="bk-input" id="checkout" name="check_out" placeholder="Select Date" required />
+                </div>
               </div>
+              
               <div class="form-row">
-                <div style="position: relative;">
-                  <input type="number" class="bk-input" name="guests" id="guests-input" placeholder="Total Guests" min="1" required />
-                  <div id="guest-error" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;line-height:1.2;"></div>
+                <div class="mb-3" style="position: relative;">
+                    <label class="p-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; display: block;">Name</label>
+                    <input type="text" class="bk-input" name="name" placeholder="Full Name" required minlength="3" pattern="[A-Za-z\s]+" title="Name should only contain letters." />
+                    <div class="error-msg" id="err-name" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;">Name is required (min 3 letters, no numbers)</div>
                 </div>
-                <div style="position: relative;">
-                  <input type="text" class="bk-input" name="name" placeholder="Full Name" required minlength="3" pattern="[A-Za-z\s]+" title="Name should only contain letters." />
-                  <div class="error-msg" id="err-name" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;">Name is required (min 3 letters, no numbers)</div>
+                <div class="mb-3" style="position: relative;">
+                    <label class="p-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; display: block;">Phone Number</label>
+                    <input type="tel" class="bk-input" name="phone" placeholder="10-digit Number" required pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" />
+                    <div class="error-msg" id="err-phone" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;">Phone number must contain exactly 10 digits.</div>
                 </div>
-                <div style="position: relative;">
-                  <input type="tel" class="bk-input" name="phone" placeholder="Phone Number" required pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" />
-                  <div class="error-msg" id="err-phone" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;">Phone number must contain exactly 10 digits.</div>
+              </div>
+
+              <div class="form-row">
+                <div class="mb-3" style="position: relative;">
+                    <label class="p-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; display: block;">Number of Guests</label>
+                    <input type="number" class="bk-input" name="guests" id="guests-input" placeholder="Total Guests" min="1" required />
+                    <div id="guest-error" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;line-height:1.2;"></div>
+                </div>
+                <div class="mb-3" style="position: relative;">
+                    <label class="p-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; display: block;">Number of Pets <span style="font-size: 0.6rem; color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
+                    <input type="number" class="bk-input" name="pets" placeholder="No. of Pets" min="0" />
                 </div>
               </div>
 
@@ -909,29 +958,40 @@ footer {
                                data-amenity-id="{{ $amenity->id }}" 
                                data-amenity-name="{{ $amenity->name }}" 
                                data-amenity-price="{{ $amenity->price }}" 
-                               data-amenity-type="{{ $amenity->pricing_type }}" 
+                               data-amenity-type="{{ str_contains(strtolower($amenity->name), 'sheesha') ? 'per_person' : $amenity->pricing_type }}" 
                                name="amenities[{{ $amenity->id }}][selected]" value="1" />
                         <span style="font-weight: 600; font-size: 0.85rem; color: var(--text-dark);">{{ $amenity->name }}</span>
                       </label>
-                      <div style="font-weight: 700; font-size: 0.85rem; color: var(--gold);">
+                      <div style="font-weight: 700; font-size: 0.85rem; color: var(--gold); text-align: right;">
                         @if($amenity->price > 0)
-                          ₹{{ number_format($amenity->price, 0) }}{{ $amenity->pricing_type === 'per_person' ? '/p' : '' }}
+                          @if(str_contains(strtolower($amenity->name), 'kayaking'))
+                            <div id="kayak-sidebar-rate-main">₹{{ (old('guests', 1) < 5) ? '1,000' : '700' }}/p</div>
+                            <div id="kayak-sidebar-rate-sub" style="font-size: 0.6rem; color: var(--text-muted); font-weight: 400; margin-top: -2px;">₹{{ (old('guests', 1) < 5) ? '700' : '1000' }}/p ({{ (old('guests', 1) < 5) ? '5+ guests' : 'below 5' }})</div>
+                          @elseif(str_contains(strtolower($amenity->name), 'yacht'))
+                            <div>₹{{ number_format($amenity->price, 0) }}</div>
+                            <div style="font-size: 0.6rem; color: var(--text-muted); font-weight: 400; margin-top: -2px;">5 Hours • Up to 10 People</div>
+                          @else
+                            ₹{{ number_format($amenity->price, 0) }}{{ (str_contains(strtolower($amenity->name), 'sheesha') || ($amenity->pricing_type === 'per_person' && !str_contains(strtolower($amenity->name), 'campfire') && !str_contains(strtolower($amenity->name), 'speaker'))) ? (str_contains(strtolower($amenity->name), 'sheesha') ? '/unit' : '/p') : '' }}
+                          @endif
                         @else
                           Premium
                         @endif
                       </div>
                     </div>
                     
-                    @if($amenity->pricing_type === 'per_person')
+                    @if((str_contains(strtolower($amenity->name), 'sheesha') || $amenity->pricing_type === 'per_person') && !str_contains(strtolower($amenity->name), 'campfire') && !str_contains(strtolower($amenity->name), 'speaker'))
                     <div class="amenity-participants mt-2" style="display: none;">
                       <div class="d-flex align-items-center justify-content-between">
-                        <div style="font-size: 0.7rem; color: var(--text-muted);">Persons:</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted);">{{ str_contains(strtolower($amenity->name), 'sheesha') ? 'Units:' : 'Persons:' }}</div>
                         <div class="d-flex align-items-center gap-2">
                           <button type="button" class="counter-btn minus-btn" style="width:24px; height:24px; font-size:0.8rem;" disabled>−</button>
                           <input type="number" class="counter-input amenity-participants-input" name="amenities[{{ $amenity->id }}][participants]" value="1" min="1" readonly style="width:30px; border:none; background:transparent; text-align:center; font-weight:700; font-size:0.85rem;" />
                           <button type="button" class="counter-btn plus-btn" style="width:24px; height:24px; font-size:0.8rem;">+</button>
                         </div>
                       </div>
+                      @if(str_contains(strtolower($amenity->name), 'sheesha'))
+                        <div class="limit-msg" style="display: none; font-size: 0.65rem; color: #d96520; font-weight: 700; margin-top: 4px; text-align: right;"><i class="bi bi-exclamation-triangle-fill"></i> Only 6 Sheeshas available</div>
+                      @endif
                     </div>
                     @else
                     <input type="hidden" class="counter-input" name="amenities[{{ $amenity->id }}][participants]" value="1" />
@@ -942,19 +1002,25 @@ footer {
                   @endforelse
                 </div>
 
-                <div id="selected-amenities-preview" style="display:none; padding:1rem; border-radius:12px; background:rgba(250,135,62,.05); border:1px solid rgba(250,135,62,.15); margin-top:1rem;">
-                  <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; color:var(--gold); margin-bottom:0.5rem; letter-spacing:0.05em;">Selected Experiences</div>
-                  <div id="preview-items-list" style="display:flex; flex-direction:column; gap:0.4rem;"></div>
+                <div id="selected-amenities-preview" style="padding:1.5rem; border-radius:20px; background:rgba(250,135,62,.03); border:1px solid rgba(250,135,62,.1); margin-top:1.5rem; box-shadow: 0 10px 30px rgba(62, 32, 16, 0.03);">
+                  <div style="font-size:0.75rem; font-weight:800; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; letter-spacing:0.12em; display:flex; align-items:center; gap:0.6rem;">
+                    <i class="bi bi-receipt"></i> Booking Summary
+                  </div>
+                  <div id="preview-items-list" style="display:flex; flex-direction:column; gap:0.75rem; border-bottom: 1px solid rgba(250,135,62,0.1); padding-bottom: 1rem; margin-bottom: 1rem;"></div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, rgba(250,135,62,0.08), rgba(250,135,62,0.02)); padding:1rem; border-radius:12px;">
+                    <span style="font-size:0.85rem; font-weight:800; color:var(--text-dark); text-transform:uppercase; letter-spacing:0.05em;">Total Payable</span>
+                    <span id="sidebar-grand-total" style="font-size:1.4rem; font-weight:900; color:var(--brand-d); font-family:var(--font-sans); line-height:1;">₹0</span>
+                  </div>
                 </div>
               </div>
 
               <button type="button" class="btn-book-submit" style="margin-top:1.5rem;" onclick="openBookingWizard()">CONFIRM BOOKING</button>
             </div>
 
-            {{-- Enquiry Section (shown on all steps or just step 1) --}}
-            <div id="enquiry-section" class="contact-panel" style="margin-top:1.2rem;padding:1.5rem;border:1px solid rgba(0,0,0,.08);border-radius:12px;background:#fafafa;font-size:.95rem;text-align:center;">
-              <div style="font-weight:700;margin-bottom:.85rem;color:var(--text-dark);">For enquiries only:</div>
-              <a href="{{ route('home') }}#contact" class="btn-outline-premium w-100 justify-content-center" style="display:inline-flex;text-decoration:none;">ENQUIRE NOW</a>
+            {{-- Enquiry Section --}}
+            <div id="enquiry-section" class="contact-panel" style="margin-top:2.5rem; padding-top:2rem; border-top:1px solid rgba(250,135,62,0.15); text-align:center;">
+              <div style="font-weight:700; font-size: 0.9rem; color:var(--text-dark); margin-bottom:0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">For more enquiries</div>
+              <a href="{{ route('home') }}#contact" class="btn-outline-premium justify-content-center" style="display:inline-flex; text-decoration:none; padding: 0.7rem 2rem; font-size: 0.8rem; border-radius: 50px; border: 1.5px solid var(--brand); color: var(--brand-d); font-weight: 700; transition: all 0.3s ease; width: auto;">CONTACT US</a>
             </div>
 
             <div id="booking-msg" style="display:none;margin-top:1.5rem;padding:1rem;border-radius:var(--radius-sm);font-size:.9rem;text-align:center"></div>
@@ -972,17 +1038,15 @@ footer {
   <footer>
     <div class="container">
       <div class="row g-5">
-        <!-- SECTION 1: ADDRESS -->
+        <!-- SECTION 1: BRAND & ADDRESS -->
         <div class="col-lg-3 col-md-6">
-          <div class="f-head">Address</div>
-          <div class="f-brand" style="font-family: 'Cormorant Garamond', serif; font-weight:700;">
-            <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 85px; width: auto; object-fit: contain;">
+          <div class="f-brand mb-3" style="font-family: 'Cormorant Garamond', serif; font-weight:700;">
+            <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 90px; width: auto; object-fit: contain;">
           </div>
-          <p style="font-size:.8rem;color:rgba(255,243,236,.55);margin-top:1rem;line-height:1.75">
-            Kerala Backwaters<br/>
-            India
+          <p style="font-size:.85rem;color:rgba(255,243,236,.6);line-height:1.8">
+            Kerala Backwaters, India
           </p>
-          <p style="font-style:italic;color:rgba(255,243,236,.4);font-size:.95rem;line-height:1.65; font-family:'EB Garamond', serif;">
+          <p style="font-style:italic;color:rgba(255,243,236,.4);font-size:1rem;line-height:1.6; font-family:'EB Garamond', serif; margin-top: 1rem;">
             "Experience Serenity by the Lake"</p>
         </div>
 
@@ -995,6 +1059,7 @@ footer {
             <li><a href="{{ route('home') }}#gallery">Gallery</a></li>
             <li><a href="{{ route('home') }}#about">About Us</a></li>
             <li><a href="{{ route('home') }}#contact">Contact</a></li>
+            <li><a href="/booking">Book Now</a></li>
           </ul>
         </div>
 
@@ -1011,9 +1076,22 @@ footer {
         <!-- SECTION 4: CONTACT US -->
         <div class="col-md-6 col-lg-4">
           <div class="f-head">Contact Us</div>
-          <div class="footer-contact">
-            <div class="footer-contact-item"><i class="bi bi-telephone" style="color:var(--brand)"></i><a href="tel:+918921021202">+91 89210 21202</a></div>
-            <div class="footer-contact-item"><i class="bi bi-envelope" style="color:var(--brand-l)"></i><a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a></div>
+          <div class="footer-contact mb-4">
+            <div class="footer-contact-item">
+              <i class="bi bi-telephone" style="color:var(--brand)"></i>
+              <a href="tel:+918921021202">+91 89210 21202</a>
+            </div>
+            <div class="footer-contact-item">
+              <i class="bi bi-envelope" style="color:var(--brand-l)"></i>
+              <a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a>
+            </div>
+          </div>
+          
+          <div class="f-head" style="margin-top: 2rem;">Follow Us</div>
+          <div class="footer-social d-flex gap-3">
+              <a href="https://instagram.com/parudeesa" target="_blank" class="fs-link" title="Instagram"><i class="bi bi-instagram"></i></a>
+              <a href="https://facebook.com/parudeesa" target="_blank" class="fs-link" title="Facebook"><i class="bi bi-facebook"></i></a>
+              <a href="https://youtube.com/parudeesa" target="_blank" class="fs-link" title="YouTube"><i class="bi bi-youtube"></i></a>
           </div>
         </div>
       </div>
@@ -1024,7 +1102,7 @@ footer {
 
   <!-- ████ Booking Wizard Modal ████ -->
   <div class="modal fade" id="bookingWizardModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content" style="border-radius: var(--radius-lg); border: none; box-shadow: var(--shadow-hover);">
         <div class="modal-header" style="border-bottom: 1px solid var(--gold-light); padding: 1.5rem;">
           <h5 class="modal-title" id="wizardTitle" style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--text-dark);">Stay Options</h5>
@@ -1036,27 +1114,51 @@ footer {
           <div id="wizard-step-1">
             <p class="text-muted mb-4" style="font-size: 0.9rem;">Please select your preferred stay package to continue.</p>
             <div class="d-flex flex-column gap-3 mb-4">
-              <label class="amenity-card stay-option-card is-selected" style="cursor: pointer;">
+              <label class="amenity-card stay-option-card is-selected" style="cursor: pointer; border-radius: 16px; padding: 1.25rem; transition: all 0.3s ease;">
                 <input type="radio" name="wizard_package_option" value="0" data-name="Only Stay" checked style="display: none;">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div style="font-weight: 700; color: var(--text-dark);">Only Stay</div>
-                  <div style="font-weight: 800; color: var(--gold);">Base Price</div>
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="package-icon" style="width: 45px; height: 45px; border-radius: 12px; background: rgba(250,135,62,0.1); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.25rem;">
+                      <i class="bi bi-house-door-fill"></i>
+                    </div>
+                    <div style="font-weight: 700; color: var(--text-dark); font-size: 1rem;">Only Stay</div>
+                  </div>
+                  <div id="wizard-only-stay-price" style="font-weight: 800; color: var(--gold); font-size: 1.2rem; white-space: nowrap;">₹0</div>
                 </div>
               </label>
-              <label class="amenity-card stay-option-card" style="cursor: pointer;">
-                <input type="radio" name="wizard_package_option" value="200" data-name="Stay + Breakfast" style="display: none;">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div style="font-weight: 700; color: var(--text-dark);">Stay + Breakfast</div>
-                  <div style="font-weight: 800; color: var(--gold);">+ ₹200 / person</div>
+              
+              <label class="amenity-card stay-option-card" style="cursor: pointer; border-radius: 16px; padding: 1.25rem; transition: all 0.3s ease;">
+                <input type="radio" name="wizard_package_option" value="200" data-name="Stay + Breakfast + Tea & Snacks" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="package-icon" style="width: 45px; height: 45px; border-radius: 12px; background: rgba(250,135,62,0.1); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.25rem;">
+                      <i class="bi bi-cup-hot-fill"></i>
+                    </div>
+                    <div style="font-weight: 700; color: var(--text-dark); font-size: 1rem;">Stay + Breakfast + Tea & Snacks</div>
+                  </div>
+                  <div style="font-weight: 800; color: var(--gold); font-size: 1.1rem; white-space: nowrap;">+ ₹200 / person</div>
                 </div>
               </label>
-              <label class="amenity-card stay-option-card" style="cursor: pointer;">
-                <input type="radio" name="wizard_package_option" value="450" data-name="Stay + Breakfast + Dinner" style="display: none;">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div style="font-weight: 700; color: var(--text-dark);">Stay + Breakfast + Dinner</div>
-                  <div style="font-weight: 800; color: var(--gold);">+ ₹450 / person</div>
+              
+              <label class="amenity-card stay-option-card" style="cursor: pointer; border-radius: 16px; padding: 1.25rem; transition: all 0.3s ease;">
+                <input type="radio" name="wizard_package_option" value="450" data-name="Stay + Breakfast + Tea & Snacks + Dinner" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="package-icon" style="width: 45px; height: 45px; border-radius: 12px; background: rgba(250,135,62,0.1); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.25rem;">
+                      <i class="bi bi-moon-stars-fill"></i>
+                    </div>
+                    <div style="font-weight: 700; color: var(--text-dark); font-size: 1rem;">Stay + Breakfast + Tea & Snacks + Dinner</div>
+                  </div>
+                  <div style="font-weight: 800; color: var(--gold); font-size: 1.1rem; white-space: nowrap;">+ ₹450 / person</div>
                 </div>
               </label>
+            </div>
+
+            <div id="wizard-step-1-total-box" class="mb-4 p-3 rounded-4" style="background: rgba(250,135,62,0.05); border: 1px solid rgba(250,135,62,0.15);">
+              <div class="d-flex justify-content-between align-items-center">
+                <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-dark); text-transform: uppercase; letter-spacing: 0.05em;">Total Amount</span>
+                <span id="wizard-step-1-total-val" style="font-size: 1.4rem; font-weight: 900; color: var(--gold);">₹0</span>
+              </div>
             </div>
             <button type="button" class="btn-book-submit w-100" onclick="wizardGoToStep(2)">Continue to Summary</button>
           </div>
@@ -1064,20 +1166,40 @@ footer {
           <!-- Wizard Step 2: Booking Summary -->
           <div id="wizard-step-2" style="display:none;">
             <div class="summary-details p-4 rounded-4" style="background:var(--bg-beige); border:1px solid rgba(250,135,62,.12);">
+              
+              <!-- Guest Info Section -->
+              <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; letter-spacing: 0.1em;">Guest Information</div>
+              <div class="d-flex justify-content-between mb-2">
+                <span style="color:var(--text-muted); font-size:0.9rem;">Name:</span>
+                <span id="wizard-summary-name" style="font-weight:700; color:var(--text-dark);"></span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span style="color:var(--text-muted); font-size:0.9rem;">Phone:</span>
+                <span id="wizard-summary-phone" style="font-weight:700; color:var(--text-dark);"></span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span style="color:var(--text-muted); font-size:0.9rem;">Guests:</span>
+                <span id="wizard-summary-guests" style="font-weight:700; color:var(--text-dark);"></span>
+              </div>
+              <div id="wizard-summary-pets-row" class="d-flex justify-content-between mb-3 pb-3 border-bottom" style="border-color:rgba(250,135,62,.1) !important; display: none;">
+                <span style="color:var(--text-muted); font-size:0.9rem;">Pets:</span>
+                <span id="wizard-summary-pets" style="font-weight:700; color:var(--text-dark);"></span>
+              </div>
+
+              <!-- Booking Info Section -->
+              <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; margin-top: 1.5rem; letter-spacing: 0.1em;">Stay Details</div>
               <div class="d-flex justify-content-between mb-2">
                 <span style="color:var(--text-muted); font-size:0.9rem;">Stay Type:</span>
                 <span id="wizard-summary-stay-type" style="font-weight:700; color:var(--text-dark);"></span>
               </div>
-              <div class="d-flex justify-content-between mb-2">
+              <div class="d-flex justify-content-between mb-3 pb-3 border-bottom" style="border-color:rgba(250,135,62,.1) !important;">
                 <span style="color:var(--text-muted); font-size:0.9rem;">Package:</span>
                 <span id="wizard-summary-package" style="font-weight:700; color:var(--gold);"></span>
               </div>
-              <div class="d-flex justify-content-between mb-3 pb-3 border-bottom" style="border-color:rgba(250,135,62,.1) !important;">
-                <span style="color:var(--text-muted); font-size:0.9rem;">Guests:</span>
-                <span id="wizard-summary-guests" style="font-weight:700; color:var(--text-dark);"></span>
-              </div>
               
-              <div id="wizard-summary-amenities" class="mb-3"></div>
+              <!-- Cost Breakdown Section -->
+              <div style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; margin-top: 1.5rem; letter-spacing: 0.1em;">Price Breakdown</div>
+              <div id="wizard-summary-cost-items" class="mb-3"></div>
 
               {{-- Coupon Section in Wizard --}}
               <div class="coupon-wizard-section mb-3 p-3 rounded-3" style="background:#fff; border:1px dashed var(--gold);">
@@ -1220,9 +1342,44 @@ function openBookingWizard() {
   
   // Reset wizard to Step 1
   wizardGoToStep(1);
+
+  // Populate dynamic prices in Step 1
+  const baseAmt = parseFloat(document.getElementById('form-base-amount').value) || 0;
+  const onlyStayLabel = document.getElementById('wizard-only-stay-price');
+  if (onlyStayLabel) {
+    onlyStayLabel.textContent = `₹${baseAmt.toLocaleString()}`;
+  }
+  
+  updateStep1Total();
+
   const wizardModal = new bootstrap.Modal(document.getElementById('bookingWizardModal'));
   wizardModal.show();
 }
+
+function updateStep1Total() {
+  const baseAmt = parseFloat(document.getElementById('form-base-amount').value) || 0;
+  const amenitiesAmt = parseFloat(document.getElementById('form-extra-amount').value) || 0;
+  const guests = getGuestCount();
+  const nights = getBookingNights() || 1;
+  const selectedPackage = document.querySelector('input[name="wizard_package_option"]:checked');
+  const packageRate = selectedPackage ? parseFloat(selectedPackage.value) : 0;
+  
+  const total = baseAmt + amenitiesAmt + (packageRate * guests * nights);
+  const totalVal = document.getElementById('wizard-step-1-total-val');
+  if (totalVal) {
+    totalVal.textContent = `₹${total.toLocaleString()}`;
+  }
+}
+
+// Add listener for Step 1 package changes
+document.addEventListener('change', function(e) {
+  if (e.target && e.target.name === 'wizard_package_option') {
+    // UI feedback for selection
+    document.querySelectorAll('#wizard-step-1 .stay-option-card').forEach(c => c.classList.remove('is-selected'));
+    e.target.closest('.stay-option-card').classList.add('is-selected');
+    updateStep1Total();
+  }
+});
 
 function wizardGoToStep(step) {
   const step1 = document.getElementById('wizard-step-1');
@@ -1245,45 +1402,80 @@ function wizardGoToStep(step) {
 function updateWizardSummary() {
   const stayOptionLabel = document.getElementById('form-event-type').value;
   const guestCount = getGuestCount();
+  const guestName = document.querySelector('input[name="name"]').value;
+  const guestPhone = document.querySelector('input[name="phone"]').value;
+  const petCount = parseInt(document.querySelector('input[name="pets"]')?.value || '0');
+  
   const selectedPackage = document.querySelector('input[name="wizard_package_option"]:checked');
   const packageName = selectedPackage.dataset.name;
   const packagePricePerPerson = parseFloat(selectedPackage.value);
   
   // Base Stay Price (already calculated in form-base-amount during updateBookingSummary)
+  const nights = getBookingNights() || 1;
   const baseTotal = parseFloat(document.getElementById('form-base-amount').value) || 0;
-  const packageTotal = packagePricePerPerson * guestCount;
+  const packageTotal = packagePricePerPerson * guestCount * nights;
   const amenitiesTotal = parseFloat(document.getElementById('form-extra-amount').value) || 0;
   const grandTotal = baseTotal + packageTotal + amenitiesTotal;
   
-  document.getElementById('wizard-summary-stay-type').textContent = stayOptionLabel;
+  // Update UI Elements
+  document.getElementById('wizard-summary-name').textContent = guestName;
+  document.getElementById('wizard-summary-phone').textContent = guestPhone;
   document.getElementById('wizard-summary-guests').textContent = guestCount;
+  
+  const petsRow = document.getElementById('wizard-summary-pets-row');
+  if (petCount > 0) {
+      petsRow.style.display = 'flex';
+      document.getElementById('wizard-summary-pets').textContent = petCount;
+  } else {
+      petsRow.style.display = 'none';
+  }
+
+  document.getElementById('wizard-summary-stay-type').textContent = stayOptionLabel + (nights > 0 ? ` (${nights} ${nights === 1 ? 'night' : 'nights'})` : '');
   document.getElementById('wizard-summary-package').textContent = packageName;
   document.getElementById('wizard-summary-total').textContent = `₹${grandTotal.toLocaleString()}`;
   
-  // Populate amenities in summary
-  const amenities = buildAmenityPayload();
-  const amenitiesContainer = document.getElementById('wizard-summary-amenities');
-  amenitiesContainer.innerHTML = '';
+  // Detailed Cost Breakdown
+  const costItemsContainer = document.getElementById('wizard-summary-cost-items');
+  costItemsContainer.innerHTML = '';
   
+  // 1. Stay Cost
+  const stayItem = document.createElement('div');
+  stayItem.style.cssText = 'display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.6rem; color:var(--text-dark); border-bottom: 1px dashed rgba(250,135,62,0.1); padding-bottom: 0.4rem;';
+  stayItem.innerHTML = `<span>Base Stay Cost</span><span style="font-weight: 700;">₹${baseTotal.toLocaleString()}</span>`;
+  costItemsContainer.appendChild(stayItem);
+
+  // 2. Package Cost
+  if (packageTotal > 0) {
+      const packItem = document.createElement('div');
+      packItem.style.cssText = 'display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.6rem; color:var(--text-dark); border-bottom: 1px dashed rgba(250,135,62,0.1); padding-bottom: 0.4rem;';
+      packItem.innerHTML = `<span>Food Package (${packageName})</span><span style="font-weight: 700;">₹${packageTotal.toLocaleString()}</span>`;
+      costItemsContainer.appendChild(packItem);
+  }
+
+  // 3. Amenities
+  const amenities = buildAmenityPayload();
   if(amenities.length > 0) {
     amenities.forEach(a => {
       const item = document.createElement('div');
-      item.style.cssText = 'display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.4rem; color:var(--text-muted);';
-      const text = a.pricing_type === 'per_person' ? `${a.name} (${a.participants} guests)` : a.name;
+      item.style.cssText = 'display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.6rem; color:var(--text-muted);';
+      let text = (a.pricing_type === 'per_person' && !a.name.toLowerCase().includes('campfire') && !a.name.toLowerCase().includes('speaker')) 
+                 ? `${a.name} (${a.participants} ${a.name.toLowerCase().includes('sheesha') ? 'units' : 'guests'})` 
+                 : a.name;
+      if (a.name.toLowerCase().includes('kayaking')) {
+          text = `${a.name} (₹${a.price}/p × ${a.participants} guests)`;
+      }
       item.innerHTML = `<span>${text}</span><span style="font-weight: 600; color:var(--text-dark);">₹${a.total.toLocaleString()}</span>`;
-      amenitiesContainer.appendChild(item);
+      costItemsContainer.appendChild(item);
     });
-  } else {
-    amenitiesContainer.innerHTML = '<div style="font-size:0.85rem; color:var(--text-muted); font-style:italic;">No extra amenities selected</div>';
   }
-  
+
   // Sync values back to hidden form inputs for final submission
   document.getElementById('form-package-name').value = packageName;
   document.getElementById('form-amount').value = grandTotal;
   
-  // Re-apply coupon if active, ensuring it's calculated from the NEW grandTotal
+  // Re-apply coupon if active
   if (currentWizardCoupon) {
-      applyWizardCoupon(true); // true means silent re-apply
+      applyWizardCoupon(true);
   }
 }
 
@@ -1463,15 +1655,34 @@ function initAmenityListeners() {
       const guestCount = getGuestCount();
       let val = parseInt(input.value) || 1;
 
-      if (val < guestCount) {
+      const isSheesha = (card.querySelector('.amenity-selector').dataset.amenityName || '').toLowerCase().includes('sheesha');
+      const limit = isSheesha ? 6 : guestCount;
+
+      if (val < limit) {
         val++;
         input.value       = val;
         minusBtn.disabled = val <= 1;
-        btn.disabled      = val >= guestCount;
+        btn.disabled      = val >= limit;
+        
+        // Show limit message for Sheesha
+        if (isSheesha && val === 6) {
+            const msg = card.querySelector('.limit-msg');
+            if (msg) msg.style.display = 'block';
+        }
+
         updateSubtotal(card, price, val);
         updateBookingSummary();
       } else {
-        alert(`Participants cannot exceed the total number of guests (${guestCount}).`);
+        if (isSheesha) {
+            const msg = card.querySelector('.limit-msg');
+            if (msg) {
+                msg.style.display = 'block';
+                msg.style.animation = 'shake 0.3s ease';
+                setTimeout(() => msg.style.animation = '', 300);
+            }
+        } else {
+            alert(`Participants cannot exceed the total number of guests (${guestCount}).`);
+        }
       }
     });
   });
@@ -1491,25 +1702,97 @@ function initAmenityListeners() {
         input.value      = val;
         btn.disabled     = val <= 1;
         plusBtn.disabled = val >= getGuestCount();
+        
+        // Hide limit message for Sheesha if below 6
+        if ((card.querySelector('.amenity-selector').dataset.amenityName || '').toLowerCase().includes('sheesha') && val < 6) {
+            const msg = card.querySelector('.limit-msg');
+            if (msg) msg.style.display = 'none';
+        }
+
         updateSubtotal(card, price, val);
         updateBookingSummary();
       }
     });
   });
+}
 
-  /* Guest count change → clamp participant inputs */
-  const guestInput = document.getElementById('guests-input');
-  if (guestInput) {
-    guestInput.addEventListener('input', () => {
-      syncLimits();
-      updateBookingSummary();
-    });
-  }
+/* Guest count change → clamp participant inputs */
+document.addEventListener('DOMContentLoaded', () => {
+    const guestInput = document.getElementById('guests-input');
+    if (guestInput) {
+      guestInput.addEventListener('input', () => {
+        syncLimits();
+        updateKayakDisplay();
+        updateBookingSummary();
+      });
+    }
+    
+    // Also trigger on date change
+    document.getElementById('checkin')?.addEventListener('change', updateBookingSummary);
+    document.getElementById('checkout')?.addEventListener('change', updateBookingSummary);
+});
+
+function autoSelectStayOption() {
+    const guests = getGuestCount();
+    const checkinVal = document.getElementById('checkin').value;
+    let selectedId = 'radio-opt-3'; // Default to Weekend
+
+    if (checkinVal) {
+        const date = new Date(checkinVal);
+        const day = date.getDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
+        const isWeekend = (day === 0 || day === 5 || day === 6); // Fri, Sat, Sun
+
+        if (isWeekend) {
+            selectedId = 'radio-opt-3';
+        } else {
+            selectedId = (guests <= 5) ? 'radio-opt-1' : 'radio-opt-2';
+        }
+    } else {
+        selectedId = (guests <= 5) ? 'radio-opt-1' : 'radio-opt-2';
+    }
+
+    const radio = document.getElementById(selectedId);
+    if (radio) {
+        radio.checked = true;
+        
+        // Update visual state of static cards
+        document.querySelectorAll('[id^="stay-opt-"]').forEach(el => {
+            el.style.borderColor = 'rgba(250,135,62,0.1)';
+            el.style.background = '#fff';
+            el.style.boxShadow = 'none';
+        });
+        
+        const cardId = selectedId.replace('radio', 'stay');
+        const activeCard = document.getElementById(cardId);
+        if (activeCard) {
+            activeCard.style.borderColor = 'var(--brand)';
+            activeCard.style.background = '#fffaf7';
+            activeCard.style.boxShadow = '0 4px 12px rgba(250, 135, 62, 0.1)';
+        }
+    }
 }
 
 let currentAddonKeyword = '';
 
 function openAddonModal(keyword, name) {
+  // Bypassing participant count for Campfire and Speakers
+  if (keyword.includes('campfire') || keyword.includes('speaker')) {
+    const checkbox = Array.from(document.querySelectorAll('.amenity-selector'))
+      .find((chk) => (chk.dataset.amenityName || '').toLowerCase().includes(keyword.toLowerCase()));
+    
+    if (checkbox) {
+      checkbox.checked = true;
+      checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+      
+      // Visual feedback
+      updateSidebarPreview();
+      setTimeout(() => {
+        document.getElementById('selected-amenities-preview')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+      return; // Stop here, no modal
+    }
+  }
+
   currentAddonKeyword = keyword;
   document.getElementById('modalExperienceName').textContent = name;
   document.getElementById('modalPersonCount').value = 1;
@@ -1520,12 +1803,14 @@ function openAddonModal(keyword, name) {
 function updateModalCount(delta) {
   const input = document.getElementById('modalPersonCount');
   let val = parseInt(input.value) || 1;
-  const guestCount = getGuestCount();
+  const isSheesha = currentAddonKeyword.toLowerCase().includes('sheesha');
+  const limit = isSheesha ? 6 : guestCount;
+  
   val += delta;
   if (val < 1) val = 1;
-  if (val > guestCount) {
-    val = guestCount;
-    alert(`Participants cannot exceed the total number of guests (${guestCount}).`);
+  if (val > limit) {
+    val = limit;
+    alert(isSheesha ? 'Maximum 6 Sheeshas available.' : `Participants cannot exceed the total number of guests (${guestCount}).`);
   }
   input.value = val;
 }
@@ -1568,32 +1853,72 @@ document.getElementById('btnConfirmAddon')?.addEventListener('click', function()
   }
 });
 
-function updateSidebarPreview() {
+function getBookingNights() {
+  const cin = document.getElementById('checkin').value;
+  const cout = document.getElementById('checkout').value;
+  if (!cin || !cout) return 0;
+  const d1 = new Date(cin);
+  const d2 = new Date(cout);
+  const diff = d2.getTime() - d1.getTime();
+  const nights = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  return nights > 0 ? nights : 0;
+}
+
+function updateSidebarPreview(basePrice = 0, stayType = '', nights = 0) {
   const amenities = buildAmenityPayload();
-  const previewContainer = document.getElementById('selected-amenities-preview');
   const previewList = document.getElementById('preview-items-list');
   
   previewList.innerHTML = '';
   
+  // Add Base Price with stay type and nights
+  if (true) { // Always show stay cost
+    const displayBase = basePrice > 0 ? basePrice : 0;
+    const baseItem = document.createElement('div');
+    baseItem.style.cssText = 'display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-dark); margin-bottom: 2px;';
+    const typeLabel = stayType ? ` <span style="font-size:0.65rem; color:var(--brand); font-weight:700; text-transform:uppercase; margin-left:4px;">(${stayType.split(' ')[0]})</span>` : '';
+    const nightsLabel = nights > 0 ? ` <span style="font-size:0.65rem; color:var(--text-muted); font-weight:500;">(${nights} ${nights === 1 ? 'night' : 'nights'})</span>` : '';
+    baseItem.innerHTML = `
+      <span style="font-weight:500;">Stay Cost${typeLabel}${nightsLabel}</span>
+      <span style="font-weight:600; color:var(--text-muted);">₹${basePrice.toLocaleString()}</span>
+    `;
+    previewList.appendChild(baseItem);
+  }
+  
   if (amenities.length > 0) {
-    previewContainer.style.display = 'block';
     amenities.forEach(a => {
       const item = document.createElement('div');
       item.style.cssText = 'display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-dark);';
-      const personText = a.participants ? ` (${a.participants} persons)` : '';
+      
+      let label = a.name;
+      if (a.name.toLowerCase().includes('kayaking')) {
+          label = `Kayaking (₹${a.price.toLocaleString()}/p × ${a.participants})`;
+      } else if (a.name.toLowerCase().includes('yacht')) {
+          label = `Yacht Service`;
+      } else if (a.participants && !a.name.toLowerCase().includes('campfire') && !a.name.toLowerCase().includes('speaker')) {
+          label = `${a.name} (${a.participants} ${a.name.toLowerCase().includes('sheesha') ? 'units' : 'persons'})`;
+      }
+
       item.innerHTML = `
-        <span style="font-weight:500;">${a.name}${personText}</span>
+        <span style="font-weight:500;">${label}</span>
         <span style="font-weight:700; color:var(--gold);">₹${a.total.toLocaleString()}</span>
       `;
       previewList.appendChild(item);
     });
-  } else {
-    previewContainer.style.display = 'none';
   }
 }
 
 function getGuestCount() {
-  return Math.max(1, parseInt(document.getElementById('guests-input')?.value || '1'));
+  const val = document.getElementById('guests-input')?.value || '0';
+  const count = parseInt(val);
+  return isNaN(count) ? 0 : count;
+}
+
+function updateKayakDisplay() {
+  const guests = getGuestCount();
+  const price = (guests < 5) ? 1000 : 700;
+  document.querySelectorAll('.kayak-price-display').forEach(el => {
+    el.textContent = `₹${price}/p`;
+  });
 }
 
 function updateSubtotal(card, price, qty) {
@@ -1601,9 +1926,11 @@ function updateSubtotal(card, price, qty) {
   const chk = card.querySelector('.amenity-selector');
   let finalPrice = price;
 
-  // Custom logic for Kayaking & Boating
+  // Custom logic for Kayaking & Boating based on PARTICIPANTS
   if ((chk.dataset.amenityName || '').toLowerCase().includes('kayaking')) {
-    finalPrice = (qty < 5) ? 1000 : 700;
+    const input = chk.closest('.amenity-card').querySelector('.counter-input');
+    const parts = parseInt(input?.value || '1');
+    finalPrice = (parts >= 5) ? 700 : 1000;
   }
 
   if (pill) pill.textContent = `₹${(finalPrice * qty).toFixed(0)}`;
@@ -1617,17 +1944,25 @@ function syncLimits() {
     if (!input || !chk?.checked) return;
 
     const price    = parseFloat(chk.dataset.amenityPrice) || 0;
+    const isSheesha = (chk.dataset.amenityName || '').toLowerCase().includes('sheesha');
+    const limit    = isSheesha ? 6 : guestCount;
     const plusBtn  = card.querySelector('.plus-btn');
     const minusBtn = card.querySelector('.minus-btn');
     let val = parseInt(input.value) || 1;
 
-    if (val > guestCount) {
-      val = guestCount;
+    if (val > limit) {
+      val = limit;
       input.value = val;
     }
     updateSubtotal(card, price, val);
-    if (plusBtn)  plusBtn.disabled  = val >= guestCount;
+    if (plusBtn)  plusBtn.disabled  = val >= limit;
     if (minusBtn) minusBtn.disabled = val <= 1;
+
+    // Sync limit message
+    if (isSheesha) {
+        const msg = card.querySelector('.limit-msg');
+        if (msg) msg.style.display = (val >= 6) ? 'block' : 'none';
+    }
   });
 }
 
@@ -1644,11 +1979,10 @@ function buildAmenityPayload() {
       ? Math.max(1, parseInt(input?.value || '1'))
       : null;
     
-    // Custom logic for Kayaking & Boating dynamic pricing
+    // Custom logic for Kayaking & Boating dynamic pricing based on PARTICIPANTS
     if ((chk.dataset.amenityName || '').toLowerCase().includes('kayaking')) {
-      if (participants !== null) {
-        price = (participants < 5) ? 1000 : 700;
-      }
+      // Use the local 'participants' variable which is the counter value
+      price = (participants !== null && participants >= 5) ? 700 : 1000;
     }
 
     const total = pricingType === 'per_person' && participants !== null ? price * participants : price;
@@ -1666,6 +2000,7 @@ function buildAmenityPayload() {
 
 /* ── Summary ───────────────────────────────────────────────────────────── */
 function updateBookingSummary() {
+  autoSelectStayOption();
   const guests = getGuestCount();
   const selectedRadio = document.querySelector('input[name="stay_option_radio"]:checked');
   if (!selectedRadio) return;
@@ -1713,54 +2048,49 @@ function updateBookingSummary() {
       }
   }
 
-  const dynamicBaseAmount = baseStayPrice + extraGuestCharge;
+  const nights = getBookingNights();
+  const dynamicBaseAmount = (baseStayPrice + extraGuestCharge) * Math.max(1, nights);
 
   document.getElementById('form-base-amount').value = dynamicBaseAmount;
   document.getElementById('form-event-type').value = label;
-  document.getElementById('summary-base-price').textContent = `₹${baseStayPrice.toLocaleString()}`;
+
+  // Update Kayaking Rate Labels in Sidebar based on its own participant count
+  const kayakRateMain = document.getElementById('kayak-sidebar-rate-main');
+  const kayakRateSub = document.getElementById('kayak-sidebar-rate-sub');
+  if (kayakRateMain && kayakRateSub) {
+      const kayakCard = document.querySelector('.amenity-card[data-amenity-name*="Kayaking"]');
+      const kayakInput = kayakCard?.querySelector('.counter-input');
+      const kayakParts = parseInt(kayakInput?.value || '0');
+      
+      if (kayakParts < 5) {
+          kayakRateMain.textContent = '₹1,000/p';
+          kayakRateSub.textContent = '₹700/p (5+ people)';
+      } else {
+          kayakRateMain.textContent = '₹700/p';
+          kayakRateSub.textContent = '₹1,000/p (below 5)';
+      }
+  }
 
   const amenities       = buildAmenityPayload();
-  const summaryList     = document.getElementById('summary-amenities-list');
-  const summaryEmpty    = document.getElementById('summary-amenities-empty');
-  const extraTotalElem  = document.getElementById('summary-extra-total');
-  const grandTotalElem  = document.getElementById('summary-grand-total');
   const formExtraAmount = document.getElementById('form-extra-amount');
   const formAmount      = document.getElementById('form-amount');
 
   let extraTotal = 0;
-  summaryList.querySelectorAll('.summary-item').forEach(el => el.remove());
-
-  if (amenities.length === 0 && extraGuestCharge === 0) {
-    summaryEmpty.style.display = 'block';
-  } else {
-    summaryEmpty.style.display = 'none';
-
-    // Show Extra Guest Charge in Summary
-    if (extraGuestCharge > 0) {
-        const item = document.createElement('div');
-        item.className = 'summary-item';
-        item.style.cssText = 'margin-bottom:.65rem;font-size:.96rem;color:#e06828;font-weight:700;';
-        item.textContent = `Extra Guests (${extraGuestCount} × ₹600) = ₹${extraGuestCharge.toLocaleString()}`;
-        summaryList.appendChild(item);
-    }
-
-    amenities.forEach((a) => {
-      extraTotal += a.total;
-      const item = document.createElement('div');
-      item.className = 'summary-item';
-      item.style.cssText = 'margin-bottom:.65rem;font-size:.96rem;color:#334155;';
-      item.textContent = a.pricing_type === 'per_person' && a.participants !== null
-        ? `${a.name} (${a.participants} × ₹${a.price.toFixed(2)}) = ₹${a.total.toFixed(2)}`
-        : `${a.name} = ₹${a.total.toFixed(2)}`;
-      summaryList.appendChild(item);
-    });
-  }
+  amenities.forEach((a) => {
+    extraTotal += a.total;
+  });
 
   const grandTotal          = dynamicBaseAmount + extraTotal;
-  formExtraAmount.value      = extraTotal.toFixed(2);
-  formAmount.value           = grandTotal.toFixed(2);
+  if (formExtraAmount) formExtraAmount.value = extraTotal.toFixed(2);
+  if (formAmount)      formAmount.value      = grandTotal.toFixed(2);
 
-  updateSidebarPreview();
+  const sidebarTotal = document.getElementById('sidebar-grand-total');
+  // Always show sidebar total
+  if (sidebarTotal) {
+      sidebarTotal.textContent = `₹${grandTotal.toLocaleString()}`;
+  }
+
+  updateSidebarPreview(dynamicBaseAmount, label, nights);
 }
 
 /* ── Form submit ───────────────────────────────────────────────────────── */

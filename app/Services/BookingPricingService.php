@@ -43,7 +43,21 @@ class BookingPricingService
             ? $property->amenities->keyBy('id')
             : Amenity::where('status', true)->orderBy('name')->get()->keyBy('id');
 
-        $baseAmount = round(((float) ($property->price ?? 0)) * $nights, 2);
+        $isWeekend = in_array($checkIn->dayOfWeek, [Carbon::FRIDAY, Carbon::SATURDAY, Carbon::SUNDAY]);
+        $baseStayPrice = $isWeekend ? 12000 : ($guests > 5 ? 11000 : 8000);
+        
+        $extraGuestCharge = 0;
+        if ($isWeekend || $guests > 5) {
+            if ($guests > 10) {
+                $extraGuestCharge = (min($guests, 15) - 10) * 600;
+            }
+        } else {
+            if ($guests > 5) {
+                $extraGuestCharge = ($guests - 5) * 600;
+            }
+        }
+
+        $baseAmount = round(($baseStayPrice + $extraGuestCharge) * $nights, 2);
         $selectedAmenities = collect($payload['amenities'] ?? []);
         $amenityLines = [];
         $amenityTotal = 0;
@@ -70,6 +84,12 @@ class BookingPricingService
             }
 
             $unitPrice = round((float) $amenity->price, 2);
+
+            // Custom tiered pricing for Kayaking & Boating based on PARTICIPANTS
+            if (str_contains(strtolower($amenity->name), 'kayaking')) {
+                $unitPrice = ($quantity < 5) ? 1000 : 700;
+            }
+
             $lineAmount = $pricingType === 'per_person'
                 ? round($unitPrice * $quantity, 2)
                 : $unitPrice;
@@ -82,6 +102,26 @@ class BookingPricingService
                 'price' => $unitPrice,
                 'quantity' => $quantity,
                 'amount' => $lineAmount,
+            ];
+        }
+
+        // Add Food Package as a dynamic line item
+        $packageRates = [
+            'Stay + Breakfast + Tea & Snacks' => 200,
+            'Stay + Breakfast + Tea & Snacks + Dinner' => 450,
+        ];
+        $packageName = $payload['package_name'] ?? 'Only Stay';
+        if (isset($packageRates[$packageName])) {
+            $rate = $packageRates[$packageName];
+            $packageAmount = round($rate * $guests * $nights, 2);
+            $amenityTotal += $packageAmount;
+            $amenityLines[] = [
+                'id' => null,
+                'name' => "Package: " . $packageName,
+                'pricing_type' => 'package',
+                'price' => $rate,
+                'quantity' => $guests * $nights,
+                'amount' => $packageAmount,
             ];
         }
 

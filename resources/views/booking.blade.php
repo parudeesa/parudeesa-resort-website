@@ -7,14 +7,124 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
+:root {
+  --brand: #fa873e;
+  --brand-d: #e06828;
+  --brand-l: #ffb07a;
+  --brand-pale: #fff3ec;
+  --text-dark: #3b2a22;
+  --text-muted: #5a5a5a;
+  --gold: #fa873e;
+  --ease: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
 body{
     margin:0;
     padding:0;
-    font-family:'Poppins',sans-serif;
+    font-family:'Outfit',sans-serif;
     background:linear-gradient(135deg,#fff8f2,#fde9d8);
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    color: #5a5a5a;
+}
+
+/* Footer Styles */
+footer {
+    background: linear-gradient(160deg, #1e0a02 0%, #3e2010 100%);
+    color: rgba(255, 243, 236, .6);
+    padding: 65px 0 30px;
+    border-top: 2px solid rgba(250, 135, 62, .2);
+    margin-top: 4rem;
+}
+.f-brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff8f3
+}
+.f-head {
+    font-size: .58rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    font-weight: 700
+}
+.f-links {
+    list-style: none;
+    padding: 0;
+    margin: 0
+}
+.f-links li {
+    margin-bottom: .45rem
+}
+.f-links a {
+    color: rgba(255, 243, 236, .55);
+    text-decoration: none;
+    font-size: .8rem;
+    transition: all var(--ease);
+    cursor: pointer
+}
+.f-links a:hover {
+    color: var(--gold);
+    padding-left: 5px
+}
+.f-div {
+    border-color: rgba(250, 135, 62, .15);
+    margin: 2.5rem 0 1.5rem
+}
+.f-copy {
+    font-size: .7rem;
+    text-align: center;
+    color: rgba(255, 243, 236, .4);
+}
+.footer-social .fs-link {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 243, 236, 0.7);
+    font-size: 1.1rem;
+    transition: all var(--ease);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer-social .fs-link:hover {
+    background: var(--brand);
+    color: #fff;
+    transform: translateY(-3px);
+    border-color: var(--brand);
+}
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+.footer-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+}
+.footer-contact-item i {
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+.footer-contact-item a {
+    color: rgba(255, 243, 236, 0.7);
+    text-decoration: none;
+    transition: color var(--ease);
+}
+.footer-contact-item a:hover {
+    color: var(--gold);
 }
 
 .form-container{
@@ -61,10 +171,11 @@ input,select,textarea{
     border:1px solid rgba(250,135,62,.25);
     border-radius:12px;
     font-size:14px;
-    font-family:'Poppins',sans-serif;
+    font-family:'Outfit',sans-serif;
     background:#fff;
     box-sizing:border-box;
     outline:none;
+    letter-spacing: 0.02em;
 }
 
 input:focus,select:focus,textarea:focus{
@@ -113,11 +224,13 @@ button{
     border-radius:14px;
     background:linear-gradient(135deg,#fa873e,#d96520);
     color:white;
-    font-size:16px;
+    font-size:15px;
     font-weight:600;
     cursor:pointer;
     margin-top:10px;
-    transition:opacity .3s ease,transform .3s ease;
+    transition:all .3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
 
 button:hover{
@@ -295,6 +408,70 @@ button:disabled {
 
     <div class="success-message" id="successMsg"></div>
 </div>
+
+<footer>
+    <div class="container">
+      <div class="row g-5">
+        <!-- SECTION 1: BRAND & ADDRESS -->
+        <div class="col-lg-3 col-md-6">
+          <div class="f-brand mb-3" style="font-family: 'Cormorant Garamond', serif; font-weight:700;">
+            <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 90px; width: auto; object-fit: contain;">
+          </div>
+          <p style="font-size:.85rem;color:rgba(255,243,236,.6);line-height:1.8">
+            Kerala Backwaters, India
+          </p>
+          <p style="font-style:italic;color:rgba(255,243,236,.4);font-size:1rem;line-height:1.6; font-family:'EB Garamond', serif; margin-top: 1rem;">
+            "Experience Serenity by the Lake"</p>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="f-head">Navigation</div>
+          <ul class="f-links">
+            <li><a href="{{ route('home') }}">Home</a></li>
+            <li><a href="{{ route('home') }}#events">Events</a></li>
+            <li><a href="{{ route('home') }}#gallery">Gallery</a></li>
+            <li><a href="{{ route('home') }}#about">About Us</a></li>
+            <li><a href="{{ route('home') }}#contact">Contact</a></li>
+            <li><a href="/booking">Book Now</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-3">
+          <div class="f-head">Policies</div>
+          <div class="policy-list">
+            <a href="/terms-and-conditions" class="policy-link">Terms & Conditions</a>
+            <a href="/privacy-policy" class="policy-link">Privacy Policy</a>
+            <a href="/cancellation-policy" class="policy-link">Cancellation Policy</a>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="f-head">Contact Us</div>
+          <div class="footer-contact mb-4">
+            <div class="footer-contact-item">
+              <i class="bi bi-telephone" style="color:var(--brand)"></i>
+              <a href="tel:+918921021202">+91 89210 21202</a>
+            </div>
+            <div class="footer-contact-item">
+              <i class="bi bi-envelope" style="color:var(--brand-l)"></i>
+              <a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a>
+            </div>
+          </div>
+          
+          <div class="f-head" style="margin-top: 2rem;">Follow Us</div>
+          <div class="footer-social d-flex gap-3">
+              <a href="https://instagram.com/parudeesa" target="_blank" class="fs-link" title="Instagram"><i class="bi bi-instagram"></i></a>
+              <a href="https://facebook.com/parudeesa" target="_blank" class="fs-link" title="Facebook"><i class="bi bi-facebook"></i></a>
+              <a href="https://youtube.com/parudeesa" target="_blank" class="fs-link" title="YouTube"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      <hr class="f-div" />
+      <p class="f-copy">&copy; 2026 Parudeesa - The Lake View Resort. All rights reserved. Made with love in Kerala.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 document.getElementById("bookingForm").addEventListener("submit", function(e){

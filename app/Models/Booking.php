@@ -26,6 +26,9 @@ class Booking extends Model
         'base_amount',
         'coupon_id',
         'discount_amount',
+        'yacht_id',
+        'type',
+        'user_id',
     ];
 
     protected $casts = [
@@ -52,5 +55,10 @@ class Booking extends Model
     public function payment()
     {
         return $this->hasOne(Payment::class);
+    }
+
+    public function yacht()
+    {
+        return $this->belongsTo(Yacht::class);
     }
 }

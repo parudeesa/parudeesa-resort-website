@@ -49,6 +49,7 @@ Route::get('/booking', function () {
 });
 
 Route::post('/bookings', [HomeController::class, 'storeBooking'])->name('bookings.store');
+Route::post('/book-yacht', [\App\Http\Controllers\YachtController::class, 'store'])->name('yacht.store');
 Route::get('/api/check-phone-bookings/{phone}', [HomeController::class, 'checkPhoneBookings']);
 Route::post('/coupons/validate', [\App\Http\Controllers\CouponController::class, 'validateCoupon'])->name('coupons.validate');
 
@@ -119,6 +120,12 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::post('/admin/coupons', [\App\Http\Controllers\CouponController::class, 'store'])->name('admin.coupons.store');
     Route::post('/admin/coupons/{id}/toggle', [\App\Http\Controllers\CouponController::class, 'toggleStatus'])->name('admin.coupons.toggle_status');
     Route::delete('/admin/coupons/{id}', [\App\Http\Controllers\CouponController::class, 'destroy'])->name('admin.coupons.destroy');
+
+    // Yacht Management
+    Route::get('/admin/yachts', [\App\Http\Controllers\YachtController::class, 'index'])->name('admin.yachts.index');
+    Route::post('/admin/yachts', [\App\Http\Controllers\YachtController::class, 'storeAdmin'])->name('admin.yachts.store');
+    Route::patch('/admin/yachts/{id}', [\App\Http\Controllers\YachtController::class, 'updateAdmin'])->name('admin.yachts.update');
+    Route::delete('/admin/yachts/{id}', [\App\Http\Controllers\YachtController::class, 'destroyAdmin'])->name('admin.yachts.delete');
 });
 
 require __DIR__.'/auth.php';
