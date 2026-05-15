@@ -19,7 +19,23 @@ class HomeController extends Controller
     {
         $properties = Property::with('amenities')->get();
         $yachts = Yacht::where('status', true)->get();
-        return view('design', compact('properties', 'yachts'));
+        $homeAmenities = \App\Models\HomeAmenity::where('status', true)->orderBy('order')->get();
+        $homeReviews = \App\Models\HomeReview::where('status', true)->orderBy('order')->get();
+        $galleries = \App\Models\Gallery::orderBy('sort_order')->get();
+        
+        $foodPackages = \App\Models\FoodPackage::where('status', true)->get();
+        $allAmenities = Amenity::where('status', true)->get();
+        $bookingSettings = [
+            'check_in_time' => \App\Models\Setting::get('check_in_time', '02:00 PM'),
+            'check_out_time' => \App\Models\Setting::get('check_out_time', '11:00 AM'),
+            'water_activity_threshold' => (int) \App\Models\Setting::get('water_activity_threshold', 5),
+            'water_activity_low_price' => (float) \App\Models\Setting::get('water_activity_low_price', 1000),
+            'water_activity_high_price' => (float) \App\Models\Setting::get('water_activity_high_price', 700),
+            'property_stay_threshold' => (int) \App\Models\Setting::get('property_stay_threshold', 5),
+            'booking_advance_amount' => (float) \App\Models\Setting::get('booking_advance_amount', 5000),
+        ];
+
+        return view('design', compact('properties', 'yachts', 'homeAmenities', 'homeReviews', 'galleries', 'foodPackages', 'allAmenities', 'bookingSettings'));
     }
     public function home()
     {
@@ -30,17 +46,45 @@ class HomeController extends Controller
     {
         $properties = Property::with('amenities')->get();
         $yachts = Yacht::where('status', true)->get();
-        return view('design', compact('properties', 'yachts'));
+        $homeAmenities = \App\Models\HomeAmenity::where('status', true)->orderBy('order')->get();
+        $homeReviews = \App\Models\HomeReview::where('status', true)->orderBy('order')->get();
+        $galleries = \App\Models\Gallery::orderBy('sort_order')->get();
+        
+        $foodPackages = \App\Models\FoodPackage::where('status', true)->get();
+        $allAmenities = Amenity::where('status', true)->get();
+        $bookingSettings = [
+            'check_in_time' => \App\Models\Setting::get('check_in_time', '02:00 PM'),
+            'check_out_time' => \App\Models\Setting::get('check_out_time', '11:00 AM'),
+            'water_activity_threshold' => (int) \App\Models\Setting::get('water_activity_threshold', 5),
+            'water_activity_low_price' => (float) \App\Models\Setting::get('water_activity_low_price', 1000),
+            'water_activity_high_price' => (float) \App\Models\Setting::get('water_activity_high_price', 700),
+            'property_stay_threshold' => (int) \App\Models\Setting::get('property_stay_threshold', 5),
+            'booking_advance_amount' => (float) \App\Models\Setting::get('booking_advance_amount', 5000),
+        ];
+
+        return view('design', compact('properties', 'yachts', 'homeAmenities', 'homeReviews', 'galleries', 'foodPackages', 'allAmenities', 'bookingSettings'));
     }
 
     public function show($id)
     {
         \Log::info('Property show method called', ['property_id' => $id]);
         $property = Property::with('amenities')->findOrFail($id);
-        $amenities = Amenity::where('status', true)->orderBy('name')->get();
-        $activeCoupons = \App\Models\Coupon::where('is_active', true)->get();
+        
+        // Filter amenities based on property assignment logic
+        $propertyKey = str_contains(strtolower($property->name), 'utopiya') ? 'utopia' : 'paradise';
+        
+        $amenities = Amenity::where('status', true)
+            ->where(function($query) use ($propertyKey) {
+                $query->where('property_assignment', $propertyKey)
+                      ->orWhere('property_assignment', 'both');
+            })
+            ->orderBy('name')
+            ->get();
 
-        return view('properties.show', compact('property', 'amenities', 'activeCoupons'));
+        $activeCoupons = \App\Models\Coupon::where('is_active', 1)->get();
+        $yacht = Yacht::where('status', true)->first();
+
+        return view('properties.show', compact('property', 'amenities', 'activeCoupons', 'yacht'));
     }
 
     public function unavailableDates($id)

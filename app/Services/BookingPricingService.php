@@ -39,28 +39,52 @@ class BookingPricingService
 
         $this->ensurePropertyIsAvailable($property->id, $checkIn, $checkOut);
 
-        $availableAmenities = $property->amenities->isNotEmpty()
-            ? $property->amenities->keyBy('id')
-            : Amenity::where('status', true)->orderBy('name')->get()->keyBy('id');
+        $nameLower = strtolower($property->name);
+        $propertyTag = str_contains($nameLower, 'paradise') ? 'paradise' : (str_contains($nameLower, 'utopi') ? 'utopia' : 'both');
 
-        $isWeekend = in_array($checkIn->dayOfWeek, [Carbon::FRIDAY, Carbon::SATURDAY, Carbon::SUNDAY]);
-        $baseStayPrice = $isWeekend ? 12000 : ($guests > 5 ? 11000 : 8000);
-        
-        $extraGuestCharge = 0;
-        if ($isWeekend || $guests > 5) {
-            if ($guests > 10) {
-                $extraGuestCharge = (min($guests, 15) - 10) * 600;
+        $availableAmenities = Amenity::where('status', true)
+            ->where(function($q) use ($propertyTag) {
+                $q->where('property_assignment', $propertyTag)
+                  ->orWhere('property_assignment', 'both');
+            })
+            ->get()
+            ->keyBy('id');
+
+        $totalBaseStayAmount = 0;
+        $currentDate = $checkIn->copy();
+
+        while ($currentDate->lessThan($checkOut)) {
+            $dayOfWeek = $currentDate->dayOfWeek;
+            $isNightWeekend = in_array($dayOfWeek, [\Illuminate\Support\Carbon::FRIDAY, \Illuminate\Support\Carbon::SATURDAY, \Illuminate\Support\Carbon::SUNDAY]);
+            
+            $stayThreshold = (int) \App\Models\Setting::get('property_stay_threshold', 5);
+            $nightPrice = 0;
+            if ($isNightWeekend) {
+                // Rule 3: Weekend (Up to 10 Guests)
+                $nightPrice = (float) ($property->weekend_price ?: 12000);
+            } else {
+                if ($guests <= $stayThreshold) {
+                    // Rule 1: Weekday (Up to threshold Guests)
+                    $nightPrice = (float) ($property->weekday_price ?: 8000);
+                } else {
+                    // Rule 2: Weekday (Up to 10 Guests)
+                    $nightPrice = (float) ($property->weekday_tier2_price ?: 11000);
+                }
             }
-        } else {
-            if ($guests > 5) {
-                $extraGuestCharge = ($guests - 5) * 600;
-            }
+
+            $totalBaseStayAmount += $nightPrice;
+            $currentDate->addDay();
         }
 
-        $baseAmount = round(($baseStayPrice + $extraGuestCharge) * $nights, 2);
+        $baseAmount = round($totalBaseStayAmount, 2);
         $selectedAmenities = collect($payload['amenities'] ?? []);
         $amenityLines = [];
         $amenityTotal = 0;
+
+        // Fetch settings for tiered pricing (Unified Water Activity)
+        $waThreshold = (int) \App\Models\Setting::get('water_activity_threshold', 5);
+        $waLowPrice = (float) \App\Models\Setting::get('water_activity_low_price', 1000);
+        $waHighPrice = (float) \App\Models\Setting::get('water_activity_high_price', 700);
 
         foreach ($selectedAmenities as $selection) {
             $amenityId = (int) ($selection['id'] ?? 0);
@@ -85,9 +109,10 @@ class BookingPricingService
 
             $unitPrice = round((float) $amenity->price, 2);
 
-            // Custom tiered pricing for Kayaking & Boating based on PARTICIPANTS
-            if (str_contains(strtolower($amenity->name), 'kayaking')) {
-                $unitPrice = ($quantity < 5) ? 1000 : 700;
+            // Dynamic tiered pricing for Kayaking & Boating based on settings
+            $aName = strtolower($amenity->name);
+            if (str_contains($aName, 'kayaking') || str_contains($aName, 'boating')) {
+                $unitPrice = ($quantity < $waThreshold) ? $waLowPrice : $waHighPrice;
             }
 
             $lineAmount = $pricingType === 'per_person'
@@ -105,19 +130,17 @@ class BookingPricingService
             ];
         }
 
-        // Add Food Package as a dynamic line item
-        $packageRates = [
-            'Stay + Breakfast + Tea & Snacks' => 200,
-            'Stay + Breakfast + Tea & Snacks + Dinner' => 450,
-        ];
-        $packageName = $payload['package_name'] ?? 'Only Stay';
-        if (isset($packageRates[$packageName])) {
-            $rate = $packageRates[$packageName];
+        // Add Food Package from database
+        $packageName = $payload['package_name'] ?? 'Stay Only';
+        $foodPackage = \App\Models\FoodPackage::where('name', $packageName)->where('status', true)->first();
+        
+        if ($foodPackage && $foodPackage->price > 0) {
+            $rate = (float) $foodPackage->price;
             $packageAmount = round($rate * $guests * $nights, 2);
             $amenityTotal += $packageAmount;
             $amenityLines[] = [
-                'id' => null,
-                'name' => "Package: " . $packageName,
+                'id' => $foodPackage->id,
+                'name' => "Package: " . $foodPackage->name,
                 'pricing_type' => 'package',
                 'price' => $rate,
                 'quantity' => $guests * $nights,
@@ -137,7 +160,7 @@ class BookingPricingService
             'property' => [
                 'id' => $property->id,
                 'name' => $property->name,
-                'price' => round((float) ($property->price ?? 0), 2),
+                'price' => round((float) ($property->weekday_price ?? 0), 2),
             ],
             'check_in' => $checkIn->toDateString(),
             'check_out' => $checkOut->toDateString(),

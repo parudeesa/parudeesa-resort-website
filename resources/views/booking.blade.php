@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Parudeesa Booking Form</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +14,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 <style>
 :root {
@@ -38,99 +42,14 @@ body{
 footer {
     background: linear-gradient(160deg, #1e0a02 0%, #3e2010 100%);
     color: rgba(255, 243, 236, .6);
-    padding: 65px 0 30px;
+    padding: 70px 0 calc(24px + var(--safe-b));
     border-top: 2px solid rgba(250, 135, 62, .2);
-    margin-top: 4rem;
-}
-.f-brand {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #fff8f3
-}
-.f-head {
-    font-size: .58rem;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-    font-weight: 700
-}
-.f-links {
-    list-style: none;
-    padding: 0;
-    margin: 0
-}
-.f-links li {
-    margin-bottom: .45rem
-}
-.f-links a {
-    color: rgba(255, 243, 236, .55);
-    text-decoration: none;
-    font-size: .8rem;
-    transition: all var(--ease);
-    cursor: pointer
-}
-.f-links a:hover {
-    color: var(--gold);
-    padding-left: 5px
-}
-.f-div {
-    border-color: rgba(250, 135, 62, .15);
-    margin: 2.5rem 0 1.5rem
-}
-.f-copy {
-    font-size: .7rem;
-    text-align: center;
-    color: rgba(255, 243, 236, .4);
-}
-.footer-social .fs-link {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 243, 236, 0.7);
-    font-size: 1.1rem;
-    transition: all var(--ease);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-.footer-social .fs-link:hover {
-    background: var(--brand);
-    color: #fff;
-    transform: translateY(-3px);
-    border-color: var(--brand);
-}
-.footer-contact {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-}
-.footer-contact-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.9rem;
-}
-.footer-contact-item i {
-    font-size: 1.1rem;
-    width: 20px;
-    text-align: center;
-}
-.footer-contact-item a {
-    color: rgba(255, 243, 236, 0.7);
-    text-decoration: none;
-    transition: color var(--ease);
-}
-.footer-contact-item a:hover {
-    color: var(--gold);
 }
 
 .form-container{
     width:90%;
     max-width:700px;
-    margin:40px auto;
+    margin:120px auto 40px;
     background:#fff3ec;
     padding:35px;
     border-radius:20px;
@@ -314,13 +233,52 @@ button:disabled {
     cursor: not-allowed;
     transform: none !important;
 }
+.amenity-visual-card.is-selected {
+    border-color: #fa873e !important;
+    background: #fff8f3 !important;
+    box-shadow: 0 4px 12px rgba(250,135,62,0.15) !important;
+}
 </style>
 </head>
 <body>
 
-<div class="form-container">
-    <h1>Book Your Stay</h1>
+    <x-navbar :isHome="false" />
+
+<div class="form-container" style="background: #fff; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.05);">
+    
+    <!-- STAY OPTIONS CARD (PREMIUM) -->
+    <div style="background: #fff8f3; border: 1px solid rgba(250,135,62,0.1); border-radius: 24px; padding: 30px; margin-bottom: 40px; position: relative;">
+        <div style="display: flex; align-items: center; gap: 10px; color: #d96520; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px;">
+            <i class="bi bi-info-circle"></i> STAY OPTIONS
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #fff; border-radius: 16px; padding: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0,0,0,0.03);">
+                <div style="color: #3b2a22; font-weight: 600;">Weekday <span style="color: #8a7b6e; font-weight: 400; font-size: 0.85rem;">(Up to 5 Guests)</span></div>
+                <div style="font-weight: 800; color: #fa873e; font-size: 1.1rem;">₹8,000 <span style="font-size: 0.7rem; color: #8a7b6e; font-weight: 400;">/ night</span></div>
+            </div>
+            <div style="background: #fff; border-radius: 16px; padding: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0,0,0,0.03);">
+                <div style="color: #3b2a22; font-weight: 600;">Weekday <span style="color: #8a7b6e; font-weight: 400; font-size: 0.85rem;">(Up to 10 Guests)</span></div>
+                <div style="font-weight: 800; color: #fa873e; font-size: 1.1rem;">₹11,000 <span style="font-size: 0.7rem; color: #8a7b6e; font-weight: 400;">/ night</span></div>
+            </div>
+            <div style="background: #fff; border-radius: 16px; padding: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0,0,0,0.03);">
+                <div style="color: #3b2a22; font-weight: 600;">Weekend <span style="color: #8a7b6e; font-weight: 400; font-size: 0.85rem;">(Up to 10 Guests)</span></div>
+                <div style="font-weight: 800; color: #fa873e; font-size: 1.1rem;">₹12,000 <span style="font-size: 0.7rem; color: #8a7b6e; font-weight: 400;">/ night</span></div>
+            </div>
+        </div>
+
+        <!-- Float Green Button -->
+        <div style="position: absolute; left: 50%; bottom: -25px; transform: translateX(-50%); z-index: 5;">
+            <button type="button" onclick="toggleChatbot()" style="background: #58b368; color: #fff; border: none; padding: 14px 28px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(88,179,104,0.3); text-transform: uppercase; letter-spacing: 1px; width: auto; margin: 0;">
+                <i class="bi bi-robot"></i> BOOK VIA CHATBOT
+            </button>
+        </div>
+    </div>
+
+    <h1 style="margin-top: 50px;">Book Your Stay</h1>
     <div class="subtitle">Reserve your perfect lakeside staycation at Parudeesa</div>
+
+
 
     <form id="bookingForm">
 
@@ -362,6 +320,34 @@ button:disabled {
             <label>Phone Number</label>
             <input type="tel" id="phone" name="phone" placeholder="e.g. 9876543210" required pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
             <div class="error-msg" id="err-phone">Phone number must contain exactly 10 digits. Only numbers allowed.</div>
+        </div>
+
+        <div class="form-group" style="margin-top: 30px; margin-bottom: 30px;">
+            <label style="font-size: 1.1rem; margin-bottom: 20px;">Enhance Your Experience</label>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                @foreach($amenities as $amenity)
+                @if(!str_contains(strtolower($amenity->name), 'yacht'))
+                <div class="amenity-visual-card" data-price="{{ $amenity->price }}" style="background: #fff; border: 1px solid rgba(250,135,62,0.15); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; position: relative; cursor: pointer;" onclick="toggleAmenity(this)">
+                    @php
+                        $keyword = strtolower($amenity->name);
+                        $fallbackImg = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=300&q=80';
+                        if(str_contains($keyword, 'campfire')) $fallbackImg = 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=300&q=80';
+                        if(str_contains($keyword, 'speaker')) $fallbackImg = 'https://images.unsplash.com/photo-1545127398-14699f92334b?w=300&q=80';
+                        if(str_contains($keyword, 'kayak')) $fallbackImg = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=300&q=80';
+                        if(str_contains($keyword, 'sheesha') || str_contains($keyword, 'shisha')) $fallbackImg = 'https://images.unsplash.com/photo-1516715105260-7a5611666687?w=300&q=80';
+                    @endphp
+                    <div style="height: 120px; width: 100%; position: relative;">
+                        <img src="{{ str_starts_with($amenity->image, 'http') ? $amenity->image : asset($amenity->image) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <input type="checkbox" name="amenities[]" value="{{ $amenity->id }}" class="amenity-checkbox" style="position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; accent-color: var(--brand); z-index: 2;">
+                    </div>
+                    <div style="padding: 12px;">
+                        <div style="font-weight: 700; font-size: 0.95rem; color: #3b2a22; margin-bottom: 4px;">{{ $amenity->name }}</div>
+                        <div style="font-weight: 800; color: #fa873e; font-size: 0.9rem;">₹{{ number_format($amenity->price, 0) }}</div>
+                    </div>
+                </div>
+                @endif
+                @endforeach
+            </div>
         </div>
 
         <div class="coupon-section">
@@ -409,67 +395,6 @@ button:disabled {
     <div class="success-message" id="successMsg"></div>
 </div>
 
-<footer>
-    <div class="container">
-      <div class="row g-5">
-        <!-- SECTION 1: BRAND & ADDRESS -->
-        <div class="col-lg-3 col-md-6">
-          <div class="f-brand mb-3" style="font-family: 'Cormorant Garamond', serif; font-weight:700;">
-            <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 90px; width: auto; object-fit: contain;">
-          </div>
-          <p style="font-size:.85rem;color:rgba(255,243,236,.6);line-height:1.8">
-            Kerala Backwaters, India
-          </p>
-          <p style="font-style:italic;color:rgba(255,243,236,.4);font-size:1rem;line-height:1.6; font-family:'EB Garamond', serif; margin-top: 1rem;">
-            "Experience Serenity by the Lake"</p>
-        </div>
-
-        <div class="col-6 col-md-3 col-lg-2">
-          <div class="f-head">Navigation</div>
-          <ul class="f-links">
-            <li><a href="{{ route('home') }}">Home</a></li>
-            <li><a href="{{ route('home') }}#events">Events</a></li>
-            <li><a href="{{ route('home') }}#gallery">Gallery</a></li>
-            <li><a href="{{ route('home') }}#about">About Us</a></li>
-            <li><a href="{{ route('home') }}#contact">Contact</a></li>
-            <li><a href="/booking">Book Now</a></li>
-          </ul>
-        </div>
-
-        <div class="col-6 col-md-3 col-lg-3">
-          <div class="f-head">Policies</div>
-          <div class="policy-list">
-            <a href="/terms-and-conditions" class="policy-link">Terms & Conditions</a>
-            <a href="/privacy-policy" class="policy-link">Privacy Policy</a>
-            <a href="/cancellation-policy" class="policy-link">Cancellation Policy</a>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="f-head">Contact Us</div>
-          <div class="footer-contact mb-4">
-            <div class="footer-contact-item">
-              <i class="bi bi-telephone" style="color:var(--brand)"></i>
-              <a href="tel:+918921021202">+91 89210 21202</a>
-            </div>
-            <div class="footer-contact-item">
-              <i class="bi bi-envelope" style="color:var(--brand-l)"></i>
-              <a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a>
-            </div>
-          </div>
-          
-          <div class="f-head" style="margin-top: 2rem;">Follow Us</div>
-          <div class="footer-social d-flex gap-3">
-              <a href="https://instagram.com/parudeesa" target="_blank" class="fs-link" title="Instagram"><i class="bi bi-instagram"></i></a>
-              <a href="https://facebook.com/parudeesa" target="_blank" class="fs-link" title="Facebook"><i class="bi bi-facebook"></i></a>
-              <a href="https://youtube.com/parudeesa" target="_blank" class="fs-link" title="YouTube"><i class="bi bi-youtube"></i></a>
-          </div>
-        </div>
-      </div>
-      <hr class="f-div" />
-      <p class="f-copy">&copy; 2026 Parudeesa - The Lake View Resort. All rights reserved. Made with love in Kerala.</p>
-    </div>
-</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -526,20 +451,49 @@ const amountInput = document.getElementById('amount_val');
 const displayBase = document.getElementById('display_base');
 const displayTotal = document.getElementById('display_total');
 
+function toggleAmenity(card) {
+    const checkbox = card.querySelector('.amenity-checkbox');
+    checkbox.checked = !checkbox.checked;
+    if (checkbox.checked) {
+        card.classList.add('is-selected');
+    } else {
+        card.classList.remove('is-selected');
+    }
+    updatePrice();
+}
+
+// Ensure checkbox clicks also trigger update
+document.querySelectorAll('.amenity-checkbox').forEach(chk => {
+    chk.onclick = (e) => {
+        e.stopPropagation();
+        const card = chk.closest('.amenity-visual-card');
+        if (chk.checked) card.classList.add('is-selected');
+        else card.classList.remove('is-selected');
+        updatePrice();
+    };
+});
+
 function updatePrice() {
     const selected = propertySelect.options[propertySelect.selectedIndex];
     if (!selected.value) return;
     
-    // Extract price from text (hacky but works for this demo) or better, use data attribute
     const text = selected.text;
-    const price = parseInt(text.match(/₹(\d+)/)[1]);
+    const basePrice = parseInt(text.match(/₹(\d+)/)[1]);
     
-    amountInput.value = price;
-    document.getElementById('base_amount_val').value = price;
-    displayBase.innerText = '₹' + price.toLocaleString();
-    displayTotal.innerText = '₹' + price.toLocaleString();
+    let extraPrice = 0;
+    document.querySelectorAll('.amenity-checkbox:checked').forEach(chk => {
+        const card = chk.closest('.amenity-visual-card');
+        const price = parseFloat(card.dataset.price) || 0;
+        extraPrice += price;
+    });
+
+    const total = basePrice + extraPrice;
     
-    // Reset coupon if property changes
+    amountInput.value = total;
+    document.getElementById('base_amount_val').value = total; // Note: In this simple form, base_amount includes amenities for coupon calculation
+    displayBase.innerText = '₹' + total.toLocaleString();
+    displayTotal.innerText = '₹' + total.toLocaleString();
+    
     resetCoupon();
 }
 
@@ -664,5 +618,8 @@ function resetCoupon() {
 }
 </script>
 
+    <x-footer :isHome="false" />
+<x-social-nav />
+@include('chatbot')
 </body>
 </html>

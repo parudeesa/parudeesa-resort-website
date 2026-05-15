@@ -24,7 +24,7 @@
                     <h3 class="p-serif text-2xl font-bold mb-6 border-b pb-3 flex items-center" style="color:#3e2010; border-color:rgba(250,135,62,.15)">
                         <i data-lucide="sparkles" class="w-5 h-5 mr-2 text-[#e06828]"></i> Add Amenity
                     </h3>
-                    <form action="{{ route('amenities.store') }}" method="POST" class="space-y-5">
+                    <form action="{{ route('amenities.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                         @csrf
                         <div>
                             <label class="p-label">Amenity Name</label>
@@ -42,12 +42,23 @@
                             </select>
                         </div>
                         <div>
+                            <label class="p-label">Property Assignment</label>
+                            <select id="property_assignment" name="property_assignment" class="p-input mt-1" required>
+                                <option value="both">Both Properties</option>
+                                <option value="paradise">Paradise Only</option>
+                                <option value="utopia">Utopia Only</option>
+                            </select>
+                        </div>
+                        <div>
                             <label class="p-label">Description (Optional)</label>
                             <textarea id="description" name="description" class="p-input mt-1" rows="3" placeholder="Brief details..." maxlength="2000"></textarea>
                         </div>
                         <div>
-                            <label class="p-label">Image URL (Optional)</label>
-                            <input id="image_url" name="image_url" type="url" class="p-input mt-1" placeholder="https://images.unsplash.com/..." maxlength="2048" />
+                            <label class="p-label">Amenity Image</label>
+                            <div class="mt-1 flex items-center gap-4">
+                                <div id="add_preview" class="w-16 h-16 rounded-lg border border-orange-100 overflow-hidden hidden bg-orange-50"></div>
+                                <input id="image" name="image" type="file" class="p-input mt-1" accept="image/*" onchange="previewImage(this, 'add_preview')" />
+                            </div>
                         </div>
                         <div>
                             <label class="p-label">Condition Note (Optional)</label>
@@ -93,11 +104,10 @@
                             <table class="min-w-full divide-y" style="border-color:rgba(250,135,62,.15)">
                                 <thead style="background:rgba(250,135,62,.05)">
                                     <tr>
-                                        <th class="px-6 py-4 text-left p-label rounded-tl-lg">Name</th>
+                                        <th class="px-6 py-4 text-left p-label rounded-tl-lg">Amenity</th>
                                         <th class="px-6 py-4 text-left p-label">Price</th>
                                         <th class="px-6 py-4 text-left p-label">Pricing Type</th>
                                         <th class="px-6 py-4 text-left p-label">Details</th>
-                                        <th class="px-6 py-4 text-left p-label">Created</th>
                                         <th class="px-6 py-4 text-right p-label rounded-tr-lg">Actions</th>
                                     </tr>
                                 </thead>
@@ -105,7 +115,18 @@
                                     @foreach($amenities as $amenity)
                                         <tr class="hover:bg-orange-50/50 transition-colors group">
                                             <td class="px-6 py-4">
-                                                <div class="font-bold p-text text-md">{{ $amenity->name }}</div>
+                                                <div class="flex items-center gap-3">
+                                                    <div class="w-10 h-10 rounded-lg border border-orange-100 overflow-hidden bg-orange-50 flex-shrink-0">
+                                                        @if($amenity->image)
+                                                            <img src="{{ asset($amenity->image) }}" class="w-full h-full object-cover">
+                                                        @else
+                                                            <div class="w-full h-full flex items-center justify-center text-orange-200">
+                                                                <i data-lucide="image" class="w-5 h-5"></i>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="font-bold p-text text-md">{{ $amenity->name }}</div>
+                                                </div>
                                             </td>
                                             <td class="px-6 py-4">
                                                 <div class="text-sm text-gray-700">₹{{ number_format($amenity->price, 2) }}</div>
@@ -121,15 +142,20 @@
                                                 @if($amenity->is_premium)
                                                     <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold mt-1 bg-yellow-100 text-yellow-800 uppercase tracking-tighter">Premium</span>
                                                 @endif
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <div class="text-sm text-gray-500">{{ $amenity->created_at->format('M d, Y') }}</div>
+                                                <div class="mt-1 flex gap-1">
+                                                    @if($amenity->property_assignment === 'both' || $amenity->property_assignment === 'paradise')
+                                                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-bold bg-blue-50 text-blue-700 uppercase">Paradise</span>
+                                                    @endif
+                                                    @if($amenity->property_assignment === 'both' || $amenity->property_assignment === 'utopia')
+                                                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-bold bg-purple-50 text-purple-700 uppercase">Utopia</span>
+                                                    @endif
+                                                </div>
                                             </td>
                                             <td class="px-6 py-4 text-right">
                                                 <div class="flex justify-end space-x-2">
                                                     <!-- Edit Icon with Tooltip -->
                                                     <div class="relative flex items-center group/tooltip">
-                                                        <button @click="openEditModal({{ $amenity->id }}, '{{ addslashes($amenity->name) }}', {{ $amenity->price }}, '{{ $amenity->pricing_type }}', {{ $amenity->status ? 'true' : 'false' }}, '{{ addslashes($amenity->description ?? '') }}', {{ $amenity->is_premium ? 'true' : 'false' }}, '{{ $amenity->image_url ?? '' }}', '{{ addslashes($amenity->condition_note ?? '') }}')" 
+                                                        <button @click="openEditModal({{ json_encode($amenity) }})" 
                                                                 class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-lg transition-colors">
                                                             <i data-lucide="pencil" class="w-4 h-4"></i>
                                                         </button>
@@ -191,22 +217,32 @@
                         </button>
                     </div>
 
-                    <form :action="editFormAction" method="POST" class="space-y-6">
+                    <form :action="editFormAction" method="POST" enctype="multipart/form-data" class="space-y-6">
                         @csrf
                         @method('PATCH')
                         <div>
                             <label class="p-label block mb-2">Amenity Name</label>
                             <input type="text" name="name" x-model="editName" required minlength="3" maxlength="255" class="p-input">
                         </div>
-                        <div>
-                            <label class="p-label block mb-2">Price</label>
-                            <input type="number" name="price" x-model="editPrice" required min="0" max="1000000" step="0.01" class="p-input">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="p-label block mb-2">Price</label>
+                                <input type="number" name="price" x-model="editPrice" required min="0" max="1000000" step="0.01" class="p-input">
+                            </div>
+                            <div>
+                                <label class="p-label block mb-2">Pricing Type</label>
+                                <select name="pricing_type" x-model="editPricingType" class="p-input" required>
+                                    <option value="fixed">Fixed</option>
+                                    <option value="per_person">Per Person</option>
+                                </select>
+                            </div>
                         </div>
                         <div>
-                            <label class="p-label block mb-2">Pricing Type</label>
-                            <select name="pricing_type" x-model="editPricingType" class="p-input" required>
-                                <option value="fixed">Fixed</option>
-                                <option value="per_person">Per Person</option>
+                            <label class="p-label block mb-2">Property Assignment</label>
+                            <select name="property_assignment" x-model="editPropertyAssignment" class="p-input" required>
+                                <option value="both">Both Properties</option>
+                                <option value="paradise">Paradise Only</option>
+                                <option value="utopia">Utopia Only</option>
                             </select>
                         </div>
                         <div>
@@ -214,8 +250,16 @@
                             <textarea name="description" x-model="editDescription" class="p-input" rows="3" maxlength="2000"></textarea>
                         </div>
                         <div>
-                            <label class="p-label block mb-2">Image URL (Optional)</label>
-                            <input type="url" name="image_url" x-model="editImageUrl" maxlength="2048" class="p-input">
+                            <label class="p-label block mb-2">Amenity Image</label>
+                            <div class="flex items-center gap-4">
+                                <div id="edit_preview" class="w-20 h-20 rounded-xl border border-orange-100 overflow-hidden bg-orange-50">
+                                    <template x-if="editImage">
+                                        <img :src="`{{ asset('') }}${editImage}`" class="w-full h-full object-cover">
+                                    </template>
+                                </div>
+                                <input type="file" name="image" class="p-input text-xs" accept="image/*" onchange="previewImage(this, 'edit_preview_img')">
+                            </div>
+                            <div id="edit_preview_img" class="mt-2 h-32 rounded-xl border border-orange-100 overflow-hidden hidden"></div>
                         </div>
                         <div>
                             <label class="p-label block mb-2">Condition Note (Optional)</label>
@@ -285,6 +329,18 @@
 
     <!-- Alpine Component Logic -->
     <script>
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         document.addEventListener('alpine:init', () => {
             Alpine.data('amenitiesManager', () => ({
                 isEditModalOpen: false,
@@ -296,22 +352,34 @@
                 editStatus: true,
                 editDescription: '',
                 editIsPremium: false,
-                editImageUrl: '',
+                editImage: '',
                 editConditionNote: '',
+                editPropertyAssignment: 'both',
                 deleteFormAction: '',
                 deleteAmenityName: '',
 
-                openEditModal(id, name, price, pricingType, status, description, isPremium, imageUrl, conditionNote) {
-                    this.editFormAction = `/amenities/${id}`;
-                    this.editName = name;
-                    this.editPrice = price;
-                    this.editPricingType = pricingType;
-                    this.editStatus = !!status;
-                    this.editDescription = description;
-                    this.editIsPremium = !!isPremium;
-                    this.editImageUrl = imageUrl;
-                    this.editConditionNote = conditionNote;
+                openEditModal(amenity) {
+                    this.editFormAction = `/amenities/${amenity.id}`;
+                    this.editName = amenity.name;
+                    this.editPrice = amenity.price;
+                    this.editPricingType = amenity.pricing_type;
+                    this.editStatus = !!amenity.status;
+                    this.editDescription = amenity.description || '';
+                    this.editIsPremium = !!amenity.is_premium;
+                    this.editImage = amenity.image || '';
+                    this.editConditionNote = amenity.condition_note || '';
+                    this.editPropertyAssignment = amenity.property_assignment || 'both';
                     this.isEditModalOpen = true;
+                    
+                    // Reset preview
+                    setTimeout(() => {
+                        const preview = document.getElementById('edit_preview_img');
+                        if (preview) {
+                            preview.innerHTML = '';
+                            preview.classList.add('hidden');
+                        }
+                        lucide.createIcons();
+                    }, 50);
                 },
 
                 closeEditModal() {

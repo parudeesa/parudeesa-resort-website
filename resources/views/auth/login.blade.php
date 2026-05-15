@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Josefin+Sans:wght@300;400;600&family=Outfit:wght@300;400;500;600&display=swap"
         rel="stylesheet" />
 
     <style>
@@ -51,11 +51,12 @@
         }
 
         body {
-            font-family: 'Josefin Sans', sans-serif;
-            background: var(--brand-pale);
+            font-family: 'Outfit', sans-serif;
+            background: #000;
             color: var(--txt);
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
         }
 
         h1,
@@ -72,26 +73,27 @@
             inset: 0;
             pointer-events: none;
             z-index: 9990;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E")
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E")
         }
 
         /* ═══════ NAVBAR ═══════ */
         .navbar {
-            background: rgba(255, 243, 236, .97);
+            background: rgba(255, 243, 236, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(250, 135, 62, .18);
+            border-bottom: 1px solid rgba(250, 135, 62, .1);
             padding: .75rem 1rem;
-            position: sticky;
+            position: fixed;
+            width: 100%;
             top: 0;
-            z-index: 1050;
-            box-shadow: 0 4px 28px rgba(250, 135, 62, .1);
-            transition: box-shadow var(--ease), background var(--ease);
+            z-index: 2000;
+            box-shadow: 0 4px 28px rgba(0, 0, 0, 0.05);
+            transition: all var(--ease);
         }
 
         .navbar.scrolled {
-            background: rgba(255, 243, 236, .97);
-            box-shadow: 0 6px 36px rgba(250, 135, 62, .18);
+            background: rgba(255, 243, 236, .98);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
         }
 
         .navbar-brand {
@@ -132,41 +134,40 @@
 
         /* ═══════ BUTTONS ═══════ */
         .btn-brand {
-            background: linear-gradient(135deg, var(--brand), var(--brand-d));
+            background: linear-gradient(135deg, #D98A4E, #C7773A);
             color: #fff !important;
             border: none !important;
-            border-radius: 10px;
-            padding: .7rem 1.6rem;
-            font-family: 'Josefin Sans', sans-serif;
-            font-size: .73rem;
-            font-weight: 700;
-            letter-spacing: .08em;
+            border-radius: 12px;
+            padding: 1rem 1.6rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: .85rem;
+            font-weight: 600;
+            letter-spacing: .05em;
             text-transform: uppercase;
             text-decoration: none !important;
             display: inline-flex !important;
             align-items: center;
             justify-content: center;
             gap: .5rem;
-            box-shadow: 0 4px 18px rgba(250, 135, 62, .35);
-            transition: transform var(--ease), box-shadow var(--ease);
-            -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 10px 25px rgba(217, 138, 78, 0.3);
+            transition: all var(--ease);
             cursor: pointer;
             width: 100%;
+            margin-top: 1rem;
         }
 
         .btn-brand:hover {
-            color: #fff !important;
             transform: translateY(-2px);
             box-shadow: 0 8px 28px rgba(250, 135, 62, .45);
         }
 
         /* ═══════ FORM STYLES ═══════ */
         .login-container {
-            min-height: calc(100vh - 80px);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 20px;
             position: relative;
             overflow: hidden;
         }
@@ -175,28 +176,37 @@
             position: absolute;
             inset: 0;
             background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=85') center/cover no-repeat;
-            filter: blur(8px) brightness(0.6);
-            transform: scale(1.05);
-            /* hide blurred edges */
+            filter: blur(5px);
+            transform: scale(1.1);
             z-index: -1;
         }
 
+        .login-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(46, 26, 8, 0.4), rgba(0, 0, 0, 0.75));
+            z-index: 0;
+        }
+
         .login-card {
-            background: var(--parch);
-            border: 1px solid rgba(250, 135, 62, .18);
-            border-radius: var(--r);
-            padding: 3rem 2.5rem;
-            box-shadow: var(--sh-l);
+            background: rgba(255, 248, 243, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 24px;
+            padding: 2.5rem 2.2rem;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 440px;
+            max-width: 410px;
             position: relative;
             z-index: 1;
-            animation: fadeUp .6s ease both;
+            margin-top: 60px; /* offset for navbar if needed */
+            animation: fadeUp .8s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         .login-header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
 
         .ornament-line {
@@ -229,71 +239,94 @@
         }
 
         .login-header h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--brn-dk);
-            line-height: 1.15;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
         }
 
         .login-header h1 em {
             font-style: italic;
-            color: var(--brand);
+            color: #C7773A;
+            font-weight: 500;
         }
 
         .form-group {
-            margin-bottom: 1.4rem;
+            margin-bottom: 1.2rem;
         }
 
         label {
-            font-size: .68rem;
-            font-weight: 700;
-            letter-spacing: .1em;
+            font-size: .65rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: var(--brand-d);
+            color: var(--txt-m);
             display: block;
-            margin-bottom: .4rem;
+            margin-bottom: .5rem;
+            padding-left: 4px;
         }
 
         input[type="text"],
         input[type="email"],
         input[type="password"] {
             width: 100%;
-            border: 1.5px solid rgba(250, 135, 62, .25);
-            border-radius: 8px;
-            padding: .85rem 1rem;
-            font-family: 'Josefin Sans', sans-serif;
-            font-size: .95rem;
-            background: var(--brand-mist);
+            border: 1px solid rgba(217, 138, 78, 0.2);
+            border-radius: 12px;
+            padding: .95rem 1.2rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: .9rem;
+            background: rgba(255, 255, 255, 0.6);
             color: var(--txt);
-            transition: border-color var(--ease), box-shadow var(--ease);
+            transition: all var(--ease);
             outline: none;
         }
 
         input:focus {
-            border-color: var(--brand);
-            box-shadow: 0 0 0 3px rgba(250, 135, 62, .12);
+            border-color: #D98A4E;
+            box-shadow: 0 0 0 4px rgba(217, 138, 78, 0.1);
             background: #fff;
         }
 
         .forgot-link {
             display: block;
             text-align: right;
-            font-size: .75rem;
-            color: var(--txt-m);
+            font-size: .7rem;
+            font-weight: 500;
+            color: var(--txt-l);
             text-decoration: none;
-            margin-top: -0.6rem;
-            margin-bottom: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 2rem;
             transition: color var(--ease);
         }
 
         .forgot-link:hover {
-            color: var(--brand-d);
+            color: #C7773A;
+        }
+
+        @media (max-width: 576px) {
+            .login-card {
+                padding: 2.5rem 1.5rem;
+                border-radius: 0;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                background: var(--parch);
+                backdrop-filter: none;
+            }
+            .login-container {
+                padding: 0;
+            }
+            .login-header h1 {
+                font-size: 2rem;
+            }
         }
 
         @keyframes fadeUp {
             from {
                 opacity: 0;
-                transform: translateY(26px)
+                transform: translateY(30px)
             }
 
             to {
@@ -307,33 +340,15 @@
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 55px; width: auto; object-fit: contain;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link" href="/design">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/design#events">Events</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/design#gallery">Gallery</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/design#about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/design#contact">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link anav" style="background: rgba(250, 135, 62, .1); color: var(--brand-d) !important;" href="/login">Login</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <x-navbar :isHome="false" />
 
     <!-- LOGIN SECTION -->
     <div class="login-container">
         <div class="login-bg"></div>
+        <div class="login-overlay"></div>
         <div class="login-card">
             <div class="login-header">
-                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 100px; width: auto; object-fit: contain; margin-bottom: 1.2rem;">
+                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 70px; width: auto; object-fit: contain; margin-bottom: 1rem;">
                 <div class="ornament-line"><span>Welcome Back</span></div>
                 <h1><em>Login</em></h1>
             </div>

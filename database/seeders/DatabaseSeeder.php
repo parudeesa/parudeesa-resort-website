@@ -32,6 +32,9 @@ class DatabaseSeeder extends Seeder
             AmenitySeeder::class,
             EventPackageSeeder::class,
             PropertyGallerySeeder::class,
+            EventCMSSeeder::class,
+            SettingsTableSeeder::class,
+            HomepageSeeder::class,
         ]);
     }
 }

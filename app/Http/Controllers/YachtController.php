@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Yacht;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class YachtController extends Controller
 {
@@ -58,10 +60,25 @@ class YachtController extends Controller
             'price' => 'required|numeric',
             'duration' => 'required|string',
             'capacity' => 'required|integer',
-            'image_url' => 'required|url',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
-        Yacht::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . Str::slug($request->name) . '.' . $file->getClientOriginalExtension();
+            $path = 'images/yachts/' . $filename;
+            
+            if (!File::exists(public_path('images/yachts'))) {
+                File::makeDirectory(public_path('images/yachts'), 0755, true);
+            }
+            
+            $file->move(public_path('images/yachts'), $filename);
+            $data['image'] = $path;
+        }
+
+        Yacht::create($data);
 
         return back()->with('success', 'Yacht added successfully.');
     }
@@ -76,11 +93,33 @@ class YachtController extends Controller
             'price' => 'required|numeric',
             'duration' => 'required|string',
             'capacity' => 'required|integer',
-            'image_url' => 'required|url',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'status' => 'required|boolean',
         ]);
 
-        $yacht->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            // Delete old image
+            if ($yacht->image && File::exists(public_path($yacht->image))) {
+                File::delete(public_path($yacht->image));
+            }
+
+            $file = $request->file('image');
+            $filename = time() . '_' . Str::slug($request->name) . '.' . $file->getClientOriginalExtension();
+            $path = 'images/yachts/' . $filename;
+            
+            if (!File::exists(public_path('images/yachts'))) {
+                File::makeDirectory(public_path('images/yachts'), 0755, true);
+            }
+            
+            $file->move(public_path('images/yachts'), $filename);
+            $data['image'] = $path;
+        } else {
+            $data['image'] = $yacht->image;
+        }
+
+        $yacht->update($data);
 
         return back()->with('success', 'Yacht updated successfully.');
     }
@@ -88,6 +127,11 @@ class YachtController extends Controller
     public function destroyAdmin($id)
     {
         $yacht = Yacht::findOrFail($id);
+        
+        if ($yacht->image && File::exists(public_path($yacht->image))) {
+            File::delete(public_path($yacht->image));
+        }
+
         $yacht->delete();
 
         return back()->with('success', 'Yacht deleted successfully.');

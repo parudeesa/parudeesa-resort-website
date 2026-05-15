@@ -23,8 +23,16 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($yachts as $yacht)
-                    <div class="p-card overflow-hidden">
-                        <img src="{{ $yacht->image_url }}" alt="{{ $yacht->name }}" class="w-full h-48 object-cover">
+                    <div class="p-card overflow-hidden group">
+                        <div class="h-48 overflow-hidden relative">
+                            @if($yacht->image)
+                                <img src="{{ asset($yacht->image) }}" alt="{{ $yacht->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            @else
+                                <div class="w-full h-full bg-orange-50 flex items-center justify-center text-orange-200">
+                                    <i data-lucide="ship" class="w-12 h-12"></i>
+                                </div>
+                            @endif
+                        </div>
                         <div class="p-6">
                             <div class="flex justify-between items-start mb-2">
                                 <h3 class="text-xl font-bold p-serif text-[#3e2010]">{{ $yacht->name }}</h3>
@@ -44,7 +52,7 @@
                                 </div>
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="editYacht({{ $yacht }})" class="flex-1 py-2 bg-white border border-orange-200 text-orange-600 rounded-lg hover:bg-orange-50 transition-colors font-bold text-sm">Edit</button>
+                                <button onclick="editYacht({{ json_encode($yacht) }})" class="flex-1 py-2 bg-white border border-orange-200 text-orange-600 rounded-lg hover:bg-orange-50 transition-colors font-bold text-sm">Edit</button>
                                 <form action="{{ route('admin.yachts.delete', $yacht->id) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
@@ -128,7 +136,7 @@
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <form action="{{ route('admin.yachts.store') }}" method="POST">
+            <form action="{{ route('admin.yachts.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
@@ -152,8 +160,9 @@
                         <input type="number" name="capacity" class="p-input" required>
                     </div>
                     <div>
-                        <label class="p-label">Image URL</label>
-                        <input type="url" name="image_url" class="p-input" required>
+                        <label class="p-label">Yacht Image</label>
+                        <input type="file" name="image" class="p-input" accept="image/*" required onchange="previewImage(this, 'add_preview')">
+                        <div id="add_preview" class="mt-2 h-32 rounded-xl border border-orange-100 overflow-hidden hidden"></div>
                     </div>
                 </div>
                 <div class="mt-8 flex justify-end gap-4">
@@ -173,7 +182,7 @@
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <form id="editYachtForm" method="POST">
+            <form id="editYachtForm" method="POST" enctype="multipart/form-data">
                 @csrf @method('PATCH')
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
@@ -197,15 +206,16 @@
                         <input type="number" name="capacity" id="edit_capacity" class="p-input" required>
                     </div>
                     <div>
-                        <label class="p-label">Image URL</label>
-                        <input type="url" name="image_url" id="edit_image_url" class="p-input" required>
-                    </div>
-                    <div>
                         <label class="p-label">Status</label>
                         <select name="status" id="edit_status" class="p-input">
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
                         </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="p-label">Yacht Image (Leave empty to keep current)</label>
+                        <input type="file" name="image" class="p-input" accept="image/*" onchange="previewImage(this, 'edit_preview')">
+                        <div id="edit_preview" class="mt-2 h-40 rounded-xl border border-orange-100 overflow-hidden"></div>
                     </div>
                 </div>
                 <div class="mt-8 flex justify-end gap-4">
@@ -224,10 +234,30 @@
             document.getElementById('edit_price').value = yacht.price;
             document.getElementById('edit_duration').value = yacht.duration;
             document.getElementById('edit_capacity').value = yacht.capacity;
-            document.getElementById('edit_image_url').value = yacht.image_url;
             document.getElementById('edit_status').value = yacht.status ? 1 : 0;
             
+            const preview = document.getElementById('edit_preview');
+            if (yacht.image) {
+                preview.innerHTML = `<img src="{{ asset('') }}${yacht.image}" class="w-full h-full object-cover">`;
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+            
             document.getElementById('editYachtModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
 </x-admin-layout>

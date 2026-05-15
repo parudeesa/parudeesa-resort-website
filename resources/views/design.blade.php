@@ -17,6 +17,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        // Immediate Page Initialization to prevent flash
+        (function() {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            const validPages = ['home', 'events', 'gallery', 'about', 'booking', 'login', 'register'];
+            const target = validPages.includes(hash) ? hash : 'home';
+            
+            // Add a style to hide all pages except the target one immediately
+            const style = document.createElement('style');
+            style.id = 'flash-prevent';
+            style.innerHTML = `.page:not(#page-${target}) { display: none !important; opacity: 0 !important; } #page-${target} { display: block !important; opacity: 1 !important; }`;
+            document.head.appendChild(style);
+        })();
+    </script>
+
 
     <style>
         /* ═══════════════════════════════════════
@@ -58,16 +77,16 @@
             padding: 0
         }
 
-        html {
-            scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
         }
 
         body {
             font-family: 'Outfit', sans-serif;
             background: var(--brand-pale);
             color: var(--txt-m);
-            overflow-x: hidden;
             font-weight: 300;
             -webkit-font-smoothing: antialiased
         }
@@ -95,100 +114,18 @@
 
         /* Pages */
         .page {
-            display: none
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .page.active {
-            display: block
-        }
-
-        /* ═══════ NAVBAR ═══════ */
-        .navbar {
-            background: rgba(255, 243, 236, .88);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(250, 135, 62, .18);
-            padding: .75rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1050;
-            box-shadow: 0 4px 28px rgba(250, 135, 62, .1);
-            transition: box-shadow var(--ease), background var(--ease)
-        }
-
-        .navbar.scrolled {
-            background: rgba(255, 243, 236, .97);
-            box-shadow: 0 6px 36px rgba(250, 135, 62, .18)
-        }
-
-        .navbar-brand {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--brn-dk) !important;
-            letter-spacing: .3px;
-            line-height: 1.1
-        }
-
-        .navbar-brand small {
             display: block;
-            font-size: .52rem;
-            font-weight: 400;
-            letter-spacing: .22em;
-            text-transform: uppercase;
-            color: var(--brand);
-            margin-top: .1rem
+            opacity: 1;
         }
 
-        .nav-link {
-            font-size: .82rem;
-            font-weight: 600;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            color: var(--txt-m) !important;
-            padding: .45rem .85rem !important;
-            border-radius: 50px;
-            transition: all var(--ease);
-            cursor: pointer
-        }
 
-        .nav-link:hover,
-        .nav-link.anav {
-            color: var(--brand-d) !important;
-            background: rgba(250, 135, 62, .1)
-        }
 
-        .btn-nav-book {
-            background: linear-gradient(135deg, var(--brand), var(--brand-d));
-            color: #fff !important;
-            border-radius: 50px;
-            padding: .42rem 1.2rem !important;
-            font-size: .63rem;
-            font-weight: 700;
-            letter-spacing: .1em;
-            box-shadow: 0 3px 14px rgba(250, 135, 62, .35);
-            transition: opacity var(--ease), transform var(--ease)
-        }
-
-        .btn-nav-book:hover {
-            opacity: .9;
-            transform: translateY(-1px)
-        }
-
-        .navbar-toggler {
-            border: 1px solid rgba(250, 135, 62, .35);
-            border-radius: 8px;
-            padding: .3rem .5rem;
-            box-shadow: none !important
-        }
-
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23fa873e' stroke-width='2.2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")
-        }
-
-        .navbar-toggler:focus {
-            box-shadow: none
-        }
 
         /* ═══════ BUTTONS ═══════ */
         .btn-brand {
@@ -797,7 +734,7 @@
         .ev-banner-bg {
             position: absolute;
             inset: 0;
-            background: url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1600&q=80') center/cover no-repeat
+            background: url('/images/event-hero-main.jpg') center/cover no-repeat
         }
 
         .ev-banner-ov {
@@ -816,7 +753,7 @@
         /* ═══════ GOOGLE REVIEWS ═══════ */
         .reviews-sec {
             padding: 80px 0;
-            background: linear-gradient(180deg, var(--cream-d) 0%, var(--brand-pale) 100%)
+            background: linear-gradient(160deg, var(--brn-dk) 0%, #2e1408 100%)
         }
 
         .review-card {
@@ -900,7 +837,7 @@
         /* ═══════ INSTAGRAM REELS ═══════ */
         .reels-sec {
             padding: 80px 0;
-            background: linear-gradient(160deg, var(--brn-dk) 0%, #2e1408 100%)
+            background: linear-gradient(180deg, var(--cream-d) 0%, var(--brand-pale) 100%)
         }
 
         .reel-card {
@@ -954,7 +891,15 @@
         .reel-card:hover .reel-play {
             background: var(--brand);
             border-color: var(--brand);
-            transform: translate(-50%, -50%) scale(1.1)
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 0 20px rgba(250, 135, 62, 0.6);
+            animation: pulse-play 1.5s infinite;
+        }
+
+        @keyframes pulse-play {
+            0% { box-shadow: 0 0 0 0 rgba(250, 135, 62, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(250, 135, 62, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(250, 135, 62, 0); }
         }
 
         .reel-label {
@@ -1115,41 +1060,50 @@
 
         .gal-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-auto-rows: 250px;
+            grid-auto-flow: dense;
+            gap: 20px;
+            padding: 10px 0;
         }
 
         .gal-item {
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
             position: relative;
             cursor: pointer;
-            aspect-ratio: 1;
-            transition: transform var(--ease)
-        }
-
-        .gal-item:hover {
-            transform: scale(1.02)
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--cream-d);
+            border: 1px solid rgba(250, 135, 62, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         .gal-item.wide {
-            grid-column: span 2
+            grid-column: span 2;
         }
 
         .gal-item.tall {
             grid-row: span 2;
-            aspect-ratio: unset
         }
 
-        .gal-item img {
+        .gal-item img, 
+        .gal-item video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform .6s ease
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            display: block;
         }
 
-        .gal-item:hover img {
-            transform: scale(1.06)
+        .gal-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(62, 32, 16, 0.15);
+            z-index: 2;
+        }
+
+        .gal-item:hover img,
+        .gal-item:hover video {
+            transform: scale(1.1);
         }
 
         .gal-item-ov {
@@ -1658,157 +1612,6 @@
         }
 
         /* ═══════ FOOTER ═══════ */
-        footer {
-            background: linear-gradient(160deg, #1e0a02 0%, var(--brn-dk) 100%);
-            color: rgba(255, 243, 236, .6);
-            padding: 65px 0 calc(24px + var(--safe-b));
-            border-top: 2px solid rgba(250, 135, 62, .2)
-        }
-
-        .f-brand {
-            font-size: 1.8rem;
-            font-weight: 700;
-            font-style: italic;
-            color: var(--brand-pale)
-        }
-
-        .f-brand small {
-            display: block;
-            font-size: .53rem;
-            font-style: normal;
-            letter-spacing: .22em;
-            text-transform: uppercase;
-            color: var(--brand-l);
-            margin-top: .2rem;
-            font-family: 'Josefin Sans', sans-serif
-        }
-
-        .f-head {
-            font-size: .58rem;
-            letter-spacing: .18em;
-            text-transform: uppercase;
-            color: var(--brand-l);
-            margin-bottom: 1rem;
-            font-weight: 700
-        }
-
-        .f-links {
-            list-style: none;
-            padding: 0;
-            margin: 0
-        }
-
-        .f-links li {
-            margin-bottom: .45rem
-        }
-
-        .f-links a {
-            font-size: .8rem;
-            color: rgba(255, 243, 236, .45);
-            text-decoration: none;
-            transition: color var(--ease);
-            cursor: pointer
-        }
-
-        .f-links a:hover {
-            color: var(--brand-l);
-            padding-left: 5px;
-        }
-
-        .policy-list {
-            display: flex;
-            flex-direction: column;
-            gap: .5rem;
-            margin-top: .6rem
-        }
-
-        .policy-link {
-            font-size: .8rem;
-            text-decoration: none;
-            color: rgba(255, 243, 236, .45);
-            transition: all var(--ease);
-        }
-
-        .policy-link:hover {
-            color: var(--brand-l);
-            padding-left: 5px;
-        }
-
-        .policy-sep {
-            color: rgba(255, 243, 236, .35);
-            font-weight: 700
-        }
-
-        .footer-social .fs-link {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 243, 236, 0.7);
-            font-size: 1.1rem;
-            transition: all var(--ease);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-social .fs-link:hover {
-            background: var(--brand);
-            color: #fff;
-            transform: translateY(-3px);
-            border-color: var(--brand);
-        }
-
-        .footer-contact {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .footer-contact-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.9rem;
-        }
-
-        .footer-contact-item i {
-            font-size: 1.1rem;
-            width: 20px;
-            text-align: center;
-        }
-
-        .footer-contact-item a {
-            color: rgba(255, 243, 236, 0.7);
-            text-decoration: none;
-            transition: color var(--ease);
-        }
-
-        .footer-contact-item a:hover {
-            color: var(--brand-l);
-        }
-
-        .policy-text {
-            flex: 1 1 220px
-        }
-
-        .f-div {
-            border-color: rgba(255, 255, 255, .06);
-            margin: 2rem 0 1.2rem
-        }
-
-        .f-copy {
-            font-size: .68rem;
-            opacity: .3;
-            text-align: center
-        }
-
-        .footer-social {
-            display: flex;
-            flex-wrap: wrap;
-            gap: .55rem
-        }
 
         .footer-contact {
             font-size: .8rem;
@@ -1853,60 +1656,6 @@
             transform: translateY(-2px)
         }
 
-        /* ═══════ FLOAT STACK ═══════ */
-        .float-stack {
-            position: fixed;
-            bottom: calc(10.2rem + var(--safe-b));
-            right: 1.4rem;
-            display: flex;
-            flex-direction: column;
-            gap: .7rem;
-            z-index: 995
-        }
-
-        .float-btn {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #fff;
-            text-decoration: none;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, .25);
-            transition: transform var(--ease);
-            -webkit-tap-highlight-color: transparent;
-            border: none;
-            cursor: pointer
-        }
-
-        .float-btn:hover {
-            transform: translateY(-3px)
-        }
-
-        .fig {
-            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)
-        }
-
-        .home-ig-float {
-            position: fixed;
-            bottom: calc(6rem + var(--safe-b));
-            right: 1.4rem;
-            z-index: 995
-        }
-
-        .fbtt {
-            background: linear-gradient(135deg, var(--brand), var(--brand-d));
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity var(--ease)
-        }
-
-        .fbtt.show {
-            opacity: 1;
-            pointer-events: auto
-        }
 
         /* ═══════ SOCIAL PROOF POPUP ═══════ */
         .sp-popup {
@@ -2032,27 +1781,82 @@
             background-clip: text
         }
 
-        /* ═══════ CHATBOT ═══════ */
-        
-        .cb-bubble {
+        /* ═══════ REEL MODAL ═══════ */
+        .reel-modal-bg {
             position: fixed;
-            bottom: calc(1.8rem + var(--safe-b));
-            right: 1.4rem;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #25D366, #128C7E);
+            inset: 0;
+            background: rgba(62, 32, 16, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s var(--ease);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: #fff;
-            cursor: pointer;
-            z-index: 997;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, .45);
-            animation: pulse-wa 2.5s ease-in-out infinite;
-            -webkit-tap-highlight-color: transparent
+            padding: 20px;
         }
+
+        .reel-modal-bg.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .reel-modal {
+            background: #fff;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+            transform: translateY(40px) scale(0.9);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reel-modal-bg.open .reel-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .reel-modal-body {
+            padding: 0;
+            overflow-y: auto;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            background: #fafafa;
+        }
+
+        .reel-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: var(--brn-dk);
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .reel-modal-close:hover {
+            background: var(--brand);
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
 
         @keyframes pulse-wa {
 
@@ -2066,53 +1870,6 @@
             }
         }
 
-        .cb-notif {
-            position: absolute;
-            top: -3px;
-            right: -3px;
-            background: var(--brand);
-            color: #fff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: .62rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #fff;
-            font-family: 'Josefin Sans', sans-serif
-        }
-
-        .cb-notif.hidden {
-            display: none
-        }
-
-        .cb-win {
-            position: fixed;
-            bottom: calc(5rem + var(--safe-b));
-            right: 1.4rem;
-            width: min(460px, calc(100vw - 2.4rem));
-            max-width: calc(100vw - 2.8rem);
-            background: #fff3ec;
-            border-radius: 20px;
-            box-shadow: 0 16px 56px rgba(0, 0, 0, .22);
-            border: 1px solid rgba(250, 135, 62, .2);
-            z-index: 996;
-            transform: scale(.88) translateY(24px);
-            opacity: 0;
-            pointer-events: none;
-            transition: transform .38s cubic-bezier(.34, 1.56, .64, 1), opacity .3s ease;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column
-        }
-
-        .cb-win.open {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-            pointer-events: auto
-        }
 
         .cb-head {
             background: linear-gradient(135deg, #d96520, #fa873e);
@@ -2324,14 +2081,21 @@
             -webkit-tap-highlight-color: transparent
         }
 
-        /* YACHT SECTION STYLES */
-        .yacht-sec { background: var(--parch); }
-        .yacht-gallery img { width: 100%; height: auto; max-height: 500px; object-fit: cover; border-radius: 24px; }
+        /* YACHT & EVENT SECTION STYLES */
+        .yacht-sec, .ev-sec { background: var(--parch); }
+        .yacht-gallery img, .ev-img-wrap img { width: 100%; height: auto; max-height: 500px; object-fit: cover; border-radius: 24px; }
         .premium-badge { position: absolute; top: 20px; left: 20px; background: linear-gradient(135deg, #d4af37, #b8860b); color: #fff; padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .stat-item { flex: 1; padding: 1.2rem; background: var(--cream); border: 1px solid rgba(250, 135, 62, 0.15); border-radius: 16px; text-align: center; }
         .stat-item i { font-size: 1.5rem; color: var(--brand); display: block; }
         .stat-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--txt-m); margin-bottom: 0.2rem; }
         .stat-value { font-weight: 700; color: var(--brn-dk); font-size: 0.95rem; }
+        
+        .ev-feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 2.5rem; }
+        .ev-feat-card { aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; background: #fff; border: 1px solid rgba(250, 135, 62, 0.12); border-radius: 16px; text-align: center; transition: all var(--ease); }
+        .ev-feat-card:hover { transform: translateY(-4px); border-color: var(--brand); box-shadow: 0 10px 25px rgba(250, 135, 62, 0.1); }
+        .ev-feat-card i { font-size: 1.4rem; color: var(--brand); margin-bottom: 6px; }
+        .ev-feat-card span { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--brn-dk); line-height: 1.2; display: block; }
+
         .price-label { font-size: 0.8rem; color: var(--txt-m); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 0.2rem; }
         .price-value { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 700; color: var(--brand-d); margin: 0; }
         .p-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--txt-l); display: block; margin-bottom: 0.4rem; }
@@ -2428,17 +2192,6 @@
                 max-height: none
             }
 
-            .cb-bubble {
-                right: .8rem
-            }
-
-            .float-stack {
-                right: .8rem
-            }
-
-            .home-ig-float {
-                right: .8rem
-            }
 
             .sp-popup {
                 left: .8rem;
@@ -2456,15 +2209,17 @@
             }
 
             .gal-grid {
-                grid-template-columns: repeat(2, 1fr)
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: 180px;
+                gap: 12px;
             }
 
             .gal-item.wide {
-                grid-column: span 1
+                grid-column: span 2;
             }
 
             .gal-item.tall {
-                grid-row: span 1
+                grid-row: span 2;
             }
 
             .amenity-check-grid {
@@ -2657,81 +2412,77 @@
                 transform: translateY(0)
             }
         }
+        .contact-info-card {
+            background: var(--parch);
+            border: 1px solid rgba(250, 135, 62, 0.15);
+            border-radius: var(--r);
+            transition: all var(--ease);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+        .contact-info-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--brand);
+            box-shadow: var(--sh-m);
+        }
+        .contact-info-card .ci-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--brand-mist);
+            color: var(--brand);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            border: 1px solid rgba(250, 135, 62, 0.2);
+        }
+        .contact-info-card .ci-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--txt-m);
+            font-weight: 700;
+        }
+        .contact-info-card .ci-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--brn-dk);
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- ██ NAVBAR ██ -->
-    <nav class="navbar navbar-expand-lg" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand" href="#" onclick="goPage('home');return false;" style="display: flex; align-items: center;">
-                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 55px; width: auto; object-fit: contain;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
-                aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="nav">
-                <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link anav" onclick="goPage('home')">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" onclick="goPage('events')">Events</a></li>
-                    <li class="nav-item"><a class="nav-link" onclick="goPage('gallery')">Gallery</a></li>
-                    <li class="nav-item"><a class="nav-link" onclick="goPage('about')">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" onclick="goPage('contact')">Contact</a></li>
-                    @auth
-                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="nav-item">
-                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                                @csrf
-                                <button type="submit" class="nav-link" style="background: none; border: none; color: inherit; cursor: pointer;">Logout</button>
-                            </form>
-                        </li>
-                    @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">LOGIN</a></li>
-                    @endauth
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <x-navbar :isHome="true" />
 
     <!-- ████████████████████ PAGE: HOME ████████████████████ -->
-    <div id="page-home" class="page active">
+    <div id="page-home" class="page">
 
-        <!-- INSTAGRAM MODAL -->
-        <div class="ig-modal-bg" id="igModal" onclick="closeIgModal(event)">
-            <div class="ig-modal">
-                <div class="ig-modal-icon"><i class="bi bi-instagram"></i></div>
-                <h4>Choose Instagram Account</h4>
-                <p>Explore our properties on Instagram:</p>
-                <div class="d-flex gap-2 flex-column">
-                    <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank"
-                        class="btn-brand w-100 justify-content-center mb-2" style="border-radius:10px" onclick="closeIgModal()">
-                        <i class="bi bi-instagram"></i> @Parudeesa_the_paradise (Paradise)
-                    </a>
-                    <a href="https://www.instagram.com/parudeesa_utopiya" target="_blank"
-                        class="btn-brand w-100 justify-content-center mb-2" style="border-radius:10px" onclick="closeIgModal()">
-                        <i class="bi bi-instagram"></i> @parudeesa_utopiya (Utopiya)
-                    </a>
+
+        <!-- REEL MODAL -->
+        <div class="reel-modal-bg" id="reelModal" onclick="closeReelModal(event)">
+            <button class="reel-modal-close" onclick="closeReelModal(true)">&times;</button>
+            <div class="reel-modal">
+                <div class="reel-modal-body" id="reelContainer">
+                    <!-- Dynamic Instagram Embed Injection -->
                 </div>
-                <button onclick="closeIgModal()"
-                    style="font-size:.72rem;color:var(--txt-m);background:none;border:none;cursor:pointer;margin-top:.3rem;padding:.4rem 1rem">Maybe
-                    later</button>
             </div>
-        </div>
-        <div class="home-ig-float">
-            <a href="#" onclick="showIgModal();return false;" class="float-btn fig"
-                title="Instagram" aria-label="Open Instagram accounts"><i class="bi bi-instagram"></i></a>
         </div>
 
         <!-- HERO -->
         <section class="hero">
-            <div class="hero-bg"></div>
+            <div class="hero-bg" style="background-image: url('{{ str_starts_with(\App\Models\Setting::get('home_hero_bg'), 'http') ? \App\Models\Setting::get('home_hero_bg') : asset(\App\Models\Setting::get('home_hero_bg')) }}')"></div>
             <div class="hero-ov"></div>
             <div class="hero-vig"></div>
             <div class="hero-frame"></div>
             <div class="container hero-ct py-5" style="display:flex;align-items:center;justify-content:center;min-height:100%">
-                <h1 class="hero-name">Parudeesa</h1>
+                <h1 class="hero-name">{{ \App\Models\Setting::get('home_hero_title', 'Parudeesa') }}</h1>
             </div>
         </section>
 
@@ -2739,12 +2490,12 @@
         <section class="feat-sec">
             <div class="container">
                 <div class="text-center mb-5 reveal">
-                    <div class="ornament-line"><span>Our Properties</span></div>
-                    <span class="eyebrow">Handpicked Retreats</span>
-                    <h2 class="sec-title">Two <em>Lakeside</em> Jewels</h2>
+                    <div class="ornament-line"><span>{{ \App\Models\Setting::get('home_prop_subtitle', 'Our Properties') }}</span></div>
+                    <span class="eyebrow">{{ \App\Models\Setting::get('home_prop_subtitle', 'Handpicked Retreats') }}</span>
+                    <h2 class="sec-title">{!! \App\Models\Setting::get('home_prop_title', 'Two <em>Lakeside</em> Jewels') !!}</h2>
                     <p class="eb mt-2"
                         style="color:var(--txt-m);max-width:480px;margin:0 auto;font-size:1rem;line-height:1.7">
-                        Each property offers unobstructed sunset views, private lake access, and curated experiences.
+                        {{ \App\Models\Setting::get('home_prop_desc', 'Each property offers unobstructed sunset views, private lake access, and curated experiences.') }}
                     </p>
                 </div>
                 <div class="row g-4 justify-content-center">
@@ -2753,7 +2504,7 @@
                         <div class="prop-card">
                             <div class="prop-img">
                                 <a class="ig-link" onclick="showIgModal();return false;" title="View on Instagram">
-                                    <img src="{{ $property->image_url ?: 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=700&q=80' }}"
+                                    <img src="{{ str_starts_with($property->image, 'http') ? $property->image : asset($property->image) }}"
                                         alt="{{ $property->name }}" loading="lazy" />
                                 </a>
                                 <div class="prop-img-ov"></div>
@@ -2786,7 +2537,7 @@
                 <div class="row align-items-center g-5">
                     <div class="col-lg-7 reveal">
                         <div class="yacht-gallery position-relative">
-                            <img src="{{ $yacht->image_url }}" alt="{{ $yacht->name }}" class="img-fluid rounded-4 shadow-lg">
+                            <img src="{{ str_starts_with($yacht->image, 'http') ? $yacht->image : asset($yacht->image) }}" alt="{{ $yacht->name }}" class="img-fluid rounded-4 shadow-lg">
                             <div class="premium-badge">Premium Experience</div>
                         </div>
                     </div>
@@ -2813,8 +2564,8 @@
                             <h3 class="price-value">₹{{ number_format($yacht->price, 0) }}</h3>
                         </div>
                         <div class="yacht-actions d-flex gap-3">
-                            <button onclick="openYachtBooking({{ $yacht->id }}, '{{ $yacht->name }}', {{ $yacht->price }})" class="btn-brand px-4 py-3">Book Yacht Now</button>
-                            <a href="#" onclick="goPage('contact'); return false;" class="btn-outline-brand px-4 py-3">Enquire Details</a>
+                            <button onclick="openYachtBooking({{ $yacht->id }}, '{{ $yacht->name }}', {{ $yacht->price }}, {{ $yacht->capacity }})" class="btn-brand px-4 py-3">Book Yacht Now</button>
+                            <a href="#" onclick="goPage('about'); return false;" class="btn-outline-brand px-4 py-3">Enquire Details</a>
                         </div>
                     </div>
                 </div>
@@ -2827,126 +2578,74 @@
         <section class="amen-sec">
             <div class="container">
                 <div class="text-center mb-5 reveal">
-                    <span class="eyebrow" style="color:rgba(255,179,120,.8)">Experiences</span>
-                    <h2 class="sec-title" style="color:var(--brand-pale)">What <em
-                            style="color:var(--brand-l)">Awaits</em> You
-                    </h2>
+                    <span class="eyebrow" style="color:rgba(255,179,120,.8)">{{ \App\Models\Setting::get('home_amenities_subtitle', 'Experiences') }}</span>
+                    <h2 class="sec-title" style="color:var(--brand-pale)">{!! \App\Models\Setting::get('home_amenities_title', 'What <em style="color:var(--brand-l)">Awaits</em> You') !!}</h2>
                 </div>
                 <div class="row g-4 justify-content-center">
-                    <!-- Infinity Pool -->
+                    @forelse($homeAmenities as $amenity)
                     <div class="col-12 col-md-6 col-lg-4 reveal">
                         <div class="amen-card">
                             <div class="amen-img-box">
-                                <img src="{{ asset('images/experiences/infinity-pool.png') }}" alt="Infinity Pool" loading="lazy">
+                                <img src="{{ asset($amenity->image) }}" alt="{{ $amenity->title }}" loading="lazy">
                             </div>
                             <div class="amen-footer">
-                                <h3 class="amen-title">Infinity Pool</h3>
+                                <h3 class="amen-title">{{ $amenity->title }}</h3>
                             </div>
                         </div>
                     </div>
-                    <!-- Campfire Area -->
-                    <div class="col-12 col-md-6 col-lg-4 reveal">
-                        <div class="amen-card">
-                            <div class="amen-img-box">
-                                <img src="{{ asset('images/experiences/campfire.png') }}" alt="Campfire Area" loading="lazy">
-                            </div>
-                            <div class="amen-footer">
-                                <h3 class="amen-title">Campfire Area</h3>
-                            </div>
-                        </div>
+                    @empty
+                    <div class="col-12 text-center text-white-50 py-5">
+                        <p class="eb italic">No amenities featured yet.</p>
                     </div>
-                    <!-- Boating -->
-                    <div class="col-12 col-md-6 col-lg-4 reveal">
-                        <div class="amen-card">
-                            <div class="amen-img-box">
-                                <img src="{{ asset('images/experiences/boating.png') }}" alt="Boating" loading="lazy">
-                            </div>
-                            <div class="amen-footer">
-                                <h3 class="amen-title">Boating Experience</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Event Space -->
-                    <div class="col-12 col-md-6 col-lg-4 reveal">
-                        <div class="amen-card">
-                            <div class="amen-img-box">
-                                <img src="{{ asset('images/experiences/event-space.png') }}" alt="Event Space" loading="lazy">
-                            </div>
-                            <div class="amen-footer">
-                                <h3 class="amen-title">Lakeside Events</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- High-Speed WiFi -->
-                    <div class="col-12 col-md-6 col-lg-4 reveal">
-                        <div class="amen-card">
-                            <div class="amen-img-box">
-                                <img src="{{ asset('images/experiences/wifi.png') }}" alt="High-Speed WiFi" loading="lazy">
-                            </div>
-                            <div class="amen-footer">
-                                <h3 class="amen-title">Free WiFi</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Parking Facility -->
-                    <div class="col-12 col-md-6 col-lg-4 reveal">
-                        <div class="amen-card">
-                            <div class="amen-img-box">
-                                <img src="{{ asset('images/experiences/parking.png') }}" alt="Parking Facility" loading="lazy">
-                            </div>
-                            <div class="amen-footer">
-                                <h3 class="amen-title">Parking Facility</h3>
-                            </div>
-                        </div>
-                    </div>
+                    @endforelse
                 </div>
             </div>
         </section>
 
         <!-- EXPLORE EVENTS BANNER -->
-        <section class="ev-banner">
-            <div class="ev-banner-bg"></div>
-            <div class="ev-banner-ov"></div>
-            <div class="container ev-banner-ct reveal text-center">
-                <span class="eyebrow" style="color:rgba(255,243,236,.7); letter-spacing:0.2em; text-transform:uppercase; font-size:0.6rem; font-weight:700; display:block; margin-bottom:1rem;">CELEBRATIONS AT PARUDEESA</span>
-                <h2
-                    style="font-size:clamp(2.5rem,5vw,4.5rem);font-weight:700;color:var(--brand-pale);margin-bottom:1rem;font-family:'Cormorant Garamond',serif">
-                    Make Every Moment <em style="color:var(--brand-l);font-style:italic">Unforgettable</em></h2>
-                <p class="eb mb-5"
-                    style="color:rgba(255,243,236,.85);font-size:1rem;margin:0 auto;line-height:1.75;max-width:500px">
-                    Premier lakeside events destination.</p>
+        <!-- EVENTS SECTION REDESIGN -->
+        <section class="ev-sec py-5" id="events">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <!-- Content Side -->
+                    <div class="col-lg-5 reveal">
+                        <div class="ornament-line justify-content-start"><span>{{ \App\Models\Setting::get('home_events_subtitle', 'CELEBRATIONS AT PARUDEESA') }}</span></div>
+                        <h2 class="sec-title mb-3">{!! \App\Models\Setting::get('home_events_title', 'Make Every Moment <em style="font-style:italic">Unforgettable</em>') !!}</h2>
+                        <p class="eb mb-4" style="color:var(--txt-m); font-size:1.05rem; line-height:1.8">
+                            {{ \App\Models\Setting::get('home_events_desc', 'Experience the magic of lakeside celebrations. From intimate gatherings to grand events, we provide the perfect backdrop for your most cherished memories.') }}
+                        </p>
+                        
+                        <!-- Compact Feature Cards -->
+                        <div class="ev-feat-grid">
+                            <div class="ev-feat-card">
+                                <i class="bi bi-gift"></i>
+                                <span>Premium Party Package</span>
+                            </div>
+                            <div class="ev-feat-card">
+                                <i class="bi bi-stars"></i>
+                                <span>Grand Celebration</span>
+                            </div>
+                            <div class="ev-feat-card">
+                                <i class="bi bi-people"></i>
+                                <span>200+ Guest Capacity</span>
+                            </div>
+                            <div class="ev-feat-card">
+                                <i class="bi bi-gear-wide-connected"></i>
+                                <span>100% Customisable</span>
+                            </div>
+                        </div>
 
-                <div class="row justify-content-center gap-3 mb-5 px-3">
-                    <div class="col-6 col-md-3" style="max-width: 220px;">
-                        <div style="padding: 1.8rem 1rem; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--r); height: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
-                            <div style="font-weight:700; color:var(--brand-l); font-size:1.1rem; letter-spacing:0.1em; margin-bottom:0.5rem; font-family:'Cormorant Garamond',serif">PREMIUM</div>
-                            <div style="font-size:0.65rem; color:rgba(255,255,255,0.9); letter-spacing:0.15em; font-weight:700; text-transform:uppercase">PARTY PACKAGE</div>
+                        <div class="ev-actions">
+                            <a href="{{ route('events') }}" class="btn-brand px-5 py-3" style="display:inline-flex; width:auto;">EXPLORE ALL PACKAGES</a>
                         </div>
                     </div>
-                    <div class="col-6 col-md-3" style="max-width: 220px;">
-                        <div style="padding: 1.8rem 1rem; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--r); height: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
-                            <div style="font-weight:700; color:var(--brand-l); font-size:1.1rem; letter-spacing:0.1em; margin-bottom:0.5rem; font-family:'Cormorant Garamond',serif">GRAND</div>
-                            <div style="font-size:0.65rem; color:rgba(255,255,255,0.9); letter-spacing:0.15em; font-weight:700; text-transform:uppercase">CELEBRATION</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3" style="max-width: 220px;">
-                        <div style="padding: 1.8rem 1rem; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--r); height: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
-                            <div style="font-weight:700; color:var(--brand-l); font-size:1.1rem; letter-spacing:0.1em; margin-bottom:0.5rem; font-family:'Cormorant Garamond',serif">200+</div>
-                            <div style="font-size:0.65rem; color:rgba(255,255,255,0.9); letter-spacing:0.15em; font-weight:700; text-transform:uppercase">GUEST CAPACITY</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3" style="max-width: 220px;">
-                        <div style="padding: 1.8rem 1rem; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--r); height: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
-                            <div style="font-weight:700; color:var(--brand-l); font-size:1.1rem; letter-spacing:0.1em; margin-bottom:0.5rem; font-family:'Cormorant Garamond',serif">100%</div>
-                            <div style="font-size:0.65rem; color:rgba(255,255,255,0.9); letter-spacing:0.15em; font-weight:700; text-transform:uppercase">CUSTOMISABLE</div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="d-flex justify-content-center">
-                    <a onclick="goPage('events')" class="btn-brand" style="cursor:pointer; display:inline-flex; width:auto; padding:0.8rem 2rem;"><i
-                            class="bi bi-stars me-1"></i>
-                        EXPLORE ALL PACKAGES</a>
+                    <!-- Image Side -->
+                    <div class="col-lg-7 reveal">
+                        <div class="ev-img-wrap position-relative">
+                            <img src="{{ str_starts_with(\App\Models\Setting::get('home_events_bg'), 'http') ? \App\Models\Setting::get('home_events_bg') : asset(\App\Models\Setting::get('home_events_bg')) }}" alt="Events at Parudeesa" class="img-fluid">
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -2958,9 +2657,9 @@
         <section class="reviews-sec">
             <div class="container">
                 <div class="text-center mb-5 reveal">
-                    <div class="ornament-line"><span>What Guests Say</span></div>
-                    <span class="eyebrow">Guest Reviews</span>
-                    <h2 class="sec-title">Memories <em>Made Here</em></h2>
+                    <div class="ornament-line"><span style="color:var(--brand-l)">{{ \App\Models\Setting::get('home_reviews_title', 'What Guests Say') }}</span></div>
+                    <span class="eyebrow" style="color:rgba(250,135,62,.8)">{{ \App\Models\Setting::get('home_reviews_subtitle', 'Guest Reviews') }}</span>
+                    <h2 class="sec-title" style="color:var(--brand-pale)">{!! \App\Models\Setting::get('home_reviews_title', 'Memories <em>Made Here</em>') !!}</h2>
                     <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="google-badge mt-3"
                         aria-label="Open Parudeesa Resort Google Travel reviews">
                         <svg width="16" height="16" viewBox="0 0 48 48">
@@ -2973,89 +2672,14 @@
                             <path fill="#34A853"
                                 d="M24 45.5c5.7 0 10.5-1.9 14-5.1l-7.4-5.7c-1.9 1.3-4.4 2.1-6.6 2.1-6.4 0-11.9-3.5-13.6-9.8l-7.4 5.7C6.7 40.9 14.6 45.5 24 45.5z" />
                         </svg>
-                        5.0 - Google Reviews - 200+ Happy Guests
+                        {{ \App\Models\Setting::get('home_reviews_badge', '5.0 - Google Reviews - 200+ Happy Guests') }}
                     </a>
                 </div>
-                <div class="row g-4 justify-content-center">
-                    <div class="col-md-4 reveal">
-                        <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="review-card"
-                            aria-label="Open Google Travel review by Sona Babu">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Beautiful lakeside resort with great service, perfect for events and
-                                relaxing with friends and family."</p>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="review-av">SB</div>
-                                <div>
-                                    <div class="review-name">Sona Babu</div>
-                                    <div class="review-src">Google Review</div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4 reveal">
-                        <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="review-card"
-                            aria-label="Open Google Travel review by Raseena P S">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Budget-friendly and peaceful place near the city, ideal for
-                                gatherings and get-togethers."</p>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="review-av">RP</div>
-                                <div>
-                                    <div class="review-name">Raseena P S</div>
-                                    <div class="review-src">Google Review</div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4 reveal">
-                        <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="review-card"
-                            aria-label="Open Google Travel review by Mathew Varghese">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Nice natural atmosphere with amazing lake views, especially at night
-                                - great place to hang out."</p>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="review-av">MV</div>
-                                <div>
-                                    <div class="review-name">Mathew Varghese</div>
-                                    <div class="review-src">Google Review</div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4 reveal">
-                        <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="review-card"
-                            aria-label="Open Google Travel review by Jess N George">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Calm and comfortable resort with scenic beauty, perfect for relaxing
-                                stays and private events."</p>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="review-av">JG</div>
-                                <div>
-                                    <div class="review-name">Jess. N. George</div>
-                                    <div class="review-src">Google Review</div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4 reveal">
-                        <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="review-card"
-                            aria-label="Open Google Travel review by Midhun Dev">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Amazing stay with friends, great lake views, friendly staff, and
-                                excellent facilities."</p>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="review-av">MD</div>
-                                <div>
-                                    <div class="review-name">Midhun Dev</div>
-                                    <div class="review-src">Google Review - 6 months ago</div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="text-center mt-4 reveal">
-                    <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="btn-outline-brand">Read All
-                        Reviews on Google <i class="bi bi-arrow-right ms-1"></i></a>
+
+                <!-- Elfsight Google Reviews Widget -->
+                <div class="reveal">
+                    <script src="https://elfsightcdn.com/platform.js" async></script>
+                    <div class="elfsight-app-46a181e2-db8d-40e4-96c0-1c2e66b1049f" data-elfsight-app-lazy></div>
                 </div>
             </div>
         </section>
@@ -3064,65 +2688,47 @@
         <section class="reels-sec">
             <div class="container">
                 <div class="text-center mb-5 reveal">
-                    <span class="eyebrow" style="color:rgba(250,135,62,.8)">Follow Our Story</span>
-                    <h2 class="sec-title" style="color:var(--brand-pale)">Instagram <em
-                            style="color:var(--brand-l)">Reels</em>
-                    </h2>
-                    <p style="color:rgba(255,243,236,.55);font-size:.82rem;margin-top:.5rem">@parudeesa_utopiya &
+                    <span class="eyebrow">Follow Our Story</span>
+                    <h2 class="sec-title">Instagram <em>Reels</em></h2>
+                    <p style="color:var(--txt-m);font-size:.82rem;margin-top:.5rem">@parudeesa_utopiya &
                         @Parudeesa_the_paradise</p>
                 </div>
-                <div class="row g-3 justify-content-center">
-                    <div class="col-6 col-md-4 col-lg-2-4 reveal" style="flex:0 0 auto;width:18%">
-                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank">
-                            <div class="reel-card">
-                                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80"
-                                    alt="Reel 1" loading="lazy" />
-                                <div class="reel-ov"><span class="reel-label">Sunrise Views</span></div>
-                                <div class="reel-play"><i class="bi bi-play-fill"></i></div>
+                
+                <div class="swiper reelsSwiper reveal">
+                    <div class="swiper-wrapper">
+                        @php
+                            $reels = \App\Models\Reel::where('is_active', true)->orderBy('order')->get();
+                        @endphp
+                        @foreach($reels as $reel)
+                            <div class="swiper-slide" style="width: auto;">
+                                <a href="javascript:void(0)" onclick="openReel('{{ $reel->instagram_url }}')">
+                                    <div class="reel-card">
+                                        @if($reel->video)
+                                            <video src="{{ asset('storage/' . $reel->video) }}" 
+                                                   poster="{{ asset('storage/' . $reel->thumbnail) }}"
+                                                   autoplay muted loop playsinline
+                                                   style="width:100%; height:100%; object-fit: cover; position:absolute; top:0; left:0;"></video>
+                                        @else
+                                            <img src="{{ $reel->thumbnail ? asset('storage/' . $reel->thumbnail) : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80' }}" alt="{{ $reel->title }}" loading="lazy" />
+                                        @endif
+                                        
+                                        <div class="reel-ov">
+                                            <span class="reel-label">{{ $reel->title }}</span>
+                                            @if($reel->description)
+                                                <p style="font-size: 0.7rem; opacity: 0.8; margin-top: 4px;">{{ $reel->description }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="reel-play pulse-animation"><i class="bi bi-play-fill"></i></div>
+                                    </div>
+                                </a>
                             </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2-4 reveal" style="flex:0 0 auto;width:18%">
-                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank">
-                            <div class="reel-card">
-                                <img src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=400&q=80"
-                                    alt="Reel 2" loading="lazy" />
-                                <div class="reel-ov"><span class="reel-label">Parudeesa The Paradise</span></div>
-                                <div class="reel-play"><i class="bi bi-play-fill"></i></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2-4 reveal" style="flex:0 0 auto;width:18%">
-                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank">
-                            <div class="reel-card">
-                                <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&q=80"
-                                    alt="Reel 3" loading="lazy" />
-                                <div class="reel-ov"><span class="reel-label">Parudeesa Utopiya</span></div>
-                                <div class="reel-play"><i class="bi bi-play-fill"></i></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2-4 reveal" style="flex:0 0 auto;width:18%">
-                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank">
-                            <div class="reel-card">
-                                <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80"
-                                    alt="Reel 4" loading="lazy" />
-                                <div class="reel-ov"><span class="reel-label">Celebrations</span></div>
-                                <div class="reel-play"><i class="bi bi-play-fill"></i></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2-4 reveal" style="flex:0 0 auto;width:18%">
-                        <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank">
-                            <div class="reel-card">
-                                <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=400&q=80"
-                                    alt="Reel 5" loading="lazy" />
-                                <div class="reel-ov"><span class="reel-label">Lake at Dusk</span></div>
-                                <div class="reel-play"><i class="bi bi-play-fill"></i></div>
-                            </div>
-                        </a>
-                    </div>
+                    @endforeach
                 </div>
+            </div>
+
+            @if($reels->count() == 0)
+                <p class="text-center italic text-gray-400">No reels featured yet.</p>
+            @endif
                 <div class="text-center mt-4 reveal">
                     <a href="https://www.instagram.com/Parudeesa_the_paradise" target="_blank" class="btn-brand"
                         style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888)">
@@ -3134,102 +2740,6 @@
 
     </div><!-- /page-home -->
 
-    <!-- ████████████████████ PAGE: EVENTS ████████████████████ -->
-    <div id="page-events" class="page">
-        <div class="page-hero">
-            <div class="ph-bg"
-                style="background-image:url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1400&q=80')">
-            </div>
-            <div class="ph-ov"></div>
-            <div class="ph-ct">
-                <span class="eyebrow" style="color:rgba(255,243,236,.65)">Celebrations at Parudeesa</span>
-                <h1 class="ph-title">Event <em>Packages</em></h1>
-                <div class="bc"><span onclick="goPage('home')">Home</span> / Events</div>
-            </div>
-        </div>
-        <section style="padding:80px 0;background:linear-gradient(180deg,var(--brand-pale) 0%,var(--cream-d) 100%)">
-            <div class="container">
-                <div class="text-center mb-5 reveal">
-                    <div class="ornament-line"><span>All Packages</span></div>
-                    <h2 class="sec-title">Make Every <em>Moment</em> Special</h2>
-                    <p class="eb mt-2"
-                        style="color:var(--txt-m);max-width:540px;margin:0 auto;font-size:1rem;line-height:1.7">
-                        Every celebration at Parudeesa is crafted to perfection — from intimate lakeside birthdays to
-                        grand
-                        200-person weddings.</p>
-                </div>
-                <div class="row g-4">
-
-                    <!-- Day Out for Corporate Team -->
-                    <div class="col-md-6 col-lg-4 reveal">
-                        <div class="ev-card">
-                            <div class="ev-hdr ev-hdr-gold">
-                                <span class="ev-label">Parudeesa Utopiya · Corporate</span>
-                                <div class="ev-name">Day Out for Corporate Team</div>
-                                <div class="ev-cap"><i class="bi bi-briefcase-fill me-1"></i>50 People</div>
-                            </div>
-                            <div class="ev-body">
-                                <p class="ev-desc">Elegant lakeside team experience</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Friends Day Out -->
-                    <div class="col-md-6 col-lg-4 reveal">
-                        <div class="ev-card">
-                            <div class="ev-hdr ev-hdr-org">
-                                <span class="ev-label">Parudeesa The Paradise · Group</span>
-                                <div class="ev-name">Friends Day Out</div>
-                                <div class="ev-cap"><i class="bi bi-people-fill me-1"></i>Small Group Gathering</div>
-                            </div>
-                            <div class="ev-body">
-                                <p class="ev-desc">Perfect for intimate moments by the lake</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Family Gathering -->
-                    <div class="col-md-6 col-lg-4 reveal">
-                        <div class="ev-card">
-                            <div class="ev-hdr ev-hdr-teal">
-                                <span class="ev-label">Parudeesa The Paradise · Families</span>
-                                <div class="ev-name">Family Gathering</div>
-                                <div class="ev-cap"><i class="bi bi-house-heart fill me-1"></i>All Ages</div>
-                            </div>
-                            <div class="ev-body">
-                                <p class="ev-desc">Memorable moments for all ages</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Wedding Function -->
-                    <div class="col-md-6 col-lg-4 reveal">
-                        <div class="ev-card">
-                            <div class="ev-hdr ev-hdr-pur">
-                                <span class="ev-label">Parudeesa Utopiya · Wedding</span>
-                                <div class="ev-name">Wedding Function</div>
-                                <div class="ev-cap"><i class="bi bi-heart-fill me-1"></i>200 People</div>
-                            </div>
-                            <div class="ev-body">
-                                <p class="ev-desc">Grand venue for special days</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Custom Package -->
-                    <div class="col-md-6 col-lg-4 reveal">
-                        <div class="ev-card">
-                            <div class="ev-hdr" style="background:linear-gradient(135deg,#4a6a30,#2a4a18)">
-                                <span class="ev-label">Both Properties</span>
-                                <div class="ev-name">Custom Package</div>
-                                <div class="ev-cap"><i class="bi bi-stars me-1"></i>Fully Tailored</div>
-                            </div>
-                            <div class="ev-body">
-                                <p class="ev-desc">Bespoke experiences crafted for you</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-    </div><!-- /page-events -->
 
     <!-- ████████████████████ PAGE: GALLERY ████████████████████ -->
     <div id="page-gallery" class="page">
@@ -3259,42 +2769,24 @@
                     <button class="gal-btn" onclick="filterGal(this,'food')">Dining</button>
                 </div>
                 <div class="gal-grid reveal" id="galGrid">
-                    <div class="gal-item wide" data-cat="lake"><img
-                            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80"
-                            alt="Lakeside sunset" loading="lazy" />
-                    </div>
-                    <div class="gal-item tall" data-cat="property"><img
-                            src="https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=500&q=80"
-                            alt="Parudeesa The Paradise" loading="lazy" />
-                    </div>
-                    <div class="gal-item" data-cat="events"><img
-                            src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&q=80"
-                            alt="Event celebration" loading="lazy" />
-                    </div>
-                    <div class="gal-item" data-cat="lake"><img
-                            src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=500&q=80"
-                            alt="Lake view" loading="lazy" />
-                    </div>
-                    <div class="gal-item" data-cat="property"><img
-                            src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=500&q=80"
-                            alt="Parudeesa Utopiya" loading="lazy" />
-                    </div>
-                    <div class="gal-item wide" data-cat="events"><img
-                            src="https://images.unsplash.com/photo-1519741497674-611481863552?w=900&q=80"
-                            alt="Wedding setup" loading="lazy" />
-                    </div>
-                    <div class="gal-item" data-cat="food"><img
-                            src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&q=80"
-                            alt="Lakeside dining" loading="lazy" />
-                    </div>
-                    <div class="gal-item" data-cat="lake"><img
-                            src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500&q=80"
-                            alt="Lake cabin" loading="lazy" />
-                    </div>
-                    <div class="gal-item" data-cat="events"><img
-                            src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&q=80"
-                            alt="Party night" loading="lazy" />
-                    </div>
+                    @forelse($galleries as $item)
+                        <div class="gal-item {{ $item->layout === 'wide' ? 'wide' : ($item->layout === 'tall' ? 'tall' : '') }}" data-cat="{{ strtolower($item->category ?? 'all') }}">
+                            @if($item->type === 'image')
+                                <img src="{{ $item->url }}" alt="{{ $item->title ?? 'Gallery Image' }}" loading="lazy" />
+                            @else
+                                <video src="{{ $item->url }}" controls loading="lazy" style="width:100%; height:100%; object-fit:cover; border-radius: inherit;"></video>
+                            @endif
+                            @if($item->title)
+                                <div class="gal-info">
+                                    <span>{{ $item->title }}</span>
+                                </div>
+                            @endif
+                        </div>
+                    @empty
+                        <div class="col-12 text-center py-5">
+                            <p class="eb italic">Capturing memories... Check back soon!</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </section>
@@ -3319,33 +2811,24 @@
                 <div class="row g-5 align-items-center mb-5">
                     <div class="col-lg-6 reveal">
                         <div class="about-img-wrap">
-                            <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=700&q=80"
+                            <img src="{{ str_starts_with(\App\Models\Setting::get('home_about_image'), 'http') ? \App\Models\Setting::get('home_about_image') : asset(\App\Models\Setting::get('home_about_image')) }}"
                                 alt="Parudeesa resort view" loading="lazy" />
                             <div class="about-badge">
-                                <div class="num">5+</div>
-                                <div class="lbl">Years of<br />Experiences</div>
+                                <div class="num">{{ \App\Models\Setting::get('home_about_badge_number', '5+') }}</div>
+                                <div class="lbl">{{ \App\Models\Setting::get('home_about_badge_text', 'Years of Experiences') }}</div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 reveal">
                         <span class="eyebrow">Our Story</span>
-                        <h2 class="sec-title mb-3">Born from a Love of <em>Kerala's Waters</em></h2>
+                        <h2 class="sec-title mb-3">{!! \App\Models\Setting::get('home_about_title', 'Born from a Love of <em>Kerala\'s Waters</em>') !!}</h2>
                         <p class="eb"
-                            style="font-size:1.05rem;color:var(--txt-m);line-height:1.85;margin-bottom:1.2rem">Parudeesa
-                            —
-                            meaning "paradise" — was born from a deep love of Kerala's serene backwaters and a vision to
-                            share that
-                            peace with the world. Nestled on the shores of a tranquil lake, we offer two distinct
-                            properties that
-                            blend natural beauty with thoughtful luxury.</p>
+                            style="font-size:1.05rem;color:var(--txt-m);line-height:1.85;margin-bottom:1.2rem">{{ \App\Models\Setting::get('home_about_description', 'Parudeesa — meaning "paradise" — was born from a deep love of Kerala\'s serene backwaters and a vision to share that peace with the world.') }}</p>
                         <p class="eb" style="font-size:1.05rem;color:var(--txt-m);line-height:1.85;margin-bottom:2rem">
-                            From intimate
-                            couples' retreats to grand 200-person celebrations, every experience at Parudeesa is crafted
-                            with warmth,
-                            care, and an eye for the extraordinary. We don't just host events — we create lifelong
-                            memories.</p>
+                            {{ \App\Models\Setting::get('home_about_description_2', 'From intimate couples\' retreats to grand 200-person celebrations, every experience at Parudeesa is crafted with warmth, care, and an eye for an eye for the extraordinary. We don\'t just host events — we create lifelong memories.') }}
+                        </p>
                         <div class="d-flex gap-3 flex-wrap">
-                            <a onclick="goPage('contact')" class="btn-brand" style="cursor:pointer"><i
+                            <a href="#about-contact" onclick="document.getElementById('about-contact').scrollIntoView({behavior:'smooth'}); return false;" class="btn-brand" style="cursor:pointer"><i
                                     class="bi bi-telephone"></i>
                                 Get in Touch</a>
                         </div>
@@ -3380,44 +2863,36 @@
                     </div>
                 </div>
 
-                <!-- Values -->
-                <div class="text-center mb-4 reveal">
-                    <div class="ornament-line"><span>Our Values</span></div>
-                    <h2 class="sec-title">What We <em>Stand For</em></h2>
-                </div>
-                <div class="row g-4 mb-5">
-                    <div class="col-md-4 reveal">
-                        <div
-                            style="background:var(--parch);border:1px solid rgba(250,135,62,.15);border-radius:var(--r);padding:2rem;text-align:center;box-shadow:var(--sh-s)">
-                            <div style="font-size:2.5rem;margin-bottom:1rem">🌿</div>
-                            <h4 style="font-size:1.2rem;font-weight:700;color:var(--brn-dk);margin-bottom:.5rem">Nature
-                                First</h4>
-                            <p class="eb" style="font-size:.95rem;color:var(--txt-m);line-height:1.65">Every design
-                                decision honours
-                                the natural beauty of our lakeside setting. We preserve, not disturb.</p>
-                        </div>
+                <!-- Contact Information -->
+                <div id="about-contact" class="mb-5 pb-5 reveal">
+                    <div class="text-center mb-5">
+                        <div class="ornament-line"><span>Connect With Us</span></div>
+                        <h2 class="sec-title">Contact <em>Information</em></h2>
                     </div>
-                    <div class="col-md-4 reveal">
-                        <div
-                            style="background:var(--parch);border:1px solid rgba(250,135,62,.15);border-radius:var(--r);padding:2rem;text-align:center;box-shadow:var(--sh-s)">
-                            <div style="font-size:2.5rem;margin-bottom:1rem">🤝</div>
-                            <h4 style="font-size:1.2rem;font-weight:700;color:var(--brn-dk);margin-bottom:.5rem">Warm
-                                Hospitality</h4>
-                            <p class="eb" style="font-size:.95rem;color:var(--txt-m);line-height:1.65">Every guest is
-                                family. We
-                                personalise every stay, anticipate every need, and exceed every expectation.</p>
+                    <div class="row g-4 justify-content-center">
+                        <!-- Phone -->
+                        <div class="col-12 col-md-4">
+                            <div class="contact-info-card text-center p-4">
+                                <div class="ci-icon mb-3"><i class="bi bi-telephone"></i></div>
+                                <h4 class="ci-label mb-2">Phone</h4>
+                                <a href="tel:{{ \App\Models\Setting::get('contact_phone', '+91 89210 21202') }}" class="ci-value text-decoration-none">{{ \App\Models\Setting::get('contact_phone', '+91 89210 21202') }}</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 reveal">
-                        <div
-                            style="background:var(--parch);border:1px solid rgba(250,135,62,.15);border-radius:var(--r);padding:2rem;text-align:center;box-shadow:var(--sh-s)">
-                            <div style="font-size:2.5rem;margin-bottom:1rem">✨</div>
-                            <h4 style="font-size:1.2rem;font-weight:700;color:var(--brn-dk);margin-bottom:.5rem">
-                                Unforgettable Moments
-                            </h4>
-                            <p class="eb" style="font-size:.95rem;color:var(--txt-m);line-height:1.65">We don't just
-                                provide venues.
-                                We craft experiences that guests carry with them for a lifetime.</p>
+                        <!-- WhatsApp -->
+                        <div class="col-12 col-md-4">
+                            <div class="contact-info-card text-center p-4" style="border-color: rgba(37, 211, 102, 0.3);">
+                                <div class="ci-icon mb-3" style="background: rgba(37, 211, 102, 0.1); color: #25D366;"><i class="bi bi-whatsapp"></i></div>
+                                <h4 class="ci-label mb-2">WhatsApp</h4>
+                                <a href="https://wa.me/{{ str_replace(['+', ' '], '', \App\Models\Setting::get('contact_phone', '918921021202')) }}" target="_blank" class="ci-value text-decoration-none" style="color:var(--brn-dk); font-weight: 600;">Message Us</a>
+                            </div>
+                        </div>
+                        <!-- Email -->
+                        <div class="col-12 col-md-4">
+                            <div class="contact-info-card text-center p-4">
+                                <div class="ci-icon mb-3"><i class="bi bi-envelope"></i></div>
+                                <h4 class="ci-label mb-2">Email</h4>
+                                <a href="mailto:{{ \App\Models\Setting::get('contact_email', 'hello@parudeesa.in') }}" class="ci-value text-decoration-none">{{ \App\Models\Setting::get('contact_email', 'hello@parudeesa.in') }}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3427,193 +2902,42 @@
                     <div class="ornament-line"><span>Our People</span></div>
                     <h2 class="sec-title">Meet the <em>Team</em></h2>
                 </div>
-                <div class="row g-4 justify-content-center">
+                <div class="row g-4 justify-content-center mb-5 pb-5">
+                    @foreach(\App\Models\TeamMember::orderBy('order')->get() as $member)
                     <div class="col-6 col-md-4 col-lg-3 reveal">
                         <div class="team-card">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80"
-                                class="team-img" alt="Resort Manager" loading="lazy" />
+                            <img src="{{ str_starts_with($member->image, 'http') ? $member->image : asset($member->image) }}"
+                                class="team-img" alt="{{ $member->name }}" loading="lazy" />
                             <div class="team-body">
-                                <div class="team-name">Arun Kumar</div>
-                                <div class="team-role">Resort Manager</div>
+                                <div class="team-name">{{ $member->name }}</div>
+                                <div class="team-role">{{ $member->role }}</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
-                        <div class="team-card">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=80"
-                                class="team-img" alt="Event Coordinator" loading="lazy" />
-                            <div class="team-body">
-                                <div class="team-name">Priya Nair</div>
-                                <div class="team-role">Event Coordinator</div>
-                            </div>
+                    @endforeach
+                </div>
+
+                <!-- Values -->
+                <div class="text-center mb-4 reveal">
+                    <div class="ornament-line"><span>Our Values</span></div>
+                    <h2 class="sec-title">What We <em>Stand For</em></h2>
+                </div>
+                <div class="row g-4">
+                    @foreach(\App\Models\AboutValue::orderBy('order')->get() as $val)
+                    <div class="col-md-4 reveal">
+                        <div
+                            style="background:var(--parch);border:1px solid rgba(250,135,62,.15);border-radius:var(--r);padding:2rem;text-align:center;box-shadow:var(--sh-s); height: 100%;">
+                            <div style="font-size:2.5rem;margin-bottom:1rem">{{ $val->icon }}</div>
+                            <h4 style="font-size:1.2rem;font-weight:700;color:var(--brn-dk);margin-bottom:.5rem">{{ $val->title }}</h4>
+                            <p class="eb" style="font-size:.95rem;color:var(--txt-m);line-height:1.65">{{ $val->description }}</p>
                         </div>
                     </div>
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
-                        <div class="team-card">
-                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80"
-                                class="team-img" alt="Head Chef" loading="lazy" />
-                            <div class="team-body">
-                                <div class="team-name">Rajan Pillai</div>
-                                <div class="team-role">Head Chef</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-3 reveal">
-                        <div class="team-card">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&q=80"
-                                class="team-img" alt="Guest Relations" loading="lazy" />
-                            <div class="team-body">
-                                <div class="team-name">Meera Thomas</div>
-                                <div class="team-role">Guest Relations</div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </section>
     </div><!-- /page-about -->
 
-    <!-- ████████████████████ PAGE: CONTACT ████████████████████ -->
-    <div id="page-contact" class="page">
-        <div class="page-hero">
-            <div class="ph-bg"
-                style="background-image:url('https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=1400&q=80')">
-            </div>
-            <div class="ph-ov"></div>
-            <div class="ph-ct">
-                <span class="eyebrow" style="color:rgba(255,243,236,.65)">Reach Us</span>
-                <h1 class="ph-title">Get in <em>Touch</em></h1>
-                <div class="bc"><span onclick="goPage('home')">Home</span> / Contact</div>
-            </div>
-        </div>
-        <section class="contact-sec">
-            <div class="container">
-                <div class="row g-5">
-                    <!-- LEFT: Contact Info -->
-                    <div class="col-lg-5 reveal">
-                        <div class="ornament-line mb-3"><span>Reach Us</span></div>
-                        <h2 class="sec-title mb-4">Let's <em>Plan Together</em></h2>
-                        <div class="contact-card">
-                            <div class="contact-info-item">
-                                <div class="ci-icon"><i class="bi bi-whatsapp"></i></div>
-                                <div>
-                                    <div class="ci-label">WhatsApp — Parudeesa The Paradise</div>
-                                    <a href="/chatbot" target="_blank" class="ci-value"
-                                        style="text-decoration:none;color:var(--brn-dk)">+91 89210 21202</a>
-                                    <div class="ci-sub">Direct booking for Parudeesa The Paradise</div>
-                                </div>
-                            </div>
-                            <div class="contact-info-item">
-                                <div class="ci-icon"
-                                    style="color:#25D366;background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.2)">
-                                    <i class="bi bi-whatsapp"></i>
-                                </div>
-                                <div>
-                                    <div class="ci-label">WhatsApp — Parudeesa Utopiya</div>
-                                    <a href="/chatbot" target="_blank" class="ci-value"
-                                        style="text-decoration:none;color:var(--brn-dk)">+91 80757 41948</a>
-                                    <div class="ci-sub">Direct booking for Parudeesa Utopiya & Events</div>
-                                </div>
-                            </div>
-                            <div class="contact-info-item">
-                                <div class="ci-icon"><i class="bi bi-envelope"></i></div>
-                                <div>
-                                    <div class="ci-label">Email</div>
-                                    <div class="ci-value">hello@parudeesa.in</div>
-                                    <div class="ci-sub">We respond within 4 hours</div>
-                                </div>
-                            </div>
-                            <div class="contact-info-item">
-                                <div class="ci-icon"><i class="bi bi-geo-alt"></i></div>
-                                <div>
-                                    <div class="ci-label">Location</div>
-                                    <div class="ci-value">Kerala Backwaters, India</div>
-                                    <div class="ci-sub">Exact address shared on booking confirmation</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Map -->
-                        <a href="https://www.google.com/maps/place/Parudeesa+:+The+Lakeview+Resort/@10.0268921,76.2646621,17z/data=!4m9!3m8!1s0x3b0813e12fe49c39:0x81371c194e5f7846!5m2!4m1!1i2!8m2!3d10.0268921!4d76.267237!16s%2Fg%2F11rvgn8spk?hl=en-US&entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" style="text-decoration:none; display:block;">
-                            <div class="map-embed mt-3 reveal">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63064.6!2d76.5!3d9.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b062ba16a5f9a1b%3A0x1234567890abcdef!2sKerala%20Backwaters!5e0!3m2!1sen!2sin!4v1234567890"
-                                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- RIGHT: Contact Form -->
-                    <div class="col-lg-7 reveal">
-                        <div class="contact-card contact-form">
-                            <div class="ornament-line mb-3"><span>Send a Message</span></div>
-                            <h3 style="font-size:1.5rem;font-weight:700;color:var(--brn-dk);margin-bottom:.3rem">Drop Us
-                                a Note</h3>
-                            <p class="eb mb-4" style="color:var(--txt-m);font-size:.95rem">For enquiries, event
-                                planning, or just to
-                                say hello — we'd love to hear from you.</p>
-                            <form onsubmit="handleContact(event)">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <div class="fg"><label>Full Name *</label><input type="text" id="c-name"
-                                                placeholder="Your name" required /></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="fg"><label>Phone / WhatsApp *</label><input type="tel" id="c-phone"
-                                                placeholder="9876543210" required maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" pattern="[0-9]{10}" title="Please enter a 10-digit phone number." /></div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="fg"><label>Email Address</label><input type="email" id="c-email"
-                                                placeholder="you@email.com" /></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="fg">
-                                            <label>I'm Interested In</label>
-                                            <select id="c-interest">
-                                                <option value="">Select...</option>
-                                                <option>Parudeesa The Paradise Stay</option>
-                                                <option>Parudeesa Utopiya Stay</option>
-                                                <option>Party Package</option>
-                                                <option>Grand Celebration</option>
-                                                <option>Romantic Anniversary</option>
-                                                <option>Corporate Retreat</option>
-                                                <option>Custom Package</option>
-                                                <option>General Enquiry</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="fg"><label>Preferred Date</label><input type="date" id="c-date" />
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="fg"><label>Your Message *</label><textarea id="c-msg" rows="4"
-                                                placeholder="Tell us about your plans, guest count, or any questions..."
-                                                required></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex flex-column gap-2 mt-2">
-                                    <button type="submit" class="btn-brand w-100 justify-content-center"
-                                        style="border-radius:10px;padding:1rem;font-size:.88rem">
-                                        <i class="bi bi-send me-2"></i> Send Message
-                                    </button>
-                                    <a href="/chatbot"
-                                        target="_blank" class="btn-wa w-100 justify-content-center"
-                                        style="border-radius:10px;padding:1rem;font-size:.88rem">
-                                        <i class="bi bi-whatsapp me-2"></i> Or Chat on WhatsApp
-                                    </a>
-                                </div>
-                                <div id="c-success"
-                                    style="display:none;margin-top:1rem;background:#fff;border-left:4px solid var(--brand);padding:1rem 1.2rem;border-radius:10px;color:var(--brn-dk);font-size:.88rem;line-height:1.75">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div><!-- /page-contact -->
 
     <!-- ████████████████████ PAGE: BOOKING ████████████████████ -->
     <div id="page-booking" class="page">
@@ -3637,6 +2961,7 @@
                             Form</button>
                         <button class="bk-tab" onclick="switchTab('wa',this)"><i class="bi bi-whatsapp"></i> Via
                             WhatsApp</button>
+                        <button class="bk-tab" onclick="toggleChatbot()"><i class="bi bi-robot"></i> Book via Chatbot</button>
                     </div>
                 </div>
 
@@ -3658,7 +2983,13 @@
                                         <select id="f-prop" required onchange="updateSummary()">
                                             <option value="" data-price="0">Choose property...</option>
                                             @foreach($properties as $property)
-                                            <option value="{{ $property->id }}" data-name="{{ $property->name }}" data-price="{{ $property->price }}">{{ $property->name }} — ₹{{ number_format($property->price, 0) }}/night
+                                            <option value="{{ $property->id }}" 
+                                                data-name="{{ $property->name }}" 
+                                                data-weekday-price="{{ $property->weekday_price }}"
+                                                data-weekday-tier2-price="{{ $property->weekday_tier2_price }}"
+                                                data-weekend-price="{{ $property->weekend_price }}"
+                                            >
+                                                {{ $property->name }} — Starting ₹{{ number_format($property->weekday_price, 0) }}/night
                                             </option>
                                             @endforeach
                                         </select>
@@ -3700,38 +3031,41 @@
                                                     id="f-checkout" placeholder="YYYY-MM-DD" required onchange="updateSummary()" /></div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group"><label>Guests <span
-                                                        style="color:var(--brand)">*</span></label><input type="number"
-                                                    id="f-guests" placeholder="e.g. 4" min="1" max="200" required
-                                                    onchange="updateSummary()" /></div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group"><label>Select Amenities</label>
-                                        <div id="amenities-list" style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))">
-                                            @php
-                                                $allAmenities = \App\Models\Amenity::where('status', true)->get();
-                                            @endphp
-                                            @forelse($allAmenities as $amenity)
-                                            <label class="amen-check-item" style="border:1px solid rgba(250,135,62,.18);border-radius:14px;padding:1rem;cursor:pointer;">
-                                                <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="{{ $amenity->id }}" data-amenity-name="{{ $amenity->name }}" data-amenity-price="{{ $amenity->price }}" data-amenity-type="{{ $amenity->pricing_type }}" value="{{ $amenity->name }}" onchange="updateSummary()" />
-                                                <span class="amen-check-box"><i class="bi bi-check"></i></span>
-                                                <strong>{{ $amenity->name }}</strong>
-                                                @if($amenity->pricing_type === 'per_person')
-                                                  (₹{{ number_format($amenity->price, 2) }}/person)
-                                                @else
-                                                  (₹{{ number_format($amenity->price, 2) }})
-                                                @endif
-                                                @if($amenity->pricing_type === 'per_person')
-                                                <div class="amenity-participants" style="margin-top:.85rem;display:none;">
-                                                    <label style="font-size:.9rem;color:#555;font-weight:600;display:block;margin-bottom:.35rem;">Persons participating</label>
-                                                    <div style="display:flex;align-items:center;gap:.5rem;">
-                                                        <button type="button" class="amenity-decrement" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#f5f5f5;cursor:pointer;font-weight:bold;color:#555;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">−</button>
-                                                        <input type="number" class="amenity-participants-input" min="1" value="1" disabled style="width:60px;padding:.5rem;border:1px solid #ddd;border-radius:6px;font-size:.9rem;text-align:center;" />
-                                                        <button type="button" class="amenity-increment" style="width:32px;height:32px;border:1px solid #ddd;border-radius:4px;background:#fa873e;cursor:pointer;font-weight:bold;color:#fff;font-size:1.2rem;padding:0;display:flex;align-items:center;justify-content:center;">+</button>
+                                                                      @forelse($allAmenities as $amenity)
+                                            <div class="amenity-card" style="margin-bottom: 0.6rem; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 0.5rem; border:1px solid rgba(250,135,62,.18); border-radius:14px; padding:1rem;">
+                                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; width: 100%;">
+                                                    <label class="amen-check-item" style="margin: 0; padding: 0; border: none; background: transparent; cursor: pointer; display: flex; align-items: flex-start; gap: 0.8rem; flex: 1;">
+                                                        <input type="checkbox" class="amenity-selector" name="amenities" data-amenity-id="{{ $amenity->id }}" data-amenity-name="{{ $amenity->name }}" data-amenity-price="{{ $amenity->price }}" data-amenity-type="{{ $amenity->pricing_type }}" value="{{ $amenity->name }}" onchange="updateSummary()" style="width: 1.1rem; height: 1.1rem; accent-color: var(--brand); margin-top: 2px;" />
+                                                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                            <strong style="font-size: 0.9rem; color: var(--text-dark);">{{ $amenity->name }}</strong>
+                                                            @if(str_contains(strtolower($amenity->name), 'kayaking') || str_contains(strtolower($amenity->name), 'boating'))
+                                                                <span style="font-size: 0.68rem; color: var(--txt-m); opacity: 0.8; font-weight: 500;">
+                                                                    &lt;{{ $bookingSettings['water_activity_threshold'] }} Guests: ₹{{ number_format($bookingSettings['water_activity_low_price'], 0) }}/p | {{ $bookingSettings['water_activity_threshold'] }}+ Guests: ₹{{ number_format($bookingSettings['water_activity_high_price'], 0) }}/p
+                                                                </span>
+                                                            @endif
+                                                        </div>
+                                                    </label>
+                                                    <div style="font-weight: 800; color: var(--brand-d); font-size: 0.95rem;">₹{{ number_format($amenity->price, 0) }}</div>
+                                                </div>
+
+                                                @php
+                                                    $nameL = strtolower($amenity->name);
+                                                    $showPicker = ($amenity->pricing_type === 'per_person') && !str_contains($nameL, 'campfire') && !str_contains($nameL, 'camp fire') && !str_contains($nameL, 'speaker');
+                                                @endphp
+
+                                                @if($showPicker)
+                                                <div class="amenity-participants" style="display:none; opacity: 0; width: 100%; border-top: 1px dashed rgba(250,135,62,0.15); margin-top: 4px; padding-top: 10px;">
+                                                    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+                                                        <span style="font-size: 0.7rem; font-weight: 700; color: var(--txt-m); text-transform: uppercase; letter-spacing: 0.05em;">Participants</span>
+                                                        <div style="display:flex;align-items:center;gap:.5rem;">
+                                                            <button type="button" class="amenity-decrement" style="width:28px;height:28px;border:1px solid rgba(250,135,62,0.2);border-radius:6px;background:#fff3ec;cursor:pointer;font-weight:bold;color:#e06828;font-size:1rem;padding:0;display:flex;align-items:center;justify-content:center;">−</button>
+                                                            <input type="number" class="amenity-participants-input" min="1" value="1" disabled style="width:40px;padding:.2rem;border:none;background:transparent;font-size:.9rem;text-align:center;font-weight:700;color:var(--text-dark);" />
+                                                            <button type="button" class="amenity-increment" style="width:28px;height:28px;border:1px solid rgba(250,135,62,0.2);border-radius:6px;background:#fa873e;cursor:pointer;font-weight:bold;color:#fff;font-size:1rem;padding:0;display:flex;align-items:center;justify-content:center;">+</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 @endif
-                                            </label>
+                                            </div>
                                             @empty
                                             <div style="color:#999;font-size:.95rem">No amenities available</div>
                                             @endforelse
@@ -3749,10 +3083,10 @@
                                         <span
                                             style="font-size:.65rem;color:var(--txt-m);font-weight:700;letter-spacing:.08em;text-transform:uppercase">Also
                                             reach us:</span>
-                                        <a href="/chatbot" target="_blank"
+                                        <a href="https://wa.me/918921021202" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Paradise: 89210 21202</a>
-                                        <a href="/chatbot" target="_blank"
+                                        <a href="https://wa.me/918075741948" target="_blank"
                                             style="display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#25D366;font-weight:700;text-decoration:none"><i
                                                 class="bi bi-whatsapp"></i> Utopiya: 80757 41948</a>
                                     </div>
@@ -3794,7 +3128,7 @@
                                         <div class="tp" id="sum-total">₹ —</div>
                                     </div>
                                     <div style="text-align:right;font-size:.6rem;color:rgba(255,243,236,.5)">Advance:
-                                        ₹5,000<br />via
+                                        ₹{{ number_format($bookingSettings['booking_advance_amount'], 0) }}<br />via
                                         Razorpay</div>
                                 </div>
                                 <div class="wa-box">
@@ -3822,7 +3156,7 @@
                                         <i class="bi bi-credit-card"></i>
                                     </div>
                                     <div>
-                                        <div class="step-title" style="font-size:.95rem">Pay ₹5,000 Advance</div>
+                                        <div class="step-title" style="font-size:.95rem">Pay ₹{{ number_format($bookingSettings['booking_advance_amount'], 0) }} Advance</div>
                                         <p class="step-desc" style="font-size:.78rem">Secure via Razorpay — UPI, card,
                                             net banking.</p>
                                     </div>
@@ -3859,17 +3193,17 @@
                                     button for your
                                     property. Our team will guide you through dates, guests, packages and payment.</p>
                                 <div class="d-flex flex-column gap-3 mb-4">
-                                    <a href="/chatbot"
+                                    <a href="https://wa.me/918921021202"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-whatsapp"></i> 🏡 Book
                                         Parudeesa The Paradise (+91 89210 21202)</a>
-                                    <a href="/chatbot"
+                                    <a href="https://wa.me/918075741948"
                                         target="_blank" class="btn-wa w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-whatsapp"></i> 🌅 Book
                                         Parudeesa Utopiya (+91 80757 41948)</a>
-                                    <a href="/chatbot"
+                                    <a href="https://wa.me/918921021202"
                                         target="_blank" class="btn-brand w-100 justify-content-center"
                                         style="border-radius:12px;padding:1rem;font-size:.9rem"><i
                                             class="bi bi-calendar-event"></i> Enquire
@@ -4019,96 +3353,8 @@
         </section>
     </div><!-- /page-register -->
 
-    <!-- ████████ FOOTER ████████ -->
-    <footer>
-        <div class="container">
-            <div class="row g-5">
-                <!-- SECTION 1: BRAND & ADDRESS -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="f-brand mb-3" style="font-family: 'Cormorant Garamond', serif; font-weight:700;">
-                        <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 90px; width: auto; object-fit: contain;">
-                    </div>
-                    <p style="font-size:.85rem;color:rgba(255,243,236,.6);line-height:1.8">
-                        Kerala Backwaters, India
-                    </p>
-                    <p style="font-style:italic;color:rgba(255,243,236,.4);font-size:1rem;line-height:1.6; font-family:'EB Garamond', serif; margin-top: 1rem;">
-                        "Experience Serenity by the Lake"</p>
-                </div>
 
-                <!-- SECTION 2: NAVIGATION -->
-                <div class="col-6 col-md-3 col-lg-2">
-                    <div class="f-head">Navigation</div>
-                    <ul class="f-links">
-                        <li><a onclick="goPage('home')">Home</a></li>
-                        <li><a onclick="goPage('events')">Events</a></li>
-                        <li><a onclick="goPage('gallery')">Gallery</a></li>
-                        <li><a onclick="goPage('about')">About Us</a></li>
-                        <li><a onclick="goPage('contact')">Contact</a></li>
-                        <li><a onclick="goPage('booking')">Book Now</a></li>
-                    </ul>
-                </div>
 
-                <!-- SECTION 3: POLICIES -->
-                <div class="col-6 col-md-3 col-lg-3">
-                    <div class="f-head">Policies</div>
-                    <div class="policy-list">
-                        <a href="/terms-and-conditions" class="policy-link">Terms & Conditions</a>
-                        <a href="/privacy-policy" class="policy-link">Privacy Policy</a>
-                        <a href="/cancellation-policy" class="policy-link">Cancellation Policy</a>
-                    </div>
-                </div>
-
-                <!-- SECTION 4: CONTACT US -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="f-head">Contact Us</div>
-                    <div class="footer-contact mb-4">
-                        <div class="footer-contact-item">
-                            <i class="bi bi-telephone" style="color:var(--brand)"></i>
-                            <a href="tel:+918921021202">+91 89210 21202</a>
-                        </div>
-                        <div class="footer-contact-item">
-                            <i class="bi bi-envelope" style="color:var(--brand-l)"></i>
-                            <a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a>
-                        </div>
-                    </div>
-                    
-                    <div class="f-head" style="margin-top: 2rem;">Follow Us</div>
-                    <div class="footer-social d-flex gap-3">
-                        <a href="https://instagram.com/parudeesa" target="_blank" class="fs-link" title="Instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="https://facebook.com/parudeesa" target="_blank" class="fs-link" title="Facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="https://youtube.com/parudeesa" target="_blank" class="fs-link" title="YouTube"><i class="bi bi-youtube"></i></a>
-                    </div>
-                </div>
-            </div>
-            <hr class="f-div" />
-            <p class="f-copy">&copy; 2026 Parudeesa - The Lake View Resort. All rights reserved. Made with love in Kerala.</p>
-        </div>
-    </footer>
-
-    <!-- FLOAT STACK -->
-    <div class="float-stack">
-        <button class="float-btn fbtt" id="bttBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})"
-            title="Back to top"><i class="bi bi-chevron-up"></i></button>
-    </div>
-
-    <!-- CHATBOT WIDGET -->
-    <div class="cb-win" id="cbWin">
-        <div class="cb-head">
-            <div class="cb-av">🏡</div>
-            <div class="cb-info">
-                <strong>Parudeesa Resort</strong>
-                <span><span class="cb-dot"></span>Live booking assistant</span>
-            </div>
-            <button class="cb-close" onclick="toggleChatbot()">✕</button>
-        </div>
-        <div class="cb-body">
-            <iframe id="cbFrame" class="cb-frame" src="about:blank" title="Parudeesa Chatbot" loading="lazy"></iframe>
-        </div>
-    </div>
-    <div class="cb-bubble" id="cbBubble" onclick="toggleChatbot()">
-        <i class="bi bi-whatsapp"></i>
-        <span class="cb-notif" id="cbNotif">1</span>
-    </div>
 
     <!-- SOCIAL PROOF POPUP -->
     <div class="sp-popup" id="spPopup">
@@ -4124,22 +3370,61 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         /* ── Page nav ── */
-        function goPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + id).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('anav'));
-            const map = { 'home': 'home', 'events': 'events', 'gallery': 'gallery', 'about': 'about', 'contact': 'contact', 'booking': 'booking', 'login': 'login', 'register': 'register' };
-            document.querySelectorAll('.nav-link').forEach(l => { if (l.getAttribute('onclick') && l.getAttribute('onclick').includes("'" + id + "'")) l.classList.add('anav') });
+        function goPage(id, skipScroll = false) {
+            const targetPage = document.getElementById('page-' + id);
+            if (!targetPage) return;
+
+            // Hide all pages, show target page
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            targetPage.classList.add('active');
+            
+            // Remove flash prevention style if it exists
+            const fps = document.getElementById('flash-prevent');
+            if (fps) fps.remove();
+            
+            // Scroll to top
+            if (!skipScroll) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            // Update Navbar Active State
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            const activeLink = document.getElementById('nav-link-' + id);
+            if (activeLink) activeLink.classList.add('active');
+            
+            // Close mobile menu if open
             const nc = document.getElementById('nav');
-            if (nc && nc.classList.contains('show')) { try { new bootstrap.Collapse(nc).hide() } catch (e) { } }
+            if (nc && nc.classList.contains('show')) { 
+                try { bootstrap.Collapse.getInstance(nc).hide(); } catch (e) { } 
+            }
+
+            // Update URL hash without jumping
+            if (id !== 'home') {
+                history.replaceState(null, null, '#' + id);
+            } else {
+                history.replaceState(null, null, window.location.pathname);
+            }
+            
+            // Re-init reveals
             setTimeout(initReveals, 80);
         }
 
-        window.addEventListener('load', function() {
+        // Removed redundant immediate initialization from bottom
+
+        // Handle browser back/forward buttons
+        window.addEventListener('hashchange', function() {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            goPage(hash);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Re-check hash on DOMContentLoaded just in case
             const hash = window.location.hash.replace('#', '');
             if (hash && document.getElementById('page-' + hash)) {
-                goPage(hash);
+                goPage(hash, true);
             }
         });
 
@@ -4163,46 +3448,25 @@
             });
         }
 
-        /* ── Event Packages Data ── */
-        const eventPackages = {
-            'Birthday': [
-                { value: 'party', name: 'Party Package', price: 25000 },
-                { value: 'intimate', name: 'Intimate Gathering', price: 10000 }
-            ],
-            'Wedding': [
-                { value: 'grand', name: 'Grand Celebration', price: 75000 },
-                { value: 'royal', name: 'Royal Wedding', price: 150000 }
-            ],
-            'Corporate': [
-                { value: 'retreat', name: 'Corporate Retreat', price: 35000 },
-                { value: 'dayout', name: 'Day Outing', price: 15000 }
-            ]
-        };
+        /* ── Dynamic Data Injection ── */
+        window.foodPackages = @json($foodPackages);
+        window.bookingSettings = @json($bookingSettings);
 
-        const amenityPricing = {
-            'Kayaking': { price: 500, perPerson: true },
-            'Private Yacht': { price: 2000, perPerson: true },
-            'Food Package': { price: 1000, perPerson: true },
-            'Decorations': { price: 5000, perPerson: false },
-            'Photography': { price: 8000, perPerson: false },
-            'DJ Setup': { price: 10000, perPerson: false }
-        };
+        const eventPackages = {};
 
         function updatePackages() {
-            const event = document.getElementById('f-event').value;
             const pkgSelect = document.getElementById('f-pkg');
+            if (!pkgSelect) return;
             pkgSelect.innerHTML = '<option value="" data-price="0" data-name="No package">No package</option>';
             
-            if (eventPackages[event]) {
-                eventPackages[event].forEach(p => {
-                    const opt = document.createElement('option');
-                    opt.value = p.value;
-                    opt.setAttribute('data-price', p.price);
-                    opt.setAttribute('data-name', p.name);
-                    opt.textContent = `${p.name} — ₹${p.price.toLocaleString('en-IN')}`;
-                    pkgSelect.appendChild(opt);
-                });
-            }
+            window.foodPackages.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.setAttribute('data-price', p.price);
+                opt.setAttribute('data-name', p.name);
+                opt.textContent = `${p.name} — ₹${parseFloat(p.price).toLocaleString('en-IN')}/person/night`;
+                pkgSelect.appendChild(opt);
+            });
         }
 
         /* ── Amenity participant handling ── */
@@ -4246,9 +3510,14 @@
         function syncAmenityParticipantLimits() {
             const guestCount = Math.max(1, parseInt(document.getElementById('f-guests')?.value) || 1);
             document.querySelectorAll('.amenity-participants-input').forEach((input) => {
-                input.max = guestCount;
-                if (parseInt(input.value || '1') > guestCount) {
-                    input.value = guestCount;
+                const amenityItem = input.closest('.amen-check-item');
+                const amenityName = (amenityItem?.querySelector('.amenity-selector')?.dataset.amenityName || '').toLowerCase();
+                const isYacht = amenityName.includes('yacht');
+                
+                const limit = isYacht ? Math.min(guestCount, 10) : guestCount;
+                input.max = limit;
+                if (parseInt(input.value || '1') > limit) {
+                    input.value = limit;
                 }
             });
         }
@@ -4257,27 +3526,59 @@
         function updateSummary() {
             const propSelect = document.getElementById('f-prop');
             const propOpt = propSelect.options[propSelect.selectedIndex];
-            const propName = propOpt ? propOpt.getAttribute('data-name') || '—' : '—';
-            const propPrice = propOpt ? parseFloat(propOpt.getAttribute('data-price')) || 0 : 0;
+            if (!propOpt || !propOpt.value) return;
+
+            const propName = propOpt.getAttribute('data-name');
+            const weekdayPrice = parseFloat(propOpt.getAttribute('data-weekday-price')) || 0;
+            const weekdayTier2Price = parseFloat(propOpt.getAttribute('data-weekday-tier2-price')) || weekdayPrice;
+            const weekendPrice = parseFloat(propOpt.getAttribute('data-weekend-price')) || 0;
             
             const ci = (document.getElementById('f-checkin') || {}).value || '';
             const co = (document.getElementById('f-checkout') || {}).value || '';
             let guests = parseInt((document.getElementById('f-guests') || {}).value) || 0;
             
             const pkgSelect = document.getElementById('f-pkg');
-            const pkgOpt = pkgSelect.options[pkgSelect.selectedIndex];
+            const pkgOpt = pkgSelect ? pkgSelect.options[pkgSelect.selectedIndex] : null;
             const pkgName = pkgOpt ? pkgOpt.getAttribute('data-name') || 'None' : 'None';
             const pkgPrice = pkgOpt ? parseFloat(pkgOpt.getAttribute('data-price')) || 0 : 0;
             
             const el = id => document.getElementById(id);
             if (!el('sum-prop')) return;
+
             el('sum-prop').textContent = propName;
             el('sum-in').textContent = ci ? new Date(ci + 'T00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
             el('sum-out').textContent = co ? new Date(co + 'T00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
             el('sum-guests').textContent = guests ? guests + ' Guests' : '—';
-            el('sum-pkg').textContent = pkgName !== 'No package' ? pkgName + ' (₹' + pkgPrice.toLocaleString('en-IN') + ')' : 'None';
             
-            let n = 0; if (ci && co) { const d = (new Date(co) - new Date(ci)) / 86400000; n = d > 0 ? d : 0; }
+            let n = 0; 
+            let stayTotal = 0;
+            if (ci && co) { 
+                const start = new Date(ci + 'T00:00');
+                const end = new Date(co + 'T00:00');
+                n = (end - start) / 86400000;
+                n = n > 0 ? n : 0;
+                
+                // Calculate daily stay total
+                if (n > 0) {
+                    for (let i = 0; i < n; i++) {
+                        let curr = new Date(start);
+                        curr.setDate(curr.getDate() + i);
+                        let day = curr.getDay(); // 0 is Sun
+                        let isWeekend = [5, 6, 0].includes(day); // Fri, Sat, Sun
+                        let dailyBase = 0;
+                        const stayThreshold = window.bookingSettings.property_stay_threshold || 5;
+                        if (guests <= stayThreshold) {
+                            dailyBase = isWeekend ? weekendPrice : weekdayPrice;
+                        } else {
+                            dailyBase = isWeekend ? weekendPrice : weekdayTier2Price;
+                        }
+                        stayTotal += dailyBase;
+                    }
+                }
+            }
+
+            const pkgTotal = pkgPrice * guests * n;
+            el('sum-pkg').textContent = pkgName !== 'No package' ? pkgName + ' (₹' + pkgTotal.toLocaleString('en-IN') + ')' : 'None';
             el('sum-nights').textContent = n ? n + (n === 1 ? ' Night' : ' Nights') : '—';
             
             // Calculate Amenities from data attributes
@@ -4287,17 +3588,26 @@
             
             checkedAmenities.forEach(cb => {
                 const name = cb.getAttribute('data-amenity-name') || cb.value;
-                const price = parseFloat(cb.getAttribute('data-amenity-price')) || 0;
+                let price = parseFloat(cb.getAttribute('data-amenity-price')) || 0;
                 const pricingType = cb.getAttribute('data-amenity-type') || 'fixed';
                 
                 let cost = price;
                 let participants = 1;
                 
                 if (pricingType === 'per_person') {
-                    // Find the participant input for this amenity
                     const amenityItem = cb.closest('.amen-check-item');
                     const participantsInput = amenityItem?.querySelector('.amenity-participants-input');
                     participants = participantsInput ? parseInt(participantsInput.value) || 1 : 1;
+                    
+                    // Tiered Water Activity check (Unified)
+                    const aName = name.toLowerCase();
+                    if (aName.includes('kayaking') || aName.includes('boating')) {
+                        const threshold = window.bookingSettings.water_activity_threshold || 5;
+                        const lowPrice = window.bookingSettings.water_activity_low_price || 1000;
+                        const highPrice = window.bookingSettings.water_activity_high_price || 700;
+                        price = (participants < threshold) ? lowPrice : highPrice;
+                    }
+                    
                     cost = price * participants;
                 }
                 
@@ -4311,7 +3621,7 @@
             
             el('sum-amenities-container').innerHTML = amenityHtml;
             
-            const tot = (propPrice * n) + pkgPrice + amenitiesTotal;
+            const tot = stayTotal + pkgTotal + amenitiesTotal;
             el('sum-total').textContent = tot > 0 ? '₹' + tot.toLocaleString('en-IN') : '₹ —';
             return tot;
         }
@@ -4413,19 +3723,6 @@
             }
         }
 
-        /* ── Contact form ── */
-        function handleContact(e) {
-            e.preventDefault();
-            const name = document.getElementById('c-name').value.trim();
-            const phone = document.getElementById('c-phone').value.trim();
-            const interest = document.getElementById('c-interest').value || 'General Enquiry';
-            const msg = document.getElementById('c-msg').value.trim();
-            if (!name || !phone || !msg) { alert('Please fill required fields.'); return }
-            document.getElementById('c-success').innerHTML = '<strong style="color:var(--brand)">✅ Message Sent!</strong><br/>Thank you, ' + name + '! Our team will reach you on WhatsApp within 4 hours.';
-            document.getElementById('c-success').style.display = 'block';
-            const t = encodeURIComponent('Hi! I sent a message via the Parudeesa website.\n\nName: ' + name + '\nPhone: ' + phone + '\nInterest: ' + interest + '\nMessage: ' + msg);
-            setTimeout(() => window.open('/chatbot?text=' + t, '_blank'), 800);
-        }
 
         /* ── Scroll reveal ── */
         function initReveals() {
@@ -4440,33 +3737,59 @@
         /* ── Navbar scroll & BTT ── */
         window.addEventListener('scroll', () => {
             document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 50);
-            document.getElementById('bttBtn').classList.toggle('show', window.scrollY > 400);
         }, { passive: true });
 
-        /* ── Instagram modal ── */
-        function showIgModal() { document.getElementById('igModal').classList.add('open') }
-        function closeIgModal(e) { if (!e || e.target === document.getElementById('igModal')) document.getElementById('igModal').classList.remove('open') }
 
-        /* ── Social proof popup ── */
-        /* ── Chatbot Widget ── */
-        let cbOpen = false;
-        let cbFrameLoaded = false;
-
-        function ensureChatbotFrame() {
-            const frame = document.getElementById('cbFrame');
-            if (!frame || cbFrameLoaded) return;
-            frame.src = '/chatbot?embed=1';
-            cbFrameLoaded = true;
-        }
-
-        function toggleChatbot() {
-            cbOpen = !cbOpen;
-            document.getElementById('cbWin').classList.toggle('open', cbOpen);
-            if (cbOpen) {
-                document.getElementById('cbNotif').classList.add('hidden');
-                ensureChatbotFrame();
+        /* ── Reel Modal ── */
+        function openReel(url) {
+            const modal = document.getElementById('reelModal');
+            const container = document.getElementById('reelContainer');
+            
+            // Clean URL and prepare embed link
+            const cleanUrl = url.split('?')[0];
+            
+            container.innerHTML = `
+                <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="${cleanUrl}?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
+                    <div style="padding:16px;"> 
+                        <a href="${cleanUrl}?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> 
+                            <div style=" display: flex; flex-direction: row; align-items: center;"> 
+                                <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> 
+                                <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> 
+                                    <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> 
+                                    <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div>
+                                </div>
+                            </div>
+                            <div style="padding: 19% 0;"></div> 
+                            <div style="display:block; height:50px; margin:0 auto 12px; width:50px;">
+                                <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g>
+                                </svg>
+                            </div>
+                            <div style="padding-top: 8px;"> 
+                                <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div>
+                            </div>
+                        </a>
+                    </div>
+                </blockquote>
+            `;
+            
+            modal.classList.add('open');
+            
+            // Re-process Instagram embeds to render the new blockquote
+            if (window.instgrm) {
+                window.instgrm.Embeds.process();
             }
         }
+
+        function closeReelModal(e) {
+            if (e === true || e.target === document.getElementById('reelModal')) {
+                document.getElementById('reelModal').classList.remove('open');
+                // Optional: clear container to stop video/audio if playing
+                // document.getElementById('reelContainer').innerHTML = '';
+            }
+        }
+
+        /* ── Social proof popup ── */
 
         /* ── Social Proof Popups ── */
         const spMsgs = [
@@ -4570,11 +3893,20 @@
         let currentYachtName = '';
         let currentYachtPrice = 0;
 
-        function openYachtBooking(id, name, price) {
+        function openYachtBooking(id, name, price, capacity) {
             currentYachtName = name;
             currentYachtPrice = price;
             document.getElementById('yachtIdInput').value = id;
             document.getElementById('yachtTotalPrice').textContent = '₹' + price.toLocaleString();
+            
+            // Sync capacity to guests input
+            const guestsInput = document.getElementById('yachtGuestsInput');
+            if (guestsInput) {
+                guestsInput.max = capacity || 10;
+                if (parseInt(guestsInput.value) > guestsInput.max) {
+                    guestsInput.value = guestsInput.max;
+                }
+            }
             
             // Reset to form step
             backToYachtForm();
@@ -4705,7 +4037,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="p-label mb-2"><i class="bi bi-people me-2"></i>Number of Guests</label>
-                                    <input type="number" name="guests" id="yachtGuestsInput" class="p-input" min="1" max="15" value="1" required style="border-radius: 10px;">
+                                    <input type="number" name="guests" id="yachtGuestsInput" class="p-input" min="1" max="{{ $bookingSettings['yacht_capacity'] ?? 10 }}" value="1" required style="border-radius: 10px;">
                                 </div>
                             </div>
                             
@@ -4824,6 +4156,28 @@
         </div>
     </div>
 
+    <x-footer :isHome="true" />
+    <script async src="//www.instagram.com/embed.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new Swiper(".reelsSwiper", {
+                slidesPerView: 2,
+                spaceBetween: 12,
+                loop: true,
+                speed: 1000,
+                autoplay: {
+                    delay: 2500,
+                    disableOnInteraction: false,
+                },
+                breakpoints: {
+                    640: { slidesPerView: 3, spaceBetween: 16 },
+                    1024: { slidesPerView: 5, spaceBetween: 20 },
+                },
+            });
+        });
+    </script>
+    @include('chatbot')
+    <x-social-nav />
 </body>
 
 </html>

@@ -294,23 +294,7 @@
 
 <body>
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="/design">
-                <img src="/images/Parudeesa%20logo.png" alt="Parudeesa The Lake View Resort" style="height: 72px; width: auto; object-fit: contain;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-center" id="nav">
-                <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link" href="/design#home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/design#events">Events</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/design#gallery">Gallery</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/design#about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/design#contact">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+    <x-navbar :isHome="false" />
 
     <!-- MAIN CONTENT -->
     <main>
@@ -318,44 +302,9 @@
     </main>
 
     <!-- FOOTER -->
-    <footer>
-        <div class="container">
-            <div class="row g-5">
-                <div class="col-lg-3 col-md-6">
-                    <div class="f-brand">
-                        <img src="/images/Parudeesa%20logo.png" alt="Parudeesa The Lake View Resort" style="height: 90px; width: auto; object-fit: contain;">
-                    </div>
-                    <p class="eb mt-2" style="font-style:italic;color:rgba(255,243,236,.4);font-size:.95rem;line-height:1.65">
-                        "Experience Serenity by the Lake"</p>
-                </div>
-                <div class="col-6 col-md-3 col-lg-2">
-                    <div class="f-head">Navigation</div>
-                    <ul class="f-links">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="#top">Back to Top</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md-3 col-lg-3">
-                    <div class="f-head">Policies</div>
-                    <ul class="f-links">
-                        <li><a href="/terms-and-conditions">Terms & Conditions</a></li>
-                        <li><a href="/privacy-policy">Privacy Policy</a></li>
-                        <li><a href="/cancellation-policy">Cancellation Policy</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="f-head">Contact Us</div>
-                    <p style="font-size:.8rem;color:rgba(255,243,236,.45);line-height:1.75">
-                        <i class="bi bi-telephone" style="color:var(--brand)"></i> +91 89210 21202<br/>
-                        <i class="bi bi-envelope" style="color:var(--brand-l)"></i> hello@parudeesa.in
-                    </p>
-                </div>
-            </div>
-            <hr class="f-div" />
-            <p class="f-copy">&copy; 2026 Parudeesa - The Lake View Resort. All rights reserved. Made with love in Kerala.</p>
-        </div>
-    </footer>
+    <x-footer :isHome="false" />
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<x-social-nav />
 </body>
 </html>

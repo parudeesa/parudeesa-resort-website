@@ -34,8 +34,8 @@ class ChatbotBookingController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unable to generate quote. Please check your booking details and try again.',
-            ], 500);
+                'message' => $e->getMessage(),
+            ], 400);
         }
     }
 
@@ -75,12 +75,16 @@ class ChatbotBookingController extends Controller
                 ]);
 
                 foreach ($quote['amenities'] as $amenity) {
-                    $booking->bookingAmenities()->create([
-                        'amenity_id' => $amenity['id'],
-                        'quantity' => $amenity['quantity'] ?? 1,
-                        'unit_price' => $amenity['price'],
-                        'amount' => $amenity['amount'],
-                    ]);
+                    // Skip food packages which are included in the amenities array for pricing breakdown
+                    // but should not be stored in the booking_amenities table (foreign key constraint)
+                    if (! empty($amenity['id']) && ($amenity['pricing_type'] ?? '') !== 'package') {
+                        $booking->bookingAmenities()->create([
+                            'amenity_id' => $amenity['id'],
+                            'quantity' => $amenity['quantity'] ?? 1,
+                            'unit_price' => $amenity['price'],
+                            'amount' => $amenity['amount'],
+                        ]);
+                    }
                 }
 
                 $order = $this->razorpayService->createOrder(
@@ -131,8 +135,8 @@ class ChatbotBookingController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Unable to process booking. Please try again later.',
-            ], 500);
+                'message' => $e->getMessage(),
+            ], 400);
         }
     }
 

@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="csrf-token" content="{{ csrf_token() }}" />
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <title>{{ $property->name }} – Luxury Details</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
@@ -21,13 +22,14 @@
         'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1400&q=85',
         'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1400&q=85',
     ];
-    $heroImages = collect(array_merge([$property->image_url], $property->gallery_images ?? []))
+    $heroImages = collect(array_merge([$property->image], $property->gallery_images ?? []))
         ->filter()
+        ->map(fn($img) => str_starts_with($img, 'http') ? $img : asset($img))
         ->values()
         ->all();
     $heroImages = array_slice(count($heroImages) ? $heroImages : $fallbackHeroImages, 0, 5);
     $heroMain = $heroImages[0];
-    $propertyPrice = $property->price ?: 8000;
+    $propertyPrice = $property->weekday_price ?: 8000;
     $phone = $property->phone ?: '89210 21202';
     $location = $property->location ?: 'Kerala, India';
     $defaultHighlights = [
@@ -38,6 +40,28 @@
     ];
     $highlights = count($property->highlights ?? []) ? $property->highlights : $defaultHighlights;
     $yachtAmenity = $amenities->first(fn ($amenity) => str_contains(strtolower($amenity->name), 'yacht'));
+
+    // Dynamic Food Packages
+    $foodPackages = \App\Models\FoodPackage::where('status', true)->get();
+    
+    // Dynamic Settings
+    $bookingSettings = [
+        'check_in_time' => \App\Models\Setting::get('check_in_time', '02:00 PM'),
+        'check_out_time' => \App\Models\Setting::get('check_out_time', '11:00 AM'),
+        'water_activity_threshold' => (int) \App\Models\Setting::get('water_activity_threshold', 5),
+        'water_activity_low' => (float) \App\Models\Setting::get('water_activity_low_price', 0),
+        'water_activity_high' => (float) \App\Models\Setting::get('water_activity_high_price', 0),
+        'property_stay_threshold' => (int) \App\Models\Setting::get('property_stay_threshold', 5),
+        'yacht_capacity' => (int) ($yacht->capacity ?? 10),
+        'yacht_price' => (float) ($yacht->price ?? 0),
+        'sheesha_capacity' => (int) \App\Models\Setting::get('sheesha_capacity', 6),
+        'cancellation_policy' => \App\Models\Setting::get('cancellation_policy', 'Free cancellation up to 48 hours before check-in.'),
+    ];
+
+    // Sync yacht amenity price if it exists
+    if ($yachtAmenity && isset($yacht)) {
+        $yachtAmenity->price = $yacht->price;
+    }
 @endphp
 
 <style>
@@ -68,68 +92,6 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:var(--font-sans);background:var(--bg-ivory);color:var(--text-dark);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.8;font-weight: 300;letter-spacing: 0.01em;}
 h1,h2,h3,h4,h5{font-family:var(--font-serif);color:var(--text-dark);line-height:1.2}
 
-/* Navbar */
-.navbar {
-    background: rgba(255, 243, 236, .88);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(250, 135, 62, .18);
-    padding: .75rem 0;
-    position: sticky;
-    top: 0;
-    z-index: 1050;
-    box-shadow: 0 4px 28px rgba(250, 135, 62, .1);
-    transition: box-shadow var(--ease), background var(--ease)
-}
-.navbar.scrolled {
-    background: rgba(255, 243, 236, .97);
-    box-shadow: 0 6px 36px rgba(250, 135, 62, .18)
-}
-.navbar-brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--brn-dk) !important;
-    letter-spacing: .3px;
-    line-height: 1.1
-}
-.navbar-brand small {
-    display: block;
-    font-size: .52rem;
-    font-weight: 400;
-    letter-spacing: .22em;
-    text-transform: uppercase;
-    color: var(--brand);
-    margin-top: .1rem
-}
-.nav-link {
-    font-size: .82rem;
-    font-weight: 600;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--text-muted) !important;
-    padding: .45rem .85rem !important;
-    border-radius: 50px;
-    transition: all var(--ease);
-    cursor: pointer;
-    text-decoration: none;
-}
-.nav-link:hover {
-    color: var(--brand-d) !important;
-    background: rgba(250, 135, 62, .1)
-}
-.navbar-toggler {
-    border: 1px solid rgba(250, 135, 62, .35);
-    border-radius: 8px;
-    padding: .3rem .5rem;
-    box-shadow: none !important
-}
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23fa873e' stroke-width='2.2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")
-}
-.navbar-toggler:focus {
-    box-shadow: none
-}
 
 /* Hero */
 .hero-wrapper{position:relative;height:85vh;min-height:600px;overflow:hidden;border-radius:var(--radius-lg);max-width:1400px;width:calc(100% - 2rem);margin:1.5rem auto 3rem;background:#111;box-shadow:var(--shadow-hover)}
@@ -169,121 +131,103 @@ h1,h2,h3,h4,h5{font-family:var(--font-serif);color:var(--text-dark);line-height:
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
 }
-@media (max-width: 768px) {
+@media (max-width: 991px) {
     .exp-grid {
         grid-template-columns: 1fr;
     }
 }
 .exp-card {
-    background: var(--card-bg);
-    border-radius: var(--radius-md);
+    background: #fff;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: var(--shadow-soft);
-    transition: all var(--ease);
-    border: 1px solid rgba(197, 160, 89, 0.1);
-    position: relative;
+    box-shadow: 0 10px 30px rgba(62, 32, 16, 0.04);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid rgba(250, 135, 62, 0.08);
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 .exp-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-    border-color: var(--gold-light);
+    box-shadow: 0 15px 40px rgba(62, 32, 16, 0.08);
+    border-color: rgba(250, 135, 62, 0.2);
 }
 .exp-img-box {
     position: relative;
     width: 100%;
-    padding-top: 56.25%; /* 16:9 ratio */
+    height: 180px;
     overflow: hidden;
 }
 .exp-img-box img {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
+    transition: transform 0.8s ease;
 }
 .exp-card:hover .exp-img-box img {
-    transform: scale(1.05);
-}
-.premium-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: linear-gradient(135deg, #d4af37, #b8860b);
-    color: #fff;
-    padding: 0.35rem 0.9rem;
-    border-radius: 50px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: scale(1.08);
 }
 .exp-body {
-    padding: 1.5rem;
+    padding: 1.25rem;
     display: flex;
     flex-direction: column;
     flex: 1;
-    text-align: left;
 }
 .exp-title {
     font-family: var(--font-serif);
-    font-size: 0.95rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
+    line-height: 1.2;
 }
 .exp-price {
     font-family: var(--font-sans);
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--gold);
-    margin-bottom: 0.25rem;
-}
-.exp-condition {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    font-style: italic;
-    margin-bottom: 1rem;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #fa873e;
+    margin-bottom: 0.6rem;
 }
 .exp-desc {
     font-family: var(--font-sans);
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-bottom: 1.25rem;
-    line-height: 1.6;
-    flex: 1;
+    font-size: 0.78rem;
+    color: var(--text-dark);
+    opacity: 0.7;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    flex: 0 0 auto;
 }
 .btn-add-exp {
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.65rem 1.5rem;
-    background: var(--brand);
+    padding: 0.6rem 1.6rem;
+    background: linear-gradient(135deg, #fa873e, #e06828);
     color: #fff;
     border: none;
     border-radius: 50px;
     font-family: var(--font-sans);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all var(--ease);
-    box-shadow: 0 4px 15px rgba(250, 135, 62, 0.15);
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(250, 135, 62, 0.15);
 }
 .btn-add-exp:hover {
-    background: var(--brand-d);
+    background: linear-gradient(135deg, #e06828, #c7561d);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(250, 135, 62, 0.25);
+    box-shadow: 0 8px 20px rgba(250, 135, 62, 0.25);
     color: #fff;
+}
+.btn-add-exp.is-added {
+    background: #3b2a22;
+    box-shadow: none;
+}
+.btn-add-exp i {
+    font-size: 0.9rem;
 }
 
 /* Highlights Section Redesign */
@@ -629,42 +573,344 @@ footer {
   25% { transform: translateX(-4px); }
   75% { transform: translateX(4px); }
 }
+/* LUXURY YACHT REDESIGN - LIGHT THEME */
+.yacht-experience-wrap {
+    margin: 3.5rem 0;
+    position: relative;
+    z-index: 1;
+}
+
+.luxury-yacht-banner {
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(250, 135, 62, 0.15);
+}
+
+.yacht-image-side {
+    flex: 1;
+    min-width: 350px;
+    min-height: 300px;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (max-width: 991px) {
+    .yacht-image-side { min-width: 100%; min-height: 250px; }
+}
+
+.yacht-image-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 10s ease;
+}
+
+.luxury-yacht-banner:hover .yacht-image-side img {
+    transform: scale(1.08);
+}
+
+.yacht-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent 50%, rgba(255,255,255,0.05) 100%);
+}
+
+.yacht-content-side {
+    flex: 1.2;
+    min-width: 300px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--text-dark);
+    position: relative;
+    z-index: 2;
+    background: var(--bg-beige);
+}
+
+@media (max-width: 768px) {
+    .yacht-content-side { padding: 1.8rem; min-width: 100%; }
+}
+
+.exclusive-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+}
+
+.exclusive-label::after {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--brand);
+}
+
+.yacht-main-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.yacht-main-title em {
+    color: var(--brand);
+    font-style: italic;
+}
+
+.yacht-description {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+
+.yacht-spec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+}
+
+@media (max-width: 480px) {
+    .yacht-spec-grid { grid-template-columns: 1fr; gap: 1rem; }
+}
+
+.yacht-spec-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: #fff;
+    padding: 0.8rem;
+    border-radius: 12px;
+    border: 1px solid rgba(250, 135, 62, 0.1);
+}
+
+.yacht-spec-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--gold-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.yacht-spec-info .label {
+    display: block;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.1rem;
+}
+
+.yacht-spec-info .value {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.yacht-cta-block {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(250, 135, 62, 0.1);
+    padding-top: 1.5rem;
+}
+
+.yacht-price-display .price-label {
+    display: block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+}
+
+.yacht-price-display .price-amt {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--brand-d);
+}
+
+.btn-book-yacht-luxury {
+    background: var(--text-dark);
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn-book-yacht-luxury:hover {
+    background: var(--brand);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(250, 135, 62, 0.2);
+}
+
+.yacht-subtitle {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+
+.floating-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--gold-light);
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.floating-badge span {
+    display: block;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.floating-badge strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--brand);
+    font-family: var(--font-serif);
+}
+    .location-map-card {
+        background: #fff;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(250, 135, 62, 0.1);
+        transition: all var(--ease);
+        cursor: pointer;
+        text-decoration: none !important;
+        display: block;
+        margin-top: 2rem;
+        position: relative;
+    }
+    .location-map-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--gold);
+    }
+    .map-preview-container {
+        position: relative;
+        width: 100%;
+        height: 280px;
+        overflow: hidden;
+    }
+    .map-preview-container::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+        z-index: 1;
+    }
+    .map-preview-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 1.2s ease;
+    }
+    .location-map-card:hover .map-preview-img {
+        transform: scale(1.05);
+    }
+    .map-overlay-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.95);
+        padding: 0.8rem 1.8rem;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        z-index: 5;
+        transition: all 0.3s ease;
+    }
+    .map-overlay-badge i {
+        color: var(--brand);
+        font-size: 1.2rem;
+    }
+    .map-overlay-badge span {
+        font-family: var(--font-sans);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--brand-d);
+    }
+    .location-map-card:hover .map-overlay-badge {
+        background: var(--brand);
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    .location-map-card:hover .map-overlay-badge span,
+    .location-map-card:hover .map-overlay-badge i {
+        color: #fff;
+    }
+    .map-info-body {
+        padding: 1.2rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        text-align: left;
+        background: #fff;
+    }
+    .map-title {
+        font-family: var(--font-serif);
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 0;
+    }
+    .map-address {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.4;
+        font-weight: 400;
+    }
 </style>
 </head>
 <body>
 
     <!-- ██ NAVBAR ██ -->
-    <nav class="navbar navbar-expand-lg" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}" style="display: flex; align-items: center;">
-                <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 55px; width: auto; object-fit: contain;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
-                aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="nav">
-                <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}#events">Events</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}#gallery">Gallery</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}#about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}#contact">Contact</a></li>
-                    @auth
-                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="nav-item">
-                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                                @csrf
-                                <button type="submit" class="nav-link" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0 !important;">Logout</button>
-                            </form>
-                        </li>
-                    @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">LOGIN</a></li>
-                    @endauth
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <x-navbar :isHome="false" />
 
 <div class="hero-wrapper" id="heroWrap">
   <div id="propertyHeroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
@@ -704,91 +950,99 @@ footer {
         </p>
         <h2 class="section-title mt-4">Highlights</h2>
         <div class="highlight-grid">
-          <!-- Swimming Pool -->
+          @foreach($highlights as $item)
           <div class="highlight-card reveal">
             <div class="highlight-img-box">
-              <img src="{{ asset('images/highlights/pool.png') }}" alt="Swimming Pool" loading="lazy">
+              @if(isset($item['image']) && $item['image'])
+                <img src="{{ str_starts_with($item['image'], 'http') ? $item['image'] : asset($item['image']) }}" alt="{{ $item['label'] }}" loading="lazy">
+              @elseif(isset($item['icon']) && $item['icon'])
+                <div class="w-100 h-100 d-flex align-items-center justify-center bg-orange-50 text-orange-500 fs-2">
+                    <i class="bi {{ $item['icon'] }}"></i>
+                </div>
+              @else
+                <img src="{{ asset('images/highlights/default.png') }}" alt="{{ $item['label'] }}" loading="lazy">
+              @endif
             </div>
             <div class="highlight-body">
-              <h3 class="highlight-title">Infinity Swimming Pool</h3>
+              <h3 class="highlight-title">{{ $item['label'] }}</h3>
             </div>
           </div>
-          <!-- In-House Restaurant -->
-          <div class="highlight-card reveal">
-            <div class="highlight-img-box">
-              <img src="{{ asset('images/highlights/restaurant.png') }}" alt="Restaurant" loading="lazy">
-            </div>
-            <div class="highlight-body">
-              <h3 class="highlight-title">In-House Restaurant</h3>
-            </div>
-          </div>
-          <!-- Lakeside Property -->
-          <div class="highlight-card reveal">
-            <div class="highlight-img-box">
-              <img src="{{ asset('images/highlights/property.png') }}" alt="Lakeside Property" loading="lazy">
-            </div>
-            <div class="highlight-body">
-              <h3 class="highlight-title">Lakeside Property</h3>
-            </div>
-          </div>
-          <!-- Sunset Views -->
-          <div class="highlight-card reveal">
-            <div class="highlight-img-box">
-              <img src="{{ asset('images/highlights/sunset.png') }}" alt="Sunset Views" loading="lazy">
-            </div>
-            <div class="highlight-body">
-              <h3 class="highlight-title">Breathtaking Sunset Views</h3>
-            </div>
-          </div>
+          @endforeach
         </div>
       </div>
 
       <div class="content-section reveal mx-auto" style="max-width:1400px">
         <h2 class="section-title">Accommodation and Outdoor Spaces</h2>
         <div class="icon-card-grid">
-          <div class="icon-card"><div class="ic-icon"><i class="bi bi-houses-fill"></i></div><div class="ic-content"><div class="ic-title">3 Bedroom Cottage</div></div></div>
-          <div class="icon-card"><div class="ic-icon"><i class="bi bi-snow2"></i></div><div class="ic-content"><div class="ic-title">1 Master Bedroom</div></div></div>
-          <div class="icon-card"><div class="ic-icon"><i class="bi bi-door-open-fill"></i></div><div class="ic-content"><div class="ic-title">2 Standard Bedrooms</div></div></div>
-          <div class="icon-card"><div class="ic-icon"><i class="bi bi-badge-wc-fill"></i></div><div class="ic-content"><div class="ic-title">1 Common Washroom</div></div></div>
-          <div class="icon-card"><div class="ic-icon"><i class="bi bi-brightness-alt-high-fill"></i></div><div class="ic-content"><div class="ic-title">Veranda</div></div></div>
-          <div class="icon-card"><div class="ic-icon"><i class="bi bi-water"></i></div><div class="ic-content"><div class="ic-title">Private Pool Area</div></div></div>
-          <div class="icon-card"><div class="ic-icon"><i class="bi bi-tree-fill"></i></div><div class="ic-content"><div class="ic-title">Lawn Area</div></div></div>
-          <div class="icon-card"><div class="ic-icon"><i class="bi bi-car-front-fill"></i></div><div class="ic-content"><div class="ic-title">Private Parking</div></div></div>
-          <div class="icon-card"><div class="ic-icon"><i class="bi bi-balloon-heart-fill"></i></div><div class="ic-content"><div class="ic-title">Open Event Space</div></div></div>
+          @if($property->accommodation)
+            @foreach($property->accommodation as $item)
+              <div class="icon-card">
+                <div class="ic-icon"><i class="bi bi-houses-fill"></i></div>
+                <div class="ic-content"><div class="ic-title">{{ $item }}</div></div>
+              </div>
+            @endforeach
+          @endif
+
+          @if($property->outdoor_spaces)
+            @foreach($property->outdoor_spaces as $item)
+              <div class="icon-card">
+                <div class="ic-icon"><i class="bi bi-tree-fill"></i></div>
+                <div class="ic-content"><div class="ic-title">{{ $item }}</div></div>
+              </div>
+            @endforeach
+          @endif
         </div>
       </div>
 
-      <div class="content-section reveal mx-auto" style="max-width:1400px">
+      <div class="content-section reveal">
         <h2 class="section-title">Experiences and Add-ons</h2>
+
         <div class="exp-grid">
           @foreach($amenities as $amenity)
             @if(!str_contains(strtolower($amenity->name), 'yacht'))
             <div class="exp-card">
-              @if($amenity->is_premium)
-                <div class="premium-badge">Premium</div>
-              @endif
               <div class="exp-img-box">
-                <img src="{{ $amenity->image_url ?: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80' }}" alt="{{ $amenity->name }}" loading="lazy">
+                @php
+                  $keyword = strtolower($amenity->name);
+                  $fallbackImg = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80';
+                  if(str_contains($keyword, 'campfire')) $fallbackImg = 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=600&q=80';
+                  if(str_contains($keyword, 'speaker')) $fallbackImg = 'https://images.unsplash.com/photo-1545127398-14699f92334b?w=600&q=80';
+                  if(str_contains($keyword, 'kayak')) $fallbackImg = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80';
+                  if(str_contains($keyword, 'sheesha') || str_contains($keyword, 'shisha')) $fallbackImg = 'https://images.unsplash.com/photo-1516715105260-7a5611666687?w=600&q=80';
+                @endphp
+                <img src="{{ str_starts_with($amenity->image, 'http') ? $amenity->image : asset($amenity->image) }}" alt="{{ $amenity->name }}" class="img-fluid rounded-4">
               </div>
-              <div class="exp-body">
-                <div class="exp-title" style="font-size: 1.25rem; margin-bottom: 0.75rem;">{{ $amenity->name }}</div>
-                <div class="exp-price" style="display: flex; flex-direction: column; margin-bottom: 1rem;">
-                  @if($amenity->price > 0)
-                    <span style="font-size: 1.2rem; font-weight: 800; color: var(--gold);">₹{{ number_format($amenity->price, 0) }}{{ str_contains(strtolower($amenity->name), 'sheesha') ? ' / unit' : (($amenity->pricing_type === 'per_person' && !str_contains(strtolower($amenity->name), 'campfire') && !str_contains(strtolower($amenity->name), 'speaker')) ? ' / person' : '') }}</span>
-                    @if(str_contains(strtolower($amenity->name), 'kayaking'))
-                      <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400; margin-top: -2px;">₹1,000 / person (below 5 people)</span>
+                <div class="exp-body">
+                  <div class="exp-title">{{ $amenity->name }}</div>
+                  @php
+                    $nameLower = strtolower($amenity->name);
+                    $fallbackDesc = 'Enhance your stay with this premium experience.';
+                    
+                    if(str_contains($nameLower, 'kayaking') || str_contains($nameLower, 'boating')) $fallbackDesc = 'Refreshments will be provided during the activity.';
+                    elseif(str_contains($nameLower, 'speaker') || str_contains($nameLower, 'jbl')) $fallbackDesc = 'High-volume sound usage is allowed only until 10 PM. After that, volume should be reduced.';
+                    elseif(str_contains($nameLower, 'campfire') || str_contains($nameLower, 'camp fire')) $fallbackDesc = 'In case of unfavorable circumstances, refunds will not be provided.';
+                    elseif(str_contains($nameLower, 'sheesha') || str_contains($nameLower, 'shisha')) $fallbackDesc = 'Only 6 sheesha units are available at a time.';
+                    
+                    $displayDesc = $amenity->description ?: $fallbackDesc;
+                  @endphp
+                  <p class="exp-desc">{{ $displayDesc }}</p>
+                  
+                  <div class="exp-price">
+                    @if(str_contains(strtolower($amenity->name), 'kayaking') || str_contains(strtolower($amenity->name), 'boating'))
+                      <span class="kayak-price-display">₹{{ number_format($bookingSettings['water_activity_high'], 0) }}/p</span>
+                    @elseif($amenity->price > 0)
+                      ₹{{ number_format($amenity->price, 0) }}
+                    @else
+                      Premium Add-on
                     @endif
-                  @else
-                    <span style="font-size: 1.1rem; font-weight: 800; color: var(--gold);">Premium Add-on</span>
-                  @endif
+                  </div>
+
+                  <div style="flex: 1;"></div> <!-- Spacer to push button down -->
+                  
+                  <button class="btn-add-exp" onclick="openAddonModal('{{ strtolower($amenity->name) }}', '{{ $amenity->name }}')">
+                    <i class="bi bi-plus"></i> ADD
+                  </button>
                 </div>
-                @if($amenity->condition_note && !str_contains(strtolower($amenity->name), 'kayaking'))
-                  <div class="exp-condition">{{ $amenity->condition_note }}</div>
-                @endif
-                <button class="btn-add-exp" style="padding: 0.5rem 1.6rem; font-size: 0.75rem; font-weight: 800;" onclick="openAddonModal('{{ strtolower($amenity->name) }}', '{{ $amenity->name }}')">
-                  <i class="bi bi-plus-lg"></i> ADD
-                </button>
-              </div>
             </div>
             @endif
           @endforeach
@@ -796,23 +1050,60 @@ footer {
       </div>
 
       @if($yachtAmenity)
-      <div class="reveal mx-auto" style="max-width:1400px">
-        <div class="special-card mb-5">
-          <div class="special-bg" style="background-image: url('{{ $yachtAmenity->image_url ?: 'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1400&q=80' }}');"></div>
-          <div class="special-overlay"></div>
-          <div class="special-content">
-            <h4 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.25rem;">{{ $yachtAmenity->name }}</h4>
-            <div style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.75rem;">₹{{ number_format($yachtAmenity->price, 0) }}</div>
-            <div style="font-size: 0.9rem; color: rgba(255,255,255,0.9); margin-bottom: 1.5rem; display: flex; gap: 1.2rem;">
-                <span><i class="bi bi-clock me-1"></i> 5 Hours</span>
-                <span><i class="bi bi-people me-1"></i> Up to 10 People</span>
+      <div class="yacht-experience-wrap reveal">
+        <div class="luxury-yacht-banner">
+            <div class="yacht-image-side">
+                <img src="{{ str_starts_with($yachtAmenity->image, 'http') ? $yachtAmenity->image : asset($yachtAmenity->image) }}" alt="{{ $yachtAmenity->name }}">
+                <div class="yacht-image-overlay"></div>
+                
+                <div class="floating-badge">
+                    <span>Exclusive</span>
+                    <strong>Private Hire</strong>
+                </div>
             </div>
-            <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-              <button class="btn-add-exp" style="background: #fff; color: var(--text-dark); border: none; padding: 0.6rem 1.8rem; font-weight: 800; border-radius: 50px; font-size: 0.8rem;" onclick="openAddonModal('{{ strtolower($yachtAmenity->name) }}', '{{ $yachtAmenity->name }}')">
-                <i class="bi bi-plus-lg"></i> ADD TO BOOKING
-              </button>
+            
+            <div class="yacht-content-side">
+                <div class="exclusive-label">Luxury Experience</div>
+                <h2 class="yacht-main-title">
+                    Indulge in the <br><em>Yacht</em> Lifestyle
+                </h2>
+                
+                <p class="yacht-subtitle">
+                    Premium yacht add-on
+                </p>
+                
+                <div class="yacht-spec-grid">
+                    <div class="yacht-spec-item">
+                        <div class="yacht-spec-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <div class="yacht-spec-info">
+                            <span class="label">Duration</span>
+                            <span class="value">5 Hours</span>
+                        </div>
+                    </div>
+                    <div class="yacht-spec-item">
+                        <div class="yacht-spec-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="yacht-spec-info">
+                            <span class="label">Capacity</span>
+                            <span class="value">Up to 10 People</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="yacht-cta-block">
+                    <div class="yacht-price-display">
+                        <span class="price-label">Fixed Rate</span>
+                        <div class="yacht-price-amt" style="font-family: var(--font-sans); font-weight: 600; color: #5a5a5a; font-size: 1.4rem;">₹{{ number_format($yachtAmenity->price, 0) }}</div>
+                    </div>
+                    
+                    <button class="btn-book-yacht-luxury" onclick="openAddonModal('{{ strtolower($yachtAmenity->name) }}', '{{ $yachtAmenity->name }}')">
+                        ADD TO BOOKING
+                    </button>
+                </div>
             </div>
-          </div>
         </div>
       </div>
       @endif
@@ -831,13 +1122,32 @@ footer {
             <span class="e-tag">Romantic Events</span>
             <span class="e-tag">Private Celebrations</span>
           </div>
-          <a href="/chatbot" target="_blank" class="btn-premium mt-3">
+          <a href="{{ route('events') }}#inquiry" class="btn-premium mt-3">
             Request Custom Event Package
           </a>
         </div>
       </div>
 
-      <div class="content-section reveal mx-auto" style="max-width:1400px; margin-top: 4rem;">
+      @if(trim($property->name) === 'Parudeesa The Paradise')
+      <div class="content-section reveal mx-auto" style="max-width: 900px; margin-top: 4rem;">
+        <h2 class="section-title">Location & Directions</h2>
+        <a href="https://www.google.com/maps/dir/Parudeesa+:+The+Lakeview+Resort,+Vettussery+lane,+Boat+Jetty+Road,+Vaduthala,+Ernakulam,+Kerala+682023/Parudeesa+:+The+Lakeview+Resort,+Vettussery+lane,+Boat+Jetty+Road,+Vaduthala,+Ernakulam,+Kerala+682023/@10.0268974,76.2646621,17z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x3b0813e12fe49c39:0x81371c194e5f7846!2m2!1d76.267237!2d10.0268921!1m5!1m1!1s0x3b0813e12fe49c39:0x81371c194e5f7846!2m2!1d76.267237!2d10.0268921?entry=ttu&g_ep=EgoyMDI2MDUwNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="location-map-card">
+            <div class="map-preview-container">
+                <img src="{{ asset('images/luxury_resort_banner.png') }}" alt="{{ $property->name }} Resort View" class="map-preview-img">
+                <div class="map-overlay-badge">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <span>View on Maps</span>
+                </div>
+            </div>
+            <div class="map-info-body">
+                <h3 class="map-title">{{ $property->name }}</h3>
+                <p class="map-address">Vettussery lane, Vaduthala, Ernakulam, Kerala 682023</p>
+            </div>
+        </a>
+      </div>
+      @endif
+
+      <div class="content-section reveal mx-auto" style="max-width:1400px; margin-top: {{ trim($property->name) === 'Parudeesa The Paradise' ? '0' : '4rem' }};">
         <h2 class="section-title">Cancellation & Rescheduling Policy</h2>
         <div class="policy-card" style="background: var(--bg-beige); padding: 2rem; border-radius: var(--radius-md); border-left: 4px solid var(--gold);">
           <ul style="list-style: none; padding: 0; margin: 0; font-family: var(--font-body); font-size: 1.1rem; color: var(--text-dark); line-height: 1.8;">
@@ -860,37 +1170,29 @@ footer {
           {{-- 1. Pricing Options (STATIC) --}}
           <div style="background: rgba(250,135,62,0.05); border: 1px solid rgba(250,135,62,0.15); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
             <div style="font-family:var(--font-sans);font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-d);margin-bottom:1.2rem; display: flex; align-items: center; gap: 0.5rem;">
-              <i class="bi bi-info-circle"></i> STAY OPTIONS
+              <i class="bi bi-info-circle"></i> STAY RATES
             </div>
             <div class="pricing-options-grid" style="display: flex; flex-direction: column; gap: 0.85rem;">
-              {{-- Hidden Radios for Logic --}}
-              <input type="radio" name="stay_option_radio" id="radio-opt-1" value="8000" data-label="Weekday (Up to 5 Guests)" style="display: none;">
-              <input type="radio" name="stay_option_radio" id="radio-opt-2" value="11000" data-label="Weekday (Up to 10 Guests)" style="display: none;">
-              <input type="radio" name="stay_option_radio" id="radio-opt-3" value="12000" data-label="Weekend (Up to 10 Guests)" checked style="display: none;">
-
-              {{-- 1. Weekday (Up to 5 Guests) --}}
-              <div id="stay-opt-1" style="padding: 1rem 1.25rem; border-radius: 12px; background: #fff; border: 1px solid rgba(250,135,62,0.1); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
+              <div id="rate-weekday" style="padding: 1rem 1.25rem; border-radius: 12px; background: #fff; border: 1px solid rgba(250,135,62,0.1); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
                 <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">Weekday <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">(Up to 5 Guests)</span></div>
-                <div style="font-weight: 800; color: var(--gold); font-size: 1rem;">₹8,000</div>
+                <div style="font-weight: 800; color: var(--gold); font-size: 1rem;">₹{{ number_format($property->weekday_price ?: $property->price, 0) }}</div>
               </div>
-              {{-- 2. Weekday (Up to 10 Guests) --}}
-              <div id="stay-opt-2" style="padding: 1rem 1.25rem; border-radius: 12px; background: #fff; border: 1px solid rgba(250,135,62,0.1); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
+              <div id="rate-weekday-tier2" style="padding: 1rem 1.25rem; border-radius: 12px; background: #fff; border: 1px solid rgba(250,135,62,0.1); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
                 <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">Weekday <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">(Up to 10 Guests)</span></div>
-                <div style="font-weight: 800; color: var(--gold); font-size: 1rem;">₹11,000</div>
+                <div style="font-weight: 800; color: var(--gold); font-size: 1rem;">₹{{ number_format($property->weekday_tier2_price ?: ($property->weekday_price ?: $property->price), 0) }}</div>
               </div>
-              {{-- 3. Weekend (Up to 10 Guests) --}}
-              <div id="stay-opt-3" style="padding: 1rem 1.25rem; border-radius: 12px; background: #fff; border: 1px solid rgba(250,135,62,0.1); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
+              <div id="rate-weekend" style="padding: 1rem 1.25rem; border-radius: 12px; background: #fff; border: 1px solid rgba(250,135,62,0.1); display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;">
                 <div style="font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">Weekend <span style="color: var(--text-muted); font-weight: 400; font-size: 0.8rem;">(Up to 10 Guests)</span></div>
-                <div style="font-weight: 800; color: var(--gold); font-size: 1rem;">₹12,000</div>
+                <div style="font-weight: 800; color: var(--gold); font-size: 1rem;">₹{{ number_format($property->weekend_price ?: $property->price, 0) }}</div>
               </div>
             </div>
           </div>
 
           {{-- 2. BOOK VIA CHATBOT Button --}}
           <div class="text-center mb-4">
-            <a href="/chatbot" class="btn-wa-alt d-inline-flex justify-content-center align-items-center" style="background: linear-gradient(135deg, #25D366, #1aa854); color: #fff; padding: 0.5rem 1.5rem; font-size: 0.85rem; border-radius: 30px; width: auto; gap: 0.5rem; border: none; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);">
-              <i class="bi bi-robot"></i> BOOK VIA CHATBOT
-            </a>
+            <a href="#" onclick="toggleChatbot(); return false;" class="btn-wa-alt d-inline-flex justify-content-center align-items-center" style="background: linear-gradient(135deg, #25D366, #1aa854); color: #fff; padding: 0.5rem 1.5rem; font-size: 0.85rem; border-radius: 30px; width: auto; gap: 0.5rem; border: none; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);">
+  <i class="bi bi-robot"></i> BOOK VIA CHATBOT
+</a>
           </div>
 
           <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(250,135,62,0.2), transparent); margin: 2rem 0;"></div>
@@ -898,11 +1200,13 @@ footer {
           <form action="{{ route('bookings.store') }}" method="POST" id="bk-form">
             @csrf
             <input type="hidden" name="property_id"  value="{{ $property->id }}" />
-            <input type="hidden" name="amount"        id="form-amount"       value="12000" />
+            <input type="hidden" name="amount"        id="form-amount"       value="0" />
             <input type="hidden" name="extra_amount"  id="form-extra-amount" value="0" />
-            <input type="hidden" name="base_amount"   id="form-base-amount"  value="12000" />
+            <input type="hidden" name="base_amount"   id="form-base-amount"  value="0" />
             <input type="hidden" name="package_name"  id="form-package-name" value="Only Stay" />
-            <input type="hidden" name="event_type"    id="form-event-type"   value="Weekend (Up to 10 Guests)" />
+            <input type="hidden" name="event_type"    id="form-event-type"   value="" />
+            <input type="hidden" name="coupon_id"      id="form-coupon-id"    value="" />
+            <input type="hidden" name="discount_amount" id="form-discount-amount" value="0" />
 
             <!-- Sidebar Form Content (Always Visible) -->
             <div id="booking-details-sidebar">
@@ -922,12 +1226,12 @@ footer {
               <div class="form-row">
                 <div class="mb-3" style="position: relative;">
                     <label class="p-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; display: block;">Name</label>
-                    <input type="text" class="bk-input" name="name" placeholder="Full Name" required minlength="3" pattern="[A-Za-z\s]+" title="Name should only contain letters." />
+                    <input type="text" class="bk-input" id="bk-name" name="name" placeholder="Full Name" required minlength="3" pattern="[A-Za-z\s]+" title="Name should only contain letters." />
                     <div class="error-msg" id="err-name" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;">Name is required (min 3 letters, no numbers)</div>
                 </div>
                 <div class="mb-3" style="position: relative;">
                     <label class="p-label" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; display: block;">Phone Number</label>
-                    <input type="tel" class="bk-input" name="phone" placeholder="10-digit Number" required pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" />
+                    <input type="tel" class="bk-input" id="bk-phone" name="phone" placeholder="10-digit Number" required pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" />
                     <div class="error-msg" id="err-phone" style="color:#C62828;font-size:0.7rem;margin-top:-0.8rem;margin-bottom:0.8rem;display:none;font-weight:700;">Phone number must contain exactly 10 digits.</div>
                 </div>
               </div>
@@ -949,67 +1253,71 @@ footer {
                 <div style="font-family:var(--font-sans);font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.85rem;">
                   Select Amenities
                 </div>
-                <div id="amenities-list" style="display:flex;flex-direction:column;gap:.75rem;">
+                <div id="amenities-list" style="display:flex;flex-direction:column;gap:0.6rem; margin-bottom:1.5rem;">
                   @forelse($amenities as $amenity)
-                  <div class="amenity-card" data-amenity-id="{{ $amenity->id }}" style="padding: 1rem; border-radius: 12px; background: var(--bg-beige); border: 1px solid rgba(250,135,62,.1);">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <label class="amenity-label d-flex align-items-center gap-2 mb-0" style="cursor: pointer;">
+                  <div class="amenity-card" style="transition: all 0.3s ease; display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; width: 100%;">
+                      <label class="amenity-label" style="margin: 0; font-weight: 600; color: var(--text-dark); font-size: 0.85rem; cursor: pointer; display: flex; align-items: flex-start; gap: 0.8rem; flex: 1; padding-top: 2px;">
                         <input type="checkbox" class="amenity-selector" 
                                data-amenity-id="{{ $amenity->id }}" 
                                data-amenity-name="{{ $amenity->name }}" 
-                               data-amenity-price="{{ $amenity->price }}" 
-                               data-amenity-type="{{ str_contains(strtolower($amenity->name), 'sheesha') ? 'per_person' : $amenity->pricing_type }}" 
-                               name="amenities[{{ $amenity->id }}][selected]" value="1" />
-                        <span style="font-weight: 600; font-size: 0.85rem; color: var(--text-dark);">{{ $amenity->name }}</span>
+                               data-amenity-price="{{ $amenity->price }}"
+                               data-amenity-type="{{ (str_contains(strtolower($amenity->name), 'sheesha') || str_contains(strtolower($amenity->name), 'kayak')) ? 'per_person' : $amenity->pricing_type }}"
+                               name="amenities[{{ $amenity->id }}][selected]" value="1"
+                               style="width: 1rem; height: 1rem; accent-color: var(--brand); margin-top: 2px;">
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="line-height: 1.4; font-weight: 700; font-size: 0.9rem;">{{ $amenity->name }}</span>
+                            @if(str_contains(strtolower($amenity->name), 'kayaking') || str_contains(strtolower($amenity->name), 'boating'))
+                                <span style="font-size: 0.68rem; color: var(--text-muted); opacity: 0.7; font-weight: 500; letter-spacing: 0.01em;">
+                                    &lt;{{ $bookingSettings['water_activity_threshold'] }} Guests: ₹{{ number_format($bookingSettings['water_activity_low'], 0) }}/p | {{ $bookingSettings['water_activity_threshold'] }}+ Guests: ₹{{ number_format($bookingSettings['water_activity_high'], 0) }}/p
+                                </span>
+                            @endif
+                        </div>
                       </label>
-                      <div style="font-weight: 700; font-size: 0.85rem; color: var(--gold); text-align: right;">
-                        @if($amenity->price > 0)
-                          @if(str_contains(strtolower($amenity->name), 'kayaking'))
-                            <div id="kayak-sidebar-rate-main">₹{{ (old('guests', 1) < 5) ? '1,000' : '700' }}/p</div>
-                            <div id="kayak-sidebar-rate-sub" style="font-size: 0.6rem; color: var(--text-muted); font-weight: 400; margin-top: -2px;">₹{{ (old('guests', 1) < 5) ? '700' : '1000' }}/p ({{ (old('guests', 1) < 5) ? '5+ guests' : 'below 5' }})</div>
-                          @elseif(str_contains(strtolower($amenity->name), 'yacht'))
-                            <div>₹{{ number_format($amenity->price, 0) }}</div>
-                            <div style="font-size: 0.6rem; color: var(--text-muted); font-weight: 400; margin-top: -2px;">5 Hours • Up to 10 People</div>
+                      
+                      <div class="dynamic-amenity-price" data-amenity-base-price="{{ $amenity->price }}" style="font-weight: 800; color: #fa873e; font-size: 0.95rem; text-align: right; white-space: nowrap;">
+                          @if(str_contains(strtolower($amenity->name), 'kayaking') || str_contains(strtolower($amenity->name), 'boating'))
+                              ₹{{ number_format($bookingSettings['water_activity_high'], 0) }}
                           @else
-                            ₹{{ number_format($amenity->price, 0) }}{{ (str_contains(strtolower($amenity->name), 'sheesha') || ($amenity->pricing_type === 'per_person' && !str_contains(strtolower($amenity->name), 'campfire') && !str_contains(strtolower($amenity->name), 'speaker'))) ? (str_contains(strtolower($amenity->name), 'sheesha') ? '/unit' : '/p') : '' }}
+                              ₹{{ number_format($amenity->price, 0) }}
                           @endif
-                        @else
-                          Premium
-                        @endif
                       </div>
                     </div>
-                    
-                    @if((str_contains(strtolower($amenity->name), 'sheesha') || $amenity->pricing_type === 'per_person') && !str_contains(strtolower($amenity->name), 'campfire') && !str_contains(strtolower($amenity->name), 'speaker'))
-                    <div class="amenity-participants mt-2" style="display: none;">
-                      <div class="d-flex align-items-center justify-content-between">
-                        <div style="font-size: 0.7rem; color: var(--text-muted);">{{ str_contains(strtolower($amenity->name), 'sheesha') ? 'Units:' : 'Persons:' }}</div>
-                        <div class="d-flex align-items-center gap-2">
-                          <button type="button" class="counter-btn minus-btn" style="width:24px; height:24px; font-size:0.8rem;" disabled>−</button>
-                          <input type="number" class="counter-input amenity-participants-input" name="amenities[{{ $amenity->id }}][participants]" value="1" min="1" readonly style="width:30px; border:none; background:transparent; text-align:center; font-weight:700; font-size:0.85rem;" />
-                          <button type="button" class="counter-btn plus-btn" style="width:24px; height:24px; font-size:0.8rem;">+</button>
-                        </div>
-                      </div>
-                      @if(str_contains(strtolower($amenity->name), 'sheesha'))
-                        <div class="limit-msg" style="display: none; font-size: 0.65rem; color: #d96520; font-weight: 700; margin-top: 4px; text-align: right;"><i class="bi bi-exclamation-triangle-fill"></i> Only 6 Sheeshas available</div>
-                      @endif
+
+                    @php
+                      $amenityNameLower = strtolower($amenity->name);
+                      $isPerPerson = (str_contains($amenityNameLower, 'sheesha') || str_contains($amenityNameLower, 'kayak') || str_contains($amenityNameLower, 'boating') || $amenity->pricing_type === 'per_person');
+                      $isAutoGuest = (str_contains($amenityNameLower, 'campfire') || str_contains($amenityNameLower, 'camp fire') || str_contains($amenityNameLower, 'speaker') || str_contains($amenityNameLower, 'yacht'));
+                    @endphp
+
+                    @if($isPerPerson && !$isAutoGuest)
+                    <div class="amenity-participants" style="display:none; opacity: 0; transform: translateY(-5px); transition: all 0.3s ease; width: 100%; border-top: 1px dashed rgba(250,135,62,0.15); margin-top: 4px; padding-top: 8px;">
+                       <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+                         <span style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Guests</span>
+                         <div class="counter-wrap" style="height: 28px; border-radius: 8px; background: #fff; border: 1px solid rgba(250,135,62,0.25); display: flex; align-items: center; overflow: hidden;">
+                           <button type="button" class="counter-btn minus-btn" style="width: 28px; height: 28px; font-size: 1rem; background: #fff3ec; border: none; color: #e06828; font-weight: 700; cursor: pointer;" disabled>−</button>
+                           <input type="number" class="counter-input amenity-participants-input" name="amenities[{{ $amenity->id }}][participants]" value="1" min="1" readonly style="width: 32px; height: 28px; font-size: 0.85rem; border: none; background: transparent; text-align: center; font-weight: 700; color: var(--text-dark); outline: none;">
+                           <button type="button" class="counter-btn plus-btn" style="width: 28px; height: 28px; font-size: 1rem; background: #fff3ec; border: none; color: #e06828; font-weight: 700; cursor: pointer;">+</button>
+                         </div>
+                       </div>
                     </div>
                     @else
-                    <input type="hidden" class="counter-input" name="amenities[{{ $amenity->id }}][participants]" value="1" />
+                      <input type="hidden" class="counter-input" name="amenities[{{ $amenity->id }}][participants]" value="1" />
                     @endif
                   </div>
                   @empty
-                  <div style="font-size:.85rem;color:var(--text-muted);">No amenities available.</div>
+                  <div style="font-size:.8rem;color:var(--text-muted); text-align: center; padding: 1rem;">No amenities available.</div>
                   @endforelse
                 </div>
 
-                <div id="selected-amenities-preview" style="padding:1.5rem; border-radius:20px; background:rgba(250,135,62,.03); border:1px solid rgba(250,135,62,.1); margin-top:1.5rem; box-shadow: 0 10px 30px rgba(62, 32, 16, 0.03);">
-                  <div style="font-size:0.75rem; font-weight:800; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; letter-spacing:0.12em; display:flex; align-items:center; gap:0.6rem;">
-                    <i class="bi bi-receipt"></i> Booking Summary
-                  </div>
-                  <div id="preview-items-list" style="display:flex; flex-direction:column; gap:0.75rem; border-bottom: 1px solid rgba(250,135,62,0.1); padding-bottom: 1rem; margin-bottom: 1rem;"></div>
-                  <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, rgba(250,135,62,0.08), rgba(250,135,62,0.02)); padding:1rem; border-radius:12px;">
-                    <span style="font-size:0.85rem; font-weight:800; color:var(--text-dark); text-transform:uppercase; letter-spacing:0.05em;">Total Payable</span>
-                    <span id="sidebar-grand-total" style="font-size:1.4rem; font-weight:900; color:var(--brand-d); font-family:var(--font-sans); line-height:1;">₹0</span>
+                <div id="selected-amenities-preview" style="padding: 1rem 0;">
+                  <div id="preview-items-list" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
+                </div>
+
+                <div id="sidebar-total-display" style="margin-top: 1rem; padding: 1.25rem; background: rgba(250,135,62,0.05); border-radius: 12px; border: 1px solid rgba(250,135,62,0.15);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-dark); text-transform: uppercase; letter-spacing: 0.05em;">Total Payable</span>
+                    <span id="sidebar-grand-total" style="font-size: 1.4rem; font-weight: 900; color: var(--gold);">₹0</span>
                   </div>
                 </div>
               </div>
@@ -1020,7 +1328,7 @@ footer {
             {{-- Enquiry Section --}}
             <div id="enquiry-section" class="contact-panel" style="margin-top:2.5rem; padding-top:2rem; border-top:1px solid rgba(250,135,62,0.15); text-align:center;">
               <div style="font-weight:700; font-size: 0.9rem; color:var(--text-dark); margin-bottom:0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">For more enquiries</div>
-              <a href="{{ route('home') }}#contact" class="btn-outline-premium justify-content-center" style="display:inline-flex; text-decoration:none; padding: 0.7rem 2rem; font-size: 0.8rem; border-radius: 50px; border: 1.5px solid var(--brand); color: var(--brand-d); font-weight: 700; transition: all 0.3s ease; width: auto;">CONTACT US</a>
+              <a href="{{ route('home') }}#about" class="btn-outline-premium justify-content-center" style="display:inline-flex; text-decoration:none; padding: 0.7rem 2rem; font-size: 0.8rem; border-radius: 50px; border: 1.5px solid var(--brand); color: var(--brand-d); font-weight: 700; transition: all 0.3s ease; width: auto;">CONTACT US</a>
             </div>
 
             <div id="booking-msg" style="display:none;margin-top:1.5rem;padding:1rem;border-radius:var(--radius-sm);font-size:.9rem;text-align:center"></div>
@@ -1034,71 +1342,7 @@ footer {
 </div>
 
 
-  <!-- ████████ FOOTER ████████ -->
-  <footer>
-    <div class="container">
-      <div class="row g-5">
-        <!-- SECTION 1: BRAND & ADDRESS -->
-        <div class="col-lg-3 col-md-6">
-          <div class="f-brand mb-3" style="font-family: 'Cormorant Garamond', serif; font-weight:700;">
-            <img src="/images/parudeesa-logo.png" alt="Parudeesa Logo" style="height: 90px; width: auto; object-fit: contain;">
-          </div>
-          <p style="font-size:.85rem;color:rgba(255,243,236,.6);line-height:1.8">
-            Kerala Backwaters, India
-          </p>
-          <p style="font-style:italic;color:rgba(255,243,236,.4);font-size:1rem;line-height:1.6; font-family:'EB Garamond', serif; margin-top: 1rem;">
-            "Experience Serenity by the Lake"</p>
-        </div>
-
-        <!-- SECTION 2: NAVIGATION -->
-        <div class="col-6 col-md-3 col-lg-2">
-          <div class="f-head">Navigation</div>
-          <ul class="f-links">
-            <li><a href="{{ route('home') }}">Home</a></li>
-            <li><a href="{{ route('home') }}#events">Events</a></li>
-            <li><a href="{{ route('home') }}#gallery">Gallery</a></li>
-            <li><a href="{{ route('home') }}#about">About Us</a></li>
-            <li><a href="{{ route('home') }}#contact">Contact</a></li>
-            <li><a href="/booking">Book Now</a></li>
-          </ul>
-        </div>
-
-        <!-- SECTION 3: POLICIES -->
-        <div class="col-6 col-md-3 col-lg-3">
-          <div class="f-head">Policies</div>
-          <div class="policy-list">
-            <a href="/terms-and-conditions" class="policy-link">Terms & Conditions</a>
-            <a href="/privacy-policy" class="policy-link">Privacy Policy</a>
-            <a href="/cancellation-policy" class="policy-link">Cancellation Policy</a>
-          </div>
-        </div>
-
-        <!-- SECTION 4: CONTACT US -->
-        <div class="col-md-6 col-lg-4">
-          <div class="f-head">Contact Us</div>
-          <div class="footer-contact mb-4">
-            <div class="footer-contact-item">
-              <i class="bi bi-telephone" style="color:var(--brand)"></i>
-              <a href="tel:+918921021202">+91 89210 21202</a>
-            </div>
-            <div class="footer-contact-item">
-              <i class="bi bi-envelope" style="color:var(--brand-l)"></i>
-              <a href="mailto:hello@parudeesa.in">hello@parudeesa.in</a>
-            </div>
-          </div>
-          
-          <div class="f-head" style="margin-top: 2rem;">Follow Us</div>
-          <div class="footer-social d-flex gap-3">
-              <a href="https://instagram.com/parudeesa" target="_blank" class="fs-link" title="Instagram"><i class="bi bi-instagram"></i></a>
-              <a href="https://facebook.com/parudeesa" target="_blank" class="fs-link" title="Facebook"><i class="bi bi-facebook"></i></a>
-              <a href="https://youtube.com/parudeesa" target="_blank" class="fs-link" title="YouTube"><i class="bi bi-youtube"></i></a>
-          </div>
-        </div>
-      </div>
-      <hr class="f-div" />
-      <p class="f-copy">&copy; 2026 Parudeesa - The Lake View Resort. All rights reserved. Made with love in Kerala.</p>
-    </div>
-  </footer>
+  <x-footer :isHome="false" />
 
   <!-- ████ Booking Wizard Modal ████ -->
   <div class="modal fade" id="bookingWizardModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
@@ -1114,44 +1358,32 @@ footer {
           <div id="wizard-step-1">
             <p class="text-muted mb-4" style="font-size: 0.9rem;">Please select your preferred stay package to continue.</p>
             <div class="d-flex flex-column gap-3 mb-4">
-              <label class="amenity-card stay-option-card is-selected" style="cursor: pointer; border-radius: 16px; padding: 1.25rem; transition: all 0.3s ease;">
-                <input type="radio" name="wizard_package_option" value="0" data-name="Only Stay" checked style="display: none;">
+              @foreach($foodPackages as $index => $pkg)
+              <label class="amenity-card stay-option-card {{ $index === 0 ? 'is-selected' : '' }}" style="cursor: pointer; border-radius: 16px; padding: 1.25rem; transition: all 0.3s ease;">
+                <input type="radio" name="wizard_package_option" value="{{ (float)$pkg->price }}" data-name="{{ $pkg->name }}" {{ $index === 0 ? 'checked' : '' }} style="display: none;">
                 <div class="d-flex justify-content-between align-items-center w-100">
                   <div style="display: flex; align-items: center; gap: 1rem;">
                     <div class="package-icon" style="width: 45px; height: 45px; border-radius: 12px; background: rgba(250,135,62,0.1); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.25rem;">
-                      <i class="bi bi-house-door-fill"></i>
+                      @if(str_contains(strtolower($pkg->name), 'only'))
+                        <i class="bi bi-house-door-fill"></i>
+                      @elseif(str_contains(strtolower($pkg->name), 'breakfast'))
+                        <i class="bi bi-cup-hot-fill"></i>
+                      @else
+                        <i class="bi bi-moon-stars-fill"></i>
+                      @endif
                     </div>
-                    <div style="font-weight: 700; color: var(--text-dark); font-size: 1rem;">Only Stay</div>
+                    <div style="font-weight: 700; color: var(--text-dark); font-size: 1rem;">{{ $pkg->name }}</div>
                   </div>
-                  <div id="wizard-only-stay-price" style="font-weight: 800; color: var(--gold); font-size: 1.2rem; white-space: nowrap;">₹0</div>
+                  <div class="package-price-val" style="font-weight: 800; color: var(--gold); font-size: 1.1rem; white-space: nowrap;">
+                    @if($pkg->price > 0)
+                      + ₹{{ number_format($pkg->price, 0) }} / person
+                    @else
+                      Included
+                    @endif
+                  </div>
                 </div>
               </label>
-              
-              <label class="amenity-card stay-option-card" style="cursor: pointer; border-radius: 16px; padding: 1.25rem; transition: all 0.3s ease;">
-                <input type="radio" name="wizard_package_option" value="200" data-name="Stay + Breakfast + Tea & Snacks" style="display: none;">
-                <div class="d-flex justify-content-between align-items-center w-100">
-                  <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div class="package-icon" style="width: 45px; height: 45px; border-radius: 12px; background: rgba(250,135,62,0.1); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.25rem;">
-                      <i class="bi bi-cup-hot-fill"></i>
-                    </div>
-                    <div style="font-weight: 700; color: var(--text-dark); font-size: 1rem;">Stay + Breakfast + Tea & Snacks</div>
-                  </div>
-                  <div style="font-weight: 800; color: var(--gold); font-size: 1.1rem; white-space: nowrap;">+ ₹200 / person</div>
-                </div>
-              </label>
-              
-              <label class="amenity-card stay-option-card" style="cursor: pointer; border-radius: 16px; padding: 1.25rem; transition: all 0.3s ease;">
-                <input type="radio" name="wizard_package_option" value="450" data-name="Stay + Breakfast + Tea & Snacks + Dinner" style="display: none;">
-                <div class="d-flex justify-content-between align-items-center w-100">
-                  <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div class="package-icon" style="width: 45px; height: 45px; border-radius: 12px; background: rgba(250,135,62,0.1); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.25rem;">
-                      <i class="bi bi-moon-stars-fill"></i>
-                    </div>
-                    <div style="font-weight: 700; color: var(--text-dark); font-size: 1rem;">Stay + Breakfast + Tea & Snacks + Dinner</div>
-                  </div>
-                  <div style="font-weight: 800; color: var(--gold); font-size: 1.1rem; white-space: nowrap;">+ ₹450 / person</div>
-                </div>
-              </label>
+              @endforeach
             </div>
 
             <div id="wizard-step-1-total-box" class="mb-4 p-3 rounded-4" style="background: rgba(250,135,62,0.05); border: 1px solid rgba(250,135,62,0.15);">
@@ -1240,8 +1472,6 @@ footer {
                 <span id="wizard-summary-total" style="font-weight:800; color:var(--gold); font-size:1.5rem;"></span>
               </div>
             </div>
-            <input type="hidden" name="coupon_id" id="form-coupon-id">
-            <input type="hidden" name="discount_amount" id="form-discount-amount">
 
             <div class="d-flex gap-2 mt-4">
               <button type="button" class="btn btn-outline-secondary w-50" style="border-radius:12px; font-weight:600;" onclick="wizardGoToStep(1)">Back</button>
@@ -1298,7 +1528,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (res.ok) disabledDates = await res.json();
   } catch (err) { console.error('Could not load unavailable dates:', err); }
 
-  const fpCfg = { minDate: 'today', dateFormat: 'Y-m-d', disable: disabledDates };
+  const fpCfg = { 
+    minDate: 'today', 
+    dateFormat: 'Y-m-d', 
+    disable: disabledDates,
+    onChange: function() {
+        updateBookingSummary();
+    }
+  };
   flatpickr('#checkin',  fpCfg);
   flatpickr('#checkout', fpCfg);
 
@@ -1321,22 +1558,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  window.propertyPricing = {
+    weekday: {{ (float)($property->weekday_price ?: 8000) }},
+    weekday_tier2: {{ (float)($property->weekday_tier2_price ?: 11000) }},
+    weekend: {{ (float)($property->weekend_price ?: 12000) }},
+    maxGuests: {{ (int)($property->capacity ?: 15) }}
+  };
+  window.bookingSettings = @json($bookingSettings);
+
   initAmenityListeners();
   initStayOptionListeners();
   initPackageListeners();
   updateBookingSummary();
 });
 
+function initStayOptionListeners() {
+  document.querySelectorAll('input[name="stay_option_radio"]').forEach((radio) => {
+    radio.addEventListener('change', () => {
+      document.querySelectorAll('.stay-option-card').forEach(c => c.classList.remove('is-selected'));
+      radio.closest('.stay-option-card').classList.add('is-selected');
+      updateBookingSummary();
+    });
+  });
+}
+
 /* ── Modal Wizard Flow ──────────────────────────────────────────────────── */
 function openBookingWizard() {
   const checkin = document.getElementById('checkin').value;
   const checkout = document.getElementById('checkout').value;
-  const guests = document.querySelector('input[name="guests"]').value;
-  const name = document.querySelector('input[name="name"]').value;
-  const phone = document.querySelector('input[name="phone"]').value;
+  const guests = document.getElementById('guests-input').value;
+  const name = document.getElementById('bk-name').value;
+  const phone = document.getElementById('bk-phone').value;
   
   if(!checkin || !checkout || !guests || !name || !phone) {
     alert('Please fill all required fields before proceeding.');
+    return;
+  }
+
+  const pricing = getFinalPricing();
+  if (pricing.grandTotal <= 0) {
+    alert('Please select valid dates and details to calculate the booking amount.');
     return;
   }
   
@@ -1356,18 +1617,77 @@ function openBookingWizard() {
   wizardModal.show();
 }
 
-function updateStep1Total() {
-  const baseAmt = parseFloat(document.getElementById('form-base-amount').value) || 0;
-  const amenitiesAmt = parseFloat(document.getElementById('form-extra-amount').value) || 0;
+function getFinalPricing() {
+  const nights = getBookingNights();
   const guests = getGuestCount();
-  const nights = getBookingNights() || 1;
+  const checkinVal = document.getElementById('checkin').value;
+  
+  let stayTotal = 0;
+  let stayLabel = 'Weekday Rate';
+  let isWeekendStatus = false;
+
+  if (checkinVal && nights > 0) {
+    const start = new Date(checkinVal + 'T00:00');
+    for (let i = 0; i < nights; i++) {
+        const curr = new Date(start);
+        curr.setDate(start.getDate() + i);
+        const isWeekend = [5, 6, 0].includes(curr.getDay()); 
+        if (isWeekend) isWeekendStatus = true;
+        
+        let dailyRate = 0;
+        if (isWeekend) {
+            dailyRate = window.propertyPricing.weekend;
+        } else {
+            const stayThreshold = {{ $bookingSettings['property_stay_threshold'] }};
+            if (guests <= stayThreshold) {
+                dailyRate = window.propertyPricing.weekday;
+            } else {
+                dailyRate = window.propertyPricing.weekday_tier2;
+            }
+        }
+        stayTotal += dailyRate;
+    }
+    stayLabel = isWeekendStatus ? 'Weekend Rate' : 'Weekday Rate';
+  }
+  
+  // 2. Amenities Calculation
+  const amenities = buildAmenityPayload();
+  let amenitiesTotal = 0;
+  amenities.forEach(a => { 
+      amenitiesTotal += a.total; 
+  });
+  
+  // 3. Package Calculation (Step 1 Wizard)
   const selectedPackage = document.querySelector('input[name="wizard_package_option"]:checked');
   const packageRate = selectedPackage ? parseFloat(selectedPackage.value) : 0;
+  const packageTotal = (guests > 0 && nights > 0) ? (packageRate * guests * nights) : 0;
   
-  const total = baseAmt + amenitiesAmt + (packageRate * guests * nights);
+  const grandTotal = (parseFloat(stayTotal) || 0) + (parseFloat(amenitiesTotal) || 0) + (parseFloat(packageTotal) || 0);
+  
+  return {
+    stayTotal,
+    amenitiesTotal,
+    packageTotal,
+    grandTotal,
+    amenitiesList: amenities,
+    stayLabel: stayLabel,
+    packageName: selectedPackage ? selectedPackage.dataset.name : 'Only Stay',
+    nights: nights
+  };
+}
+
+function updateStep1Total() {
+  const pricing = getFinalPricing();
+  const currentStayAndExtra = pricing.stayTotal + pricing.amenitiesTotal;
+
+  // Update Individual Package Labels
+  const onlyStayLabel = document.getElementById('wizard-only-stay-price');
+  if (onlyStayLabel) onlyStayLabel.textContent = `₹${currentStayAndExtra.toLocaleString()}`;
+
+  // Update Grand Total Box at bottom of Step 1
   const totalVal = document.getElementById('wizard-step-1-total-val');
   if (totalVal) {
-    totalVal.textContent = `₹${total.toLocaleString()}`;
+    totalVal.textContent = `₹${pricing.grandTotal.toLocaleString()}`;
   }
 }
 
@@ -1400,27 +1720,15 @@ function wizardGoToStep(step) {
 }
 
 function updateWizardSummary() {
-  const stayOptionLabel = document.getElementById('form-event-type').value;
-  const guestCount = getGuestCount();
-  const guestName = document.querySelector('input[name="name"]').value;
-  const guestPhone = document.querySelector('input[name="phone"]').value;
+  const pricing = getFinalPricing();
+  const guestName = document.getElementById('bk-name').value;
+  const guestPhone = document.getElementById('bk-phone').value;
   const petCount = parseInt(document.querySelector('input[name="pets"]')?.value || '0');
-  
-  const selectedPackage = document.querySelector('input[name="wizard_package_option"]:checked');
-  const packageName = selectedPackage.dataset.name;
-  const packagePricePerPerson = parseFloat(selectedPackage.value);
-  
-  // Base Stay Price (already calculated in form-base-amount during updateBookingSummary)
-  const nights = getBookingNights() || 1;
-  const baseTotal = parseFloat(document.getElementById('form-base-amount').value) || 0;
-  const packageTotal = packagePricePerPerson * guestCount * nights;
-  const amenitiesTotal = parseFloat(document.getElementById('form-extra-amount').value) || 0;
-  const grandTotal = baseTotal + packageTotal + amenitiesTotal;
   
   // Update UI Elements
   document.getElementById('wizard-summary-name').textContent = guestName;
   document.getElementById('wizard-summary-phone').textContent = guestPhone;
-  document.getElementById('wizard-summary-guests').textContent = guestCount;
+  document.getElementById('wizard-summary-guests').textContent = getGuestCount();
   
   const petsRow = document.getElementById('wizard-summary-pets-row');
   if (petCount > 0) {
@@ -1430,9 +1738,9 @@ function updateWizardSummary() {
       petsRow.style.display = 'none';
   }
 
-  document.getElementById('wizard-summary-stay-type').textContent = stayOptionLabel + (nights > 0 ? ` (${nights} ${nights === 1 ? 'night' : 'nights'})` : '');
-  document.getElementById('wizard-summary-package').textContent = packageName;
-  document.getElementById('wizard-summary-total').textContent = `₹${grandTotal.toLocaleString()}`;
+  document.getElementById('wizard-summary-stay-type').textContent = pricing.stayLabel + (pricing.nights > 0 ? ` (${pricing.nights} ${pricing.nights === 1 ? 'night' : 'nights'})` : '');
+  document.getElementById('wizard-summary-package').textContent = pricing.packageName;
+  document.getElementById('wizard-summary-total').textContent = `₹${pricing.grandTotal.toLocaleString()}`;
   
   // Detailed Cost Breakdown
   const costItemsContainer = document.getElementById('wizard-summary-cost-items');
@@ -1441,37 +1749,50 @@ function updateWizardSummary() {
   // 1. Stay Cost
   const stayItem = document.createElement('div');
   stayItem.style.cssText = 'display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.6rem; color:var(--text-dark); border-bottom: 1px dashed rgba(250,135,62,0.1); padding-bottom: 0.4rem;';
-  stayItem.innerHTML = `<span>Base Stay Cost</span><span style="font-weight: 700;">₹${baseTotal.toLocaleString()}</span>`;
+  stayItem.innerHTML = `<span>Base Stay Cost</span><span style="font-weight: 700;">₹${pricing.stayTotal.toLocaleString()}</span>`;
   costItemsContainer.appendChild(stayItem);
 
   // 2. Package Cost
-  if (packageTotal > 0) {
+  if (pricing.packageTotal > 0) {
       const packItem = document.createElement('div');
       packItem.style.cssText = 'display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.6rem; color:var(--text-dark); border-bottom: 1px dashed rgba(250,135,62,0.1); padding-bottom: 0.4rem;';
-      packItem.innerHTML = `<span>Food Package (${packageName})</span><span style="font-weight: 700;">₹${packageTotal.toLocaleString()}</span>`;
+      packItem.innerHTML = `<span>Food Package (${pricing.packageName})</span><span style="font-weight: 700;">₹${pricing.packageTotal.toLocaleString()}</span>`;
       costItemsContainer.appendChild(packItem);
   }
 
   // 3. Amenities
-  const amenities = buildAmenityPayload();
-  if(amenities.length > 0) {
-    amenities.forEach(a => {
+  if(pricing.amenitiesList.length > 0) {
+    const heading = document.createElement('div');
+    heading.style.cssText = 'font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; margin-top: 1.5rem; letter-spacing: 0.1em;';
+    heading.textContent = 'Selected Amenities';
+    costItemsContainer.appendChild(heading);
+
+    pricing.amenitiesList.forEach(a => {
       const item = document.createElement('div');
       item.style.cssText = 'display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.6rem; color:var(--text-muted);';
-      let text = (a.pricing_type === 'per_person' && !a.name.toLowerCase().includes('campfire') && !a.name.toLowerCase().includes('speaker')) 
-                 ? `${a.name} (${a.participants} ${a.name.toLowerCase().includes('sheesha') ? 'units' : 'guests'})` 
+      
+      const safePrice = parseFloat(a.price) || 0;
+      const safeTotal = parseFloat(a.total) || 0;
+      const safeParticipants = parseInt(a.participants) || 1;
+
+      let text = (a.pricing_type === 'per_person' && !a.name.toLowerCase().includes('campfire') && !a.name.toLowerCase().includes('speaker') && !a.name.toLowerCase().includes('yacht')) 
+                 ? `${a.name} (${safeParticipants} ${a.name.toLowerCase().includes('sheesha') ? 'units' : 'guests'})` 
                  : a.name;
-      if (a.name.toLowerCase().includes('kayaking')) {
-          text = `${a.name} (₹${a.price}/p × ${a.participants} guests)`;
+                 
+      if (a.name.toLowerCase().includes('kayaking') || a.name.toLowerCase().includes('boating')) {
+          text = `${a.name} (₹${safePrice.toLocaleString()}/p × ${safeParticipants} guests)`;
       }
-      item.innerHTML = `<span>${text}</span><span style="font-weight: 600; color:var(--text-dark);">₹${a.total.toLocaleString()}</span>`;
+      item.innerHTML = `<span>${text}</span><span style="font-weight: 600; color:var(--text-dark);">₹${safeTotal.toLocaleString()}</span>`;
       costItemsContainer.appendChild(item);
     });
   }
 
   // Sync values back to hidden form inputs for final submission
-  document.getElementById('form-package-name').value = packageName;
-  document.getElementById('form-amount').value = grandTotal;
+  document.getElementById('form-package-name').value = pricing.packageName;
+  document.getElementById('form-amount').value = pricing.grandTotal;
+  document.getElementById('form-base-amount').value = pricing.stayTotal;
+  document.getElementById('form-extra-amount').value = pricing.amenitiesTotal;
+  document.getElementById('form-event-type').value = pricing.stayLabel;
   
   // Re-apply coupon if active
   if (currentWizardCoupon) {
@@ -1489,13 +1810,8 @@ async function applyWizardCoupon(isSilent = false) {
     const removeBtn = document.getElementById('wizard_remove_btn');
     
     // Crucial: Calculate base total from scratch to avoid double deduction
-    const guestCount = getGuestCount();
-    const selectedPackage = document.querySelector('input[name="wizard_package_option"]:checked');
-    const packagePricePerPerson = parseFloat(selectedPackage.value);
-    const baseTotal = parseFloat(document.getElementById('form-base-amount').value) || 0;
-    const packageTotal = packagePricePerPerson * guestCount;
-    const amenitiesTotal = parseFloat(document.getElementById('form-extra-amount').value) || 0;
-    const rawTotal = baseTotal + packageTotal + amenitiesTotal;
+    const pricing = getFinalPricing();
+    const rawTotal = pricing.grandTotal;
     
     if (!code) return;
 
@@ -1579,43 +1895,6 @@ function resetWizardCoupon() {
 }
 
 /* ── Stay Option listeners ────────────────────────────────────────────── */
-function initStayOptionListeners() {
-  document.querySelectorAll('input[name="stay_option_radio"]').forEach((radio) => {
-    radio.addEventListener('change', () => {
-      document.querySelectorAll('.stay-option-card').forEach(c => c.classList.remove('is-selected'));
-      radio.closest('.stay-option-card').classList.add('is-selected');
-      
-      updateBookingSummary();
-    });
-  });
-}
-
-function calculateDynamicBasePrice() {
-    const selected = document.querySelector('input[name="stay_option_radio"]:checked');
-    if (!selected) return 0;
-
-    const baseValue = parseFloat(selected.value);
-    const guests = getGuestCount();
-    const label = selected.dataset.label;
-
-    let calculatedPrice = baseValue;
-
-    // Weekday (Up to 5 Guests) logic: 8000 base + 600 per extra guest (>5)
-    if (label.includes("Weekday (Up to 5 Guests)")) {
-        if (guests <= 5) {
-            calculatedPrice = 8000;
-        } else {
-            calculatedPrice = 8000 + ((guests - 5) * 600);
-        }
-    } else if (label.includes("Weekend")) {
-        calculatedPrice = 12000;
-    } else if (label.includes("Weekday (Up to 10 Guests)")) {
-        calculatedPrice = 11000;
-    }
-
-    return calculatedPrice;
-}
-
 function initPackageListeners() {
   document.querySelectorAll('input[name="wizard_package_option"]').forEach((radio) => {
     radio.addEventListener('change', () => {
@@ -1627,93 +1906,105 @@ function initPackageListeners() {
 
 /* ── Amenity listeners ─────────────────────────────────────────────────── */
 function initAmenityListeners() {
-
-  /* Checkbox toggle */
   document.querySelectorAll('.amenity-selector').forEach((chk) => {
     chk.addEventListener('change', () => {
       const card = chk.closest('.amenity-card');
-      const pr   = card.querySelector('.amenity-participants');
-
-      card.classList.toggle('is-selected', chk.checked);
-
-      if (pr) {
-        pr.style.display = chk.checked ? 'block' : 'none';
-        if (chk.checked) syncLimits();
+      const counter = card.querySelector('.amenity-participants');
+      if (chk.checked) {
+        card.classList.add('is-selected');
+        if (counter) {
+          counter.style.display = 'block';
+          setTimeout(() => {
+            counter.style.opacity = '1';
+            counter.style.transform = 'translateY(0)';
+          }, 10);
+        }
+      } else {
+        card.classList.remove('is-selected');
+        if (counter) {
+          counter.style.opacity = '0';
+          counter.style.transform = 'translateY(-5px)';
+          setTimeout(() => { counter.style.display = 'none'; }, 300);
+        }
       }
       updateBookingSummary();
+      syncGridAddButtons();
     });
   });
 
-  /* Plus buttons */
+  // Plus buttons
   document.querySelectorAll('.plus-btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      const card       = btn.closest('.amenity-card');
-      const input      = card.querySelector('.counter-input');
-      const minusBtn   = card.querySelector('.minus-btn');
-      const price      = parseFloat(card.querySelector('.amenity-selector').dataset.amenityPrice) || 0;
+      const card = btn.closest('.amenity-card');
+      const input = card.querySelector('.counter-input');
+      const minusBtn = card.querySelector('.minus-btn');
+      const price = parseFloat(card.querySelector('.amenity-selector').dataset.amenityPrice) || 0;
       const guestCount = getGuestCount();
       let val = parseInt(input.value) || 1;
 
-      const isSheesha = (card.querySelector('.amenity-selector').dataset.amenityName || '').toLowerCase().includes('sheesha');
-      const limit = isSheesha ? 6 : guestCount;
+      const amenityName = (card.querySelector('.amenity-selector').dataset.amenityName || '').toLowerCase();
+      const isSheesha = amenityName.includes('sheesha');
+      const isYacht = amenityName.includes('yacht');
+      const limit = isSheesha ? window.bookingSettings.sheesha_capacity : (isYacht ? Math.min(guestCount, window.bookingSettings.yacht_capacity) : guestCount);
 
       if (val < limit) {
         val++;
-        input.value       = val;
-        minusBtn.disabled = val <= 1;
-        btn.disabled      = val >= limit;
-        
-        // Show limit message for Sheesha
-        if (isSheesha && val === 6) {
-            const msg = card.querySelector('.limit-msg');
-            if (msg) msg.style.display = 'block';
-        }
-
-        updateSubtotal(card, price, val);
+        input.value = val;
+        minusBtn.disabled = (val <= 1);
+        btn.disabled = (val >= limit);
         updateBookingSummary();
       } else {
-        if (isSheesha) {
-            const msg = card.querySelector('.limit-msg');
-            if (msg) {
-                msg.style.display = 'block';
-                msg.style.animation = 'shake 0.3s ease';
-                setTimeout(() => msg.style.animation = '', 300);
-            }
-        } else {
-            alert(`Participants cannot exceed the total number of guests (${guestCount}).`);
-        }
+        alert(isSheesha ? 'Maximum 6 Sheeshas available.' : `Participants cannot exceed total guests (${guestCount}).`);
       }
     });
   });
 
-  /* Minus buttons */
+  // Minus buttons
   document.querySelectorAll('.minus-btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      const card     = btn.closest('.amenity-card');
-      const input    = card.querySelector('.counter-input');
-      const plusBtn  = card.querySelector('.plus-btn');
-      const price    = parseFloat(card.querySelector('.amenity-selector').dataset.amenityPrice) || 0;
+      const card = btn.closest('.amenity-card');
+      const input = card.querySelector('.counter-input');
+      const plusBtn = card.querySelector('.plus-btn');
       let val = parseInt(input.value) || 1;
 
       if (val > 1) {
         val--;
-        input.value      = val;
-        btn.disabled     = val <= 1;
-        plusBtn.disabled = val >= getGuestCount();
-        
-        // Hide limit message for Sheesha if below 6
-        if ((card.querySelector('.amenity-selector').dataset.amenityName || '').toLowerCase().includes('sheesha') && val < 6) {
-            const msg = card.querySelector('.limit-msg');
-            if (msg) msg.style.display = 'none';
-        }
-
-        updateSubtotal(card, price, val);
+        input.value = val;
+        btn.disabled = (val <= 1);
+        plusBtn.disabled = false;
         updateBookingSummary();
       }
     });
   });
+}
+
+function syncGridAddButtons() {
+    const selectors = document.querySelectorAll('.amenity-selector');
+    const gridButtons = document.querySelectorAll('.btn-add-exp');
+    
+    gridButtons.forEach(btn => {
+        const card = btn.closest('.exp-card') || btn.closest('.special-content');
+        if (!card) return;
+        
+        const title = (card.querySelector('.exp-title')?.textContent || card.querySelector('h4')?.textContent || '').trim().toLowerCase();
+        if (!title) return;
+        
+        // Find checkbox where the name is contained in the title or vice versa
+        const checkbox = Array.from(selectors).find(chk => {
+            const chkName = (chk.dataset.amenityName || '').toLowerCase().trim();
+            return chkName === title || title.includes(chkName) || chkName.includes(title);
+        });
+
+        if (checkbox && checkbox.checked) {
+            btn.innerHTML = '<i class="bi bi-check-lg"></i> ADDED';
+            btn.classList.add('is-added');
+        } else {
+            btn.innerHTML = '<i class="bi bi-plus"></i> ADD' + (btn.closest('.special-content') ? ' TO BOOKING' : '');
+            btn.classList.remove('is-added');
+        }
+    });
 }
 
 /* Guest count change → clamp participant inputs */
@@ -1733,52 +2024,51 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function autoSelectStayOption() {
-    const guests = getGuestCount();
     const checkinVal = document.getElementById('checkin').value;
-    let selectedId = 'radio-opt-3'; // Default to Weekend
-
-    if (checkinVal) {
-        const date = new Date(checkinVal);
-        const day = date.getDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
-        const isWeekend = (day === 0 || day === 5 || day === 6); // Fri, Sat, Sun
-
-        if (isWeekend) {
-            selectedId = 'radio-opt-3';
-        } else {
-            selectedId = (guests <= 5) ? 'radio-opt-1' : 'radio-opt-2';
-        }
-    } else {
-        selectedId = (guests <= 5) ? 'radio-opt-1' : 'radio-opt-2';
-    }
-
-    const radio = document.getElementById(selectedId);
-    if (radio) {
-        radio.checked = true;
-        
-        // Update visual state of static cards
-        document.querySelectorAll('[id^="stay-opt-"]').forEach(el => {
+    
+    // Clear highlights
+    ['rate-weekday', 'rate-weekend'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
             el.style.borderColor = 'rgba(250,135,62,0.1)';
             el.style.background = '#fff';
             el.style.boxShadow = 'none';
-        });
-        
-        const cardId = selectedId.replace('radio', 'stay');
-        const activeCard = document.getElementById(cardId);
-        if (activeCard) {
-            activeCard.style.borderColor = 'var(--brand)';
-            activeCard.style.background = '#fffaf7';
-            activeCard.style.boxShadow = '0 4px 12px rgba(250, 135, 62, 0.1)';
         }
+    });
+
+    if (!checkinVal) return;
+
+    const date = new Date(checkinVal);
+    const day = date.getDay(); 
+    const isWeekend = (day === 0 || day === 5 || day === 6); // Fri, Sat, Sun
+    const guests = getGuestCount();
+
+    let activeId = 'rate-weekday';
+    if (isWeekend) {
+        activeId = 'rate-weekend';
+    } else if (guests > 5) {
+        activeId = 'rate-weekday-tier2';
+    }
+
+    const activeCard = document.getElementById(activeId);
+    if (activeCard) {
+        activeCard.style.borderColor = 'var(--brand)';
+        activeCard.style.background = '#fffaf7';
+        activeCard.style.boxShadow = '0 4px 12px rgba(250, 135, 62, 0.1)';
     }
 }
 
 let currentAddonKeyword = '';
 
 function openAddonModal(keyword, name) {
-  // Bypassing participant count for Campfire and Speakers
-  if (keyword.includes('campfire') || keyword.includes('speaker')) {
+  // Bypassing participant count for Campfire, Speakers, and Yacht
+  if (keyword.includes('campfire') || keyword.includes('speaker') || keyword.includes('yacht')) {
     const checkbox = Array.from(document.querySelectorAll('.amenity-selector'))
-      .find((chk) => (chk.dataset.amenityName || '').toLowerCase().includes(keyword.toLowerCase()));
+      .find((chk) => {
+        const chkName = (chk.dataset.amenityName || '').toLowerCase().trim();
+        const search = keyword.toLowerCase().trim();
+        return chkName === search || chkName.includes(search) || search.includes(chkName);
+      });
     
     if (checkbox) {
       checkbox.checked = true;
@@ -1786,6 +2076,7 @@ function openAddonModal(keyword, name) {
       
       // Visual feedback
       updateSidebarPreview();
+      syncGridAddButtons(); // Sync the button state
       setTimeout(() => {
         document.getElementById('selected-amenities-preview')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 300);
@@ -1804,13 +2095,15 @@ function updateModalCount(delta) {
   const input = document.getElementById('modalPersonCount');
   let val = parseInt(input.value) || 1;
   const isSheesha = currentAddonKeyword.toLowerCase().includes('sheesha');
-  const limit = isSheesha ? 6 : guestCount;
+  const isYacht = currentAddonKeyword.toLowerCase().includes('yacht');
+  const guestsCount = getGuestCount();
+  const limit = isSheesha ? window.bookingSettings.sheesha_capacity : (isYacht ? Math.min(guestsCount, window.bookingSettings.yacht_capacity) : guestsCount);
   
   val += delta;
   if (val < 1) val = 1;
   if (val > limit) {
     val = limit;
-    alert(isSheesha ? 'Maximum 6 Sheeshas available.' : `Participants cannot exceed the total number of guests (${guestCount}).`);
+    alert(isSheesha ? `Maximum ${window.bookingSettings.sheesha_capacity} Sheeshas available.` : (isYacht ? `Yacht capacity is limited to ${window.bookingSettings.yacht_capacity} guests.` : `Participants cannot exceed the total number of guests (${guestsCount}).`));
   }
   input.value = val;
 }
@@ -1824,7 +2117,11 @@ document.getElementById('btnConfirmAddon')?.addEventListener('click', function()
   }
 
   const checkbox = Array.from(document.querySelectorAll('.amenity-selector'))
-    .find((chk) => (chk.dataset.amenityName || '').toLowerCase().includes(currentAddonKeyword.toLowerCase()));
+    .find((chk) => {
+      const chkName = (chk.dataset.amenityName || '').toLowerCase().trim();
+      const search = currentAddonKeyword.toLowerCase().trim();
+      return chkName === search || chkName.includes(search) || search.includes(chkName);
+    });
     
   if (checkbox) {
     checkbox.checked = true;
@@ -1842,6 +2139,7 @@ document.getElementById('btnConfirmAddon')?.addEventListener('click', function()
 
     // Visual feedback
     updateSidebarPreview();
+    syncGridAddButtons(); // Sync the button state
     
     setTimeout(() => {
       document.getElementById('selected-amenities-preview')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1864,38 +2162,49 @@ function getBookingNights() {
   return nights > 0 ? nights : 0;
 }
 
-function updateSidebarPreview(basePrice = 0, stayType = '', nights = 0) {
+function updateSidebarPreview() {
   const amenities = buildAmenityPayload();
   const previewList = document.getElementById('preview-items-list');
   
   previewList.innerHTML = '';
+
+  // Remove old headings if they exist outside the list
+  const oldHeading = document.getElementById('sidebar-amenities-heading');
+  if (oldHeading && oldHeading.parentElement !== previewList) oldHeading.remove();
+
+  const pricing = getFinalPricing();
   
-  // Add Base Price with stay type and nights
-  if (true) { // Always show stay cost
-    const displayBase = basePrice > 0 ? basePrice : 0;
-    const baseItem = document.createElement('div');
-    baseItem.style.cssText = 'display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-dark); margin-bottom: 2px;';
-    const typeLabel = stayType ? ` <span style="font-size:0.65rem; color:var(--brand); font-weight:700; text-transform:uppercase; margin-left:4px;">(${stayType.split(' ')[0]})</span>` : '';
-    const nightsLabel = nights > 0 ? ` <span style="font-size:0.65rem; color:var(--text-muted); font-weight:500;">(${nights} ${nights === 1 ? 'night' : 'nights'})</span>` : '';
-    baseItem.innerHTML = `
-      <span style="font-weight:500;">Stay Cost${typeLabel}${nightsLabel}</span>
-      <span style="font-weight:600; color:var(--text-muted);">₹${basePrice.toLocaleString()}</span>
+  // 1. Stay Details
+  if (pricing.stayTotal > 0) {
+    const stayHeading = document.createElement('div');
+    stayHeading.style.cssText = 'font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; margin-top: 0.5rem; letter-spacing: 0.1em;';
+    stayHeading.textContent = 'Stay Details';
+    previewList.appendChild(stayHeading);
+
+    const stayItem = document.createElement('div');
+    stayItem.style.cssText = 'display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-dark); padding: 0.4rem 0; border-bottom: 1px dashed rgba(250,135,62,0.1); margin-bottom: 1rem;';
+    stayItem.innerHTML = `
+      <span style="font-weight:600;">Stay (${pricing.nights} ${pricing.nights === 1 ? 'night' : 'nights'})</span>
+      <span style="font-weight:700; color:var(--gold);">₹${pricing.stayTotal.toLocaleString()}</span>
     `;
-    previewList.appendChild(baseItem);
+    previewList.appendChild(stayItem);
   }
-  
+
+  // 2. Amenities Section
   if (amenities.length > 0) {
+    const heading = document.createElement('div');
+    heading.id = 'sidebar-amenities-heading';
+    heading.style.cssText = 'font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; margin-top: 0.5rem; letter-spacing: 0.1em;';
+    heading.textContent = 'Selected Amenities';
+    previewList.appendChild(heading);
+
     amenities.forEach(a => {
       const item = document.createElement('div');
-      item.style.cssText = 'display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-dark);';
+      item.style.cssText = 'display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-dark); padding: 0.2rem 0;';
       
       let label = a.name;
-      if (a.name.toLowerCase().includes('kayaking')) {
-          label = `Kayaking (₹${a.price.toLocaleString()}/p × ${a.participants})`;
-      } else if (a.name.toLowerCase().includes('yacht')) {
-          label = `Yacht Service`;
-      } else if (a.participants && !a.name.toLowerCase().includes('campfire') && !a.name.toLowerCase().includes('speaker')) {
-          label = `${a.name} (${a.participants} ${a.name.toLowerCase().includes('sheesha') ? 'units' : 'persons'})`;
+      if (a.participants && !a.name.toLowerCase().includes('campfire') && !a.name.toLowerCase().includes('speaker') && !a.name.toLowerCase().includes('yacht')) {
+          label = `${a.name} (${a.participants} ${a.name.toLowerCase().includes('sheesha') ? 'units' : (a.name.toLowerCase().includes('kayak') ? 'persons' : 'qty')})`;
       }
 
       item.innerHTML = `
@@ -1915,8 +2224,12 @@ function getGuestCount() {
 
 function updateKayakDisplay() {
   const guests = getGuestCount();
-  const price = (guests < 5) ? 1000 : 700;
-  document.querySelectorAll('.kayak-price-display').forEach(el => {
+  const lowPrice = parseFloat(window.bookingSettings.water_activity_low) || 0;
+  const highPrice = parseFloat(window.bookingSettings.water_activity_high) || 0;
+  const threshold = parseInt(window.bookingSettings.water_activity_threshold) || 5;
+  const price = (guests < threshold) ? lowPrice : highPrice;
+  
+  document.querySelectorAll('.kayak-price-display, .boating-price-display').forEach(el => {
     el.textContent = `₹${price}/p`;
   });
 }
@@ -1924,13 +2237,23 @@ function updateKayakDisplay() {
 function updateSubtotal(card, price, qty) {
   const pill = card.querySelector('.subtotal-pill');
   const chk = card.querySelector('.amenity-selector');
+  const dynamicPriceEl = card.querySelector('.dynamic-amenity-price');
   let finalPrice = price;
 
-  // Custom logic for Kayaking & Boating based on PARTICIPANTS
-  if ((chk.dataset.amenityName || '').toLowerCase().includes('kayaking')) {
-    const input = chk.closest('.amenity-card').querySelector('.counter-input');
-    const parts = parseInt(input?.value || '1');
-    finalPrice = (parts >= 5) ? 700 : 1000;
+  // Custom logic for Kayaking & Boating based on TOTAL GUESTS
+  const aName = (chk.dataset.amenityName || '').toLowerCase();
+  if (aName.includes('kayaking') || aName.includes('boating')) {
+    const guestCount = getGuestCount();
+    const lowPrice = parseFloat(window.bookingSettings.water_activity_low) || 0;
+    const highPrice = parseFloat(window.bookingSettings.water_activity_high) || 0;
+    const threshold = parseInt(window.bookingSettings.water_activity_threshold) || 5;
+    
+    finalPrice = (guestCount < threshold) ? lowPrice : highPrice;
+    
+    // Update the unit price display in the card
+    if (dynamicPriceEl) {
+        dynamicPriceEl.textContent = `₹${finalPrice.toLocaleString()}`;
+    }
   }
 
   if (pill) pill.textContent = `₹${(finalPrice * qty).toFixed(0)}`;
@@ -1944,8 +2267,10 @@ function syncLimits() {
     if (!input || !chk?.checked) return;
 
     const price    = parseFloat(chk.dataset.amenityPrice) || 0;
-    const isSheesha = (chk.dataset.amenityName || '').toLowerCase().includes('sheesha');
-    const limit    = isSheesha ? 6 : guestCount;
+    const amenityName = (chk.dataset.amenityName || '').toLowerCase();
+    const isSheesha = amenityName.includes('sheesha');
+    const isYacht = amenityName.includes('yacht');
+    const limit    = isSheesha ? window.bookingSettings.sheesha_capacity : (isYacht ? Math.min(guestCount, window.bookingSettings.yacht_capacity) : guestCount);
     const plusBtn  = card.querySelector('.plus-btn');
     const minusBtn = card.querySelector('.minus-btn');
     let val = parseInt(input.value) || 1;
@@ -1961,7 +2286,7 @@ function syncLimits() {
     // Sync limit message
     if (isSheesha) {
         const msg = card.querySelector('.limit-msg');
-        if (msg) msg.style.display = (val >= 6) ? 'block' : 'none';
+        if (msg) msg.style.display = (val >= window.bookingSettings.sheesha_capacity) ? 'block' : 'none';
     }
   });
 }
@@ -1979,10 +2304,15 @@ function buildAmenityPayload() {
       ? Math.max(1, parseInt(input?.value || '1'))
       : null;
     
-    // Custom logic for Kayaking & Boating dynamic pricing based on PARTICIPANTS
-    if ((chk.dataset.amenityName || '').toLowerCase().includes('kayaking')) {
-      // Use the local 'participants' variable which is the counter value
-      price = (participants !== null && participants >= 5) ? 700 : 1000;
+    // Custom logic for Kayaking & Boating dynamic pricing based on TOTAL GUESTS
+    const aName = (chk.dataset.amenityName || '').toLowerCase();
+    if (aName.includes('kayaking') || aName.includes('boating')) {
+      const guestCount = getGuestCount();
+      const lowPrice = parseFloat(window.bookingSettings.water_activity_low) || 0;
+      const highPrice = parseFloat(window.bookingSettings.water_activity_high) || 0;
+      const threshold = parseInt(window.bookingSettings.water_activity_threshold) || 5;
+      
+      price = (guestCount < threshold) ? lowPrice : highPrice;
     }
 
     const total = pricingType === 'per_person' && participants !== null ? price * participants : price;
@@ -2001,96 +2331,50 @@ function buildAmenityPayload() {
 /* ── Summary ───────────────────────────────────────────────────────────── */
 function updateBookingSummary() {
   autoSelectStayOption();
-  const guests = getGuestCount();
-  const selectedRadio = document.querySelector('input[name="stay_option_radio"]:checked');
-  if (!selectedRadio) return;
+  const pricing = getFinalPricing();
 
-  const label = selectedRadio.dataset.label;
   const guestError = document.getElementById('guest-error');
   if (guestError) {
       guestError.style.display = 'none';
       guestError.textContent = '';
+      const guestCount = getGuestCount();
+      const maxGuests = window.propertyPricing.maxGuests || 15;
+      
+      if (guestCount > maxGuests) {
+          guestError.textContent = `Maximum capacity is ${maxGuests} guests for this property`;
+          guestError.style.display = 'block';
+      }
   }
   
-  let baseStayPrice = parseFloat(selectedRadio.value);
-  let extraGuestCharge = 0;
-  let extraGuestCount = 0;
-
-  // STAY OPTION 1: Weekday (Up to 5 Guests)
-  if (label.includes("Weekday (Up to 5 Guests)")) {
-      if (guests >= 10) {
-          // Automatically switch to Option 2
-          const opt2 = Array.from(document.querySelectorAll('input[name="stay_option_radio"]'))
-              .find(r => r.dataset.label.includes("Weekday (Up to 10 Guests)"));
-          if (opt2) {
-              opt2.checked = true;
-              document.querySelectorAll('.stay-option-card').forEach(c => c.classList.remove('is-selected'));
-              opt2.closest('.stay-option-card').classList.add('is-selected');
-              return updateBookingSummary(); // Recurse
-          }
-      }
-      if (guests > 5) {
-          extraGuestCount = guests - 5;
-          extraGuestCharge = extraGuestCount * 600;
-      }
-  } 
-  // STAY OPTION 2 & 3: Weekday (Up to 10 Guests) OR Weekend (Up to 10 Guests)
-  else if (label.includes("Weekday (Up to 10 Guests)") || label.includes("Weekend")) {
-      if (guests > 15) {
-          if (guestError) {
-              guestError.textContent = "Maximum capacity is 15 guests for this stay option";
-              guestError.style.display = 'block';
-          }
-      }
-      if (guests > 10) {
-          extraGuestCount = Math.min(guests, 15) - 10;
-          extraGuestCharge = extraGuestCount * 600;
-      }
-  }
-
-  const nights = getBookingNights();
-  const dynamicBaseAmount = (baseStayPrice + extraGuestCharge) * Math.max(1, nights);
-
-  document.getElementById('form-base-amount').value = dynamicBaseAmount;
-  document.getElementById('form-event-type').value = label;
-
-  // Update Kayaking Rate Labels in Sidebar based on its own participant count
+  // Update Water Activity Rate Labels in Sidebar based on its own participant count
   const kayakRateMain = document.getElementById('kayak-sidebar-rate-main');
   const kayakRateSub = document.getElementById('kayak-sidebar-rate-sub');
   if (kayakRateMain && kayakRateSub) {
-      const kayakCard = document.querySelector('.amenity-card[data-amenity-name*="Kayaking"]');
-      const kayakInput = kayakCard?.querySelector('.counter-input');
-      const kayakParts = parseInt(kayakInput?.value || '0');
+      const activityCard = document.querySelector('.amenity-card[data-amenity-name*="Kayaking"], .amenity-card[data-amenity-name*="Boating"]');
+      const activityInput = activityCard?.querySelector('.counter-input');
+      const activityParts = parseInt(activityInput?.value || '0');
       
-      if (kayakParts < 5) {
-          kayakRateMain.textContent = '₹1,000/p';
-          kayakRateSub.textContent = '₹700/p (5+ people)';
+      if (activityParts < window.bookingSettings.water_activity_threshold) {
+          kayakRateMain.textContent = `₹${window.bookingSettings.water_activity_low.toLocaleString()}/p`;
+          kayakRateSub.textContent = `₹${window.bookingSettings.water_activity_high.toLocaleString()}/p (${window.bookingSettings.water_activity_threshold}+ people)`;
       } else {
-          kayakRateMain.textContent = '₹700/p';
-          kayakRateSub.textContent = '₹1,000/p (below 5)';
+          kayakRateMain.textContent = `₹${window.bookingSettings.water_activity_high.toLocaleString()}/p`;
+          kayakRateSub.textContent = `₹${window.bookingSettings.water_activity_low.toLocaleString()}/p (below ${window.bookingSettings.water_activity_threshold})`;
       }
   }
 
-  const amenities       = buildAmenityPayload();
-  const formExtraAmount = document.getElementById('form-extra-amount');
-  const formAmount      = document.getElementById('form-amount');
-
-  let extraTotal = 0;
-  amenities.forEach((a) => {
-    extraTotal += a.total;
-  });
-
-  const grandTotal          = dynamicBaseAmount + extraTotal;
-  if (formExtraAmount) formExtraAmount.value = extraTotal.toFixed(2);
-  if (formAmount)      formAmount.value      = grandTotal.toFixed(2);
+  document.getElementById('form-base-amount').value = pricing.stayTotal;
+  document.getElementById('form-extra-amount').value = pricing.amenitiesTotal;
+  document.getElementById('form-amount').value = pricing.grandTotal;
+  document.getElementById('form-event-type').value = pricing.stayLabel;
 
   const sidebarTotal = document.getElementById('sidebar-grand-total');
-  // Always show sidebar total
   if (sidebarTotal) {
-      sidebarTotal.textContent = `₹${grandTotal.toLocaleString()}`;
+      sidebarTotal.textContent = `₹${pricing.grandTotal.toLocaleString()}`;
   }
 
-  updateSidebarPreview(dynamicBaseAmount, label, nights);
+  updateSidebarPreview();
+  syncGridAddButtons();
 }
 
 /* ── Form submit ───────────────────────────────────────────────────────── */
@@ -2102,11 +2386,14 @@ async function handleBookingSubmit(event) {
   const formData  = new FormData(form);
   
   // Get the grand total including package
-  const totalAmount = parseFloat(document.getElementById('form-amount').dataset.totalWithPackage) || parseFloat(formData.get('amount'));
+  const totalAmount = parseFloat(document.getElementById('form-amount').value);
+  if (!totalAmount || totalAmount <= 0) {
+    alert('Invalid booking amount. Please try again.');
+    return;
+  }
 
   const payload = {
     name:         formData.get('name'),
-    email:        formData.get('email'),
     phone:        formData.get('phone'),
     check_in:     formData.get('check_in'),
     check_out:    formData.get('check_out'),
@@ -2202,5 +2489,7 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 </script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+@include('chatbot')
+<x-social-nav />
 </body>
 </html>

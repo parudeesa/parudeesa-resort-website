@@ -12,7 +12,7 @@ class Yacht extends Model
         'price',
         'duration',
         'capacity',
-        'image_url',
+        'image',
         'gallery',
         'status',
     ];

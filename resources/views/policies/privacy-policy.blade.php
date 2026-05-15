@@ -413,7 +413,6 @@
                     <li class="nav-item"><a class="nav-link" href="/design#events">Events</a></li>
                     <li class="nav-item"><a class="nav-link" href="/design#gallery">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="/design#about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/design#contact">Contact</a></li>
                     <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
                 </ul>
             </div>
@@ -527,7 +526,6 @@
                         <li><a href="/design#events">Events</a></li>
                         <li><a href="/design#gallery">Gallery</a></li>
                         <li><a href="/design#about">About Us</a></li>
-                        <li><a href="/design#contact">Contact</a></li>
                         <li><a href="/booking">Book Now</a></li>
                     </ul>
                 </div>
