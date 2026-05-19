@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 
 class BookingPricingService
 {
-    public function quote(array $payload): array
+    public function quote(array $payload, ?int $ignoreBookingId = null): array
     {
         $property = Property::with(['amenities' => function ($query) {
             $query->where('status', true);
@@ -37,7 +37,7 @@ class BookingPricingService
         $guests = max(1, (int) $payload['guests']);
         $nights = $checkIn->diffInDays($checkOut);
 
-        $this->ensurePropertyIsAvailable($property->id, $checkIn, $checkOut);
+        $this->ensurePropertyIsAvailable($property->id, $checkIn, $checkOut, $ignoreBookingId);
 
         $nameLower = strtolower($property->name);
         $propertyTag = str_contains($nameLower, 'paradise') ? 'paradise' : (str_contains($nameLower, 'utopi') ? 'utopia' : 'both');
@@ -176,7 +176,7 @@ class BookingPricingService
         ];
     }
 
-    protected function ensurePropertyIsAvailable(int $propertyId, Carbon $checkIn, Carbon $checkOut): void
+    protected function ensurePropertyIsAvailable(int $propertyId, Carbon $checkIn, Carbon $checkOut, ?int $ignoreBookingId = null): void
     {
         $hasBlockedDates = BlockedDate::where('property_id', $propertyId)
             ->whereDate('start_date', '<', $checkOut->toDateString())
@@ -189,17 +189,20 @@ class BookingPricingService
             ]);
         }
 
-        $hasBookings = Booking::where('property_id', $propertyId)
+        $bookingsQuery = Booking::where('property_id', $propertyId)
             ->where('status', '!=', 'cancelled')
             ->where(function ($query) {
                 $query->whereNull('payment_status')
                     ->orWhereIn('payment_status', ['Pending', 'Paid']);
             })
             ->whereDate('check_in', '<', $checkOut->toDateString())
-            ->whereDate('check_out', '>', $checkIn->toDateString())
-            ->exists();
+            ->whereDate('check_out', '>', $checkIn->toDateString());
+            
+        if ($ignoreBookingId) {
+            $bookingsQuery->where('id', '!=', $ignoreBookingId);
+        }
 
-        if ($hasBookings) {
+        if ($bookingsQuery->exists()) {
             throw ValidationException::withMessages([
                 'check_in' => 'This property is already booked for the selected dates.',
             ]);

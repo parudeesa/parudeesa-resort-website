@@ -41,7 +41,16 @@ class AdminController extends Controller
 
         $events = $blockedDates->concat($manualReservations)->sortByDesc('created_at')->values();
 
-        return view('admin.calendar', compact('properties', 'events'));
+        $amenities = \App\Models\Amenity::where('status', true)->get();
+        $foodPackages = \App\Models\FoodPackage::where('status', true)->get();
+        $bookingSettings = [
+            'water_activity_threshold' => (int) \App\Models\Setting::get('water_activity_threshold', 5),
+            'water_activity_low_price' => (float) \App\Models\Setting::get('water_activity_low_price', 1000),
+            'water_activity_high_price' => (float) \App\Models\Setting::get('water_activity_high_price', 700),
+            'property_stay_threshold' => (int) \App\Models\Setting::get('property_stay_threshold', 5),
+        ];
+
+        return view('admin.calendar', compact('properties', 'events', 'amenities', 'foodPackages', 'bookingSettings'));
     }
 
     // --- ADMIN MANAGEMENT (Superadmin only) ---
@@ -234,7 +243,9 @@ class AdminController extends Controller
             'phone' => 'nullable|numeric|digits:10',
             'check_in' => 'required|date|after_or_equal:today',
             'check_out' => 'required|date|after_or_equal:check_in',
+            'guests' => 'required|integer|min:1',
             'amount' => 'nullable|numeric|min:0',
+            'package_name' => 'nullable|string',
             'payment_status' => 'required|string|in:Paid,Pending,Failed',
             'notes' => 'nullable|string|max:1000'
         ]);
@@ -247,15 +258,36 @@ class AdminController extends Controller
             }
         }
 
+        // Format Amenities for quote
+        $rawAmenities = $request->input('amenities', []);
+        $processedAmenities = [];
+        foreach ($rawAmenities as $id => $data) {
+            if (!empty($data['selected']) && $data['selected'] == '1') {
+                $processedAmenities[] = [
+                    'id' => $id,
+                    'quantity' => $data['participants'] ?? 1,
+                ];
+            }
+        }
+        
+        $payload = $request->all();
+        $payload['amenities'] = $processedAmenities;
+
+        $pricingService = app(\App\Services\BookingPricingService::class);
+        $quote = $pricingService->quote($payload);
+
         $booking = \App\Models\Booking::create([
             'property_id' => $request->property_id,
             'name' => $request->name,
             'email' => 'manual@reservation.local', // Dummy email for manual bookings
             'phone' => $request->phone,
-            'check_in' => $request->check_in,
-            'check_out' => $request->check_out,
-            'guests' => 1,
-            'amount' => $request->amount ?? 0,
+            'check_in' => $quote['check_in'],
+            'check_out' => $quote['check_out'],
+            'guests' => $quote['guests'],
+            'package_name' => $request->package_name ?? 'Only Stay',
+            'amenities' => $quote['amenities'],
+            'base_amount' => $quote['base_amount'],
+            'amount' => filled($request->amount) ? $request->amount : $quote['amount'],
             'status' => $request->payment_status === 'Paid' ? 'confirmed' : 'pending',
             'payment_status' => $request->payment_status,
             'notes' => $request->notes,
@@ -284,7 +316,9 @@ class AdminController extends Controller
             'phone' => 'nullable|string|max:20',
             'check_in' => 'required|date',
             'check_out' => 'required|date|after_or_equal:check_in',
+            'guests' => 'required|integer|min:1',
             'amount' => 'nullable|numeric',
+            'package_name' => 'nullable|string',
             'payment_status' => 'required|string|in:Paid,Pending,Failed',
             'notes' => 'nullable|string'
         ]);
@@ -296,13 +330,35 @@ class AdminController extends Controller
             }
         }
 
+        // Format Amenities for quote
+        $rawAmenities = $request->input('amenities', []);
+        $processedAmenities = [];
+        foreach ($rawAmenities as $id => $data) {
+            if (!empty($data['selected']) && $data['selected'] == '1') {
+                $processedAmenities[] = [
+                    'id' => $id,
+                    'quantity' => $data['participants'] ?? 1,
+                ];
+            }
+        }
+        
+        $payload = $request->all();
+        $payload['amenities'] = $processedAmenities;
+
+        $pricingService = app(\App\Services\BookingPricingService::class);
+        $quote = $pricingService->quote($payload, $booking->id);
+
         $booking->update([
             'property_id' => $request->property_id,
             'name' => $request->name,
             'phone' => $request->phone,
-            'check_in' => $request->check_in,
-            'check_out' => $request->check_out,
-            'amount' => $request->amount ?? 0,
+            'check_in' => $quote['check_in'],
+            'check_out' => $quote['check_out'],
+            'guests' => $quote['guests'],
+            'package_name' => $request->package_name ?? 'Only Stay',
+            'amenities' => $quote['amenities'],
+            'base_amount' => $quote['base_amount'],
+            'amount' => filled($request->amount) ? $request->amount : $quote['amount'],
             'status' => $request->payment_status === 'Paid' ? 'confirmed' : 'pending',
             'payment_status' => $request->payment_status,
             'notes' => $request->notes

@@ -156,7 +156,7 @@
             'id' => $yArr['id'],
             'name' => $yArr['name'],
             'price' => (float)$yArr['price'],
-            'capacity' => $yArr['capacity'] ?? '6 Guests',
+            'capacity' => (int) ($yArr['capacity'] ?? 6),
             'duration' => $yArr['duration'] ?? '2 Hours',
             'image' => ($yArr['image'] ?? null) ? asset($yArr['image']) : ($yArr['image_url'] ?? 'https://images.unsplash.com/photo-1567899378494-47b22a2bb9ba?w=400&q=80'),
             'amenities' => ['Sun Deck', 'Sound System', 'Safety Jackets', 'Refreshments'],
@@ -708,7 +708,9 @@ function luxuryChatbot() {
         },
         confirmYachtDate() { const d = document.getElementById('cy-d').value; if (!d) return alert("Select date"); this.booking.eventDate = d; this.addMessage("user", `Date: ${d}`); this.nextStep(); },
         askYachtGuests() {
-            const html = `<div class="counter-card"><div class="counter-control"><button class="counter-btn" onclick="chatbot.updateCounter('cy-g-val', -1, 1, 10)">-</button><span class="counter-value" id="cy-g-val">1</span><button class="counter-btn" onclick="chatbot.updateCounter('cy-g-val', 1, 1, 10)">+</button></div><p style="font-size:10px; color:var(--chat-muted); text-align:center; margin-top:5px;">Max 10 guests</p><button class="btn-premium mt-3" onclick="chatbot.confirmYachtGuests()">Confirm Guests</button></div>`;
+            const y = this.yachts.find(x => String(x.id) === String(this.booking.yachtId));
+            const maxCap = y && y.capacity ? parseInt(y.capacity) : 6;
+            const html = `<div class="counter-card"><div class="counter-control"><button class="counter-btn" onclick="chatbot.updateCounter('cy-g-val', -1, 1, ${maxCap})">-</button><span class="counter-value" id="cy-g-val">1</span><button class="counter-btn" onclick="chatbot.updateCounter('cy-g-val', 1, 1, ${maxCap})">+</button></div><p style="font-size:10px; color:var(--chat-muted); text-align:center; margin-top:5px;">Max ${maxCap} guests</p><button class="btn-premium mt-3" onclick="chatbot.confirmYachtGuests()">Confirm Guests</button></div>`;
             this.addMessage("bot", "How many guests will be joining?", html);
         },
         confirmYachtGuests() { const g = parseInt(document.getElementById('cy-g-val').innerText); this.booking.guests = g; this.addMessage("user", `${g} Guest${g>1?'s':''}`); this.nextStep(); },

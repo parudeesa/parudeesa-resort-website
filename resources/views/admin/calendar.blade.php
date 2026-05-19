@@ -99,7 +99,7 @@
                                             <i data-lucide="trash-2" class="w-4 h-4"></i>
                                         </button>
                                     @else
-                                        <button @click="openEditReservationModal({{ $event->id }}, '{{ $event->property_id }}', '{{ addslashes($event->name) }}', '{{ addslashes($event->phone ?? '') }}', '{{ $event->start_date->format('Y-m-d') }}', '{{ $event->end_date->format('Y-m-d') }}', '{{ $event->amount }}', '{{ $event->payment_status }}', '{{ addslashes($event->notes ?? '') }}')" class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-lg transition-colors" title="Edit Reservation">
+                                        <button @click="openEditReservationModal({{ $event->id }}, '{{ $event->property_id }}', '{{ addslashes($event->name) }}', '{{ addslashes($event->phone ?? '') }}', '{{ $event->start_date->format('Y-m-d') }}', '{{ $event->end_date->format('Y-m-d') }}', '{{ $event->amount }}', '{{ $event->payment_status }}', '{{ addslashes($event->notes ?? '') }}', {{ $event->guests ?? 1 }}, '{{ $event->package_name ?? 'Only Stay' }}', {{ json_encode($event->amenities ?? []) }})" class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-lg transition-colors" title="Edit Reservation">
                                             <i data-lucide="pencil" class="w-4 h-4"></i>
                                         </button>
                                         <button @click="openDeleteModal('{{ route('admin.calendar.destroy_reservation', $event->id) }}', '{{ addslashes($event->display_name) }}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-2 rounded-lg transition-colors" title="Delete Reservation">
@@ -252,8 +252,95 @@
 
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="p-label block mb-1">Total Amount (Optional)</label>
-                                <input type="number" name="amount" x-model="formData.amount" class="p-input" placeholder="0.00">
+                                <label class="p-label block mb-1">Number of Guests *</label>
+                                <input type="number" name="guests" x-model="formData.guests" min="1" required class="p-input">
+                            </div>
+                            <div>
+                                <label class="p-label block mb-1">Food Package</label>
+                                <select name="package_name" x-model="formData.package_name" class="p-input">
+                                    <option value="Only Stay">Only Stay</option>
+                                    @foreach($foodPackages as $pkg)
+                                        @if(!str_contains(strtolower($pkg->name), 'only'))
+                                            <option value="{{ $pkg->name }}">{{ $pkg->name }} (+₹{{ number_format($pkg->price, 0) }}/person)</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="p-label block mb-2">Amenities</label>
+                            <div class="space-y-3 max-h-48 overflow-y-auto p-3 border rounded-lg" style="border-color:rgba(250,135,62,.15); background:rgba(250,135,62,.02);">
+                                @foreach($amenities as $amenity)
+                                    @php
+                                        $amenityNameLower = strtolower($amenity->name);
+                                        $isPerPerson = (str_contains($amenityNameLower, 'sheesha') || str_contains($amenityNameLower, 'kayak') || str_contains($amenityNameLower, 'boating') || $amenity->pricing_type === 'per_person');
+                                        $isAutoGuest = (str_contains($amenityNameLower, 'campfire') || str_contains($amenityNameLower, 'camp fire') || str_contains($amenityNameLower, 'speaker') || str_contains($amenityNameLower, 'yacht'));
+                                    @endphp
+                                    <div class="flex flex-col gap-2 p-2 bg-white rounded shadow-sm border border-orange-50">
+                                        <div class="flex items-start justify-between">
+                                            <label class="flex items-center gap-2 cursor-pointer">
+                                                <input type="checkbox" x-model="formData.amenities[{{ $amenity->id }}].selected" class="rounded border-orange-300 text-orange-500 focus:ring-orange-500">
+                                                <span class="text-sm font-semibold text-gray-700">{{ $amenity->name }}</span>
+                                            </label>
+                                            <span class="text-sm font-bold text-orange-500" x-text="getAmenityDisplayPrice('{{ $amenity->id }}')">
+                                                @if(str_contains($amenityNameLower, 'kayaking') || str_contains($amenityNameLower, 'boating'))
+                                                    ₹{{ number_format($bookingSettings['water_activity_high_price'] ?? 700, 0) }}/p
+                                                @else
+                                                    ₹{{ number_format($amenity->price, 0) }}
+                                                @endif
+                                            </span>
+                                        </div>
+                                        
+                                        @if($isPerPerson && !$isAutoGuest)
+                                        <div x-show="formData.amenities[{{ $amenity->id }}].selected" class="flex items-center justify-between pl-6 mt-1 border-t border-dashed border-orange-100 pt-2" x-cloak>
+                                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Guests/Units</span>
+                                            <div class="flex items-center border border-orange-200 rounded-md overflow-hidden bg-white">
+                                                <button type="button" @click="if(formData.amenities[{{ $amenity->id }}].participants > 1) formData.amenities[{{ $amenity->id }}].participants--" class="px-2 py-1 bg-orange-50 hover:bg-orange-100 text-orange-600 font-bold">-</button>
+                                                <input type="number" readonly x-model="formData.amenities[{{ $amenity->id }}].participants" class="w-10 text-center border-none text-sm font-bold p-0 focus:ring-0">
+                                                <button type="button" @click="formData.amenities[{{ $amenity->id }}].participants++" class="px-2 py-1 bg-orange-50 hover:bg-orange-100 text-orange-600 font-bold">+</button>
+                                            </div>
+                                        </div>
+                                        @endif
+                                        <!-- Hidden Inputs to submit data properly -->
+                                        <input type="hidden" :name="`amenities[${{{ $amenity->id }}}][selected]`" :value="formData.amenities[{{ $amenity->id }}].selected ? 1 : 0">
+                                        <input type="hidden" :name="`amenities[${{{ $amenity->id }}}][participants]`" :value="formData.amenities[{{ $amenity->id }}].participants">
+                                        <input type="hidden" :name="`amenities[${{{ $amenity->id }}}][id]`" value="{{ $amenity->id }}">
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Booking Summary & Total -->
+                        <div class="p-4 bg-orange-50/50 rounded-xl border border-orange-100 mt-4">
+                            <h4 class="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3 flex items-center gap-2">
+                                <i data-lucide="receipt" class="w-4 h-4 text-orange-500"></i> Reservation Summary
+                            </h4>
+                            <div class="space-y-2 text-sm text-gray-600">
+                                <div class="flex justify-between">
+                                    <span>Stay (<span x-text="bookingNights"></span> nights)</span>
+                                    <span class="font-semibold" x-text="'₹' + stayTotal.toLocaleString('en-IN')"></span>
+                                </div>
+                                <div class="flex justify-between" x-show="packageTotal > 0">
+                                    <span x-text="formData.package_name + ' Package'"></span>
+                                    <span class="font-semibold" x-text="'₹' + packageTotal.toLocaleString('en-IN')"></span>
+                                </div>
+                                <div class="flex justify-between" x-show="amenitiesTotal > 0">
+                                    <span>Amenities & Add-ons</span>
+                                    <span class="font-semibold" x-text="'₹' + amenitiesTotal.toLocaleString('en-IN')"></span>
+                                </div>
+                                <div class="flex justify-between border-t border-orange-200 pt-2 mt-2">
+                                    <span class="font-bold text-gray-800">Calculated Total</span>
+                                    <span class="font-bold text-orange-600 text-lg" x-text="'₹' + grandTotal.toLocaleString('en-IN')"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+                            <div>
+                                <label class="p-label block mb-1">Override Amount (Optional)</label>
+                                <input type="number" name="amount" x-model="formData.amount" class="p-input" placeholder="Leave blank to use calculated total">
+                                <p class="text-[10px] text-gray-400 mt-1">If left empty, ₹<span x-text="grandTotal"></span> will be used.</p>
                             </div>
                             <div>
                                 <label class="p-label block mb-1">Payment Status *</label>
@@ -337,6 +424,13 @@
                     phone: '', // for reservation
                     start_date: '',
                     end_date: '',
+                    guests: 1,
+                    package_name: 'Only Stay',
+                    amenities: {
+                        @foreach($amenities as $amenity)
+                        {{ $amenity->id }}: { selected: false, participants: 1 },
+                        @endforeach
+                    },
                     amount: '',
                     payment_status: 'Pending',
                     notes: ''
@@ -367,7 +461,7 @@
                     this.isModalOpen = true;
                 },
 
-                openEditReservationModal(id, property_id, name, phone, start_date, end_date, amount, payment_status, notes) {
+                openEditReservationModal(id, property_id, name, phone, start_date, end_date, amount, payment_status, notes, guests, package_name, savedAmenities) {
                     this.isEditMode = true;
                     this.activeTab = 'reservation';
                     this.formActionReservation = `/calendar/reservations/${id}`;
@@ -380,6 +474,17 @@
                     this.formData.amount = amount;
                     this.formData.payment_status = payment_status || 'Pending';
                     this.formData.notes = notes;
+                    this.formData.guests = guests || 1;
+                    this.formData.package_name = package_name || 'Only Stay';
+                    
+                    if (savedAmenities && Array.isArray(savedAmenities)) {
+                        savedAmenities.forEach(a => {
+                            if (this.formData.amenities[a.id]) {
+                                this.formData.amenities[a.id].selected = true;
+                                this.formData.amenities[a.id].participants = a.quantity || 1;
+                            }
+                        });
+                    }
                     this.isModalOpen = true;
                 },
 
@@ -391,6 +496,13 @@
                         phone: '',
                         start_date: '',
                         end_date: '',
+                        guests: 1,
+                        package_name: 'Only Stay',
+                        amenities: {
+                            @foreach($amenities as $amenity)
+                            {{ $amenity->id }}: { selected: false, participants: 1 },
+                            @endforeach
+                        },
                         amount: '',
                         payment_status: 'Pending',
                         notes: ''
@@ -405,6 +517,124 @@
                     this.deleteFormAction = actionUrl;
                     this.deleteEventName = name;
                     this.isDeleteModalOpen = true;
+                },
+
+                // Getters for Dynamic Pricing
+                get propertyPricing() {
+                    const propertiesData = @json($properties->keyBy('id')->map(function($p) {
+                        return [
+                            'weekday' => (float)($p->weekday_price ?: $p->price),
+                            'weekday_tier2' => (float)($p->weekday_tier2_price ?: ($p->weekday_price ?: $p->price)),
+                            'weekend' => (float)($p->weekend_price ?: $p->price)
+                        ];
+                    }));
+                    return propertiesData[this.formData.property_id] || { weekday: 8000, weekday_tier2: 11000, weekend: 12000 };
+                },
+
+                get bookingNights() {
+                    if (!this.formData.start_date || !this.formData.end_date) return 0;
+                    const start = new Date(this.formData.start_date + 'T00:00');
+                    const end = new Date(this.formData.end_date + 'T00:00');
+                    const diffTime = end - start;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays > 0 ? diffDays : 0;
+                },
+
+                get stayTotal() {
+                    if (!this.formData.property_id || this.bookingNights <= 0) return 0;
+                    let total = 0;
+                    const guests = parseInt(this.formData.guests) || 1;
+                    const stayThreshold = {{ $bookingSettings['property_stay_threshold'] ?? 5 }};
+                    const start = new Date(this.formData.start_date + 'T00:00');
+                    
+                    for (let i = 0; i < this.bookingNights; i++) {
+                        const curr = new Date(start);
+                        curr.setDate(start.getDate() + i);
+                        const isWeekend = [5, 6, 0].includes(curr.getDay()); 
+                        
+                        if (isWeekend) {
+                            total += this.propertyPricing.weekend;
+                        } else {
+                            if (guests <= stayThreshold) {
+                                total += this.propertyPricing.weekday;
+                            } else {
+                                total += this.propertyPricing.weekday_tier2;
+                            }
+                        }
+                    }
+                    return total;
+                },
+
+                get packageTotal() {
+                    if (this.formData.package_name === 'Only Stay' || this.bookingNights <= 0) return 0;
+                    const packagesData = @json($foodPackages->keyBy('name')->map(fn($p) => (float)$p->price));
+                    const pricePerPerson = packagesData[this.formData.package_name] || 0;
+                    const guests = parseInt(this.formData.guests) || 1;
+                    return pricePerPerson * guests * this.bookingNights;
+                },
+
+                get amenitiesTotal() {
+                    let total = 0;
+                    const amenitiesData = @json($amenities->keyBy('id'));
+                    
+                    for (const [id, state] of Object.entries(this.formData.amenities)) {
+                        if (state.selected) {
+                            const amenity = amenitiesData[id];
+                            if (!amenity) continue;
+                            
+                            const nameLower = amenity.name.toLowerCase();
+                            let price = parseFloat(amenity.price);
+                            const participants = parseInt(state.participants) || 1;
+                            
+                            if (nameLower.includes('kayaking') || nameLower.includes('boating')) {
+                                const waterThreshold = {{ $bookingSettings['water_activity_threshold'] ?? 5 }};
+                                const waterLow = {{ $bookingSettings['water_activity_low_price'] ?? 1000 }};
+                                const waterHigh = {{ $bookingSettings['water_activity_high_price'] ?? 700 }};
+                                price = participants < waterThreshold ? waterLow : waterHigh;
+                            }
+                            
+                            const isPerPerson = nameLower.includes('sheesha') || nameLower.includes('kayak') || nameLower.includes('boating') || amenity.pricing_type === 'per_person';
+                            const isAutoGuest = nameLower.includes('campfire') || nameLower.includes('speaker') || nameLower.includes('yacht');
+                            
+                            if (isPerPerson && !isAutoGuest) {
+                                total += price * participants;
+                            } else if (isAutoGuest) {
+                                total += price;
+                            } else {
+                                total += price;
+                            }
+                        }
+                    }
+                    return total;
+                },
+
+                getAmenityDisplayPrice(id) {
+                    const amenitiesData = @json($amenities->keyBy('id'));
+                    const amenity = amenitiesData[id];
+                    if (!amenity) return '';
+                    
+                    const nameLower = amenity.name.toLowerCase();
+                    let price = parseFloat(amenity.price);
+                    const state = this.formData.amenities[id];
+                    const participants = state ? (parseInt(state.participants) || 1) : 1;
+
+                    if (nameLower.includes('kayaking') || nameLower.includes('boating')) {
+                        const waterThreshold = {{ $bookingSettings['water_activity_threshold'] ?? 5 }};
+                        const waterLow = {{ $bookingSettings['water_activity_low_price'] ?? 1000 }};
+                        const waterHigh = {{ $bookingSettings['water_activity_high_price'] ?? 700 }};
+                        price = participants < waterThreshold ? waterLow : waterHigh;
+                        return '₹' + price.toLocaleString('en-IN') + '/p';
+                    }
+                    
+                    if (nameLower.includes('sheesha') || amenity.pricing_type === 'per_person') {
+                         return '₹' + price.toLocaleString('en-IN') + '/unit';
+                    }
+
+                    return '₹' + price.toLocaleString('en-IN');
+                },
+
+                get grandTotal() {
+                    return this.stayTotal + this.packageTotal + this.amenitiesTotal;
                 }
             }));
         });

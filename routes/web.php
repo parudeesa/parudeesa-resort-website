@@ -112,6 +112,7 @@ Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
     Route::delete('/calendar/reservations/{id}', [AdminController::class, 'destroyReservation'])->name('admin.calendar.destroy_reservation');
     
     Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+    Route::get('/revenue', [\App\Http\Controllers\Admin\RevenueController::class, 'index'])->name('admin.revenue.index');
 });
 
 /*

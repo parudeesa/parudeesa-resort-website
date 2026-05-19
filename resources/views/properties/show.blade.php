@@ -2223,14 +2223,16 @@ function getGuestCount() {
 }
 
 function updateKayakDisplay() {
-  const guests = getGuestCount();
   const lowPrice = parseFloat(window.bookingSettings.water_activity_low) || 0;
   const highPrice = parseFloat(window.bookingSettings.water_activity_high) || 0;
   const threshold = parseInt(window.bookingSettings.water_activity_threshold) || 5;
-  const price = (guests < threshold) ? lowPrice : highPrice;
   
+  // Note: Since pricing is based on individual amenity participants now, 
+  // we just show the base range format in the initial display.
+  // The dynamic price next to the checkbox will update exactly based on selected quantity.
   document.querySelectorAll('.kayak-price-display, .boating-price-display').forEach(el => {
-    el.textContent = `₹${price}/p`;
+    // Keep initial display as base low or high, wait... actually the view has already rendered it.
+    // It's better to just leave it or show the threshold logic string if needed.
   });
 }
 
@@ -2240,15 +2242,14 @@ function updateSubtotal(card, price, qty) {
   const dynamicPriceEl = card.querySelector('.dynamic-amenity-price');
   let finalPrice = price;
 
-  // Custom logic for Kayaking & Boating based on TOTAL GUESTS
+  // Custom logic for Kayaking & Boating based on participant quantity
   const aName = (chk.dataset.amenityName || '').toLowerCase();
   if (aName.includes('kayaking') || aName.includes('boating')) {
-    const guestCount = getGuestCount();
     const lowPrice = parseFloat(window.bookingSettings.water_activity_low) || 0;
     const highPrice = parseFloat(window.bookingSettings.water_activity_high) || 0;
     const threshold = parseInt(window.bookingSettings.water_activity_threshold) || 5;
     
-    finalPrice = (guestCount < threshold) ? lowPrice : highPrice;
+    finalPrice = (qty < threshold) ? lowPrice : highPrice;
     
     // Update the unit price display in the card
     if (dynamicPriceEl) {
@@ -2304,15 +2305,14 @@ function buildAmenityPayload() {
       ? Math.max(1, parseInt(input?.value || '1'))
       : null;
     
-    // Custom logic for Kayaking & Boating dynamic pricing based on TOTAL GUESTS
+    // Custom logic for Kayaking & Boating dynamic pricing based on participant count
     const aName = (chk.dataset.amenityName || '').toLowerCase();
     if (aName.includes('kayaking') || aName.includes('boating')) {
-      const guestCount = getGuestCount();
       const lowPrice = parseFloat(window.bookingSettings.water_activity_low) || 0;
       const highPrice = parseFloat(window.bookingSettings.water_activity_high) || 0;
       const threshold = parseInt(window.bookingSettings.water_activity_threshold) || 5;
       
-      price = (guestCount < threshold) ? lowPrice : highPrice;
+      price = (participants < threshold) ? lowPrice : highPrice;
     }
 
     const total = pricingType === 'per_person' && participants !== null ? price * participants : price;

@@ -117,6 +117,13 @@
                         </a>
 
                         @if(!auth()->user()->isCustomer())
+                        <a href="{{ route('admin.revenue.index') }}" class="flex items-center px-4 py-3 rounded-[16px] transition-all duration-300 {{ request()->routeIs('admin.revenue.*') ? 'bg-white text-[#e06828] shadow-[0_4px_12px_rgba(224,104,40,0.08)] font-medium' : 'text-[#3e2010]/70 hover:bg-white/60 hover:text-[#e06828]' }}">
+                            <i data-lucide="indian-rupee" class="w-[18px] h-[18px] mr-3.5"></i>
+                            <span class="text-sm">Revenue</span>
+                        </a>
+                        @endif
+
+                        @if(!auth()->user()->isCustomer())
                         <a href="{{ route('admin.calendar') }}" class="flex items-center px-4 py-3 rounded-[16px] transition-all duration-300 {{ request()->routeIs('admin.calendar') ? 'bg-white text-[#e06828] shadow-[0_4px_12px_rgba(224,104,40,0.08)] font-medium' : 'text-[#3e2010]/70 hover:bg-white/60 hover:text-[#e06828]' }}">
                             <i data-lucide="calendar-range" class="w-[18px] h-[18px] mr-3.5"></i>
                             <span class="text-sm">Google Calendar</span>
